@@ -10,7 +10,7 @@
     <!-- 
          1. EmailJS: Replace 'YOUR_PUBLIC_KEY', 'YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID'.
          2. Analytics: Replace 'G-XXXXXXXXXX'.
-         3. Images: Ensure 'logo.jpeg' and 'favicon.ico' are in your folder.
+         3. Images: Ensure 'favicon.ico' is in your folder (used for both icon and logo).
     -->
 
     <!-- SEO & Meta Data -->
@@ -20,7 +20,9 @@
     <meta name="author" content="Georgia Hills">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://geodrive.ge">
-    <meta name="theme-color" content="#2C5530">
+    
+    <!-- Dynamic Theme Color (Managed by JS) -->
+    <meta id="theme-color-meta" name="theme-color" content="#0F172A">
 
     <!-- iOS & Mobile Optimization -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,19 +35,23 @@
     <meta property="og:url" content="https://geodrive.ge/">
     <meta property="og:title" content="Georgia Hills | Premium Driver Service">
     <meta property="og:description" content="Luxury transport for families in Georgia. Book your private driver today.">
-    <meta property="og:image" content="logo.jpeg">
+    <meta property="og:image" content="favicon.ico">
 
-    <!-- Fonts & Styles -->
+    <!-- Performance: Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preconnect" href="https://flagcdn.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+
+    <!-- Fonts & Styles -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- FAVICON SETUP (Uses your .ico file) -->
+    <!-- FAVICON SETUP -->
     <link rel="icon" href="favicon.ico" sizes="any">
-    <link rel="apple-touch-icon" href="logo.jpeg">
+    <link rel="apple-touch-icon" href="favicon.ico">
 
     <!-- Config -->
     <script>
@@ -73,11 +79,13 @@
                         'float': 'float 6s ease-in-out infinite',
                         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                         'spin': 'spin 1s linear infinite',
+                        'swipe-hint': 'swipeHint 2s ease-in-out infinite',
                     },
                     keyframes: {
                         float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
                         shake: { '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' }, '20%, 80%': { transform: 'translate3d(2px, 0, 0)' }, '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' }, '40%, 60%': { transform: 'translate3d(4px, 0, 0)' } },
-                        spin: { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } }
+                        spin: { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
+                        swipeHint: { '0%, 100%': { transform: 'translateX(0)', opacity: '0.5' }, '50%': { transform: 'translateX(-20px)', opacity: '1' } }
                     }
                 }
             }
@@ -93,6 +101,7 @@
             -webkit-tap-highlight-color: transparent;
             background-color: #F9FAFB;
             background: radial-gradient(circle at 50% 0%, #ffffff 0%, #F3F4F6 100%);
+            overscroll-behavior-y: none; 
         }
         .scroll-smooth { -webkit-overflow-scrolling: touch; }
         
@@ -106,7 +115,16 @@
         /* Localization */
         html[lang="ar"] body { font-family: 'Cairo', sans-serif; }
         html[lang="en"] body { font-family: 'Outfit', sans-serif; }
-        html[lang="ar"] #bookingForm input, html[lang="ar"] #bookingForm select, html[lang="ar"] #bookingForm textarea { text-align: right; direction: rtl; }
+        
+        /* RTL Logic for Inputs */
+        html[lang="ar"] #bookingForm input, 
+        html[lang="ar"] #bookingForm select, 
+        html[lang="ar"] #bookingForm textarea,
+        html[lang="ar"] #currency-converter input { 
+            text-align: right; 
+            direction: rtl; 
+        }
+        
         html[lang="ar"] #bookingForm input[type="tel"] { text-align: right !important; direction: ltr !important; }
         html[lang="ar"] footer .fa-solid, html[lang="ar"] footer .fa-location-dot, html[lang="ar"] footer .fa-brands { margin-right: 0 !important; margin-left: 0.75rem !important; }
         html[lang="ar"] footer { text-align: right; }
@@ -115,6 +133,12 @@
         html[lang="ar"] .faq-question { text-align: right; }
         html[lang="ar"] .price-badge { left: auto; right: 1rem; } 
         html[lang="ar"] .sticky-bar { flex-direction: row-reverse; }
+
+        /* Rendering Optimization */
+        .optimize-render {
+            content-visibility: auto;
+            contain-intrinsic-size: 1px 800px; /* Estimated height to prevent scroll jump */
+        }
 
         /* Animations */
         .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s, transform 0.8s; }
@@ -144,12 +168,17 @@
         #cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 80; transform: translateY(100%); transition: transform 0.5s; }
         #cookie-banner.active { transform: translateY(0); }
         
-        .sticky-bar { display: none; }
+        /* Smart Mobile Sticky Bar */
+        .sticky-bar { display: none; transition: transform 0.3s ease-in-out; }
         @media (max-width: 768px) {
-            .sticky-bar { display: flex; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 70; padding: 12px 16px; gap: 12px; align-items: center; }
+            .sticky-bar { display: flex; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 70; padding: 12px 16px; gap: 12px; align-items: center; transform: translateY(0); }
+            .sticky-bar.hide-bar { transform: translateY(100%); }
             #cookie-banner.active { bottom: 70px; }
             footer { padding-bottom: 6rem; } 
         }
+        
+        /* Smart Navbar Hide */
+        .nav-hidden { transform: translateY(-100%); }
         
         .skip-link { position: absolute; top: -40px; left: 0; background: #2C5530; color: white; padding: 8px; z-index: 100; transition: top 0.3s; }
         .skip-link:focus { top: 0; }
@@ -157,6 +186,14 @@
         /* Logo Styles */
         .brand-logo { height: 50px; width: auto; object-fit: contain; }
         .hero-logo { height: 120px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
+
+        /* Swipe Hint Overlay */
+        .swipe-hint-overlay {
+            position: absolute; inset: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; z-index: 30;
+            background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
+            opacity: 0; transition: opacity 0.5s;
+        }
+        .swipe-hint-overlay.show { opacity: 1; }
     </style>
 </head>
 <body class="bg-surface text-gray-800 antialiased overflow-x-hidden" dir="ltr">
@@ -167,7 +204,7 @@
     <!-- Preloader (Uses Logo) -->
     <div id="preloader" style="pointer-events: auto;">
         <div class="text-center">
-            <img src="logo.jpeg" class="w-24 h-24 rounded-full mb-4 animate-bounce shadow-xl" alt="Loading..." onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            <img src="favicon.ico" class="w-24 h-24 rounded-full mb-4 animate-bounce shadow-xl" alt="Loading..." onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
             <div class="text-4xl mb-2 animate-bounce hidden">🏔️</div>
         </div>
     </div>
@@ -183,9 +220,9 @@
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                <!-- Logo Section Updated -->
+                <!-- Logo Section -->
                 <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
-                    <img src="logo.jpeg" alt="Georgia Hills Logo" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')">
+                    <img src="favicon.ico" alt="Georgia Hills Logo" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')">
                     <span class="font-bold text-xl text-dark tracking-tight hidden md:block">Georgia Hills</span>
                 </div>
 
@@ -219,6 +256,23 @@
         <a href="#destinations" data-i18n="nav_tours" class="text-2xl font-bold text-dark hover:text-primary mobile-link">Destinations</a>
         <a href="#fleet" data-i18n="nav_fleet" class="text-2xl font-bold text-dark hover:text-primary mobile-link">Fleet</a>
         <a href="#booking" data-i18n="nav_book" class="px-8 py-4 bg-primary text-white rounded-full text-xl font-bold shadow-xl mobile-link">Book Now</a>
+        
+        <!-- Mobile Specific Extras -->
+        <div class="flex gap-6 mt-4">
+             <button onclick="shareApp()" class="flex flex-col items-center gap-2 text-gray-500">
+                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-share-nodes text-xl"></i></div>
+                <span class="text-xs">Share</span>
+            </button>
+            <a href="tel:+995579088537" class="flex flex-col items-center gap-2 text-gray-500">
+                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-phone text-xl"></i></div>
+                <span class="text-xs">Call</span>
+            </a>
+            <!-- Install App Button (Hidden by default) -->
+            <button id="install-btn" class="flex flex-col items-center gap-2 text-gray-500 hidden">
+                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-download text-xl"></i></div>
+                <span class="text-xs">Install</span>
+            </button>
+        </div>
     </div>
 
     <!-- Hero -->
@@ -230,7 +284,7 @@
         <div class="relative z-10 max-w-5xl mx-auto px-4 text-center text-white mt-10 reveal">
             <!-- Logo in Hero -->
             <div class="mb-8 flex justify-center">
-                <img src="logo.jpeg" class="hero-logo" alt="Georgia Hills" onerror="this.style.display='none'">
+                <img src="favicon.ico" class="hero-logo" alt="Georgia Hills" onerror="this.style.display='none'">
             </div>
             
             <div class="inline-flex items-center gap-2 py-1 px-4 border border-white/30 rounded-full text-sm font-medium tracking-widest mb-6 bg-white/10 backdrop-blur-sm">
@@ -292,73 +346,90 @@
                 <p class="text-gray-400 mt-4 max-w-2xl" data-i18n="dest_subtitle">Discover the most beautiful locations accessible comfortably by car.</p>
             </div>
             <div class="relative">
+                <!-- Visual Swipe Hint -->
+                <div id="swipe-hint" class="swipe-hint-overlay md:hidden">
+                    <i class="fa-regular fa-hand-pointer text-white text-4xl animate-swipe-hint"></i>
+                </div>
+
                 <button onclick="scrollSlider(-1)" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -ml-4 md:-ml-6 hidden md:flex hover:scale-110 active:scale-95"><i class="fa-solid fa-chevron-left"></i></button>
                 <button onclick="scrollSlider(1)" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -mr-4 md:-mr-6 hidden md:flex hover:scale-110 active:scale-95"><i class="fa-solid fa-chevron-right"></i></button>
-                <div id="tours-slider" class="flex gap-6 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-8 reveal">
+                <div id="tours-slider" class="flex gap-6 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-8 reveal touch-pan-y">
                     
                     <!-- Card 1: Kazbegi -->
                     <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Kazbegi Mountains" onerror="this.src='https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=600&q=80'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-8 w-full">
-                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kazbegi">Kazbegi</h3>
-                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kazbegi">The heart of the Caucasus Mountains.</p>
-                            <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                            <img src="https://images.unsplash.com/photo-1565008576549-57569a49371d?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Kazbegi Mountains" onerror="this.src='https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=600&q=80'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kazbegi">Kazbegi</h3>
+                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kazbegi">The heart of the Caucasus Mountains.</p>
+                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- Card 2: Martvili -->
                     <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1666704301423-70105e550451?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Martvili Canyon" onerror="this.src='https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=600&q=80'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-8 w-full">
-                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_martvili">Martvili</h3>
-                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_martvili">Emerald canyon boat ride.</p>
-                             <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                            <img src="https://images.unsplash.com/photo-1666704301423-70105e550451?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Martvili Canyon" onerror="this.src='https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=600&q=80'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_martvili">Martvili</h3>
+                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_martvili">Emerald canyon boat ride.</p>
+                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Card 3: Signagi -->
                     <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1539652981110-e9a408970d18?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Signagi City of Love" onerror="this.src='https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-8 w-full">
-                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kakheti">Signagi</h3>
-                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kakheti">City of Love with valley views.</p>
-                             <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                            <img src="https://images.unsplash.com/photo-1539652981110-e9a408970d18?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Signagi City of Love" onerror="this.src='https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kakheti">Signagi</h3>
+                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kakheti">City of Love with valley views.</p>
+                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Card 4: Gudauri -->
                     <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1612453977084-06c46c159512?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Gudauri Mountains" onerror="this.src='https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=600&q=80'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-8 w-full">
-                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_gudauri">Gudauri</h3>
-                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_gudauri">Breathtaking mountain views.</p>
-                             <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                            <img src="https://images.unsplash.com/photo-1612453977084-06c46c159512?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Gudauri Mountains" onerror="this.src='https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=600&q=80'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_gudauri">Gudauri</h3>
+                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_gudauri">Breathtaking mountain views.</p>
+                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Card 5: Vardzia -->
                      <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1579892546907-72814e127c52?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Vardzia Cave City" onerror="this.src='https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=80'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-8 w-full">
-                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_vardzia">Vardzia</h3>
-                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_vardzia">Ancient cave city monastery.</p>
-                             <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                            <img src="https://images.unsplash.com/photo-1579892546907-72814e127c52?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Vardzia Cave City" onerror="this.src='https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=80'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_vardzia">Vardzia</h3>
+                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_vardzia">Ancient cave city monastery.</p>
+                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Card 6: Batumi -->
                     <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Batumi Black Sea" onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-8 w-full">
-                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_batumi">Batumi</h3>
-                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_batumi">Pearl of the Black Sea coast.</p>
-                             <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                            <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Batumi Black Sea" onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80'">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_batumi">Batumi</h3>
+                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_batumi">Pearl of the Black Sea coast.</p>
+                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -367,7 +438,7 @@
     </section>
 
     <!-- Fleet Section -->
-    <section id="fleet" class="py-16 md:py-24 bg-surface">
+    <section id="fleet" class="py-16 md:py-24 bg-surface optimize-render">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 md:mb-16 reveal">
                 <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="fleet_label">Our Fleet</span>
@@ -376,7 +447,7 @@
             <div id="fleet-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                 <!-- Sedan -->
                 <div class="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-2xl transition-all group reveal border border-gray-100 hover:-translate-y-1">
-                    <div class="h-56 overflow-hidden relative bg-gray-100">
+                    <div class="h-56 overflow-hidden relative bg-gray-100 aspect-video">
                         <div class="price-badge absolute top-4 left-4 bg-white/90 backdrop-blur text-dark text-xs font-bold px-3 py-1 rounded-lg z-20 shadow-sm" data-i18n="price_sedan">From 150 GEL</div>
                         <img src="https://images.unsplash.com/photo-1550355291-bbee04a92027?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Sedan" onerror="this.src='https://placehold.co/800x600/eee/333?text=Sedan'">
                     </div>
@@ -393,7 +464,7 @@
                 <!-- Minivan -->
                 <div class="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-2xl transition-all group reveal relative border-2 border-accent scale-105 z-10 hover:-translate-y-1">
                      <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full z-20 shadow-md rtl:right-auto rtl:left-4" data-i18n="tag_popular">POPULAR</div>
-                    <div class="h-56 overflow-hidden relative bg-gray-100">
+                    <div class="h-56 overflow-hidden relative bg-gray-100 aspect-video">
                         <div class="price-badge absolute top-4 left-4 bg-white/90 backdrop-blur text-dark text-xs font-bold px-3 py-1 rounded-lg z-20 shadow-sm" data-i18n="price_minivan">From 250 GEL</div>
                         <img src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?auto=format&fit=crop&w=800&q=80" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Minivan" onerror="this.src='https://placehold.co/800x600/eee/333?text=Minivan'">
                     </div>
@@ -412,7 +483,7 @@
     </section>
     
     <!-- Currency Converter -->
-    <div class="max-w-4xl mx-auto px-4 pb-16">
+    <div id="currency-converter" class="max-w-4xl mx-auto px-4 pb-16 relative z-30">
          <div class="bg-white rounded-2xl shadow-soft p-6 md:p-4 border border-gray-100 reveal">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="flex items-center gap-2 w-full md:w-auto border-b md:border-b-0 border-gray-100 pb-4 md:pb-0">
@@ -420,16 +491,16 @@
                     <div><h3 class="text-sm font-bold text-dark" data-i18n="conv_title">Currency Converter</h3><p class="text-[10px] text-gray-400" data-i18n="conv_desc">Estimate price</p></div>
                 </div>
                 <div class="flex flex-col md:flex-row items-center gap-3 flex-1 w-full">
-                    <div class="w-full md:flex-1"><label class="block text-[10px] font-bold text-gray-400 uppercase mb-1" data-i18n="label_amount">Amount</label><input type="number" id="convAmount" value="150" oninput="convertCurrency()" class="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 outline-none font-bold text-dark text-sm focus:ring-1 focus:ring-accent/50 focus:border-accent transition-colors"></div>
+                    <div class="w-full md:flex-1"><label class="block text-[10px] font-bold text-gray-400 uppercase mb-1" data-i18n="label_amount">Amount</label><input type="number" id="convAmount" value="150" inputmode="decimal" oninput="convertCurrency()" class="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 outline-none font-bold text-dark text-sm focus:ring-1 focus:ring-accent/50 focus:border-accent transition-colors"></div>
                     <div class="flex w-full md:w-auto gap-2">
-                        <div class="flex-1 relative z-20" id="select-from">
+                        <div class="flex-1 md:min-w-[140px] relative z-20" id="select-from">
                             <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1" data-i18n="label_from">From</label>
                             <button type="button" class="w-full px-3 py-2 rounded-lg bg-white border border-gray-200 flex items-center gap-2 focus:border-primary outline-none" onclick="toggleDropdown('from')"><img src="https://flagcdn.com/w40/ge.png" class="w-6 h-4 object-cover rounded-sm" id="flag-from"><span class="font-bold text-dark text-sm" id="text-from">GEL</span></button>
                             <input type="hidden" id="convFrom" value="GEL">
                             <div class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 hidden max-h-60 overflow-y-auto" id="list-from"></div>
                         </div>
                         <div class="text-gray-300 self-end mb-2"><i class="fa-solid fa-arrow-right rtl:rotate-180 transform rotate-90 md:rotate-0"></i></div>
-                        <div class="flex-1 relative" id="select-to" style="z-index: 20;">
+                        <div class="flex-1 md:min-w-[140px] relative" id="select-to" style="z-index: 20;">
                             <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1" data-i18n="label_to">To</label>
                             <button type="button" class="w-full px-3 py-2 rounded-lg bg-white border border-gray-200 flex items-center gap-2 focus:border-primary outline-none" onclick="toggleDropdown('to')"><img src="https://flagcdn.com/w40/us.png" class="w-6 h-4 object-cover rounded-sm" id="flag-to"><span class="font-bold text-dark text-sm" id="text-to">USD</span></button>
                             <input type="hidden" id="convTo" value="USD">
@@ -446,7 +517,7 @@
     </div>
 
     <!-- Reviews Section -->
-    <section id="reviews" class="py-16 md:py-20 bg-white">
+    <section id="reviews" class="py-16 md:py-20 bg-white relative z-10 optimize-render">
         <div class="max-w-7xl mx-auto px-4">
              <div class="text-center mb-12 md:mb-16 reveal">
                 <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="reviews_label">Testimonials</span>
@@ -477,7 +548,7 @@
                 </div>
                 <div class="bg-gray-50 p-8 rounded-3xl reveal hover:shadow-card transition-all border border-gray-100 hover:-translate-y-1" style="transition-delay: 200ms;">
                     <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="text-gray-600 italic mb-6 leading-relaxed testimonial-text" data-i18n="review_3_text">"Excellent service. The car arrived on time and the driver was very polite. Will definitely use Georgia Hills again."</p>
+                    <p class="text-gray-600 italic mb-6 leading-relaxed testimonial-text" data-i18n="review_3_text">"Excellent service. The car arrived on time and the driver was very polite. Will use Georgia Hills again."</p>
                      <div class="flex items-center gap-3">
                          <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">Y</div>
                          <div>
@@ -545,14 +616,14 @@
                         <!-- Name -->
                         <div class="col-span-2 md:col-span-1 group">
                             <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 pl-1" data-i18n="label_name">Full Name</label>
-                            <input type="text" id="name" name="user_name" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all focus:bg-white" placeholder="Your Name">
+                            <input type="text" id="name" name="user_name" autocomplete="name" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all focus:bg-white" placeholder="Your Name">
                             <span class="error-text hidden" id="nameError">Please enter your name</span>
                         </div>
 
                         <!-- Contact -->
                         <div class="col-span-2 md:col-span-1">
                             <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 pl-1" data-i18n="label_phone">WhatsApp Number</label>
-                            <input type="tel" id="phone" name="user_phone" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all focus:bg-white" placeholder="+995 579 08 85 37">
+                            <input type="tel" id="phone" name="user_phone" autocomplete="tel" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all focus:bg-white" placeholder="+995 579 08 85 37">
                             <span class="error-text hidden" id="phoneError">Enter a valid phone (e.g. +995...)</span>
                         </div>
 
@@ -560,7 +631,7 @@
                         <div class="col-span-2 md:col-span-1">
                             <div class="grid grid-cols-2 gap-4">
                                 <div><label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_vehicle">Vehicle</label><select id="vehicle" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20"><option value="Sedan" data-i18n="opt_sedan">Sedan</option><option value="Minivan" data-i18n="opt_minivan">Minivan</option></select></div>
-                                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_passengers">Passengers</label><input type="number" id="passengers" min="1" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20" placeholder="2"> <span class="error-text hidden" id="passengersError">Min 1 passenger</span></div>
+                                <div><label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_passengers">Passengers</label><input type="number" id="passengers" min="1" inputmode="numeric" pattern="[0-9]*" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20" placeholder="2"> <span class="error-text hidden" id="passengersError">Min 1 passenger</span></div>
                             </div>
                         </div>
 
@@ -573,16 +644,16 @@
                             </div>
                         </div>
 
-                        <!-- Responsive Date Fields: Vertically Stacked on Mobile -->
+                        <!-- Responsive Date Fields -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-2 md:col-span-2">
                             <div class="col-span-1">
                                 <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_from">Pick-up Date</label>
-                                <input type="date" id="dateFrom" onchange="updateMinDate()" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20 text-sm">
+                                <input type="date" id="dateFrom" onchange="updateMinDate()" autocomplete="off" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20 text-sm">
                                 <span class="error-text hidden" id="dateFromError">Required</span>
                             </div>
                             <div class="col-span-1">
                                 <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_to">Drop-off Date</label>
-                                <input type="date" id="dateTo" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20 text-sm">
+                                <input type="date" id="dateTo" autocomplete="off" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20 text-sm">
                                 <span class="error-text hidden" id="dateToError">Required</span>
                             </div>
                         </div>
@@ -614,6 +685,7 @@
                     <div class="flex gap-4">
                         <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent transition-colors"><i class="fa-brands fa-instagram"></i></a>
                         <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
+                        <button onclick="shareApp()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent transition-colors md:hidden"><i class="fa-solid fa-share-nodes"></i></button>
                     </div>
                     <div class="mt-6 flex gap-4 text-xs text-gray-500">
                         <button onclick="document.getElementById('privacyModal').classList.remove('hidden')" class="hover:text-white transition-colors">Privacy Policy</button>
@@ -655,11 +727,17 @@
 
     <!-- Floating Action Buttons Stack -->
     <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-4 items-end">
-        <!-- Back to Top Arrow: Positioned higher on mobile to clear sticky bar, but lowered slightly for desktop -->
+        <!-- Back to Top Arrow -->
         <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3 bg-white text-primary rounded-full shadow-lg border border-gray-100 hover:bg-gray-50 transition-all opacity-0 translate-y-10 mb-24 md:mb-0 z-50">
             <i class="fa-solid fa-arrow-up"></i>
         </button>
-        <!-- WhatsApp Button (Hidden on Mobile, Visible Desktop) -->
+        
+        <!-- Mobile Call Button (Next to WhatsApp) -->
+        <a href="tel:+995579088537" class="md:hidden w-14 h-14 bg-white text-primary rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl transition-all mb-[70px] border border-gray-100">
+            <i class="fa-solid fa-phone text-2xl"></i>
+        </a>
+
+        <!-- WhatsApp Button (Desktop/Mobile) -->
         <a href="https://wa.me/995579088537" target="_blank" class="group relative hidden md:flex z-40">
             <div class="w-14 h-14 md:w-16 md:h-16 bg-[#25D366] rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-2xl transition-all transform hover:scale-110 animate-bounce-slow">
                 <i class="fa-brands fa-whatsapp text-3xl md:text-4xl"></i>
@@ -727,16 +805,16 @@
     </div>
 
     <!-- Scripts moved to bottom for non-blocking rendering -->
-    <!-- Google Analytics 4 (Safe Mode) -->
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-6GT03GSW49"></script>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-    gtag('config', 'G-6GT03GSW49');
+      gtag('config', 'G-6GT03GSW49');
     </script>
+
     <!-- EmailJS Integration -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script type="text/javascript">
@@ -749,7 +827,32 @@
     </script>
 
     <script>
-        // --- 0. Preloader & Init (Robust) ---
+        // --- 0. Haptics & UX Utils ---
+        function vibrate(pattern = [10]) {
+            if (navigator.vibrate) navigator.vibrate(pattern);
+        }
+
+        function shareApp() {
+            vibrate();
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Georgia Hills Transport',
+                    text: 'Check out this premium driver service in Georgia!',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                // Fallback for desktop/unsupported
+                const dummy = document.createElement('input');
+                document.body.appendChild(dummy);
+                dummy.value = window.location.href;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+                alert('Link copied to clipboard!');
+            }
+        }
+
+        // --- 1. Preloader & Init (Robust) ---
         window.addEventListener('load', () => {
             const loader = document.getElementById('preloader');
             if(loader) {
@@ -761,6 +864,8 @@
             }
             
             initCustomDropdowns();
+            initSwipeGestures(); 
+            restoreFormDraft(); // NEW: Restore user data
             
             // Safe Storage Access
             try {
@@ -794,6 +899,15 @@
                     }
                 });
                 mapObserver.observe(mapContainer);
+            }
+
+            // Show swipe hint if mobile
+            if(window.innerWidth < 768) {
+                const hint = document.getElementById('swipe-hint');
+                if(hint) {
+                    hint.classList.add('show');
+                    setTimeout(() => hint.classList.remove('show'), 2500);
+                }
             }
         });
         
@@ -833,6 +947,82 @@
                 }
             } catch(e){}
         }
+
+        // --- Auto-Save Form Data (State Persistence) ---
+        const formId = 'bookingForm';
+        const storageKey = 'gh_booking_draft';
+
+        function saveFormDraft() {
+            const serviceEls = document.querySelectorAll('input[name="driver"]');
+            let serviceVal = 'with_driver'; // default
+            serviceEls.forEach(el => { if(el.checked) serviceVal = el.value; });
+
+            const formData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                passengers: document.getElementById('passengers').value,
+                vehicle: document.getElementById('vehicle').value,
+                service: serviceVal,
+                notes: document.getElementById('notes').value
+            };
+            localStorage.setItem(storageKey, JSON.stringify(formData));
+        }
+
+        function restoreFormDraft() {
+            const saved = localStorage.getItem(storageKey);
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    if(data.name) document.getElementById('name').value = data.name;
+                    if(data.phone) document.getElementById('phone').value = data.phone;
+                    if(data.passengers) document.getElementById('passengers').value = data.passengers;
+                    if(data.vehicle) document.getElementById('vehicle').value = data.vehicle;
+                    if(data.notes) document.getElementById('notes').value = data.notes;
+                    
+                    // Restore Radio Button
+                    if(data.service) {
+                        const radio = document.querySelector(`input[name="driver"][value="${data.service}"]`);
+                        if(radio) radio.checked = true;
+                    }
+                } catch(e) { 
+                    console.log("Draft corrupted, clearing", e); 
+                    localStorage.removeItem(storageKey);
+                }
+            }
+        }
+
+        // Attach listener for auto-save
+        const formEl = document.getElementById(formId);
+        if(formEl) {
+            formEl.addEventListener('input', saveFormDraft);
+            formEl.addEventListener('change', saveFormDraft); // Catch radio/select changes
+        }
+
+        // --- PWA Install Prompt Logic ---
+        let deferredPrompt;
+        const installBtn = document.getElementById('install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent Chrome 67 and earlier from automatically showing the prompt
+            e.preventDefault();
+            deferredPrompt = e;
+            // Update UI to notify the user they can add to home screen
+            if(installBtn) {
+                installBtn.classList.remove('hidden');
+                installBtn.addEventListener('click', (e) => {
+                    // Show the prompt
+                    deferredPrompt.prompt();
+                    // Wait for the user to respond to the prompt
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the A2HS prompt');
+                        }
+                        deferredPrompt = null;
+                        installBtn.classList.add('hidden');
+                    });
+                });
+            }
+        });
 
         // --- Currency Converter Logic ---
         const currencies = [
@@ -939,11 +1129,11 @@
             if(type === 'from') updateBaseRate(); else convertCurrency();
         }
 
-        // --- Slider Logic (RTL Supported) ---
+        // --- Slider & Swipe Logic (Native Feel) ---
         function scrollSlider(direction) {
+            vibrate();
             const slider = document.getElementById('tours-slider');
             const scrollAmount = 320; 
-            // Check for RTL
             const isRTL = document.documentElement.dir === 'rtl';
             const dir = isRTL ? -direction : direction;
             
@@ -953,30 +1143,77 @@
             });
         }
 
-        // --- Scroll Logic (Optimized) ---
+        function initSwipeGestures() {
+            const slider = document.getElementById('tours-slider');
+            if(!slider) return;
+
+            let startX;
+            let scrollLeft;
+
+            // Passive listener for better scroll performance
+            slider.addEventListener('touchstart', (e) => {
+                startX = e.touches[0].pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            }, { passive: true });
+
+            slider.addEventListener('touchmove', (e) => {
+                const x = e.touches[0].pageX - slider.offsetLeft;
+                const walk = (x - startX) * 1.5; // scroll-fast
+                // Native overflow scrolling handles this, but we can add custom behaviors if needed
+                // For now, we rely on overflow-x: auto + snap for best native feel
+            }, { passive: true });
+            
+            // Hide hint on interaction
+            slider.addEventListener('touchstart', () => {
+                const hint = document.getElementById('swipe-hint');
+                if(hint) hint.classList.remove('show');
+            }, {once:true, passive: true});
+        }
+
+        // --- Smart Scroll Logic (Hide Bars + Dynamic Theme) ---
+        let lastScrollTop = 0;
         let ticking = false;
+        const metaThemeColor = document.getElementById('theme-color-meta');
+
         window.addEventListener('scroll', () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
                     const scrollY = window.scrollY;
                     const nav = document.getElementById('navbar');
                     const backBtn = document.getElementById('backToTop');
-                    const heroImg = document.getElementById('hero-img');
-
+                    const stickyBar = document.querySelector('.sticky-bar');
+                    
+                    // 1. Navbar Shadow
                     if(nav) {
-                         if (scrollY > 20) nav.classList.add('shadow-md', 'py-2'); else nav.classList.remove('shadow-md', 'py-2');
+                        if (scrollY > 20) nav.classList.add('shadow-md', 'py-2'); else nav.classList.remove('shadow-md', 'py-2');
                     }
+
+                    // 2. Dynamic Theme Color (Matches Hero vs Content)
+                    if (metaThemeColor) {
+                        if (scrollY > 100) {
+                            metaThemeColor.setAttribute('content', '#ffffff'); // White for content
+                        } else {
+                            metaThemeColor.setAttribute('content', '#0F172A'); // Dark for hero
+                        }
+                    }
+
+                    // 3. Smart Hide/Show Logic
+                    if (scrollY > lastScrollTop && scrollY > 100) {
+                        // Scrolling Down
+                        if(stickyBar) stickyBar.classList.add('hide-bar');
+                        if(nav && window.innerWidth < 768) nav.classList.add('nav-hidden');
+                    } else {
+                        // Scrolling Up
+                        if(stickyBar) stickyBar.classList.remove('hide-bar');
+                        if(nav) nav.classList.remove('nav-hidden');
+                    }
+
+                    // 4. Back to Top Visibility
                     if(backBtn) {
                         if (scrollY > 500) backBtn.classList.add('show'); else backBtn.classList.remove('show');
                     }
-                    if(heroImg && scrollY < window.innerHeight) {
-                        heroImg.style.transform = `translateY(${scrollY * 0.4}px) scale(1.1)`;
-                    }
-                    
-                    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-                    const progBar = document.getElementById("scroll-progress");
-                    if(progBar) progBar.style.width = (scrollY / height) * 100 + "%";
 
+                    lastScrollTop = scrollY;
                     ticking = false;
                 });
                 ticking = true;
@@ -990,6 +1227,7 @@
         const mobileLinks = document.querySelectorAll('.mobile-link');
 
         function toggleMenu() {
+            vibrate();
             if(mobileMenu) mobileMenu.classList.toggle('open');
             document.body.classList.toggle('overflow-hidden');
         }
@@ -1006,6 +1244,7 @@
         }
 
         function prefillVehicle(type) {
+            vibrate();
             const vehInput = document.getElementById('vehicle');
             if(vehInput) vehInput.value = type;
             const bookSec = document.getElementById('booking');
@@ -1020,7 +1259,7 @@
             const dateFrom = document.getElementById('dateFrom');
             const dateTo = document.getElementById('dateTo');
 
-            // Reset
+            // Reset classes
             [name, phone, passengers, dateFrom, dateTo].forEach(el => { 
                 if(el) {
                     el.classList.remove('input-error', 'animate-shake'); 
@@ -1029,22 +1268,57 @@
             });
             document.querySelectorAll('.error-text').forEach(el => el.classList.add('hidden'));
 
-            // Validation Logic with Success States
+            // 1. Name Validation (Require non-empty trimmed string)
             if (name && !name.value.trim()) { showError(name, document.getElementById('nameError')); isValid = false; } 
             else if(name) name.classList.add('input-success');
 
+            // 2. Phone Validation (Basic international check)
             if (phone && !/^[+\d\s-]{8,}$/.test(phone.value.trim())) { showError(phone, document.getElementById('phoneError')); isValid = false; }
             else if(phone) phone.classList.add('input-success');
 
+            // 3. Passengers Validation (Must be >= 1)
             if (passengers && (!passengers.value || passengers.value < 1)) { showError(passengers, document.getElementById('passengersError')); isValid = false; }
             else if(passengers) passengers.classList.add('input-success');
 
-            if (dateFrom && !dateFrom.value) { showError(dateFrom, document.getElementById('dateFromError')); isValid = false; }
-            else if(dateFrom) dateFrom.classList.add('input-success');
+            // 4. Date Validation
+            let validDates = true;
+            if (dateFrom && !dateFrom.value) { 
+                showError(dateFrom, document.getElementById('dateFromError')); 
+                isValid = false; 
+                validDates = false;
+            } else if(dateFrom) {
+                dateFrom.classList.add('input-success');
+            }
 
-            if (dateTo && !dateTo.value) { showError(dateTo, document.getElementById('dateToError')); isValid = false; }
-            else if(dateTo) dateTo.classList.add('input-success');
+            if (dateTo && !dateTo.value) { 
+                showError(dateTo, document.getElementById('dateToError')); 
+                isValid = false; 
+                validDates = false;
+            } else if(dateTo) {
+               // Wait to add success class until logic check
+            }
 
+            // 5. Logical Date Check (Drop-off >= Pick-up)
+            if (validDates && dateFrom && dateTo) {
+                const d1 = new Date(dateFrom.value);
+                const d2 = new Date(dateTo.value);
+                
+                if (d2 < d1) {
+                    const errorSpan = document.getElementById('dateToError');
+                    if(errorSpan) {
+                        // Dynamic error message based on language
+                        errorSpan.textContent = currentLang === 'ar' ? 'يجب أن يكون بعد تاريخ الاستلام' : 'Must be after pick-up date';
+                        errorSpan.classList.remove('hidden');
+                    }
+                    dateTo.classList.add('input-error', 'animate-shake');
+                    dateTo.classList.remove('input-success'); // Remove success if logic fails
+                    isValid = false;
+                } else {
+                    dateTo.classList.add('input-success');
+                }
+            }
+
+            if(!isValid) vibrate([50, 50, 50]); // Error haptic
             return isValid;
         }
 
@@ -1056,6 +1330,8 @@
         function handleBooking(e) {
             e.preventDefault();
             if(!validateForm()) return;
+
+            vibrate([20]); // Success feedback
 
             const btnText = document.getElementById('btnText');
             const btnIcon = document.getElementById('btnIcon');
@@ -1085,6 +1361,17 @@
             const msg = `Hello! Quote Request:\n\n👤 ${formData.name}\n📱 ${formData.phone}\n👥 Pax: ${formData.passengers}\n🚗 ${formData.vehicle}\n👔 ${serviceText}\n📅 ${formData.from} to ${formData.to}\n📝 ${formData.notes}`;
             const encodedMsg = encodeURIComponent(msg);
             
+            // Safety Timeout: Re-enable button if request hangs for >10s
+            const safetyTimeout = setTimeout(() => {
+                if(submitBtn.disabled) {
+                    console.warn("Request timed out, re-enabling UI");
+                    showSuccess(); // Or just reset UI
+                }
+            }, 10000);
+
+            // Clear draft on success
+            localStorage.removeItem(storageKey);
+
             // 1. Send to Google Sheets
             const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxHMEPqGd_060KJ3dnASxx6mQLOx-z4YAirO6yWvwkklb7dHIlSbHdeTfFJ2ZHxL0WL7A/exec";
             fetch(GOOGLE_SCRIPT_URL, {
@@ -1105,12 +1392,20 @@
                     message: formData.notes
                 };
                 emailjs.send('service_booking', 'template_40h23xf', templateParams)
-                    .finally(() => {
+                    .then(() => {
+                        clearTimeout(safetyTimeout);
+                        window.open(`https://wa.me/995579088537?text=${encodedMsg}`, '_blank');
+                        showSuccess();
+                    })
+                    .catch((e) => {
+                        console.error("EmailJS Failed", e);
+                        clearTimeout(safetyTimeout);
                         window.open(`https://wa.me/995579088537?text=${encodedMsg}`, '_blank');
                         showSuccess();
                     });
             } else {
                  setTimeout(() => {
+                    clearTimeout(safetyTimeout);
                     window.open(`https://wa.me/995579088537?text=${encodedMsg}`, '_blank');
                     showSuccess();
                  }, 1500);
@@ -1202,10 +1497,14 @@
                 fleet_label: "أسطولنا", fleet_title: "اختر راحتك",
                 sedan_title: "سيدان رجال أعمال", sedan_desc: "مثالية للأزواج أو المسافرين المنفردين.", btn_select_sedan: "حجز سيدان", price_sedan: "يبدأ من 150 لاري",
                 minivan_title: "ميني فان عائلي", minivan_desc: "راحة واسعة للمجموعات والعائلات.", btn_select_minivan: "حجز ميني فان", tag_popular: "الأكثر طلباً", price_minivan: "يبدأ من 250 لاري",
-                reviews_label: "آراء العملاء", reviews_title: "موثوق من المسافرين",
-                review_1_text: "\"سائقنا جورجي كان مذهلاً! أخذنا إلى أماكن خفية في الطريق إلى كازبيجي لم نكن لنعرفها بدونه. السيارة كانت نظيفة جداً.\"", review_1_name: "سارة جونسون", review_1_country: "المملكة المتحدة",
-                review_2_text: "\"الحجز كان سهلاً جداً عبر واتساب. الميني فان لعائلتنا المكونة من 6 أشخاص كانت مريحة وواسعة. أنصح بهم بشدة.\"", review_2_name: "أحمد خليل", review_2_country: "الإمارات",
-                review_3_text: "\"أفضل خدمة في تبليسي. السائق كان دقيقاً في المواعيد ومؤدباً جداً. السعر كان تماماً كما تم الاتفاق عليه.\"", review_3_name: "إيلينا م.", review_3_country: "ألمانيا",
+                
+                // Updated Testimonials (More Authentic)
+                reviews_label: "تجارب ضيوفنا", 
+                reviews_title: "تجارب مسافرين حقيقية",
+                review_1_text: "\"السائق جورجي كان رائعاً! أرشدنا لأماكن ساحرة في طريق كازبيجي لم نكن لنكتشفها وحدنا. السيارة كانت في غاية النظافة.\"", review_1_name: "سارة جونسون", review_1_country: "المملكة المتحدة",
+                review_2_text: "\"تجربة الحجز عبر الواتساب كانت سلسة للغاية. سيارة الميني فان كانت واسعة ومريحة جداً لعائلتنا (6 أشخاص). أنصح بالتعامل معهم بشدة.\"", review_2_name: "أحمد خليل", review_2_country: "الإمارات",
+                review_3_text: "\"من أفضل خدمات النقل في تبليسي. السائق خلوق جداً وملتزم بالمواعيد. والسعر كان مطابقاً للاتفاق دون أي زيادات.\"", review_3_name: "إيلينا م.", review_3_country: "ألمانيا",
+                
                 faq_title: "أسئلة شائعة", 
                 faq_q1: "هل الوقود مشمول؟", faq_a1: "نعم، الوقود مشمول بالكامل في جميع الرحلات التي تشمل سائقاً.",
                 faq_q2: "هل يجب علي الدفع مسبقاً؟", faq_a2: "لا، الدفع يتم بالكامل عند الوصول. يمكنك الدفع نقداً للسائق (لاري، دولار، يورو) عند بدء الرحلة.",
@@ -1220,9 +1519,11 @@
                 footer_links: "روابط سريعة", footer_contact: "اتصل بنا", footer_find_us: "موقعنا",
                 modal_title: "العرض جاهز!", modal_desc: "تم تجهيز التفاصيل. أرسلها عبر واتساب.", modal_btn_send: "فتح واتساب", modal_close: "إغلاق",
                 
-                // Currency Converter Arabic
-                conv_title: "محول العملات", conv_desc: "تحقق من السعر التقديري",
-                label_amount: "المبلغ", label_from: "من", label_to: "إلى", label_result: "التقدير:",
+                // Updated Currency Converter (More Accurate)
+                conv_title: "محول العملات", 
+                conv_desc: "تقدير تكلفة الرحلة",
+                label_amount: "المبلغ", label_from: "من", label_to: "إلى", 
+                label_result: "السعر التقريبي:",
 
                 // Destinations Arabic
                 dest_label: "استكشف جورجيا",
@@ -1239,6 +1540,7 @@
         };
 
         function toggleLanguage() {
+            vibrate();
             currentLang = currentLang === 'en' ? 'ar' : 'en';
             try { localStorage.setItem('userLang', currentLang); } catch(e){}
             document.documentElement.lang = currentLang;
@@ -1248,7 +1550,7 @@
                 el.textContent = currentLang === 'en' ? 'العربية' : 'English';
             });
 
-            const rtlElements = ['hero-content', 'about-content', 'fleet-grid', 'footer-content', 'booking-container', 'faq-content', 'destinations'];
+            const rtlElements = ['hero-content', 'about-content', 'fleet-grid', 'footer-content', 'booking-container', 'faq-content', 'destinations', 'reviews', 'currency-converter'];
             rtlElements.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
