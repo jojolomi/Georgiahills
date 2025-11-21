@@ -10,6 +10,7 @@
     <!-- 
          1. EmailJS: Replace 'YOUR_PUBLIC_KEY', 'YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID'.
          2. Analytics: Replace 'G-XXXXXXXXXX'.
+         3. Images: Ensure 'logo.jpeg' and 'favicon.ico' are in your folder.
     -->
 
     <!-- SEO & Meta Data -->
@@ -32,7 +33,7 @@
     <meta property="og:url" content="https://geodrive.ge/">
     <meta property="og:title" content="Georgia Hills | Premium Driver Service">
     <meta property="og:description" content="Luxury transport for families in Georgia. Book your private driver today.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1533558133539-a6179c2d2754?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80">
+    <meta property="og:image" content="logo.jpeg">
 
     <!-- Fonts & Styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,6 +42,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- FAVICON SETUP (Uses your .ico file) -->
+    <link rel="icon" href="favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="logo.jpeg">
 
     <!-- Config -->
     <script>
@@ -131,9 +136,11 @@
         #network-toast { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: #EF4444; color: white; padding: 10px 20px; border-radius: 9999px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 100; transition: top 0.3s; font-size: 0.875rem; font-weight: bold; display: flex; gap: 8px; align-items: center; }
         #network-toast.show { top: 20px; }
 
+        /* Sticky Elements & Back To Top */
         #backToTop { visibility: hidden; opacity: 0; transition: all 0.3s; }
         #backToTop.show { visibility: visible; opacity: 1; }
         .nav-link.active { color: #2C5530; }
+        
         #cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 80; transform: translateY(100%); transition: transform 0.5s; }
         #cookie-banner.active { transform: translateY(0); }
         
@@ -148,7 +155,8 @@
         .skip-link:focus { top: 0; }
         
         /* Logo Styles */
-        .brand-logo { height: 40px; width: auto; border-radius: 50%; object-fit: cover; }
+        .brand-logo { height: 50px; width: auto; object-fit: contain; }
+        .hero-logo { height: 120px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
     </style>
 </head>
 <body class="bg-surface text-gray-800 antialiased overflow-x-hidden" dir="ltr">
@@ -159,7 +167,6 @@
     <!-- Preloader (Uses Logo) -->
     <div id="preloader" style="pointer-events: auto;">
         <div class="text-center">
-            <!-- Replace this img src if you have an online URL, otherwise local file works -->
             <img src="logo.jpeg" class="w-24 h-24 rounded-full mb-4 animate-bounce shadow-xl" alt="Loading..." onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
             <div class="text-4xl mb-2 animate-bounce hidden">🏔️</div>
         </div>
@@ -178,9 +185,8 @@
             <div class="flex justify-between h-20 items-center">
                 <!-- Logo Section Updated -->
                 <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
-                    <img src="logo.jpeg" alt="Georgia Hills Logo" class="brand-logo shadow-md" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')">
-                    <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg hidden"><i class="fa-solid fa-mountain"></i></div>
-                    <span class="font-bold text-xl text-dark tracking-tight">Georgia Hills</span>
+                    <img src="logo.jpeg" alt="Georgia Hills Logo" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')">
+                    <span class="font-bold text-xl text-dark tracking-tight hidden md:block">Georgia Hills</span>
                 </div>
 
                 <!-- Desktop Menu -->
@@ -224,7 +230,7 @@
         <div class="relative z-10 max-w-5xl mx-auto px-4 text-center text-white mt-10 reveal">
             <!-- Logo in Hero -->
             <div class="mb-8 flex justify-center">
-                <img src="logo.jpeg" class="w-32 h-32 rounded-full border-4 border-white/20 shadow-2xl" alt="Georgia Hills" onerror="this.style.display='none'">
+                <img src="logo.jpeg" class="hero-logo" alt="Georgia Hills" onerror="this.style.display='none'">
             </div>
             
             <div class="inline-flex items-center gap-2 py-1 px-4 border border-white/30 rounded-full text-sm font-medium tracking-widest mb-6 bg-white/10 backdrop-blur-sm">
@@ -360,7 +366,7 @@
         </div>
     </section>
 
-    <!-- Fleet -->
+    <!-- Fleet Section -->
     <section id="fleet" class="py-16 md:py-24 bg-surface">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 md:mb-16 reveal">
@@ -416,14 +422,14 @@
                 <div class="flex flex-col md:flex-row items-center gap-3 flex-1 w-full">
                     <div class="w-full md:flex-1"><label class="block text-[10px] font-bold text-gray-400 uppercase mb-1" data-i18n="label_amount">Amount</label><input type="number" id="convAmount" value="150" oninput="convertCurrency()" class="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 outline-none font-bold text-dark text-sm focus:ring-1 focus:ring-accent/50 focus:border-accent transition-colors"></div>
                     <div class="flex w-full md:w-auto gap-2">
-                        <div class="flex-1 relative" id="select-from">
+                        <div class="flex-1 relative z-20" id="select-from">
                             <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1" data-i18n="label_from">From</label>
                             <button type="button" class="w-full px-3 py-2 rounded-lg bg-white border border-gray-200 flex items-center gap-2 focus:border-primary outline-none" onclick="toggleDropdown('from')"><img src="https://flagcdn.com/w40/ge.png" class="w-6 h-4 object-cover rounded-sm" id="flag-from"><span class="font-bold text-dark text-sm" id="text-from">GEL</span></button>
                             <input type="hidden" id="convFrom" value="GEL">
                             <div class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 hidden max-h-60 overflow-y-auto" id="list-from"></div>
                         </div>
                         <div class="text-gray-300 self-end mb-2"><i class="fa-solid fa-arrow-right rtl:rotate-180 transform rotate-90 md:rotate-0"></i></div>
-                        <div class="flex-1 relative" id="select-to">
+                        <div class="flex-1 relative" id="select-to" style="z-index: 20;">
                             <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1" data-i18n="label_to">To</label>
                             <button type="button" class="w-full px-3 py-2 rounded-lg bg-white border border-gray-200 flex items-center gap-2 focus:border-primary outline-none" onclick="toggleDropdown('to')"><img src="https://flagcdn.com/w40/us.png" class="w-6 h-4 object-cover rounded-sm" id="flag-to"><span class="font-bold text-dark text-sm" id="text-to">USD</span></button>
                             <input type="hidden" id="convTo" value="USD">
@@ -449,7 +455,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-gray-50 p-8 rounded-3xl reveal hover:shadow-card transition-all border border-gray-100 hover:-translate-y-1">
                     <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="text-gray-600 italic mb-6 leading-relaxed" data-i18n="review_1_text">"Our driver Giorgi was amazing! He showed us hidden spots on the way to Kazbegi that we would have never found alone. The car was spotless."</p>
+                    <p class="text-gray-600 italic mb-6 leading-relaxed testimonial-text" data-i18n="review_1_text">"Our driver Giorgi was amazing! He showed us hidden spots on the way to Kazbegi that we would have never found alone. The car was spotless."</p>
                     <div class="flex items-center gap-3">
                          <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">M</div>
                          <div>
@@ -460,7 +466,7 @@
                 </div>
                 <div class="bg-gray-50 p-8 rounded-3xl reveal hover:shadow-card transition-all border border-gray-100 hover:-translate-y-1" style="transition-delay: 100ms;">
                     <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="text-gray-600 italic mb-6 leading-relaxed" data-i18n="review_2_text">"Booking via WhatsApp was very smooth. The Minivan was clean, spacious, and perfect for our family trip to Batumi."</p>
+                    <p class="text-gray-600 italic mb-6 leading-relaxed testimonial-text" data-i18n="review_2_text">"Booking via WhatsApp was very smooth. The Minivan was clean, spacious, and perfect for our family trip to Batumi."</p>
                      <div class="flex items-center gap-3">
                          <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">F</div>
                          <div>
@@ -471,7 +477,7 @@
                 </div>
                 <div class="bg-gray-50 p-8 rounded-3xl reveal hover:shadow-card transition-all border border-gray-100 hover:-translate-y-1" style="transition-delay: 200ms;">
                     <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="text-gray-600 italic mb-6 leading-relaxed" data-i18n="review_3_text">"Excellent service. The car arrived on time and the driver was very polite. Will definitely use Georgia Hills again."</p>
+                    <p class="text-gray-600 italic mb-6 leading-relaxed testimonial-text" data-i18n="review_3_text">"Excellent service. The car arrived on time and the driver was very polite. Will definitely use Georgia Hills again."</p>
                      <div class="flex items-center gap-3">
                          <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">Y</div>
                          <div>
@@ -649,12 +655,12 @@
 
     <!-- Floating Action Buttons Stack -->
     <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-4 items-end">
-        <!-- Arrow moved up significantly to avoid sticky bar on mobile -->
-        <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3 bg-white text-primary rounded-full shadow-lg border border-gray-100 hover:bg-gray-50 transition-all opacity-0 translate-y-10 mb-32 md:mb-0">
+        <!-- Back to Top Arrow: Positioned higher on mobile to clear sticky bar, but lowered slightly for desktop -->
+        <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3 bg-white text-primary rounded-full shadow-lg border border-gray-100 hover:bg-gray-50 transition-all opacity-0 translate-y-10 mb-24 md:mb-0 z-50">
             <i class="fa-solid fa-arrow-up"></i>
         </button>
         <!-- WhatsApp Button (Hidden on Mobile, Visible Desktop) -->
-        <a href="https://wa.me/995579088537" target="_blank" class="group relative hidden md:flex">
+        <a href="https://wa.me/995579088537" target="_blank" class="group relative hidden md:flex z-40">
             <div class="w-14 h-14 md:w-16 md:h-16 bg-[#25D366] rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-2xl transition-all transform hover:scale-110 animate-bounce-slow">
                 <i class="fa-brands fa-whatsapp text-3xl md:text-4xl"></i>
             </div>
@@ -664,8 +670,8 @@
     <!-- Success Modal -->
     <div id="successModal" class="fixed inset-0 z-[70] hidden flex items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-300 opacity-0 px-4">
         <div class="bg-white rounded-3xl p-6 md:p-10 max-w-sm w-full shadow-2xl text-center transform scale-90 transition-transform duration-300 relative">
-            <!-- Fixed Close Button (Ensured global JS function) -->
-            <button type="button" onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-dark text-3xl z-50 p-4 cursor-pointer">&times;</button>
+            <!-- Fixed Close Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-dark text-2xl z-10 p-2 cursor-pointer">&times;</button>
             <div class="w-16 h-16 md:w-20 md:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
                 <i class="fa-solid fa-check text-3xl md:text-4xl"></i>
             </div>
@@ -1037,12 +1043,6 @@
 
             if (dateTo && !dateTo.value) { showError(dateTo, document.getElementById('dateToError')); isValid = false; }
             else if(dateTo) dateTo.classList.add('input-success');
-            
-            if(!isValid) {
-                // Smooth scroll to error
-                const firstError = document.querySelector('.input-error');
-                if(firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
 
             return isValid;
         }
