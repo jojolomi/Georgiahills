@@ -81,7 +81,14 @@
 
     <style>
         html { scroll-padding-top: 5rem; }
-        body { text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; }
+        body { 
+            text-rendering: optimizeLegibility; 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #F9FAFB;
+            background: radial-gradient(circle at 50% 0%, #ffffff 0%, #F3F4F6 100%);
+        }
         .scroll-smooth { -webkit-overflow-scrolling: touch; }
         
         ::-webkit-scrollbar { width: 8px; }
@@ -113,14 +120,32 @@
         #mobile-menu.open { transform: translateX(0); }
         
         .input-error { border-color: #EF4444 !important; background-color: #FEF2F2 !important; }
+        .input-success { border-color: #10B981 !important; background-color: #F0FDF4 !important; }
         .error-text { display: block; font-size: 0.75rem; color: #EF4444; margin-top: 0.25rem; }
         @media screen and (max-width: 768px) { input, select, textarea { font-size: 16px !important; } }
         
         #preloader { position: fixed; inset: 0; z-index: 9999; background: #fff; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; pointer-events: none; }
         .fade-out { opacity: 0; }
         
-        /* Network Toast */
-        #network-toast { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: #EF4444; color: white; padding: 10px 20px; rounded-full shadow-lg z-[100]; transition: top 0.3s; font-size: 0.875rem; font-weight: bold; display: flex; gap: 8px; align-items: center; }
+        /* FIXED CSS HERE */
+        #network-toast { 
+            position: fixed; 
+            top: -60px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: #EF4444; 
+            color: white; 
+            padding: 10px 20px; 
+            border-radius: 9999px; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); 
+            z-index: 100; 
+            transition: top 0.3s; 
+            font-size: 0.875rem; 
+            font-weight: bold; 
+            display: flex; 
+            gap: 8px; 
+            align-items: center; 
+        }
         #network-toast.show { top: 20px; }
 
         #backToTop { visibility: hidden; opacity: 0; transition: all 0.3s; }
@@ -149,7 +174,6 @@
     <div id="preloader" style="pointer-events: auto;">
         <div class="text-center">
             <div class="text-4xl mb-2 animate-bounce">🏔️</div>
-            <!-- Removed Text to avoid visual clutter -->
         </div>
     </div>
     <script>
@@ -204,7 +228,7 @@
     <!-- Hero -->
     <section id="home" class="relative h-[90vh] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <!-- Enhanced Fallback: Uses a safe nature image if the main one fails, no text -->
+            <!-- Enhanced Fallback: No text -->
             <img id="hero-img" src="https://images.unsplash.com/photo-1533558133539-a6179c2d2754?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover scale-110" alt="Scenic Georgia" onerror="this.src='https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80'">
             <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-transparent"></div>
         </div>
@@ -237,7 +261,6 @@
                 <div class="w-full lg:w-1/2 reveal">
                     <div class="relative group">
                         <div class="absolute -top-4 -left-4 w-24 h-24 bg-accent/20 rounded-full blur-2xl transition-all group-hover:bg-accent/30"></div>
-                        <!-- Updated with a reliable Unsplash ID and fallback -->
                         <img src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80" class="rounded-3xl shadow-2xl relative z-10 transform transition-transform duration-700 group-hover:scale-[1.02]" alt="Tbilisi" onerror="this.src='https://images.unsplash.com/photo-1560066569-628ceb6e867e?auto=format&fit=crop&w=800&q=80'">
                     </div>
                 </div>
