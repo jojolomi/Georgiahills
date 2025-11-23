@@ -10,7 +10,7 @@
     <!-- 
          1. EmailJS: Replace 'YOUR_PUBLIC_KEY', 'YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID'.
          2. Analytics: Replace 'G-XXXXXXXXXX'.
-         3. Images: Ensure 'favicon.ico' is in your folder (used for both icon and logo).
+         3. Images: Ensure 'favicon.ico' is in your folder.
     -->
 
     <!-- SEO & Meta Data -->
@@ -21,17 +21,16 @@
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://geodrive.ge">
     
-    <!-- Dynamic Theme Color (Managed by JS) -->
     <meta id="theme-color-meta" name="theme-color" content="#0F172A">
 
-    <!-- JSON-LD Structured Data (New SEO Feature) -->
+    <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "AutoRental",
       "name": "Georgia Hills",
-      "image": "https://geodrive.ge/logo.jpeg",
-      "description": "Premium car rental with driver in Georgia. #1 Rated service for Arab families.",
+      "image": "https://geodrive.ge/favicon.ico",
+      "description": "Premium car rental with driver in Georgia.",
       "url": "https://geodrive.ge",
       "telephone": "+995579088537",
       "priceRange": "$$",
@@ -39,47 +38,37 @@
         "@type": "PostalAddress",
         "addressLocality": "Tbilisi",
         "addressCountry": "GE"
-      },
-      "areaServed": "Georgia",
-      "paymentAccepted": "Cash, USD, GEL",
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "500"
       }
     }
     </script>
 
-    <!-- iOS & Mobile Optimization -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Georgia Hills">
     <meta name="format-detection" content="telephone=no">
 
-    <!-- Social Media Sharing -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://geodrive.ge/">
     <meta property="og:title" content="Georgia Hills | Premium Driver Service">
     <meta property="og:description" content="Luxury transport for families in Georgia. Book your private driver today.">
     <meta property="og:image" content="favicon.ico">
 
-    <!-- Performance: Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://images.unsplash.com">
     <link rel="preconnect" href="https://flagcdn.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
 
-    <!-- Fonts & Styles -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- FAVICON SETUP -->
     <link rel="icon" href="favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="favicon.ico">
+    
+    <!-- PWA Manifest Link -->
+    <link rel="manifest" href="manifest.json">
 
-    <!-- Config -->
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -138,11 +127,9 @@
         
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
         
-        /* Localization */
         html[lang="ar"] body { font-family: 'Cairo', sans-serif; }
         html[lang="en"] body { font-family: 'Outfit', sans-serif; }
         
-        /* RTL Logic for Inputs */
         html[lang="ar"] #bookingForm input, 
         html[lang="ar"] #bookingForm select, 
         html[lang="ar"] #bookingForm textarea,
@@ -160,13 +147,7 @@
         html[lang="ar"] .price-badge { left: auto; right: 1rem; } 
         html[lang="ar"] .sticky-bar { flex-direction: row-reverse; }
 
-        /* Rendering Optimization */
-        .optimize-render {
-            content-visibility: auto;
-            contain-intrinsic-size: 1px 800px; /* Estimated height to prevent scroll jump */
-        }
-
-        /* Animations */
+        .optimize-render { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
         .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s, transform 0.8s; }
         .reveal.waiting { opacity: 0; transform: translateY(30px); } 
 
@@ -182,11 +163,9 @@
         #preloader { position: fixed; inset: 0; z-index: 9999; background: #fff; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; pointer-events: none; }
         .fade-out { opacity: 0; }
         
-        /* Network Toast */
         #network-toast { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: #EF4444; color: white; padding: 10px 20px; border-radius: 9999px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 100; transition: top 0.3s; font-size: 0.875rem; font-weight: bold; display: flex; gap: 8px; align-items: center; }
         #network-toast.show { top: 20px; }
 
-        /* Sticky Elements & Back To Top */
         #backToTop { visibility: hidden; opacity: 0; transition: all 0.3s; }
         #backToTop.show { visibility: visible; opacity: 1; }
         .nav-link.active { color: #2C5530; }
@@ -194,7 +173,6 @@
         #cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 80; transform: translateY(100%); transition: transform 0.5s; }
         #cookie-banner.active { transform: translateY(0); }
         
-        /* Smart Mobile Sticky Bar */
         .sticky-bar { display: none; transition: transform 0.3s ease-in-out; }
         @media (max-width: 768px) {
             .sticky-bar { display: flex; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 70; padding: 12px 16px; gap: 12px; align-items: center; transform: translateY(0); }
@@ -203,17 +181,13 @@
             footer { padding-bottom: 6rem; } 
         }
         
-        /* Smart Navbar Hide */
         .nav-hidden { transform: translateY(-100%); }
-        
         .skip-link { position: absolute; top: -40px; left: 0; background: #2C5530; color: white; padding: 8px; z-index: 100; transition: top 0.3s; }
         .skip-link:focus { top: 0; }
         
-        /* Logo Styles */
         .brand-logo { height: 50px; width: auto; object-fit: contain; }
         .hero-logo { height: 120px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
 
-        /* Swipe Hint Overlay */
         .swipe-hint-overlay {
             position: absolute; inset: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; z-index: 30;
             background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
@@ -227,26 +201,19 @@
     <a href="#home" class="skip-link">Skip to content</a>
     <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>You are offline</span></div>
 
-    <!-- Preloader (Uses Logo) -->
+    <!-- Preloader -->
     <div id="preloader" style="pointer-events: auto;">
         <div class="text-center">
             <img src="favicon.ico" class="w-24 h-24 rounded-full mb-4 animate-bounce shadow-xl" alt="Loading..." onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
             <div class="text-4xl mb-2 animate-bounce hidden">🏔️</div>
         </div>
     </div>
-    <script>
-        window.addEventListener('load', () => setTimeout(() => { const l=document.getElementById('preloader'); if(l){l.classList.add('fade-out'); setTimeout(()=>l.style.display='none',500);} }, 500));
-        setTimeout(() => { const l=document.getElementById('preloader'); if(l&&l.style.display!='none')l.style.display='none'; }, 3000);
-        window.addEventListener('offline', () => document.getElementById('network-toast').classList.add('show'));
-        window.addEventListener('online', () => document.getElementById('network-toast').classList.remove('show'));
-        window.onerror = function() { console.warn("App Error Handled"); return true; };
-    </script>
 
     <!-- Navbar -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-gray-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                <!-- Logo Section -->
+                <!-- Logo -->
                 <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
                     <img src="favicon.ico" alt="Georgia Hills Logo" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')">
                     <span class="font-bold text-xl text-dark tracking-tight hidden md:block">Georgia Hills</span>
@@ -283,7 +250,6 @@
         <a href="#fleet" data-i18n="nav_fleet" class="text-2xl font-bold text-dark hover:text-primary mobile-link">Fleet</a>
         <a href="#booking" data-i18n="nav_book" class="px-8 py-4 bg-primary text-white rounded-full text-xl font-bold shadow-xl mobile-link">Book Now</a>
         
-        <!-- Mobile Specific Extras -->
         <div class="flex gap-6 mt-4">
              <button onclick="shareApp()" class="flex flex-col items-center gap-2 text-gray-500">
                 <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-share-nodes text-xl"></i></div>
@@ -293,7 +259,6 @@
                 <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-phone text-xl"></i></div>
                 <span class="text-xs">Call</span>
             </a>
-            <!-- Install App Button (Hidden by default) -->
             <button id="install-btn" class="flex flex-col items-center gap-2 text-gray-500 hidden">
                 <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-download text-xl"></i></div>
                 <span class="text-xs">Install</span>
@@ -308,7 +273,6 @@
             <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-transparent"></div>
         </div>
         <div class="relative z-10 max-w-5xl mx-auto px-4 text-center text-white mt-10 reveal">
-            <!-- Logo in Hero -->
             <div class="mb-8 flex justify-center">
                 <img src="favicon.ico" class="hero-logo" alt="Georgia Hills" onerror="this.style.display='none'">
             </div>
@@ -637,24 +601,24 @@
 
             <div id="booking-container" class="glass rounded-[2rem] p-6 md:p-12 shadow-2xl reveal transition-all border-0">
                 <form id="bookingForm" onsubmit="handleBooking(event)" novalidate>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                    <div class="grid grid-cols-2 gap-6 md:gap-8">
                         
                         <!-- Name -->
-                        <div class="col-span-1 md:col-span-1 group">
+                        <div class="col-span-2 md:col-span-1 group">
                             <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 pl-1" data-i18n="label_name">Full Name</label>
                             <input type="text" id="name" name="user_name" autocomplete="name" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all focus:bg-white" placeholder="Your Name">
                             <span class="error-text hidden" id="nameError">Please enter your name</span>
                         </div>
 
                         <!-- Contact -->
-                        <div class="col-span-1 md:col-span-1">
+                        <div class="col-span-2 md:col-span-1">
                             <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 pl-1" data-i18n="label_phone">WhatsApp Number</label>
                             <input type="tel" id="phone" name="user_phone" autocomplete="tel" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all focus:bg-white" placeholder="+995 579 08 85 37">
                             <span class="error-text hidden" id="phoneError">Enter a valid phone (e.g. +995...)</span>
                         </div>
 
                         <!-- Vehicle & Passengers -->
-                        <div class="col-span-1 md:col-span-1">
+                        <div class="col-span-2 md:col-span-1">
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_vehicle">Vehicle</label>
@@ -668,7 +632,7 @@
                         </div>
 
                         <!-- Service Type -->
-                         <div class="col-span-1 md:col-span-1">
+                         <div class="col-span-2 md:col-span-1">
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_service">Service Type</label>
                             <div class="flex p-1 bg-white rounded-xl border border-gray-200">
                                 <label class="flex-1 cursor-pointer"><input type="radio" name="driver" value="with_driver" checked class="peer sr-only"><div class="py-3 text-center rounded-lg text-sm font-bold text-gray-500 peer-checked:bg-primary peer-checked:text-white transition-all"><span data-i18n="opt_driver">With Driver</span></div></label>
@@ -676,21 +640,21 @@
                             </div>
                         </div>
 
-                        <!-- Responsive Date Fields: Changed to grid-cols-2 to force side-by-side on mobile -->
-                        <div class="grid grid-cols-2 gap-4 col-span-1 md:col-span-2">
+                        <!-- Responsive Date Fields: Side-by-side on mobile -->
+                        <div class="grid grid-cols-2 gap-2 md:gap-4 col-span-2 md:col-span-2">
                             <div class="col-span-1">
                                 <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_from">Pick-up Date</label>
-                                <input type="date" id="dateFrom" onchange="updateMinDate(); updatePriceEstimate()" autocomplete="off" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20 text-sm">
+                                <input type="date" id="dateFrom" onchange="updateMinDate(); updatePriceEstimate()" autocomplete="off" class="w-full px-3 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20 text-sm">
                                 <span class="error-text hidden" id="dateFromError">Required</span>
                             </div>
                             <div class="col-span-1">
                                 <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_to">Drop-off Date</label>
-                                <input type="date" id="dateTo" onchange="updatePriceEstimate()" autocomplete="off" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20 text-sm">
+                                <input type="date" id="dateTo" onchange="updatePriceEstimate()" autocomplete="off" class="w-full px-3 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20 text-sm">
                                 <span class="error-text hidden" id="dateToError">Required</span>
                             </div>
                         </div>
                         
-                        <div class="col-span-1 md:col-span-2"><label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_notes">Notes</label><textarea id="notes" rows="3" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 outline-none resize-none focus:ring-2 focus:ring-primary/20"></textarea></div>
+                        <div class="col-span-2 md:col-span-2"><label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_notes">Notes</label><textarea id="notes" rows="3" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 outline-none resize-none focus:ring-2 focus:ring-primary/20"></textarea></div>
                     </div>
 
                     <!-- Live Price Estimate -->
@@ -765,15 +729,14 @@
     </footer>
 
     <!-- Floating Action Buttons Stack -->
-    <!-- Reduced gap-4 to gap-2 (8px) for tighter spacing -->
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 items-end">
-        <!-- Back to Top Arrow: Removed mb-24 to sit closer to the button below -->
-        <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3 bg-white text-primary rounded-full shadow-lg border border-gray-100 hover:bg-gray-50 transition-all opacity-0 translate-y-10 md:mb-0 z-50">
+    <div class="fixed bottom-24 md:bottom-6 right-6 z-50 flex flex-col gap-2 items-end">
+        <!-- Back to Top Arrow -->
+        <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3 bg-white text-primary rounded-full shadow-lg border border-gray-100 hover:bg-gray-50 transition-all opacity-0 translate-y-10 z-50">
             <i class="fa-solid fa-arrow-up"></i>
         </button>
         
         <!-- Mobile Call Button (Next to WhatsApp) -->
-        <a href="tel:+995579088537" class="md:hidden w-14 h-14 bg-white text-primary rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl transition-all mb-[70px] border border-gray-100">
+        <a href="tel:+995579088537" class="md:hidden w-14 h-14 bg-white text-primary rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl transition-all border border-gray-100">
             <i class="fa-solid fa-phone text-2xl"></i>
         </a>
 
@@ -925,10 +888,31 @@
                 fetchRates('GEL');
             }
             
+            // Date Picker Validation Setup
             const dateFrom = document.getElementById('dateFrom');
+            const dateTo = document.getElementById('dateTo');
+            
             if(dateFrom) {
                 const today = new Date().toISOString().split('T')[0];
                 dateFrom.min = today;
+            }
+            
+            // Watch for invalid date ranges
+            if (dateFrom && dateTo) {
+                const validateRange = () => {
+                    if (dateFrom.value) {
+                        dateTo.min = dateFrom.value; 
+                        if (dateTo.value && dateTo.value < dateFrom.value) {
+                            dateTo.value = ""; // Reset invalid drop-off
+                            dateTo.classList.add('input-error');
+                            vibrate([50]);
+                        } else {
+                            dateTo.classList.remove('input-error');
+                        }
+                    }
+                };
+                dateFrom.addEventListener('change', validateRange);
+                dateTo.addEventListener('change', validateRange);
             }
             
             const mapContainer = document.getElementById('map-container');
@@ -1277,9 +1261,11 @@
 
         // --- Validation & Submission ---
         function updateMinDate() {
-            const from = document.getElementById('dateFrom').value;
+            const from = document.getElementById('dateFrom');
             const to = document.getElementById('dateTo');
-            if(to) to.min = from;
+            if(from && to && from.value) {
+                to.min = from.value;
+            }
         }
 
         function prefillVehicle(type) {
