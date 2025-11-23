@@ -2,72 +2,29 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
+    <!-- Viewport fit=cover is essential for the notch/island on iPhone -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
     <!-- ============================================ -->
-    <!-- 1. CONFIGURATION                             -->
+    <!-- iOS / APPLE SPECIFIC CONFIGURATION           -->
     <!-- ============================================ -->
-    <!-- 
-         1. EmailJS: Replace 'YOUR_PUBLIC_KEY', 'YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID'.
-         2. Analytics: Replace 'G-XXXXXXXXXX'.
-         3. Images: Ensure 'favicon.ico' is in your folder.
-    -->
-
-    <!-- SEO & Meta Data -->
-    <title>Rent a Car in Georgia | سائق خاص في جورجيا للعوائل | Georgia Hills</title>
-    <meta name="description" content="Premium car rental with driver in Georgia. #1 Rated service for Arab families. Book via WhatsApp. | أفضل خدمة سائق خاص في جورجيا للعوائل. سيارات حديثة وسائقين يتحدثون العربية.">
-    <meta name="keywords" content="سائق في جورجيا, سائق خاص في جورجيا, سياحة جورجيا للعوائل, rent car georgia driver, private driver tbilisi, georgia tourism for arabs, arabic speaking driver georgia">
-    <meta name="author" content="Georgia Hills">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://geodrive.ge">
-    
-    <meta id="theme-color-meta" name="theme-color" content="#0F172A">
-
-    <!-- JSON-LD Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "AutoRental",
-      "name": "Georgia Hills",
-      "image": "https://geodrive.ge/favicon.ico",
-      "description": "Premium car rental with driver in Georgia.",
-      "url": "https://geodrive.ge",
-      "telephone": "+995579088537",
-      "priceRange": "$$",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Tbilisi",
-        "addressCountry": "GE"
-      }
-    }
-    </script>
-
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Georgia Hills">
-    <meta name="format-detection" content="telephone=no">
-
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://geodrive.ge/">
-    <meta property="og:title" content="Georgia Hills | Premium Driver Service">
-    <meta property="og:description" content="Luxury transport for families in Georgia. Book your private driver today.">
-    <meta property="og:image" content="favicon.ico">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://images.unsplash.com">
-    <link rel="preconnect" href="https://flagcdn.com">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <!-- Touch Icons (You should add actual files for these paths if possible) -->
+    <link rel="apple-touch-icon" href="favicon.ico">
+    
+    <!-- SEO & Meta Data -->
+    <title>Rent a Car in Georgia | سائق خاص في جورجيا للعوائل | Georgia Hills</title>
+    <meta name="description" content="Premium car rental with driver in Georgia. #1 Rated service for Arab families. Book via WhatsApp.">
+    <meta name="keywords" content="سائق في جورجيا, private driver tbilisi, georgia tourism">
+    <meta name="author" content="Georgia Hills">
+    <meta name="theme-color" content="#0F172A">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <link rel="icon" href="favicon.ico" sizes="any">
-    <link rel="apple-touch-icon" href="favicon.ico">
-    
-    <!-- PWA Manifest Link -->
-    <link rel="manifest" href="manifest.json">
 
     <script>
         tailwind.config = {
@@ -95,6 +52,7 @@
                         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
                         'spin': 'spin 1s linear infinite',
                         'swipe-hint': 'swipeHint 2s ease-in-out infinite',
+                        'bounce-slow': 'bounce 3s infinite',
                     },
                     keyframes: {
                         float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
@@ -108,7 +66,8 @@
     </script>
 
     <style>
-        html { scroll-padding-top: 5rem; }
+        /* === MOBILE & iOS OPTIMIZATIONS === */
+        html { scroll-padding-top: 6rem; /* Adjusted for safe area */ }
         body { 
             text-rendering: optimizeLegibility; 
             -webkit-font-smoothing: antialiased; 
@@ -116,17 +75,24 @@
             -webkit-tap-highlight-color: transparent;
             background-color: #F9FAFB;
             background: radial-gradient(circle at 50% 0%, #ffffff 0%, #F3F4F6 100%);
-            overscroll-behavior-y: none; 
+            overscroll-behavior-y: none; /* Prevents rubber-banding on body */
+            min-height: 100vh;
+            /* Support for iPhone safe areas */
+            padding-bottom: env(safe-area-inset-bottom);
         }
+        
         .scroll-smooth { -webkit-overflow-scrolling: touch; }
         
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #2C5530; }
         
+        /* Glassmorphism */
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
         
+        /* RTL Support */
         html[lang="ar"] body { font-family: 'Cairo', sans-serif; }
         html[lang="en"] body { font-family: 'Outfit', sans-serif; }
         
@@ -151,34 +117,68 @@
         .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s, transform 0.8s; }
         .reveal.waiting { opacity: 0; transform: translateY(30px); } 
 
+        /* Mobile Menu Transitions */
         #mobile-menu { transition: transform 0.3s; transform: translateX(100%); }
         html[lang="ar"] #mobile-menu { transform: translateX(-100%); }
         #mobile-menu.open { transform: translateX(0); }
         
+        /* Form States */
         .input-error { border-color: #EF4444 !important; background-color: #FEF2F2 !important; }
         .input-success { border-color: #10B981 !important; background-color: #F0FDF4 !important; }
         .error-text { display: block; font-size: 0.75rem; color: #EF4444; margin-top: 0.25rem; }
+        
+        /* Prevent font zooming on inputs */
         @media screen and (max-width: 768px) { input, select, textarea { font-size: 16px !important; } }
         
+        /* Preloader */
         #preloader { position: fixed; inset: 0; z-index: 9999; background: #fff; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; pointer-events: none; }
         .fade-out { opacity: 0; }
         
+        /* Network Toast */
         #network-toast { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: #EF4444; color: white; padding: 10px 20px; border-radius: 9999px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 100; transition: top 0.3s; font-size: 0.875rem; font-weight: bold; display: flex; gap: 8px; align-items: center; }
-        #network-toast.show { top: 20px; }
+        #network-toast.show { top: env(safe-area-inset-top, 20px); } /* Safe area adjusted */
 
         #backToTop { visibility: hidden; opacity: 0; transition: all 0.3s; }
         #backToTop.show { visibility: visible; opacity: 1; }
         .nav-link.active { color: #2C5530; }
         
-        #cookie-banner { position: fixed; bottom: 0; left: 0; right: 0; z-index: 80; transform: translateY(100%); transition: transform 0.5s; }
-        #cookie-banner.active { transform: translateY(0); }
-        
+        /* Sticky Bar for Mobile with Safe Area Support */
         .sticky-bar { display: none; transition: transform 0.3s ease-in-out; }
         @media (max-width: 768px) {
-            .sticky-bar { display: flex; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 70; padding: 12px 16px; gap: 12px; align-items: center; transform: translateY(0); }
+            .sticky-bar { 
+                display: flex; 
+                position: fixed; 
+                bottom: 0; 
+                left: 0; 
+                width: 100%; 
+                background: rgba(255,255,255,0.95); 
+                backdrop-filter: blur(10px); 
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1); 
+                z-index: 70; 
+                /* Important: Respects iPhone Home Indicator */
+                padding: 12px 16px; 
+                padding-bottom: calc(12px + env(safe-area-inset-bottom));
+                gap: 12px; 
+                align-items: center; 
+                transform: translateY(0); 
+            }
             .sticky-bar.hide-bar { transform: translateY(100%); }
-            #cookie-banner.active { bottom: 70px; }
-            footer { padding-bottom: 6rem; } 
+            #cookie-banner.active { bottom: 80px; }
+            footer { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); } 
+        }
+
+        /* Navbar Safe Area Fix */
+        #navbar {
+            padding-top: env(safe-area-inset-top);
+            height: auto;
+            min-height: calc(5rem + env(safe-area-inset-top));
+        }
+        #navbar .max-w-7xl {
+            padding-top: 0;
+            padding-bottom: 0;
+            height: 5rem; /* Maintain content height */
+            display: flex;
+            align-items: center;
         }
         
         .nav-hidden { transform: translateY(-100%); }
@@ -194,6 +194,22 @@
             opacity: 0; transition: opacity 0.5s;
         }
         .swipe-hint-overlay.show { opacity: 1; }
+
+        /* iOS Install Modal Styles */
+        #ios-install-modal {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #fff; z-index: 100;
+            border-top-left-radius: 20px; border-top-right-radius: 20px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+            padding: 20px 20px calc(20px + env(safe-area-inset-bottom)) 20px;
+            transform: translateY(120%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; flex-direction: column; gap: 15px;
+        }
+        #ios-install-modal.show { transform: translateY(0); }
+        .ios-action-icon {
+            display: inline-block; vertical-align: middle; margin: 0 4px;
+            color: #007AFF; /* Apple Blue */
+        }
     </style>
 </head>
 <body class="bg-surface text-gray-800 antialiased overflow-x-hidden" dir="ltr">
@@ -211,8 +227,8 @@
 
     <!-- Navbar -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="flex justify-between h-full items-center w-full">
                 <!-- Logo -->
                 <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
                     <img src="favicon.ico" alt="Georgia Hills Logo" class="brand-logo" onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden')">
@@ -259,6 +275,7 @@
                 <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-brands fa-whatsapp text-xl"></i></div>
                 <span class="text-xs">WhatsApp</span>
             </a>
+            <!-- Install Btn for Android -->
             <button id="install-btn" class="flex flex-col items-center gap-2 text-gray-500 hidden">
                 <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-download text-xl"></i></div>
                 <span class="text-xs">Install</span>
@@ -269,7 +286,7 @@
     <!-- Hero -->
     <section id="home" class="relative h-[90vh] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <img id="hero-img" src="https://images.unsplash.com/photo-1533558133539-a6179c2d2754?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover scale-110" alt="Scenic Georgia" onerror="this.src='https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80'">
+            <img id="hero-img" src="image.webp" class="w-full h-full object-cover scale-110" alt="Scenic Georgia" onerror="this.src='https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1920&q=80'">
             <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-transparent"></div>
         </div>
         <div class="relative z-10 max-w-5xl mx-auto px-4 text-center text-white mt-10 reveal">
@@ -396,32 +413,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Card 5: Vardzia -->
-                     <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                            <img src="https://images.unsplash.com/photo-1579892546907-72814e127c52?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Vardzia Cave City" onerror="this.src='https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=600&q=80'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-8 w-full">
-                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_vardzia">Vardzia</h3>
-                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_vardzia">Ancient cave city monastery.</p>
-                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 6: Batumi -->
-                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                            <img src="https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Batumi Black Sea" onerror="this.src='https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=80'">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-8 w-full">
-                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_batumi">Batumi</h3>
-                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_batumi">Pearl of the Black Sea coast.</p>
-                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -527,7 +518,7 @@
                 </div>
                 <div class="bg-gray-50 p-8 rounded-3xl reveal hover:shadow-card transition-all border border-gray-100 hover:-translate-y-1" style="transition-delay: 100ms;">
                     <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="text-gray-600 italic mb-6 leading-relaxed testimonial-text" data-i18n="review_2_text">"Booking via WhatsApp was very smooth. The Minivan was clean, spacious, and perfect for our family trip to Batumi."</p>
+                    <p class="text-gray-600 italic mb-6 leading-relaxed testimonial-text" data-i18n="review_2_text">"Booking via WhatsApp was very smooth. The Minivan for our family of 6 was comfortable and spacious. Highly recommended."</p>
                      <div class="flex items-center gap-3">
                          <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">F</div>
                          <div>
@@ -613,7 +604,8 @@
                         <!-- Contact -->
                         <div class="col-span-2 md:col-span-1">
                             <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 pl-1" data-i18n="label_phone">WhatsApp Number</label>
-                            <input type="tel" id="phone" name="user_phone" autocomplete="tel" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all focus:bg-white" placeholder="+995 579 08 85 37">
+                            <!-- InputMode numeric ensures better keyboard on iOS -->
+                            <input type="tel" id="phone" name="user_phone" autocomplete="tel" inputmode="tel" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all focus:bg-white" placeholder="+995 579 08 85 37">
                             <span class="error-text hidden" id="phoneError">Enter a valid phone (e.g. +995...)</span>
                         </div>
 
@@ -709,7 +701,7 @@
                     <ul class="space-y-4 text-gray-400 text-sm">
                         <li class="flex items-center"><i class="fa-solid fa-phone mr-3 text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
                         <li class="flex items-center"><i class="fa-brands fa-whatsapp mr-3 text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
-                        <li class="flex items-center"><i class="fa-solid fa-envelope mr-3 text-accent"></i> info@geodrive.ge</li>
+                        <li class="flex items-center"><i class="fa-solid fa-envelope mr-3 text-accent"></i> info@georgiahills.netlify.app</li>
                     </ul>
                 </div>
                 <div class="lg:col-span-1">
@@ -751,7 +743,6 @@
     <!-- Success Modal -->
     <div id="successModal" class="fixed inset-0 z-[70] hidden flex items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-300 opacity-0 px-4">
         <div class="bg-white rounded-3xl p-6 md:p-10 max-w-sm w-full shadow-2xl text-center transform scale-90 transition-transform duration-300 relative">
-            <!-- Fixed Close Button -->
             <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-dark text-2xl z-10 p-2 cursor-pointer">&times;</button>
             <div class="w-16 h-16 md:w-20 md:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
                 <i class="fa-solid fa-check text-3xl md:text-4xl"></i>
@@ -762,6 +753,20 @@
                 <i class="fa-brands fa-whatsapp text-xl"></i>
                 <span data-i18n="modal_btn_send">Open WhatsApp</span>
             </a>
+        </div>
+    </div>
+
+    <!-- iOS Add to Home Screen Modal (Custom) -->
+    <div id="ios-install-modal" class="hidden">
+        <div class="flex justify-between items-start">
+            <div>
+                <h3 class="font-bold text-dark text-lg">Install App</h3>
+                <p class="text-gray-500 text-sm mt-1">Install Georgia Hills for a better experience.</p>
+            </div>
+            <button onclick="closeIosModal()" class="text-gray-400 hover:text-gray-600"><i class="fa-solid fa-times text-xl"></i></button>
+        </div>
+        <div class="bg-gray-50 p-4 rounded-xl text-sm text-gray-600 flex items-center leading-relaxed">
+            <span>Tap <i class="fa-solid fa-arrow-up-from-bracket ios-action-icon text-lg"></i> below, then select <span class="font-bold text-dark">Add to Home Screen <i class="fa-regular fa-square-plus ios-action-icon"></i></span></span>
         </div>
     </div>
 
@@ -793,7 +798,7 @@
     </div>
 
     <!-- Cookie Banner -->
-    <div id="cookie-banner" class="bg-white border-t border-gray-200 p-4 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 fixed bottom-0 w-full z-50 translate-y-full transition-transform duration-500">
+    <div id="cookie-banner" class="bg-white border-t border-gray-200 p-4 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 fixed bottom-0 w-full z-50 translate-y-full transition-transform duration-500 pb-[calc(1rem+env(safe-area-inset-bottom))]">
         <p class="text-sm text-gray-600">We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.</p>
         <div class="flex gap-3">
             <button onclick="acceptCookies()" class="px-6 py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-green-800 transition-colors">Accept</button>
@@ -823,14 +828,14 @@
     <script type="text/javascript">
        (function(){
           try {
-              // REPLACE THIS WITH YOUR ACTUAL PUBLIC KEY
               emailjs.init("gFHD0l5sBGRvS44V8"); 
           } catch(e) { console.log("EmailJS init warning:", e); }
        })();
     </script>
 
+
     <script>
-        // --- Configuration ---
+        // === JS LOGIC ===
         const VEHICLE_RATES = {
             'Sedan': 150,
             'Minivan': 250
@@ -838,6 +843,7 @@
 
         // --- 0. Haptics & UX Utils ---
         function vibrate(pattern = [10]) {
+            // Navigator.vibrate doesn't work on iOS, so we just wrap it safely
             if (navigator.vibrate) navigator.vibrate(pattern);
         }
 
@@ -859,6 +865,33 @@
                 alert('Link copied to clipboard!');
             }
         }
+        
+        // --- iOS Detection & Install Prompt ---
+        function checkIosInstall() {
+            const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+            const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
+            
+            // Only show if iOS and NOT already installed (standalone)
+            if (isIos && !isInStandaloneMode) {
+                // Check if we've already shown it this session
+                if (!sessionStorage.getItem('iosPromptShown')) {
+                    const modal = document.getElementById('ios-install-modal');
+                    if(modal) {
+                        modal.classList.remove('hidden');
+                        setTimeout(() => modal.classList.add('show'), 1000); // Delay for better UX
+                        sessionStorage.setItem('iosPromptShown', 'true');
+                    }
+                }
+            }
+        }
+        
+        function closeIosModal() {
+            const modal = document.getElementById('ios-install-modal');
+            if(modal) {
+                modal.classList.remove('show');
+                setTimeout(() => modal.classList.add('hidden'), 500);
+            }
+        }
 
         // --- 1. Preloader & Init (Robust) ---
         window.addEventListener('load', () => {
@@ -873,6 +906,7 @@
             initCustomDropdowns();
             initSwipeGestures(); 
             restoreFormDraft(); 
+            checkIosInstall(); // Run iOS check
             
             try {
                 loadUserPreferences();
@@ -1048,7 +1082,7 @@
             }
         }
 
-        // --- PWA Install Prompt ---
+        // --- PWA Install Prompt (Android) ---
         let deferredPrompt;
         const installBtn = document.getElementById('install-btn');
 
@@ -1204,7 +1238,7 @@
         // --- Smart Scroll ---
         let lastScrollTop = 0;
         let ticking = false;
-        const metaThemeColor = document.getElementById('theme-color-meta');
+        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
         window.addEventListener('scroll', () => {
             if (!ticking) {
@@ -1215,7 +1249,7 @@
                     const stickyBar = document.querySelector('.sticky-bar');
                     
                     if(nav) {
-                        if (scrollY > 20) nav.classList.add('shadow-md', 'py-2'); else nav.classList.remove('shadow-md', 'py-2');
+                        if (scrollY > 20) nav.classList.add('shadow-md'); else nav.classList.remove('shadow-md');
                     }
 
                     if (metaThemeColor) {
