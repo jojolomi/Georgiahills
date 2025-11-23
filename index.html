@@ -676,8 +676,8 @@
                             </div>
                         </div>
 
-                        <!-- Responsive Date Fields -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 col-span-1 md:col-span-2">
+                        <!-- Responsive Date Fields: Changed to grid-cols-2 to force side-by-side on mobile -->
+                        <div class="grid grid-cols-2 gap-4 col-span-1 md:col-span-2">
                             <div class="col-span-1">
                                 <label class="block text-xs font-bold text-gray-500 uppercase mb-2" data-i18n="label_from">Pick-up Date</label>
                                 <input type="date" id="dateFrom" onchange="updateMinDate(); updatePriceEstimate()" autocomplete="off" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20 text-sm">
@@ -765,9 +765,10 @@
     </footer>
 
     <!-- Floating Action Buttons Stack -->
-    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-4 items-end">
-        <!-- Back to Top Arrow -->
-        <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3 bg-white text-primary rounded-full shadow-lg border border-gray-100 hover:bg-gray-50 transition-all opacity-0 translate-y-10 mb-24 md:mb-0 z-50">
+    <!-- Reduced gap-4 to gap-2 (8px) for tighter spacing -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 items-end">
+        <!-- Back to Top Arrow: Removed mb-24 to sit closer to the button below -->
+        <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3 bg-white text-primary rounded-full shadow-lg border border-gray-100 hover:bg-gray-50 transition-all opacity-0 translate-y-10 md:mb-0 z-50">
             <i class="fa-solid fa-arrow-up"></i>
         </button>
         
