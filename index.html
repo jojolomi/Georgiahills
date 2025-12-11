@@ -273,6 +273,19 @@
             border-radius: 2px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
+
+    /* Ensure horizontal touch panning is smooth on mobile */
+    #tours-slider {
+        -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
+        touch-action: pan-x; /* prefer horizontal pan */
+        overscroll-behavior-x: contain; /* avoid page swipe interfering */
+    }
+
+    /* keep hide-scrollbar but don't block interactions */
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+
+
     </style>
 </head>
 <body class="bg-surface text-gray-800 antialiased overflow-x-hidden" dir="ltr">
@@ -425,94 +438,79 @@
             </div>
         </div>
     </section>
-
     <!-- Destinations -->
-    <section id="destinations" class="py-16 md:py-24 bg-dark text-white overflow-hidden relative">
-        <div class="max-w-7xl mx-auto px-4 relative group">
-            <div class="mb-12 reveal text-center md:text-start">
-                <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="dest_label">Explore Georgia</span>
-                <h2 class="text-3xl md:text-4xl font-bold mt-2" data-i18n="dest_title">Popular Places</h2>
-                <p class="text-gray-400 mt-4 max-w-2xl" data-i18n="dest_subtitle">Discover the most beautiful locations accessible comfortably by car.</p>
-            </div>
-            <div class="relative">
-                <!-- Visual Swipe Hint -->
-                <div id="swipe-hint" class="swipe-hint-overlay md:hidden">
-                    <i class="fa-regular fa-hand-pointer text-white text-4xl animate-swipe-hint"></i>
+<section id="destinations" class="py-16 md:py-24 bg-dark text-white overflow-hidden relative">
+    <div class="max-w-7xl mx-auto px-4 relative group">
+        <div class="mb-12 reveal text-center md:text-start">
+            <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="dest_label">Explore Georgia</span>
+            <h2 class="text-3xl md:text-4xl font-bold mt-2" data-i18n="dest_title">Popular Places</h2>
+            <p class="text-gray-400 mt-4 max-w-2xl" data-i18n="dest_subtitle">Discover the most beautiful locations accessible comfortably by car.</p>
+        </div>
+
+        <div class="relative group/slider">
+            
+            <button id="prevBtn" aria-label="Scroll Left" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -ml-4 md:-ml-6 hidden md:flex hover:scale-110 active:scale-95">
+                <i class="fa-solid fa-chevron-left rtl:rotate-180"></i>
+            </button>
+            
+            <button id="nextBtn" aria-label="Scroll Right" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -mr-4 md:-mr-6 hidden md:flex hover:scale-110 active:scale-95">
+                <i class="fa-solid fa-chevron-right rtl:rotate-180"></i>
+            </button>
+
+            <div id="tours-slider" class="flex gap-6 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-8 touch-pan-x">
+                <!-- Tbilisi -->
+                <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
+                    <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                        <img src="Tbilisi.webp" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Tbilisi">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8 w-full">
+                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_Tbilisi">Tbilisi</h3>
+                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_Tbilisi">The heart of Georgia.</p>
+                            <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                        </div>
+                    </div>
                 </div>
-
-                <button onclick="scrollSlider(-1)" aria-label="Previous" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -ml-4 md:-ml-6 hidden md:flex hover:scale-110 active:scale-95"><i class="fa-solid fa-chevron-left"></i></button>
-                <button onclick="scrollSlider(1)" aria-label="Next" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -mr-4 md:-mr-6 hidden md:flex hover:scale-110 active:scale-95"><i class="fa-solid fa-chevron-right"></i></button>
-                
-                <div id="tours-slider" class="flex gap-6 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-8 reveal touch-pan-y">
-
-                    <!-- Card 1: Tbilisi -->
-                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                            <img src="Tbilisi.webp" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Tbilisi">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-8 w-full">
-                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_Tbilisi">Tbilisi</h3>
-                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_Tbilisi">The heart of Georgia.</p>
-                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
-                            </div>
+                <!-- Kazbegi -->
+                <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
+                    <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                        <img src="Kazbegi.webp" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Kazbegi Mountains">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8 w-full">
+                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kazbegi">Kazbegi</h3>
+                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kazbegi">The heart of the Caucasus Mountains.</p>
+                            <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
                         </div>
                     </div>
-
-                    <!-- Card 1: Kazbegi -->
-                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                            <img src="Kazbegi.webp" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Kazbegi Mountains">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-8 w-full">
-                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kazbegi">Kazbegi</h3>
-                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kazbegi">The heart of the Caucasus Mountains.</p>
-                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
-                            </div>
+                </div>
+                <!-- Martvili -->
+                <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
+                    <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                        <img src="Martvili.webp" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Martvili Canyon">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8 w-full">
+                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_martvili">Martvili</h3>
+                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_martvili">Emerald canyon boat ride.</p>
+                            <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
                         </div>
                     </div>
-                    
-                    <!-- Card 2: Martvili -->
-                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                            <img src="Martvili.webp" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Martvili Canyon">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-8 w-full">
-                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_martvili">Martvili</h3>
-                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_martvili">Emerald canyon boat ride.</p>
-                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 3: Signagi -->
-                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                            <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Signagi City of Love">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-8 w-full">
-                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kakheti">Signagi</h3>
-                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kakheti">City of Love with valley views.</p>
-                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Card 4: Gudauri -->
-                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 cursor-pointer">
-                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                            <img src="https://images.unsplash.com/photo-1486870591958-9b9d0d1dda99?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Gudauri Mountains">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-8 w-full">
-                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_gudauri">Gudauri</h3>
-                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_gudauri">Breathtaking mountain views.</p>
-                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
-                            </div>
+                </div>
+                <!-- Signagi -->
+                <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
+                    <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Signagi City of Love">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 p-8 w-full">
+                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kakheti">Signagi</h3>
+                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kakheti">City of Love with valley views.</p>
+                            <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+
+</section>
 
     <!-- Fleet Section -->
     <section id="fleet" class="py-16 md:py-24 bg-surface optimize-render">
@@ -1898,6 +1896,147 @@
                 }
             });
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+    const slider = document.getElementById('tours-slider');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    
+    // Config
+    const intervalTime = 3000;
+    let autoScrollInterval;
+    let isPaused = false;
+
+    // Detect RTL
+    const isRTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'ar';
+
+    let cardWidth = 0;
+    let originalItemCount = 0;
+
+    const initSlider = () => {
+        // 1. Clean up old clones if resizing
+        Array.from(slider.children).forEach(child => {
+            if (child.dataset.clone === 'true') child.remove();
+        });
+
+        // 2. Measure
+        const originalItems = Array.from(slider.children);
+        originalItemCount = originalItems.length;
+        if (originalItemCount === 0) return;
+
+        const gap = parseFloat(window.getComputedStyle(slider).gap) || 0;
+        const firstCard = originalItems[0];
+        cardWidth = firstCard.offsetWidth + gap;
+
+        // 3. Clone items (Start and End) for infinite loop
+        originalItems.forEach(item => {
+            const clone = item.cloneNode(true);
+            clone.dataset.clone = 'true';
+            clone.setAttribute('aria-hidden', 'true');
+            slider.appendChild(clone);
+        });
+
+        originalItems.slice().reverse().forEach(item => {
+            const clone = item.cloneNode(true);
+            clone.dataset.clone = 'true';
+            clone.setAttribute('aria-hidden', 'true');
+            slider.prepend(clone);
+        });
+
+        // 4. Initial positioning
+        // In LTR, we scroll right to the first real item.
+        // In RTL, we effectively scroll "left" (visually) to the first real item.
+        const startPos = cardWidth * originalItemCount;
+        
+        if (isRTL) {
+            // RTL Initial scroll is tricky across browsers. 
+            // The safest bet for modern browsers is negative value or max value depending on implementation.
+            // But scrollTo() usually handles the coordinates standardly.
+            slider.scrollLeft = -startPos; 
+            
+            // Check if browser uses Positive Inverted logic (older Chrome/Safari)
+            if (slider.scrollLeft === 0) {
+                 slider.scrollLeft = startPos; // Try positive
+            }
+        } else {
+            slider.scrollLeft = startPos;
+        }
+    };
+
+    const moveSlider = (direction) => {
+        // Direction 1 = Next, -1 = Prev
+        // In RTL: "Next" means moving visually Left (Negative X), so we invert direction
+        const effectiveDirection = isRTL ? -direction : direction;
+        
+        slider.scrollBy({
+            left: cardWidth * effectiveDirection,
+            behavior: 'smooth'
+        });
+    };
+
+    const checkInfiniteLoop = () => {
+        // Total scrollable width
+        const totalWidth = slider.scrollWidth;
+        const viewWidth = slider.clientWidth;
+        const currentScroll = slider.scrollLeft;
+        const singleSetWidth = cardWidth * originalItemCount;
+
+        // We need to know absolute value because RTL can be negative
+        const absScroll = Math.abs(currentScroll);
+
+        // Logic: If we scrolled past the last set or before the first set, teleport
+        // The "Buffer" is one full set of items
+        
+        if (absScroll <= 5) { // Too close to start
+            slider.style.scrollBehavior = 'auto';
+            const target = isRTL ? -(singleSetWidth) : singleSetWidth;
+            slider.scrollLeft = target;
+            // Force browser to accept the jump before turning smooth back on
+            setTimeout(() => { slider.style.scrollBehavior = ''; }, 10);
+        } 
+        else if (absScroll >= (singleSetWidth * 2) - 10) { // Too close to end
+            slider.style.scrollBehavior = 'auto';
+            const target = isRTL ? -(singleSetWidth) : singleSetWidth;
+            slider.scrollLeft = target;
+            setTimeout(() => { slider.style.scrollBehavior = ''; }, 10);
+        }
+    };
+
+    const startAutoScroll = () => {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = setInterval(() => {
+            if (!isPaused) moveSlider(1);
+        }, intervalTime);
+    };
+
+    // Event Listeners
+    nextBtn?.addEventListener('click', () => { 
+        moveSlider(1); 
+        startAutoScroll(); // Reset timer
+    });
+    
+    prevBtn?.addEventListener('click', () => { 
+        moveSlider(-1); 
+        startAutoScroll(); 
+    });
+
+    slider.addEventListener('scroll', checkInfiniteLoop, { passive: true });
+
+    // Pause on Hover/Touch
+    slider.addEventListener('mouseenter', () => isPaused = true);
+    slider.addEventListener('mouseleave', () => isPaused = false);
+    slider.addEventListener('touchstart', () => isPaused = true, { passive: true });
+    slider.addEventListener('touchend', () => setTimeout(() => isPaused = false, 2000), { passive: true });
+
+    // Handle Resize
+    window.addEventListener('resize', () => {
+        initSlider();
+    });
+
+    // Init
+    initSlider();
+    startAutoScroll();
+});
     </script>
 </body>
 </html>
