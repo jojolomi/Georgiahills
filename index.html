@@ -13,6 +13,13 @@
     <link rel="dns-prefetch" href="https://images.unsplash.com">
     <link rel="preconnect" href="https://flagcdn.com" crossorigin>
     <link rel="preconnect" href="https://api.exchangerate-api.com" crossorigin>
+    
+    <!-- Preload LCP Image -->
+    <link rel="preload" as="image" 
+          href="image-640.webp" 
+          imagesrcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" 
+          imagesizes="100vw"
+          fetchpriority="high">
 
     <!-- SEO & Metadata -->
     <title>Rent a Car in Georgia | سائق خاص في جورجيا | Georgia Hills</title>
@@ -66,11 +73,6 @@
     }
     </script>
 
-    <!-- iOS Specifics -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Georgia Hills">
-    
     <!-- PWA Manifest -->
     <link rel="manifest" href='data:application/manifest+json,{"name":"Georgia Hills","short_name":"Georgia Hills","start_url":".","display":"standalone","background_color":"#F9FAFB","theme_color":"#0F172A","icons":[{"src":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAAZ0lEQVRYhe3WMQqAMBQF0ZyjF/D+h3JMLYQWwUU3XyGkb/gZExcT890697m11q455+oBJyK3gA6YgWl/QGblS8A+YAc0wP4F5ErWd2A2sALq/wFgB9Qj4L8C8g/4K+Ab8B3wR8C34APe2xo3iJ/a8gAAAABJRU5ErkJggg==","sizes":"192x192","type":"image/png"}]}'>
 
@@ -93,7 +95,9 @@
         :root {
             --color-primary: #2C5530;
             --color-secondary: #8BA888;
-            --color-accent: #8B5E34;
+            /* Changed to a comfortable Muted Gold/Bronze */
+            --color-accent: #C59D5F;
+            --color-accent-light: #E6CCAA;
             --color-surface: #F9FAFB;
             --color-dark: #0F172A;
             --color-error: #EF4444;
@@ -126,7 +130,6 @@
             --container-max: 80rem; /* 7xl */
             --header-height: 5rem;
             
-            /* Z-Index Layers */
             --z-negative: 0;
             --z-normal: 10;
             --z-badge: 20;
@@ -153,7 +156,10 @@
             color: var(--color-gray-800);
             overflow-x: hidden;
             min-height: 100vh;
+            line-height: 1.6;
         }
+        
+        @media (max-width: 768px) { body { padding-bottom: 4rem; } }
 
         html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
 
@@ -162,13 +168,18 @@
         input, select, textarea { font-family: inherit; }
 
         /* Typography Utilities */
-        .text-center { text-align: center; }
-        .text-left { text-align: left; }
-        .text-right { text-align: right; }
-        .text-white { color: var(--color-white); }
-        .text-primary { color: var(--color-primary); }
-        .text-accent { color: var(--color-accent); }
-        .text-dark { color: var(--color-dark); }
+        .text-center { text-align: center !important; }
+        .text-left { text-align: left !important; }
+        .text-right { text-align: right !important; }
+        .text-white { color: var(--color-white) !important; }
+        .text-primary { color: var(--color-primary) !important; }
+        .text-accent { color: var(--color-accent) !important; }
+        .text-accent-light { color: var(--color-accent-light) !important; }
+        .text-dark { color: var(--color-dark) !important; }
+        
+        /* Force LTR for Price Displays */
+        .price-display { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+        
         .font-bold { font-weight: 700; }
         .font-extra-bold { font-weight: 800; }
         .font-serif { font-family: 'Times New Roman', Times, serif; }
@@ -179,7 +190,7 @@
         .opacity-0 { opacity: 0; }
         .opacity-80 { opacity: 0.8; }
         
-        /* Flex & Grid Utils */
+        /* Layout Utils */
         .flex { display: flex; }
         .flex-col { flex-direction: column; }
         .items-center { align-items: center; }
@@ -201,11 +212,13 @@
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
 
-        /* RTL & Language Support */
-        html[lang="ar"] body { font-family: var(--font-arabic); }
+        /* RTL Support */
+        html[lang="ar"] body { font-family: var(--font-arabic); text-align: right; }
         html[lang="ar"] .rtl-flip { transform: scaleX(-1); }
         html[lang="ar"] .fa-arrow-right { transform: rotate(180deg); }
         html[lang="ar"] .rtl-rotate-180 { transform: rotate(180deg); }
+        html[lang="ar"] .text-left { text-align: right !important; }
+        html[lang="ar"] .text-center { text-align: center !important; }
         
         /* Layout Containers */
         .container {
@@ -263,8 +276,8 @@
         @media (min-width: 768px) { .nav-logo span { display: block; } }
 
         /* Desktop Menu */
-        .desktop-menu { display: none; gap: 2rem; align-items: center; }
-        @media (min-width: 768px) { .desktop-menu { display: flex; } }
+        .desktop-menu { display: none; gap: 1.5rem; align-items: center; }
+        @media (min-width: 1024px) { .desktop-menu { display: flex; } }
         
         .nav-link {
             font-size: 0.875rem;
@@ -279,7 +292,7 @@
             border-bottom-color: rgba(44, 85, 48, 0.3);
         }
 
-        .lang-btn {
+        .action-btn {
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -290,13 +303,9 @@
             border-radius: 9999px;
             padding: 0.375rem 1rem;
             transition: background 0.2s;
+            background: white;
         }
-        .lang-btn:hover { background-color: var(--color-gray-50); color: var(--color-primary); }
-        
-        .lang-btn-mobile {
-            font-size: 0.75rem;
-            padding: 0.5rem 0.75rem;
-        }
+        .action-btn:hover { background-color: var(--color-gray-50); color: var(--color-primary); }
 
         .btn-book-nav {
             padding: 0.75rem 1.5rem;
@@ -310,9 +319,35 @@
         }
         .btn-book-nav:hover { background-color: #1a331d; transform: translateY(-2px); }
 
+        /* Custom Select for Navbar */
+        .custom-select-wrapper { position: relative; display: inline-block; }
+        .custom-select-trigger { cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
+        .custom-options {
+            position: absolute;
+            top: 120%;
+            right: 0;
+            background: white;
+            border: 1px solid var(--color-gray-200);
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-xl);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s;
+            z-index: var(--z-toast);
+            min-width: 140px;
+            overflow: hidden;
+        }
+        html[lang="ar"] .custom-options { right: auto; left: 0; }
+        .custom-select-wrapper.open .custom-options { opacity: 1; visibility: visible; transform: translateY(0); }
+        .custom-option { padding: 0.75rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; font-weight: 600; color: var(--color-dark); transition: background 0.2s; }
+        .custom-option:hover { background: var(--color-gray-50); }
+        .custom-option.selected { background: var(--color-success-bg); color: var(--color-success); }
+        .currency-flag-sm { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+
         /* Mobile Toggle */
         .mobile-controls { display: flex; align-items: center; gap: 0.75rem; }
-        @media (min-width: 768px) { .mobile-controls { display: none; } }
+        @media (min-width: 1024px) { .mobile-controls { display: none; } }
         .btn-mobile-menu { color: var(--color-dark); padding: 0.5rem; font-size: 1.5rem; }
 
         /* Mobile Menu Overlay */
@@ -327,17 +362,24 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 2rem;
+            gap: 1.5rem;
             transition: transform 0.3s;
             transform: translateX(100%);
+            overflow-y: auto;
+            padding: 2rem 0;
         }
         html[lang="ar"] #mobile-menu { transform: translateX(-100%); }
         #mobile-menu.open { transform: translateX(0); }
+        html[lang="ar"] #mobile-menu.open { transform: translateX(0); } /* Critical Fix for Arabic Mobile Menu */
         
         .close-menu-btn { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.875rem; color: var(--color-gray-400); }
+        html[lang="ar"] .close-menu-btn { right: auto; left: 1.5rem; }
+        
         .mobile-link { font-size: 1.5rem; font-weight: 700; color: var(--color-dark); }
         .mobile-link:hover { color: var(--color-primary); }
         .mobile-btn-book { padding: 1rem 2rem; background: var(--color-primary); color: white; border-radius: 9999px; font-size: 1.25rem; font-weight: 700; box-shadow: var(--shadow-xl); }
+        
+        .mobile-settings { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
         
         .mobile-social-container { display: flex; gap: 1.5rem; margin-top: 1rem; }
         .mobile-social-btn { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--color-gray-500); }
@@ -473,8 +515,14 @@
             .stats-card { grid-template-columns: repeat(3, 1fr); gap: 0; }
             .stats-item:not(:last-child) { border-right: 1px solid var(--color-gray-100); }
         }
-        .stats-item { text-center; }
-        .stats-num { font-size: 2.25rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem; }
+        /* RTL Desktop Border Fix */
+        html[lang="ar"] @media (min-width: 768px) {
+            .stats-item:not(:last-child) { border-right: none; border-left: 1px solid var(--color-gray-100); }
+        }
+
+        .stats-item { text-align: center; }
+        /* Force LTR for numbers but keep alignment centered */
+        .stats-num { font-size: 2.25rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem; direction: ltr; unicode-bidi: isolate; display: block; }
         .stats-label { color: var(--color-gray-600); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
 
         /* Common Section Styles */
@@ -664,47 +712,6 @@
         .btn-fleet-fill { background: var(--color-primary); color: white; }
         .btn-fleet-fill:hover { background: #1a331d; }
 
-        /* Currency Converter */
-        .currency-section { padding-bottom: 4rem; position: relative; z-index: var(--z-sticky); }
-        .converter-card {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: var(--shadow-soft);
-            padding: 1.5rem;
-            border: 1px solid var(--color-gray-100);
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        @media (min-width: 768px) {
-            .converter-card { flex-direction: row; align-items: center; justify-content: space-between; padding: 1rem; }
-        }
-        .conv-header { display: flex; align-items: center; gap: 0.5rem; }
-        .conv-icon-box { width: 2.5rem; height: 2.5rem; background: rgba(139, 94, 52, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--color-accent); }
-        .conv-title-text h3 { font-weight: 700; color: var(--color-dark); font-size: 0.875rem; margin: 0; }
-        .conv-title-text p { font-size: 0.625rem; color: var(--color-gray-600); margin: 0; }
-        
-        .conv-controls { flex: 1; display: flex; gap: 1rem; width: 100%; flex-direction: column; }
-        .conv-amount-group { flex: 1; }
-        .conv-select-group { display: flex; gap: 0.5rem; }
-        .conv-input {
-            width: 100%;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.5rem;
-            background: var(--color-gray-50);
-            border: 1px solid var(--color-gray-200);
-            font-weight: 700;
-            color: var(--color-dark);
-        }
-        .conv-select-wrapper { position: relative; flex: 1; }
-        .conv-select-btn { background: white; display: flex; align-items: center; gap: 0.5rem; justify-content: space-between; cursor: pointer; }
-        .conv-select-content { display: flex; align-items: center; gap: 0.5rem; }
-        .conv-arrow { display: flex; align-items: center; padding-top: 1.5rem; color: var(--color-gray-300); }
-        .conv-result-box { text-align: right; min-width: 6rem; }
-        .conv-result-label { font-size: 0.625rem; color: var(--color-gray-600); display: block; margin-bottom: 0.25rem; }
-        .conv-result-value { font-size: 1.5rem; font-weight: 800; color: var(--color-primary); }
-        .conv-result-unit { font-size: 0.75rem; margin-left: 0.25rem; color: var(--color-gray-600); }
-        
         /* Reviews */
         .reviews-bg { background: white; }
         .reviews-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
@@ -740,6 +747,10 @@
         .faq-header { display: flex; justify-content: space-between; align-items: center; }
         .faq-question { font-weight: 700; font-size: 1.125rem; margin: 0; }
         .faq-answer { margin-top: 1rem; font-size: 0.875rem; color: var(--color-gray-600); line-height: 1.6; margin-bottom: 0; }
+        
+        /* Explicitly fix Arabic alignment in FAQ */
+        html[lang="ar"] .faq-question { text-align: right !important; }
+        html[lang="ar"] .faq-answer { text-align: right !important; }
 
         /* Booking Section */
         .booking-section {
@@ -764,6 +775,10 @@
         .form-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
         @media (min-width: 768px) { .form-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; } }
         .col-span-full { grid-column: 1 / -1; }
+        
+        /* Responsive Grid for Form Rows */
+        .form-row-responsive { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 640px) { .form-row-responsive { grid-template-columns: 1fr 1fr; } }
 
         .form-label {
             display: block;
@@ -910,14 +925,6 @@
         #network-toast { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: var(--color-error); color: white; padding: 10px 20px; border-radius: 9999px; z-index: var(--z-toast); transition: top 0.3s; font-size: 0.875rem; font-weight: bold; display: flex; gap: 8px; align-items: center; }
         #network-toast.show { top: env(safe-area-inset-top, 20px); }
 
-        /* Currency Flags */
-        .currency-flag { width: 24px; height: 16px; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-        .dropdown-menu { position: absolute; top: 100%; left: 0; width: 100%; margin-top: 4px; background: white; border: 1px solid var(--color-gray-200); border-radius: 0.5rem; box-shadow: var(--shadow-xl); z-index: var(--z-navbar); display: none; max-height: 15rem; overflow-y: auto; }
-        .dropdown-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; cursor: pointer; border-bottom: 1px solid var(--color-gray-50); transition: background 0.2s; }
-        .dropdown-item:hover { background: var(--color-gray-50); }
-        .dropdown-item:last-child { border-bottom: none; }
-        .dropdown-code { font-weight: 700; font-size: 0.875rem; color: var(--color-dark); }
-        
         /* Input Errors */
         .input-error { border-color: var(--color-error) !important; background-color: #FEF2F2 !important; }
         .input-success { border-color: var(--color-success) !important; background-color: var(--color-success-bg) !important; }
@@ -994,15 +1001,34 @@
                     <a href="#destinations" data-i18n="nav_tours" class="nav-link">Destinations</a>
                     <a href="#fleet" data-i18n="nav_fleet" class="nav-link">Fleet</a>
                     <a href="#reviews" data-i18n="nav_reviews" class="nav-link">Reviews</a>
-                    <button onclick="toggleLanguage()" class="lang-btn" aria-label="Toggle Language">
-                        <i class="fa-solid fa-globe"></i><span class="lang-text">العربية</span>
-                    </button>
+                    
+                    <!-- Desktop Settings -->
+                    <div style="display:flex; gap:0.75rem;">
+                        <!-- Currency Dropdown (Desktop) -->
+                        <div class="custom-select-wrapper" id="currency-desktop">
+                            <button class="action-btn custom-select-trigger" onclick="toggleCurrencyDropdown('desktop')" aria-haspopup="true">
+                                <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-desktop">
+                                <span id="curr-code-desktop">GEL</span>
+                                <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
+                            </button>
+                            <div class="custom-options" id="curr-options-desktop">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Language Btn -->
+                        <button onclick="toggleLanguage()" class="action-btn" aria-label="Toggle Language">
+                            <i class="fa-solid fa-globe"></i><span class="lang-text">العربية</span>
+                        </button>
+                    </div>
+
                     <a href="#booking" data-i18n="nav_book" class="btn-book-nav">Book Now</a>
                 </div>
 
                 <!-- Mobile Toggle -->
                 <div class="mobile-controls">
-                    <button onclick="toggleLanguage()" class="lang-btn lang-btn-mobile" aria-label="Toggle Language Mobile">
+                    <!-- Mobile Language Switcher Added Here -->
+                    <button onclick="toggleLanguage()" class="action-btn" aria-label="Toggle Language Mobile" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
                         <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">العربية</span>
                     </button>
                     <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
@@ -1017,6 +1043,22 @@
         <a href="#home" data-i18n="nav_home" class="mobile-link">Home</a>
         <a href="#destinations" data-i18n="nav_tours" class="mobile-link">Destinations</a>
         <a href="#fleet" data-i18n="nav_fleet" class="mobile-link">Fleet</a>
+        
+        <!-- Mobile Settings -->
+        <div class="mobile-settings">
+             <!-- Currency Dropdown (Mobile) -->
+             <div class="custom-select-wrapper" id="currency-mobile">
+                <button class="action-btn custom-select-trigger" onclick="toggleCurrencyDropdown('mobile')" aria-haspopup="true">
+                    <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-mobile">
+                    <span id="curr-code-mobile">GEL</span>
+                    <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
+                </button>
+                <div class="custom-options" id="curr-options-mobile">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
         <a href="#booking" data-i18n="nav_book" class="mobile-btn-book">Book Now</a>
         
         <div class="mobile-social-container">
@@ -1047,7 +1089,7 @@
             <div class="hero-badge">
                 <i class="fa-solid fa-star" style="color:#facc15; font-size:0.75rem;"></i> #1 FOR FAMILIES
             </div>
-            <h1 class="hero-title" data-i18n="hero_title">Discover Georgia <br><span class="text-accent italic font-serif">Without Limits</span></h1>
+            <h1 class="hero-title" data-i18n="hero_title">Discover Georgia <br><span class="text-accent-light italic font-serif">Without Limits</span></h1>
             <p class="hero-subtitle" data-i18n="hero_subtitle">Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.</p>
             <div class="hero-buttons">
                 <a href="#booking" data-i18n="cta_start" class="btn-hero btn-hero-primary">Get a Quote</a>
@@ -1105,7 +1147,7 @@
     <section id="destinations" class="section-py bg-dark-section">
         <div class="container slider-container">
             <div class="reveal text-center" style="margin-bottom:3rem;">
-                <span class="section-label" data-i18n="dest_label">Explore Georgia</span>
+                <span class="section-label text-accent-light" data-i18n="dest_label">Explore Georgia</span>
                 <h2 class="section-title text-white" style="margin-top:0.5rem;" data-i18n="dest_title">Popular Places</h2>
                 <p style="color:var(--color-gray-400); max-width:42rem; margin:1rem auto 0 auto;" data-i18n="dest_subtitle">Discover the most beautiful locations accessible comfortably by car.</p>
             </div>
@@ -1121,7 +1163,7 @@
                     <div class="tour-content">
                         <h3 class="tour-title" data-i18n="dest_Tbilisi">Tbilisi</h3>
                         <p class="tour-desc" data-i18n="desc_Tbilisi">The heart of Georgia.</p>
-                        <span class="tour-btn">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
+                        <span class="tour-btn text-accent-light">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
                     </div>
                 </div>
                 <!-- Kazbegi -->
@@ -1131,7 +1173,7 @@
                     <div class="tour-content">
                         <h3 class="tour-title" data-i18n="dest_kazbegi">Kazbegi</h3>
                         <p class="tour-desc" data-i18n="desc_kazbegi">The heart of the Caucasus Mountains.</p>
-                        <span class="tour-btn">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
+                        <span class="tour-btn text-accent-light">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
                     </div>
                 </div>
                 <!-- Martvili -->
@@ -1141,7 +1183,7 @@
                     <div class="tour-content">
                         <h3 class="tour-title" data-i18n="dest_martvili">Martvili</h3>
                         <p class="tour-desc" data-i18n="desc_martvili">Emerald canyon boat ride.</p>
-                        <span class="tour-btn">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
+                        <span class="tour-btn text-accent-light">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
                     </div>
                 </div>
                 <!-- Signagi -->
@@ -1151,7 +1193,7 @@
                     <div class="tour-content">
                         <h3 class="tour-title" data-i18n="dest_kakheti">Signagi</h3>
                         <p class="tour-desc" data-i18n="desc_kakheti">City of Love with valley views.</p>
-                        <span class="tour-btn">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
+                        <span class="tour-btn text-accent-light">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
                     </div>
                 </div>
             </div>
@@ -1169,7 +1211,10 @@
                 <!-- Sedan -->
                 <div class="fleet-card reveal">
                     <div class="fleet-img-wrap">
-                        <div class="price-badge" data-i18n="price_sedan">From 150 GEL</div>
+                        <div class="price-badge">
+                            <span data-i18n="price_start">From</span> 
+                            <span class="price-display" data-base-price="150">150 GEL</span>
+                        </div>
                         <img src="Sedan.webp" width="600" height="400" loading="lazy" decoding="async" class="fleet-img" alt="Sedan Car">
                     </div>
                     <div class="fleet-body">
@@ -1186,7 +1231,10 @@
                 <div class="fleet-card featured reveal">
                      <div class="popular-tag" data-i18n="tag_popular">POPULAR</div>
                     <div class="fleet-img-wrap">
-                        <div class="price-badge" data-i18n="price_minivan">From 250 GEL</div>
+                        <div class="price-badge">
+                            <span data-i18n="price_start">From</span>
+                            <span class="price-display" data-base-price="250">250 GEL</span>
+                        </div>
                         <img src="Minivan.webp" width="600" height="400" loading="lazy" decoding="async" class="fleet-img" alt="Minivan Car">
                     </div>
                     <div class="fleet-body">
@@ -1202,45 +1250,6 @@
             </div>
         </div>
     </section>
-    
-    <!-- Currency Converter -->
-    <div class="container currency-section">
-         <div class="converter-card reveal">
-            <div class="conv-header">
-                 <div class="conv-icon-box"><i class="fa-solid fa-coins"></i></div>
-                <div class="conv-title-text"><h3 data-i18n="conv_title">Currency Converter</h3><p data-i18n="conv_desc">Estimate price</p></div>
-            </div>
-            <div class="conv-controls">
-                <div class="conv-amount-group"><label for="convAmount" class="form-label" data-i18n="label_amount">Amount</label><input type="number" id="convAmount" value="150" inputmode="decimal" oninput="convertCurrency()" class="conv-input"></div>
-                <div class="conv-select-group">
-                    <!-- From Select -->
-                    <div class="conv-select-wrapper" id="select-from">
-                        <label class="form-label" data-i18n="label_from">From</label>
-                        <button type="button" class="conv-input conv-select-btn" onclick="toggleDropdown('from')" aria-haspopup="listbox" aria-expanded="false" id="btn-from">
-                            <div class="conv-select-content"><img src="https://flagcdn.com/w40/ge.png" width="24" height="16" class="currency-flag" id="flag-from" alt=""><span id="text-from">GEL</span></div>
-                        </button>
-                        <div class="dropdown-menu" id="list-from" role="listbox"></div>
-                    </div>
-                    <div class="conv-arrow"><i class="fa-solid fa-arrow-right rtl:rotate-180"></i></div>
-                    <!-- To Select -->
-                    <div class="conv-select-wrapper" id="select-to">
-                        <label class="form-label" data-i18n="label_to">To</label>
-                        <button type="button" class="conv-input conv-select-btn" onclick="toggleDropdown('to')" aria-haspopup="listbox" aria-expanded="false" id="btn-to">
-                             <div class="conv-select-content"><img src="https://flagcdn.com/w40/us.png" width="24" height="16" class="currency-flag" id="flag-to" alt=""><span id="text-to">USD</span></div>
-                        </button>
-                        <div class="dropdown-menu" id="list-to" role="listbox"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="conv-result-box">
-                <span class="conv-result-label" data-i18n="label_result">Estimated:</span>
-                <div><span id="convResult" class="conv-result-value">...</span><span id="convResultLabel" class="conv-result-unit">USD</span></div>
-            </div>
-        </div>
-        <!-- Hidden Inputs for logic -->
-        <input type="hidden" id="convFrom" value="GEL">
-        <input type="hidden" id="convTo" value="USD">
-    </div>
 
     <!-- Reviews Section -->
     <section id="reviews" class="section-py reviews-bg">
@@ -1296,7 +1305,7 @@
             <div class="text-center reveal" style="margin-bottom:3rem;">
                 <h2 class="section-title" data-i18n="faq_title">Frequently Asked Questions</h2>
             </div>
-            <div class="faq-list reveal">
+            <div id="faq-list" class="faq-list reveal">
                 <div class="faq-item" onclick="this.querySelector('p').classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')">
                     <div class="faq-header">
                         <h3 class="faq-question" data-i18n="faq_q2">Do I need to pay in advance?</h3>
@@ -1350,7 +1359,7 @@
                         </div>
 
                         <!-- Vehicle & Passengers -->
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                        <div class="form-row-responsive">
                             <div>
                                 <label for="vehicle" class="form-label" data-i18n="label_vehicle">Vehicle</label>
                                 <select id="vehicle" onchange="updatePriceEstimate()" class="form-select">
@@ -1381,7 +1390,7 @@
                         </div>
 
                         <!-- Dates -->
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;" class="col-span-full">
+                        <div class="col-span-full form-row-responsive">
                             <div>
                                 <label for="dateFrom" class="form-label" data-i18n="label_from">Pick-up Date</label>
                                 <input type="date" id="dateFrom" onchange="updateMinDate(); updatePriceEstimate()" autocomplete="off" class="form-input">
@@ -1402,8 +1411,8 @@
 
                     <!-- Live Price Estimate -->
                     <div id="price-estimate" class="hidden price-estimate-box">
-                        <span style="font-size:0.875rem; font-weight:700; color:var(--color-gray-600);">Estimated Total:</span>
-                        <span style="font-size:1.5rem; font-weight:800; color:var(--color-primary);"><span id="total-price">0</span> <span style="font-size:0.875rem;">GEL</span></span>
+                        <span style="font-size:0.875rem; font-weight:700; color:var(--color-gray-600);" data-i18n="label_result">Estimated Total:</span>
+                        <span style="font-size:1.5rem; font-weight:800; color:var(--color-primary);" class="price-display" id="total-price-display">0 GEL</span>
                     </div>
 
                     <button type="submit" id="submitBtn" class="btn-submit">
@@ -1528,7 +1537,8 @@
     </div>
 
     <!-- EmailJS (Loaded securely via CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- CRITICAL FIX: Added defer to prevent render blocking -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
     <script>
        const EMAILJS_PUBLIC_KEY = "gFHD0l5sBGRvS44V8"; 
        window.addEventListener('load', function(){
@@ -1546,6 +1556,16 @@
     <script>
         // === JS LOGIC ===
         const VEHICLE_RATES = { 'Sedan': 150, 'Minivan': 250 };
+        
+        // Currency Config
+        const currencies = [
+            { code: 'GEL', flag: 'ge' }, { code: 'USD', flag: 'us' }, { code: 'EUR', flag: 'eu' },
+            { code: 'AED', flag: 'ae' }, { code: 'SAR', flag: 'sa' }, { code: 'KWD', flag: 'kw' },
+            { code: 'QAR', flag: 'qa' }, { code: 'OMR', flag: 'om' }
+        ];
+        
+        let currentCurrency = 'GEL';
+        let exchangeRates = { GEL: 1, USD: 0.37, EUR: 0.34, AED: 1.35, SAR: 1.38, KWD: 0.11, QAR: 1.34, OMR: 0.14 }; // Default/Fallback
 
         function vibrate(pattern = [10]) { if (navigator.vibrate) navigator.vibrate(pattern); }
 
@@ -1559,7 +1579,6 @@
                     await navigator.clipboard.writeText(text); 
                     showToast('Link Copied', 'fa-check'); 
                 } catch (err) {
-                    // Fallback for older browsers
                     const dummy = document.createElement('input');
                     document.body.appendChild(dummy); dummy.value = text; dummy.select();
                     document.execCommand('copy'); document.body.removeChild(dummy);
@@ -1579,15 +1598,13 @@
         }
         
         function checkIosInstall() {
-            const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-            const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
-            if (isIos && !isInStandaloneMode && !sessionStorage.getItem('iosPromptShown')) {
-                // Modal logic here if needed
-            }
-        }
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => { console.log("Service Worker supported - requires sw.js"); });
+            try {
+                const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+                const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
+                if (isIos && !isInStandaloneMode && !sessionStorage.getItem('iosPromptShown')) {
+                    // Modal logic here if needed
+                }
+            } catch(e) { console.log("iOS check failed/blocked"); }
         }
 
         // Debounce Helper
@@ -1608,24 +1625,18 @@
             const yearEl = document.getElementById('year');
             if(yearEl) yearEl.textContent = new Date().getFullYear();
             
-            initCustomDropdowns();
+            initCurrencyDropdowns();
             restoreFormDraft(); 
             checkIosInstall(); 
             
             try {
                 loadUserPreferences();
-                const savedCurrency = localStorage.getItem('userCurrency');
-                if(savedCurrency) {
-                    const sel = document.getElementById('convFrom');
-                    if(sel) sel.value = savedCurrency;
-                    const fromText = document.getElementById('text-from');
-                    if(fromText) fromText.textContent = savedCurrency;
-                }
                 
+                // Fetch rates independently
                 if ('requestIdleCallback' in window) {
-                    requestIdleCallback(() => fetchRates(savedCurrency || 'GEL'));
+                    requestIdleCallback(() => fetchRates('GEL'));
                 } else {
-                    setTimeout(() => fetchRates(savedCurrency || 'GEL'), 1000);
+                    setTimeout(() => fetchRates('GEL'), 1000);
                 }
 
                 if (!localStorage.getItem('cookieConsent')) {
@@ -1637,6 +1648,7 @@
                 setTimeout(() => fetchRates('GEL'), 1000);
             }
             
+            // Date Logic
             const dateFrom = document.getElementById('dateFrom');
             const dateTo = document.getElementById('dateTo');
             
@@ -1672,6 +1684,94 @@
             }
         });
         
+        // --- Currency Logic ---
+        function initCurrencyDropdowns() {
+            ['desktop', 'mobile'].forEach(type => {
+                const container = document.getElementById(`curr-options-${type}`);
+                if(!container) return;
+                
+                currencies.forEach(curr => {
+                    const opt = document.createElement('div');
+                    opt.className = 'custom-option';
+                    opt.innerHTML = `<img src="https://flagcdn.com/w40/${curr.flag}.png" class="currency-flag-sm" alt="${curr.code}"> ${curr.code}`;
+                    opt.onclick = () => changeCurrency(curr.code, curr.flag);
+                    container.appendChild(opt);
+                });
+            });
+            
+            // Close dropdowns on click outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.custom-select-wrapper')) {
+                    document.querySelectorAll('.custom-select-wrapper').forEach(el => el.classList.remove('open'));
+                }
+            });
+        }
+
+        function toggleCurrencyDropdown(type) {
+            const wrapper = document.getElementById(`currency-${type}`);
+            if(wrapper) wrapper.classList.toggle('open');
+        }
+
+        function changeCurrency(code, flag) {
+            currentCurrency = code;
+            try { localStorage.setItem('userCurrency', code); } catch(e){}
+            
+            // Update UI buttons
+            const flagUrl = flag ? `https://flagcdn.com/w40/${flag}.png` : `https://flagcdn.com/w40/${currencies.find(c=>c.code===code).flag}.png`;
+            
+            ['desktop', 'mobile'].forEach(type => {
+                const codeEl = document.getElementById(`curr-code-${type}`);
+                const flagEl = document.getElementById(`curr-flag-${type}`);
+                if(codeEl) codeEl.innerText = code;
+                if(flagEl) flagEl.src = flagUrl;
+            });
+            
+            // Close all dropdowns immediately after selection
+            document.querySelectorAll('.custom-select-wrapper').forEach(el => el.classList.remove('open'));
+            
+            updateSitePrices();
+        }
+
+        async function fetchRates(base) {
+            try {
+                const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    exchangeRates = data.rates;
+                    updateSitePrices();
+                }
+            } catch (error) {
+                console.log("Using offline rates / fallback mode");
+                // Rates already initialized with fallback
+                updateSitePrices();
+            }
+        }
+
+        function updateSitePrices() {
+            // Update global prices (Fleet tags)
+            const rate = exchangeRates[currentCurrency] || 1;
+            
+            document.querySelectorAll('.price-display').forEach(el => {
+                const basePrice = parseFloat(el.getAttribute('data-base-price'));
+                if(basePrice) {
+                    // If currency is GEL, show exact base. Otherwise convert.
+                    // Assuming base prices are in GEL.
+                    // If rate base was GEL: value * rate.
+                    // If rate base was something else, we need logic. We fetched base=GEL above.
+                    
+                    let finalPrice = basePrice;
+                    if(currentCurrency !== 'GEL') {
+                        finalPrice = Math.ceil((basePrice * rate) / 5) * 5; // Round to nearest 5
+                    }
+                    el.innerText = `${finalPrice} ${currentCurrency}`;
+                }
+            });
+            
+            updatePriceEstimate(); // Update Booking form total
+        }
+
+        // --- Standard Logic ---
+
         const focusController = new AbortController();
         let lastFocusedElement;
 
@@ -1705,11 +1805,6 @@
             }
         });
 
-        setTimeout(() => {
-             const loader = document.getElementById('preloader');
-             if(loader && loader.style.display !== 'none') { loader.style.display = 'none'; }
-        }, 3000); 
-
         function acceptCookies() { try { localStorage.setItem('cookieConsent', 'true'); } catch(e){} document.getElementById('cookie-banner').classList.remove('active'); }
         function declineCookies() { try { localStorage.setItem('cookieConsent', 'false'); } catch(e){} document.getElementById('cookie-banner').classList.remove('active'); }
 
@@ -1717,6 +1812,12 @@
             try {
                 const savedLang = localStorage.getItem('userLang');
                 if (savedLang && savedLang !== currentLang) { toggleLanguage(); }
+                
+                const savedCurr = localStorage.getItem('userCurrency');
+                if(savedCurr) {
+                    const c = currencies.find(x => x.code === savedCurr);
+                    if(c) changeCurrency(savedCurr, c.flag);
+                }
             } catch(e){}
         }
 
@@ -1736,13 +1837,13 @@
                 service: serviceVal,
                 notes: document.getElementById('notes')?.value || ''
             };
-            sessionStorage.setItem(storageKey, JSON.stringify(formData));
+            try { sessionStorage.setItem(storageKey, JSON.stringify(formData)); } catch(e){}
         }
 
         function restoreFormDraft() {
-            const saved = sessionStorage.getItem(storageKey);
-            if (saved) {
-                try {
+            try {
+                const saved = sessionStorage.getItem(storageKey);
+                if (saved) {
                     const data = JSON.parse(saved);
                     if(data.name && document.getElementById('name')) document.getElementById('name').value = data.name;
                     if(data.phone && document.getElementById('phone')) document.getElementById('phone').value = data.phone;
@@ -1755,7 +1856,9 @@
                         if(radio) radio.checked = true;
                     }
                     updatePriceEstimate();
-                } catch(e) { sessionStorage.removeItem(storageKey); }
+                }
+            } catch(e) { 
+                try { sessionStorage.removeItem(storageKey); } catch(e2){}
             }
         }
 
@@ -1767,7 +1870,7 @@
             const dateTo = document.getElementById('dateTo')?.value;
             const vehicleType = document.getElementById('vehicle')?.value;
             const estimateEl = document.getElementById('price-estimate');
-            const totalEl = document.getElementById('total-price');
+            const totalEl = document.getElementById('total-price-display');
 
             if (dateFrom && dateTo && vehicleType) {
                 const d1 = new Date(dateFrom);
@@ -1778,138 +1881,20 @@
 
                 if (d2 >= d1) {
                     const rate = VEHICLE_RATES[vehicleType] || 150;
-                    const total = diffDays * rate;
-                    if(totalEl) totalEl.innerText = total;
+                    const totalGEL = diffDays * rate;
+                    
+                    // Convert total
+                    const exRate = exchangeRates[currentCurrency] || 1;
+                    const finalTotal = currentCurrency === 'GEL' ? totalGEL : Math.ceil((totalGEL * exRate) / 5) * 5;
+                    
+                    if(totalEl) {
+                        // Store raw total for submission logic if needed, but display converted
+                        totalEl.innerText = `${finalTotal} ${currentCurrency}`;
+                    }
+                    
                     if(estimateEl) estimateEl.classList.remove('hidden');
                 } else { if(estimateEl) estimateEl.classList.add('hidden'); }
             } else { if(estimateEl) estimateEl.classList.add('hidden'); }
-        }
-
-        const currencies = [
-            { code: 'GEL', flag: 'ge' }, { code: 'USD', flag: 'us' }, { code: 'EUR', flag: 'eu' },
-            { code: 'AED', flag: 'ae' }, { code: 'SAR', flag: 'sa' }, { code: 'KWD', flag: 'kw' },
-            { code: 'QAR', flag: 'qa' }, { code: 'OMR', flag: 'om' }
-        ];
-
-        const FALLBACK_RATES = { GEL: 1, USD: 0.37, EUR: 0.34, AED: 1.35, SAR: 1.38, KWD: 0.11, QAR: 1.34, OMR: 0.14 };
-        let exchangeRates = { ...FALLBACK_RATES };
-        let rateBase = 'GEL'; 
-        
-        async function fetchRates(base) {
-            const resultEl = document.getElementById('convResult');
-            if(resultEl) resultEl.innerText = "...";
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000);
-
-            try {
-                const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`, { signal: controller.signal });
-                clearTimeout(timeoutId);
-                
-                if (!response.ok) throw new Error("API Failed");
-                const data = await response.json();
-                exchangeRates = data.rates;
-                rateBase = base;
-                convertCurrency(); 
-            } catch (error) {
-                console.log("Using offline rates / fallback mode");
-                const fallback = { ...FALLBACK_RATES }; 
-                if (base && base !== 'GEL' && fallback[base]) {
-                    const baseRate = fallback[base]; 
-                    const normalized = {};
-                    Object.keys(fallback).forEach(k => { normalized[k] = fallback[k] / baseRate; });
-                    exchangeRates = normalized;
-                    rateBase = base;
-                } else {
-                    exchangeRates = fallback;
-                    rateBase = 'GEL';
-                }
-                convertCurrency();
-            }
-        }
-
-        function updateBaseRate() {
-            const newBase = document.getElementById('convFrom').value;
-            try { localStorage.setItem('userCurrency', newBase); } catch(e){}
-            fetchRates(newBase);
-        }
-
-        function convertCurrency() {
-            const amountInput = document.getElementById('convAmount');
-            const toInput = document.getElementById('convTo');
-            const fromInput = document.getElementById('convFrom');
-            if(!amountInput || !toInput || !fromInput) return;
-
-            const amount = parseFloat(amountInput.value) || 0;
-            const targetCurrency = toInput.value;
-            const fromCurrency = fromInput.value;
-            let finalRate = 1;
-
-            const rateFromBaseToTarget = exchangeRates[targetCurrency] || 1;
-            const rateFromBaseToSource = exchangeRates[fromCurrency] || 1;
-
-            if (rateBase === fromCurrency) { finalRate = rateFromBaseToTarget; } 
-            else { finalRate = rateFromBaseToTarget / rateFromBaseToSource; }
-            
-            const resultEl = document.getElementById('convResult');
-            const labelEl = document.getElementById('convResultLabel');
-            if(resultEl) resultEl.innerText = (amount * finalRate).toFixed(2);
-            if(labelEl) labelEl.innerText = targetCurrency;
-        }
-
-        function initCustomDropdowns() {
-            populateDropdown('from', currencies);
-            populateDropdown('to', currencies);
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.conv-select-wrapper')) {
-                    const listFrom = document.getElementById('list-from');
-                    const listTo = document.getElementById('list-to');
-                    if(listFrom) listFrom.classList.add('hidden');
-                    if(listTo) listTo.classList.add('hidden');
-                    document.getElementById('btn-from').setAttribute('aria-expanded', 'false');
-                    document.getElementById('btn-to').setAttribute('aria-expanded', 'false');
-                }
-            });
-        }
-
-        function populateDropdown(type, items) {
-            const list = document.getElementById(`list-${type}`);
-            if(!list) return;
-            list.innerHTML = '';
-            items.forEach(item => {
-                const div = document.createElement('div');
-                div.className = 'dropdown-item';
-                div.setAttribute('tabindex', '0'); div.setAttribute('role', 'option');
-                div.onclick = () => selectCurrency(type, item.code, item.flag);
-                div.onkeydown = (e) => { if(e.key === 'Enter') selectCurrency(type, item.code, item.flag); };
-                div.innerHTML = `<img src="https://flagcdn.com/w40/${item.flag}.png" width="24" height="16" class="currency-flag" alt="${item.code} flag"><span class="dropdown-code">${item.code}</span>`;
-                list.appendChild(div);
-            });
-        }
-
-        function toggleDropdown(type) {
-            const list = document.getElementById(`list-${type}`);
-            const btn = document.getElementById(`btn-${type}`);
-            if(!list) return;
-            const otherType = type === 'from' ? 'to' : 'from';
-            const otherList = document.getElementById(`list-${otherType}`);
-            const otherBtn = document.getElementById(`btn-${otherType}`);
-            
-            if(otherList) {
-                 otherList.classList.add('hidden');
-                 if(otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
-            }
-            
-            const isHidden = list.classList.toggle('hidden');
-            if(btn) btn.setAttribute('aria-expanded', !isHidden);
-        }
-
-        function selectCurrency(type, code, flag) {
-            document.getElementById(`conv${type.charAt(0).toUpperCase() + type.slice(1)}`).value = code;
-            document.getElementById(`text-${type}`).innerText = code;
-            document.getElementById(`flag-${type}`).src = `https://flagcdn.com/w40/${flag}.png`;
-            document.getElementById(`list-${type}`).classList.add('hidden');
-            document.getElementById(`btn-${type}`).setAttribute('aria-expanded', 'false');
-            if(type === 'from') updateBaseRate(); else convertCurrency();
         }
 
         let lastScrollTop = 0;
@@ -1969,6 +1954,10 @@
         if(menuBtn) menuBtn.addEventListener('click', toggleMenu);
         if(closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
         mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
+        
+        // Add Close menu functionality to Book Now button in mobile menu
+        const mobileBtnBook = document.querySelector('.mobile-btn-book');
+        if(mobileBtnBook) mobileBtnBook.addEventListener('click', toggleMenu);
 
         function updateMinDate() {
             const from = document.getElementById('dateFrom');
@@ -2000,7 +1989,10 @@
             if (name && !name.value.trim()) { showError(name, document.getElementById('nameError')); isValid = false; } 
             else if(name) name.classList.add('input-success');
 
-            if (phone && !/^[+\d\s-]{8,}$/.test(phone.value.trim())) { showError(phone, document.getElementById('phoneError')); isValid = false; }
+            // Fixed Regex: Requires at least 5 digits to be a valid phone number (preventing ----)
+            if (phone && (!/^[+\d\s-]{5,}$/.test(phone.value.trim()) || !/\d{5,}/.test(phone.value.replace(/\D/g,'')))) { 
+                showError(phone, document.getElementById('phoneError')); isValid = false; 
+            }
             else if(phone) phone.classList.add('input-success');
 
             if (passengers && (!passengers.value || passengers.value < 1)) { showError(passengers, document.getElementById('passengersError')); isValid = false; }
@@ -2077,12 +2069,15 @@
             };
             
             const serviceText = formData.service === 'with_driver' ? (currentLang === 'en' ? 'With Driver' : 'مع سائق') : 'Self Drive';
-            const msg = `Hello! Quote Request:\n\n👤 ${formData.name}\n📱 ${formData.phone}\n👥 Pax: ${formData.passengers}\n🚗 ${formData.vehicle}\n👔 ${serviceText}\n📅 ${formData.from} to ${formData.to}\n📝 ${formData.notes}`;
+            // Get estimated price string
+            const priceText = document.getElementById('total-price-display')?.innerText || '';
+            
+            const msg = `Hello! Quote Request:\n\n👤 ${formData.name}\n📱 ${formData.phone}\n👥 Pax: ${formData.passengers}\n🚗 ${formData.vehicle}\n👔 ${serviceText}\n📅 ${formData.from} to ${formData.to}\n💰 Est: ${priceText}\n📝 ${formData.notes}`;
             const encodedMsg = encodeURIComponent(msg);
             
             const safetyTimeout = setTimeout(() => { if(submitBtn.disabled) { showSuccess(); } }, 6000); 
 
-            sessionStorage.removeItem(storageKey);
+            try { sessionStorage.removeItem(storageKey); } catch(e){}
 
             const whatsappUrl = `https://wa.me/995579088537?text=${encodedMsg}`;
             const modalLink = document.getElementById('whatsappLink');
@@ -2097,7 +2092,8 @@
                     service_type: serviceText,
                     date_from: formData.from,
                     date_to: formData.to,
-                    message: formData.notes
+                    message: formData.notes,
+                    estimated_price: priceText
                 };
                 emailjs.send('service_booking', 'template_40h23xf', templateParams)
                     .then(() => { clearTimeout(safetyTimeout); showSuccess(); })
@@ -2132,7 +2128,7 @@
         const translations = {
             en: {
                 nav_home: "Home", nav_about: "About", nav_fleet: "Fleet", nav_reviews: "Reviews", nav_book: "Book Now", nav_tours: "Destinations",
-                hero_title: "Discover Georgia <br/> <span class='text-accent italic font-serif'>Without Limits</span>",
+                hero_title: "Discover Georgia <br/> <span class='text-accent-light italic font-serif'>Without Limits</span>",
                 hero_subtitle: "Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.",
                 cta_start: "Get a Quote", cta_fleet: "View Fleet",
                 stat_trips: "5-Star Trips", stat_safe: "Safety Record", stat_support: "Live Support",
@@ -2141,8 +2137,8 @@
                 feat_safety_title: "Verified & Safe Drivers", feat_safety_desc: "Background checked professionals with extensive mountain driving expertise.",
                 feat_price_title: "Transparent Pricing", feat_price_desc: "All-inclusive quotes via WhatsApp. Fuel, parking, and insurance included.",
                 fleet_label: "Our Fleet", fleet_title: "Choose Your Comfort",
-                sedan_title: "Sedan", sedan_desc: "Perfect for couples or solo travelers.", btn_select_sedan: "Book Sedan", price_sedan: "From 150 GEL",
-                minivan_title: "Minivan", minivan_desc: "Spacious comfort for groups & families.", btn_select_minivan: "Book Minivan", tag_popular: "POPULAR", price_minivan: "From 250 GEL",
+                sedan_title: "Sedan", sedan_desc: "Perfect for couples or solo travelers.", btn_select_sedan: "Book Sedan", price_start: "From",
+                minivan_title: "Minivan", minivan_desc: "Spacious comfort for groups & families.", btn_select_minivan: "Book Minivan", tag_popular: "POPULAR",
                 reviews_label: "Testimonials", reviews_title: "Trusted by Travelers",
                 review_1_text: "\"Our driver Giorgi was amazing! He showed us hidden spots on the way to Kazbegi that we would have never found alone. The car was spotless.\"", review_1_name: "Sarah Johnson", review_1_country: "United Kingdom",
                 review_2_text: "\"Booking was super easy via WhatsApp. The Minivan for our family of 6 was comfortable and spacious. Highly recommended.\"", review_2_name: "Ahmed Khalil", review_2_country: "UAE",
@@ -2161,7 +2157,7 @@
                 footer_links: "Quick Links", footer_contact: "Contact Us", footer_find_us: "Find Us",
                 modal_title: "Quote Ready!", modal_desc: "Your details are ready. Send via WhatsApp.", modal_btn_send: "Open WhatsApp", modal_close: "Close",
                 conv_title: "Currency Converter", conv_desc: "Estimate price",
-                label_amount: "Amount", label_from: "From", label_to: "To", label_result: "Estimated:",
+                label_amount: "Amount", label_from: "From", label_to: "To", label_result: "Estimated Total:",
                 dest_label: "Explore Georgia",
                 dest_title: "Popular Places to Visit",
                 dest_subtitle: "Discover the most beautiful locations in Georgia accessible comfortably by car.",
@@ -2176,7 +2172,7 @@
             },
             ar: {
                 nav_home: "الرئيسية", nav_about: "من نحن", nav_fleet: "السيارات", nav_reviews: "الآراء", nav_book: "احجز الآن", nav_tours: "وجهات",
-                hero_title: "اكتشف جورجيا <br/> <span class='text-accent italic font-serif'>بلا حدود</span>",
+                hero_title: "اكتشف جورجيا <br/> <span class='text-accent-light italic font-serif'>بلا حدود</span>",
                 hero_subtitle: "سائقون محترفون وأسطول فاخر. من الاستقبال في المطار إلى الرحلات الجبلية.",
                 cta_start: "احصل على عرض", cta_fleet: "شاهد السيارات",
                 stat_trips: "رحلة سعيدة", stat_safe: "سجل أمان", stat_support: "دعم مباشر",
@@ -2185,8 +2181,8 @@
                 feat_safety_title: "سائقون معتمدون", feat_safety_desc: "محترفون تم فحصهم مع خبرة في القيادة الجبلية.",
                 feat_price_title: "أسعار شفافة", feat_price_desc: "عروض شاملة عبر واتساب. شامل الوقود والمواقف والتأمين.",
                 fleet_label: "أسطولنا", fleet_title: "اختر راحتك",
-                sedan_title: "سيدان رجال أعمال", sedan_desc: "مثالية للأزواج أو المسافرين المنفردين.", btn_select_sedan: "حجز سيدان", price_sedan: "يبدأ من 150 لاري",
-                minivan_title: "ميني فان عائلي", minivan_desc: "راحة واسعة للمجموعات والعائلات.", btn_select_minivan: "حجز ميني فان", tag_popular: "الأكثر طلباً", price_minivan: "يبدأ من 250 لاري",
+                sedan_title: "سيدان رجال أعمال", sedan_desc: "مثالية للأزواج أو المسافرين المنفردين.", btn_select_sedan: "حجز سيدان", price_start: "يبدأ من",
+                minivan_title: "ميني فان عائلي", minivan_desc: "راحة واسعة للمجموعات والعائلات.", btn_select_minivan: "حجز ميني فان", tag_popular: "الأكثر طلباً",
                 reviews_label: "تجارب ضيوفنا", 
                 reviews_title: "تجارب مسافرين حقيقية",
                 review_1_text: "\"السائق جورجي كان رائعاً! أرشدنا لأماكن ساحرة في طريق كازبيجي لم نكن لنكتشفها وحدنا. السيارة كانت في غاية النظافة.\"", review_1_name: "سارة جونسون", review_1_country: "المملكة المتحدة",
@@ -2198,6 +2194,7 @@
                 faq_q3: "هل يتحدث السائقون العربية؟", faq_a3: "نعم! لدينا سائقون محترفون يتحدثون العربية. يرجى طلب ذلك في الملاحظات.",
                 book_title: "ابدأ رحلتك", book_desc: "احصل على عرض سعر مخصص عبر واتساب فوراً.",
                 label_name: "الاسم الكامل", label_phone: "رقم واتساب", label_vehicle: "نوع السيارة",
+                label_passengers: "عدد الركاب",
                 opt_sedan: "سيدان (1-4)", opt_minivan: "ميني فان (5-7)",
                 label_service: "نوع الخدمة", opt_driver: "مع سائق", opt_self: "قيادة ذاتية",
                 label_from: "تاريخ الاستلام", label_to: "تاريخ التسليم", label_notes: "تفاصيل الرحلة / أسئلة",
@@ -2232,7 +2229,7 @@
                 el.textContent = currentLang === 'en' ? 'العربية' : 'English';
             });
 
-            const rtlElements = ['hero-content', 'about-content', 'fleet-grid', 'footer-content', 'booking-container', 'faq-content', 'destinations', 'reviews', 'currency-converter'];
+            const rtlElements = ['hero-content', 'about-content', 'fleet-grid', 'footer-content', 'booking-container', 'faq-list', 'destinations', 'reviews', 'currency-converter'];
             rtlElements.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
@@ -2299,12 +2296,16 @@
                     slider.prepend(clone);
                 });
 
-                // Set initial position
+                // Set initial position - Disable snap temporarily
+                slider.style.scrollSnapType = 'none';
                 const startPos = cardWidth * originalItemCount;
                 if (isRTL) {
                     slider.scrollLeft = -startPos; 
                     if (slider.scrollLeft === 0) slider.scrollLeft = startPos; 
                 } else { slider.scrollLeft = startPos; }
+                
+                // Re-enable snap after a tiny delay
+                setTimeout(() => { slider.style.scrollSnapType = 'x mandatory'; }, 50);
             }, 100);
 
             const moveSlider = (direction) => {
