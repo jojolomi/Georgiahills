@@ -8,14 +8,21 @@
     <!-- PERFORMANCE HINTS                            -->
     <!-- ============================================ -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+    <link rel="dns-prefetch" href="https://images.unsplash.com">
+    
     <link rel="preconnect" href="https://flagcdn.com" crossorigin>
     <link rel="preconnect" href="https://api.exchangerate-api.com" crossorigin>
 
-    <!-- FIX: Added fetchpriority="high" to the preload link to match the img tag -->
-    <link rel="preload" href="image.webp" as="image" fetchpriority="high">
+    <!-- OPTIMIZATION: Removed mismatched preload link. relying on fetchpriority="high" on the img tag itself is more efficient. -->
 
     <!-- ============================================ -->
     <!-- SEO & METADATA                               -->
@@ -84,9 +91,11 @@
     <link rel="apple-touch-icon" href="favicon.ico">
 
     <!-- Dependencies -->
-    <!-- CRITICAL CSS: Expanded to style Hero Text/Buttons before Tailwind loads -->
+    <!-- CRITICAL CSS: Merged & Expanded to style Hero Text/Buttons before Tailwind loads -->
     <style>
-        body { margin: 0; background-color: #F9FAFB; font-family: 'Outfit', sans-serif; }
+        body { margin: 0; background-color: #F9FAFB; font-family: 'Outfit', sans-serif; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-tap-highlight-color: transparent; background: radial-gradient(circle at 50% 0%, #ffffff 0%, #F3F4F6 100%); overscroll-behavior-y: none; min-height: 100vh; padding-bottom: env(safe-area-inset-bottom); }
+        html { scroll-padding-top: 6rem; }
+        
         /* Hero Container */
         #home { position: relative; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: #0F172A; }
         #hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -102,75 +111,12 @@
             .hero-subtitle { font-size: 1.25rem; line-height: 1.75rem; }
         }
         
-        /* Buttons Critical Style - Adjusted for new darker accent */
+        /* Buttons Critical Style */
         .crit-btn { display: inline-block; padding: 1rem 2rem; border-radius: 9999px; font-weight: 700; text-decoration: none; margin: 0.5rem; transition: transform 0.2s; }
-        /* FIX: Darkened accent color in critical CSS */
         .crit-btn-primary { background-color: #8B5E34; color: white; }
         .crit-btn-secondary { background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; backdrop-filter: blur(12px); }
-    </style>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-    
-    <!-- Tailwind Config -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
-                        arabic: ['Cairo', 'sans-serif'],
-                    },
-                    colors: {
-                        primary: '#2C5530',    
-                        secondary: '#8BA888',
-                        /* FIX: Darkened accent color for accessibility contrast (AA compliant on white) */  
-                        accent: '#8B5E34',     
-                        surface: '#F9FAFB',    
-                        dark: '#0F172A',
-                        error: '#EF4444',
-                    },
-                    boxShadow: {
-                        'soft': '0 20px 40px -15px rgba(0,0,0,0.1)',
-                        'card': '0 0 0 1px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.04)',
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
-                        'spin': 'spin 1s linear infinite',
-                        'swipe-hint': 'swipeHint 2s ease-in-out infinite',
-                        'bounce-slow': 'bounce 3s infinite',
-                    },
-                    keyframes: {
-                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
-                        shake: { '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' }, '20%, 80%': { transform: 'translate3d(2px, 0, 0)' }, '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' }, '40%, 60%': { transform: 'translate3d(4px, 0, 0)' } },
-                        spin: { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
-                        swipeHint: { '0%, 100%': { transform: 'translateX(0)', opacity: '0.5' }, '50%': { transform: 'translateX(-20px)', opacity: '1' } }
-                    }
-                }
-            }
-        }
-    </script>
-
-    <style>
-        /* === MOBILE & iOS OPTIMIZATIONS === */
-        html { scroll-padding-top: 6rem; }
-        body { 
-            text-rendering: optimizeLegibility; 
-            -webkit-font-smoothing: antialiased; 
-            -moz-osx-font-smoothing: grayscale;
-            -webkit-tap-highlight-color: transparent;
-            background-color: #F9FAFB;
-            background: radial-gradient(circle at 50% 0%, #ffffff 0%, #F3F4F6 100%);
-            overscroll-behavior-y: none; 
-            min-height: 100vh;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
         
+        /* Smooth Scroll */
         .scroll-smooth { -webkit-overflow-scrolling: touch; }
         
         /* Custom Scrollbar */
@@ -189,10 +135,7 @@
         html[lang="ar"] #bookingForm input, 
         html[lang="ar"] #bookingForm select, 
         html[lang="ar"] #bookingForm textarea,
-        html[lang="ar"] #currency-converter input { 
-            text-align: right; 
-            direction: rtl; 
-        }
+        html[lang="ar"] #currency-converter input { text-align: right; direction: rtl; }
         
         html[lang="ar"] #bookingForm input[type="tel"] { text-align: right !important; direction: ltr !important; }
         html[lang="ar"] footer .fa-solid, html[lang="ar"] footer .fa-location-dot, html[lang="ar"] footer .fa-brands { margin-right: 0 !important; margin-left: 0.75rem !important; }
@@ -234,20 +177,11 @@
         .sticky-bar { display: none; transition: transform 0.3s ease-in-out; }
         @media (max-width: 768px) {
             .sticky-bar { 
-                display: flex; 
-                position: fixed; 
-                bottom: 0; 
-                left: 0; 
-                width: 100%; 
-                background: rgba(255,255,255,0.95); 
-                backdrop-filter: blur(10px); 
-                box-shadow: 0 -2px 10px rgba(0,0,0,0.1); 
-                z-index: 70; 
-                padding: 12px 16px; 
-                padding-bottom: calc(12px + env(safe-area-inset-bottom));
-                gap: 12px; 
-                align-items: center; 
-                transform: translateY(0); 
+                display: flex; position: fixed; bottom: 0; left: 0; width: 100%; 
+                background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); 
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 70; 
+                padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom));
+                gap: 12px; align-items: center; transform: translateY(0); 
             }
             .sticky-bar.hide-bar { transform: translateY(100%); }
             #cookie-banner.active { bottom: 80px; }
@@ -255,26 +189,13 @@
         }
 
         /* Navbar Safe Area Fix */
-        #navbar {
-            padding-top: env(safe-area-inset-top);
-            height: auto;
-            min-height: calc(5rem + env(safe-area-inset-top));
-        }
-        #navbar .max-w-7xl {
-            padding-top: 0;
-            padding-bottom: 0;
-            height: 5rem;
-            display: flex;
-            align-items: center;
-        }
+        #navbar { padding-top: env(safe-area-inset-top); height: auto; min-height: calc(5rem + env(safe-area-inset-top)); }
+        #navbar .max-w-7xl { padding-top: 0; padding-bottom: 0; height: 5rem; display: flex; align-items: center; }
         
         .nav-hidden { transform: translateY(-100%); }
         .skip-link { position: absolute; top: -40px; left: 0; background: #2C5530; color: white; padding: 8px; z-index: 100; transition: top 0.3s; }
         .skip-link:focus { top: 0; }
         
-        .brand-logo { height: 40px; width: auto; object-fit: contain; }
-        .hero-logo { height: 100px; width: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2)); }
-
         .swipe-hint-overlay {
             position: absolute; inset: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; z-index: 30;
             background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
@@ -293,33 +214,59 @@
             display: flex; flex-direction: column; gap: 15px;
         }
         #ios-install-modal.show { transform: translateY(0); }
-        .ios-action-icon {
-            display: inline-block; vertical-align: middle; margin: 0 4px;
-            color: #007AFF;
-        }
+        .ios-action-icon { display: inline-block; vertical-align: middle; margin: 0 4px; color: #007AFF; }
         
         /* Flag styling for converter */
-        .currency-flag {
-            width: 24px;
-            height: 16px;
-            object-fit: cover;
-            border-radius: 2px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
+        .currency-flag { width: 24px; height: 16px; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 
-    /* Ensure horizontal touch panning is smooth on mobile */
-    #tours-slider {
-        -webkit-overflow-scrolling: touch; /* iOS momentum scrolling */
-        touch-action: pan-x; /* prefer horizontal pan */
-        overscroll-behavior-x: contain; /* avoid page swipe interfering */
-    }
-
-    /* keep hide-scrollbar but don't block interactions */
-    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    .hide-scrollbar::-webkit-scrollbar { display: none; }
-
-
+        /* Ensure horizontal touch panning is smooth on mobile */
+        #tours-slider { -webkit-overflow-scrolling: touch; touch-action: pan-x; overscroll-behavior-x: contain; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
     </style>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'], arabic: ['Cairo', 'sans-serif'] },
+                    colors: {
+                        primary: '#2C5530',    
+                        secondary: '#8BA888',
+                        accent: '#8B5E34',     
+                        surface: '#F9FAFB',    
+                        dark: '#0F172A',
+                        error: '#EF4444',
+                    },
+                    boxShadow: {
+                        'soft': '0 20px 40px -15px rgba(0,0,0,0.1)',
+                        'card': '0 0 0 1px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.04)',
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+                        'spin': 'spin 1s linear infinite',
+                        'swipe-hint': 'swipeHint 2s ease-in-out infinite',
+                        'bounce-slow': 'bounce 3s infinite',
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+                        shake: { '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' }, '20%, 80%': { transform: 'translate3d(2px, 0, 0)' }, '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' }, '40%, 60%': { transform: 'translate3d(4px, 0, 0)' } },
+                        spin: { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
+                        swipeHint: { '0%, 100%': { transform: 'translateX(0)', opacity: '0.5' }, '50%': { transform: 'translateX(-20px)', opacity: '1' } }
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 <body class="bg-surface text-gray-800 antialiased overflow-x-hidden" dir="ltr">
 
@@ -343,7 +290,6 @@
         <div class="text-center">
             <!-- Mountain Icon Fallback -->
             <div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 animate-bounce">
-                <!-- FIX: Added width/height attributes to minimize CLS, Added safe fallback handling -->
                 <img src="favicon.ico" width="80" height="80" class="object-contain" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
                 <i class="fa-solid fa-mountain-sun text-4xl text-primary hidden"></i>
             </div>
@@ -358,7 +304,6 @@
                 <!-- Logo -->
                 <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
                     <div class="w-14 h-14 flex items-center justify-center text-white">
-                        <!-- FIX: Added width/height attributes, Added safe fallback handling with new sibling element -->
                         <img src="favicon.ico" width="56" height="56" class="w-14 h-14 rounded-full shadow-xl object-cover" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
                         <div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center shadow-xl hidden">
                             <i class="fa-solid fa-mountain text-white text-xl"></i>
@@ -384,7 +329,6 @@
                     <button onclick="toggleLanguage()" class="flex items-center gap-2 text-xs font-bold text-gray-700 bg-gray-100 border border-gray-200 px-3 py-2 rounded-full hover:bg-gray-200 transition-all shadow-sm" aria-label="Toggle Language Mobile">
                         <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">العربية</span>
                     </button>
-                    <!-- FIX: Added accessible name for menu button -->
                     <button id="mobile-menu-btn" class="text-dark p-2" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars text-2xl"></i></button>
                 </div>
             </div>
@@ -419,22 +363,25 @@
     <!-- Hero -->
     <section id="home" class="relative h-[90vh] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <!-- FIX: Added width/height and fetchpriority to improve LCP -->
- <img
-  id="hero-img"
-  src="image-640.webp"
-  srcset="
-    image-320.webp 320w,
-    image-640.webp 640w,
-    image-1024.webp 1024w,
-    image-1600.webp 1600w" sizes="(max-width: 768px) 100vw, 1200px" width="1200" height="700" fetchpriority="high" decoding="async" class="w-full h-full object-cover" alt="Scenic Georgia Mountains">
-            <!-- Critical CSS used here -->
+             <img
+              id="hero-img"
+              src="image-640.webp"
+              srcset="
+                image-320.webp 320w,
+                image-640.webp 640w,
+                image-1024.webp 1024w,
+                image-1600.webp 1600w" 
+              sizes="(max-width: 768px) 100vw, 1200px" 
+              width="1200" 
+              height="700" 
+              fetchpriority="high" 
+              class="w-full h-full object-cover" 
+              alt="Scenic Georgia Mountains">
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content relative z-10 max-w-5xl mx-auto px-4 text-center text-white mt-10 reveal">
             <div class="mb-8 flex justify-center">
                 <div class="w-24 h-24 flex items-center justify-center">
-                    <!-- FIX: Added dimensions, Added safe fallback handling with new sibling element -->
                     <img src="favicon.ico" width="96" height="96" class="w-24 h-24 rounded-full mb-4 shadow-xl object-cover" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
                     <div class="w-24 h-24 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center mb-4 shadow-xl hidden">
                         <i class="fa-solid fa-mountain text-white text-4xl"></i>
@@ -445,7 +392,6 @@
             <div class="inline-flex items-center gap-2 py-1 px-4 border border-white/30 rounded-full text-sm font-medium tracking-widest mb-6 bg-white/10 backdrop-blur-sm">
                 <i class="fa-solid fa-star text-yellow-400 text-xs"></i> #1 FOR FAMILIES
             </div>
-            <!-- APPLIED CRITICAL CSS CLASSES HERE to prevent layout shift -->
             <h1 class="hero-title text-4xl md:text-6xl lg:text-8xl font-extrabold mb-6 leading-tight" data-i18n="hero_title">Discover Georgia <br><span class="text-accent italic font-serif">Without Limits</span></h1>
             <p class="hero-subtitle text-base md:text-xl mb-10 text-gray-100 max-w-2xl mx-auto font-light" data-i18n="hero_subtitle">Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.</p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -471,8 +417,7 @@
                 <div class="w-full lg:w-1/2 reveal">
                     <div class="relative group">
                         <div class="absolute -top-4 -left-4 w-24 h-24 bg-accent/20 rounded-full blur-2xl transition-all group-hover:bg-accent/30"></div>
-                        <!-- FIX: Added lazy loading and explicit width/height for layout stability -->
-                        <img src="Tbilisi_old_Town.webp" width="600" height="400" loading="lazy" class="rounded-3xl shadow-2xl relative z-10 transform transition-transform duration-700 group-hover:scale-[1.02] w-full h-auto" alt="Tbilisi Old Town">
+                        <img src="Tbilisi_old_Town.webp" width="600" height="400" loading="lazy" decoding="async" class="rounded-3xl shadow-2xl relative z-10 transform transition-transform duration-700 group-hover:scale-[1.02] w-full h-auto" alt="Tbilisi Old Town">
                     </div>
                 </div>
                 <div id="about-content" class="w-full lg:w-1/2 reveal">
@@ -482,12 +427,10 @@
                     <div class="space-y-6 mt-8">
                         <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-card hover:shadow-md transition-shadow">
                             <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-primary flex-shrink-0"><i class="fa-solid fa-user-shield text-xl"></i></div>
-                            <!-- FIX: Changed h4 to h3 for correct heading hierarchy -->
                             <div><h3 class="font-bold text-dark text-lg" data-i18n="feat_safety_title">Verified Drivers</h3><p class="text-sm text-gray-600" data-i18n="feat_safety_desc">Background checked professionals.</p></div>
                         </div>
                         <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-card hover:shadow-md transition-shadow">
                             <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 flex-shrink-0"><i class="fa-solid fa-tag text-xl"></i></div>
-                            <!-- FIX: Changed h4 to h3 for correct heading hierarchy -->
                             <div><h3 class="font-bold text-dark text-lg" data-i18n="feat_price_title">Transparent Pricing</h3><p class="text-sm text-gray-600" data-i18n="feat_price_desc">All-inclusive quotes via WhatsApp.</p></div>
                         </div>
                     </div>
@@ -495,81 +438,78 @@
             </div>
         </div>
     </section>
+
     <!-- Destinations -->
-<section id="destinations" class="py-16 md:py-24 bg-dark text-white overflow-hidden relative">
-    <div class="max-w-7xl mx-auto px-4 relative group">
-        <div class="mb-12 reveal text-center md:text-start">
-            <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="dest_label">Explore Georgia</span>
-            <h2 class="text-3xl md:text-4xl font-bold mt-2" data-i18n="dest_title">Popular Places</h2>
-            <!-- FIX: Darker text for better contrast on dark bg -->
-            <p class="text-slate-400 mt-4 max-w-2xl" data-i18n="dest_subtitle">Discover the most beautiful locations accessible comfortably by car.</p>
-        </div>
+    <section id="destinations" class="py-16 md:py-24 bg-dark text-white overflow-hidden relative">
+        <div class="max-w-7xl mx-auto px-4 relative group">
+            <div class="mb-12 reveal text-center md:text-start">
+                <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="dest_label">Explore Georgia</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-2" data-i18n="dest_title">Popular Places</h2>
+                <p class="text-slate-400 mt-4 max-w-2xl" data-i18n="dest_subtitle">Discover the most beautiful locations accessible comfortably by car.</p>
+            </div>
 
-        <div class="relative group/slider">
-            <!-- FIX: Added aria-labels for slider buttons -->
-            <button id="prevBtn" aria-label="Previous Slide" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -ml-4 md:-ml-6 hidden md:flex hover:scale-110 active:scale-95">
-                <i class="fa-solid fa-chevron-left rtl:rotate-180"></i>
-            </button>
-            
-            <button id="nextBtn" aria-label="Next Slide" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -mr-4 md:-mr-6 hidden md:flex hover:scale-110 active:scale-95">
-                <i class="fa-solid fa-chevron-right rtl:rotate-180"></i>
-            </button>
+            <div class="relative group/slider">
+                <button id="prevBtn" aria-label="Previous Slide" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -ml-4 md:-ml-6 hidden md:flex hover:scale-110 active:scale-95">
+                    <i class="fa-solid fa-chevron-left rtl:rotate-180"></i>
+                </button>
+                
+                <button id="nextBtn" aria-label="Next Slide" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -mr-4 md:-mr-6 hidden md:flex hover:scale-110 active:scale-95">
+                    <i class="fa-solid fa-chevron-right rtl:rotate-180"></i>
+                </button>
 
-            <div id="tours-slider" class="flex gap-6 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-8 touch-pan-x">
-                <!-- Tbilisi -->
-                <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
-                    <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                        <!-- FIX: Added lazy loading and explicit width/height -->
-                        <img src="Tbilisi.webp" width="380" height="475" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Tbilisi">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-8 w-full">
-                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_Tbilisi">Tbilisi</h3>
-                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_Tbilisi">The heart of Georgia.</p>
-                            <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                <div id="tours-slider" class="flex gap-6 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-8 touch-pan-x">
+                    <!-- Tbilisi -->
+                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
+                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                            <img src="Tbilisi.webp" width="380" height="475" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Tbilisi">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_Tbilisi">Tbilisi</h3>
+                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_Tbilisi">The heart of Georgia.</p>
+                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Kazbegi -->
-                <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
-                    <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                        <img src="Kazbegi.webp" width="380" height="475" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Kazbegi Mountains">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-8 w-full">
-                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kazbegi">Kazbegi</h3>
-                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kazbegi">The heart of the Caucasus Mountains.</p>
-                            <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                    <!-- Kazbegi -->
+                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
+                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                            <img src="Kazbegi.webp" width="380" height="475" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Kazbegi Mountains">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kazbegi">Kazbegi</h3>
+                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kazbegi">The heart of the Caucasus Mountains.</p>
+                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Martvili -->
-                <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
-                    <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                        <img src="Martvili.webp" width="380" height="475" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Martvili Canyon">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-8 w-full">
-                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_martvili">Martvili</h3>
-                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_martvili">Emerald canyon boat ride.</p>
-                            <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                    <!-- Martvili -->
+                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
+                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                            <img src="Martvili.webp" width="380" height="475" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Martvili Canyon">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_martvili">Martvili</h3>
+                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_martvili">Emerald canyon boat ride.</p>
+                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Signagi -->
-                <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
-                    <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                        <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80" width="380" height="475" loading="lazy" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Signagi City of Love">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 p-8 w-full">
-                            <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kakheti">Signagi</h3>
-                            <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kakheti">City of Love with valley views.</p>
-                            <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                    <!-- Signagi -->
+                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
+                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
+                            <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80" width="380" height="475" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Signagi City of Love">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-8 w-full">
+                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kakheti">Signagi</h3>
+                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kakheti">City of Love with valley views.</p>
+                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-</section>
+    </section>
 
     <!-- Fleet Section -->
     <section id="fleet" class="py-16 md:py-24 bg-surface optimize-render">
@@ -583,8 +523,7 @@
                 <div class="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-2xl transition-all group reveal border border-gray-100 hover:-translate-y-1">
                     <div class="h-56 overflow-hidden relative bg-gray-100 h-56">
                         <div class="price-badge absolute top-4 left-4 bg-white/90 backdrop-blur text-dark text-xs font-bold px-3 py-1 rounded-lg z-20 shadow-sm" data-i18n="price_sedan">From 150 GEL</div>
-                        <!-- FIX: Dimensions added -->
-                        <img src="Sedan.webp" width="600" height="400" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Sedan Car">
+                        <img src="Sedan.webp" width="600" height="400" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Sedan Car">
                     </div>
                     <div class="p-8">
                         <h3 class="text-2xl font-bold text-dark mb-1" data-i18n="sedan_title">Sedan</h3>
@@ -601,7 +540,7 @@
                      <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full z-20 shadow-md rtl:right-auto rtl:left-4" data-i18n="tag_popular">POPULAR</div>
                     <div class="h-56 overflow-hidden relative bg-gray-100 h-56">
                         <div class="price-badge absolute top-4 left-4 bg-white/90 backdrop-blur text-dark text-xs font-bold px-3 py-1 rounded-lg z-20 shadow-sm" data-i18n="price_minivan">From 250 GEL</div>
-                        <img src="Minivan.webp" width="600" height="400" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Minivan Car">
+                        <img src="Minivan.webp" width="600" height="400" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Minivan Car">
                     </div>
                     <div class="p-8">
                         <h3 class="text-2xl font-bold text-dark mb-1" data-i18n="minivan_title">Minivan</h3>
@@ -623,7 +562,6 @@
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="flex items-center gap-2 w-full md:w-auto border-b md:border-b-0 border-gray-100 pb-4 md:pb-0">
                      <div class="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center text-accent"><i class="fa-solid fa-coins"></i></div>
-                    <!-- FIX: Darker text for readability -->
                     <div><h3 class="text-sm font-bold text-dark" data-i18n="conv_title">Currency Converter</h3><p class="text-[10px] text-gray-600" data-i18n="conv_desc">Estimate price</p></div>
                 </div>
                 <div class="flex flex-col md:flex-row items-center gap-3 flex-1 w-full">
@@ -631,7 +569,6 @@
                     <div class="flex w-full md:w-auto gap-2">
                         <div class="flex-1 md:min-w-[140px] relative z-20" id="select-from">
                             <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1" data-i18n="label_from">From</label>
-                            <!-- FIX: Removed redundant alt text from flag -->
                             <button type="button" class="w-full px-3 py-2 rounded-lg bg-white border border-gray-200 flex items-center gap-2 focus:border-primary outline-none" onclick="toggleDropdown('from')" aria-haspopup="listbox" aria-expanded="false"><img src="https://flagcdn.com/w40/ge.png" width="24" height="16" class="currency-flag" id="flag-from" alt=""><span class="font-bold text-dark text-sm" id="text-from">GEL</span></button>
                             <input type="hidden" id="convFrom" value="GEL">
                             <div class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 hidden max-h-60 overflow-y-auto" id="list-from" role="listbox"></div>
@@ -639,7 +576,6 @@
                         <div class="text-gray-300 self-end mb-2"><i class="fa-solid fa-arrow-right rtl:rotate-180 transform rotate-90 md:rotate-0"></i></div>
                         <div class="flex-1 md:min-w-[140px] relative" id="select-to" style="z-index: 20;">
                             <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1" data-i18n="label_to">To</label>
-                            <!-- FIX: Removed redundant alt text from flag -->
                             <button type="button" class="w-full px-3 py-2 rounded-lg bg-white border border-gray-200 flex items-center gap-2 focus:border-primary outline-none" onclick="toggleDropdown('to')" aria-haspopup="listbox" aria-expanded="false"><img src="https://flagcdn.com/w40/us.png" width="24" height="16" class="currency-flag" id="flag-to" alt=""><span class="font-bold text-dark text-sm" id="text-to">USD</span></button>
                             <input type="hidden" id="convTo" value="USD">
                             <div class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 hidden max-h-60 overflow-y-auto" id="list-to" role="listbox"></div>
@@ -664,13 +600,11 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-gray-50 p-8 rounded-3xl reveal hover:shadow-card transition-all border border-gray-100 hover:-translate-y-1">
                     <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <!-- FIX: Darker text for better contrast -->
                     <p class="text-gray-600 italic mb-6 leading-relaxed testimonial-text" data-i18n="review_1_text">"Our driver Giorgi was amazing! He showed us hidden spots on the way to Kazbegi that we would have never found alone. The car was spotless."</p>
                     <div class="flex items-center gap-3">
                          <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">M</div>
                          <div>
                              <div class="font-bold text-dark text-sm" data-i18n="review_1_name">Mohammed Al-Farsi</div>
-                             <!-- FIX: Darker gray for contrast -->
                              <div class="text-xs text-gray-700" data-i18n="review_1_country">Saudi Arabia 🇸🇦</div>
                          </div>
                     </div>
@@ -755,7 +689,6 @@
                         
                         <!-- Name -->
                         <div class="col-span-2 md:col-span-1 group">
-                            <!-- FIX: Darker label text for accessibility -->
                             <label for="name" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 pl-1" data-i18n="label_name">Full Name</label>
                             <input type="text" id="name" name="user_name" autocomplete="name" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all focus:bg-white" placeholder="Your Name">
                             <span class="error-text hidden" id="nameError">Please enter your name</span>
@@ -835,23 +768,19 @@
                         </div>
                         <span class="font-bold text-2xl">Georgia Hills</span>
                     </div>
-                    <!-- FIX: Lighter text for better contrast on dark background -->
                     <p class="text-gray-300 text-sm leading-relaxed mb-6" data-i18n="footer_desc">Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.</p>
                     <div class="flex gap-4">
                         <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent transition-colors" aria-label="Visit our Instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
                         <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent transition-colors" aria-label="Visit our Facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i></a>
                         <button onclick="shareApp()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent transition-colors md:hidden" aria-label="Share this website"><i class="fa-solid fa-share-nodes"></i></button>
                     </div>
-                    <!-- FIX: Lighter text for better contrast -->
                     <div class="mt-6 flex gap-4 text-xs text-gray-400">
                         <button onclick="document.getElementById('privacyModal').classList.remove('hidden'); trapFocus(document.getElementById('privacyModal'));" class="hover:text-white transition-colors">Privacy Policy</button>
                         <button onclick="document.getElementById('termsModal').classList.remove('hidden'); trapFocus(document.getElementById('termsModal'));" class="hover:text-white transition-colors">Terms of Service</button>
                     </div>
                 </div>
                 <div>
-                    <!-- FIX: Changed h4 to h3 for correct heading hierarchy -->
                     <h3 class="font-bold text-lg mb-6" data-i18n="footer_links">Quick Links</h3>
-                    <!-- FIX: Lighter text -->
                     <ul class="space-y-3 text-gray-300 text-sm">
                         <li><a href="#home" class="hover:text-accent transition-colors" data-i18n="nav_home">Home</a></li>
                         <li><a href="#fleet" class="hover:text-accent transition-colors" data-i18n="nav_fleet">Our Fleet</a></li>
@@ -860,9 +789,7 @@
                     </ul>
                 </div>
                 <div>
-                    <!-- FIX: Changed h4 to h3 for correct heading hierarchy -->
                     <h3 class="font-bold text-lg mb-6" data-i18n="footer_contact">Contact Us</h3>
-                    <!-- FIX: Lighter text -->
                     <ul class="space-y-4 text-gray-400 text-sm">
                         <li class="flex items-center"><i class="fa-solid fa-phone mr-3 text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
                         <li class="flex items-center"><i class="fa-brands fa-whatsapp mr-3 text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
@@ -879,7 +806,6 @@
                     </div>
                 </div>
             </div>
-            <!-- FIX: Lighter text -->
             <div class="border-t border-gray-800 pt-8 text-center text-gray-400 text-xs">
                 &copy; <span id="year"></span> Georgia Hills Transport. All rights reserved.
             </div>
@@ -892,12 +818,10 @@
             <i class="fa-solid fa-arrow-up"></i>
         </button>
         
-        <!-- FIX: Darker green for contrast ratio -->
         <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="md:hidden w-14 h-14 bg-[#0F6B60] text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl transition-all border border-gray-100" aria-label="Contact on WhatsApp">
             <i class="fa-brands fa-whatsapp text-2xl"></i>
         </a>
 
-        <!-- FIX: Darker green for contrast ratio -->
         <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="group relative hidden md:flex z-40" aria-label="Contact on WhatsApp">
             <div class="w-14 h-14 md:w-16 md:h-16 bg-[#0F6B60] rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-2xl transition-all transform hover:scale-110 animate-bounce-slow">
                 <i class="fa-brands fa-whatsapp text-3xl md:text-4xl"></i>
@@ -928,7 +852,6 @@
                 <h3 class="font-bold text-dark text-lg">Install App</h3>
                 <p class="text-gray-500 text-sm mt-1">Install Georgia Hills for a better experience.</p>
             </div>
-            <!-- FIX: Added accessible name for the close button -->
             <button onclick="closeIosModal()" class="text-gray-400 hover:text-gray-600" aria-label="Close"><i class="fa-solid fa-times text-xl"></i></button>
         </div>
         <div class="bg-gray-50 p-4 rounded-xl text-sm text-gray-600 flex items-center leading-relaxed">
@@ -992,67 +915,40 @@
 
     <!-- Mobile Sticky Bar (Contact) -->
     <div class="sticky-bar">
-        <!-- FIX: Darker green for contrast ratio -->
         <a href="https://wa.me/995579088537" class="flex-1 bg-[#0F6B60] text-white py-3 rounded-lg text-center font-bold flex justify-center items-center gap-2 shadow-lg" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp text-xl"></i> WhatsApp</a>
         <a href="#booking" class="flex-1 bg-primary text-white py-3 rounded-lg text-center font-bold shadow-lg" data-i18n="nav_book">Book Now</a>
     </div>
 
     <!-- EmailJS (Loaded securely via CDN) -->
-    <script type="text/javascript" defer src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script type="text/javascript">
-       // --- EMAILJS CONFIGURATION ---
-       // Replace this placeholder with your actual public key in production
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
        const EMAILJS_PUBLIC_KEY = "gFHD0l5sBGRvS44V8"; 
-       
-       (function(){
+       window.addEventListener('load', function(){
           try {
-              // Only init if key is present to prevent errors
               if(typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "gFHD0l5sBGRvS44V8") {
                   emailjs.init(EMAILJS_PUBLIC_KEY); 
-              } else {
-                  console.log("EmailJS: No public key configured. Service disabled.");
-              }
+              } else { console.log("EmailJS: No public key configured. Service disabled."); }
           } catch(e) { console.log("EmailJS init warning:", e); }
-       })();
+       });
     </script>
 
 
     <script>
         // === JS LOGIC ===
-        const VEHICLE_RATES = {
-            'Sedan': 150,
-            'Minivan': 250
-        };
+        const VEHICLE_RATES = { 'Sedan': 150, 'Minivan': 250 };
 
-        // --- 0. Haptics & UX Utils ---
-        function vibrate(pattern = [10]) {
-            if (navigator.vibrate) navigator.vibrate(pattern);
-        }
+        function vibrate(pattern = [10]) { if (navigator.vibrate) navigator.vibrate(pattern); }
 
         async function shareApp() {
             vibrate();
             if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: 'Georgia Hills Transport',
-                        text: 'Check out this premium driver service in Georgia!',
-                        url: window.location.href
-                    });
-                } catch(err) { console.error('Share failed:', err); }
+                try { await navigator.share({ title: 'Georgia Hills Transport', text: 'Check out this premium driver service in Georgia!', url: window.location.href }); } catch(err) { console.error('Share failed:', err); }
             } else {
-                // Modern Clipboard API with Fallback
                 const text = window.location.href;
-                try {
-                    await navigator.clipboard.writeText(text);
-                    showToast('Link Copied', 'fa-check');
-                } catch (err) {
-                    // Fallback for older browsers or insecure contexts
+                try { await navigator.clipboard.writeText(text); showToast('Link Copied', 'fa-check'); } catch (err) {
                     const dummy = document.createElement('input');
-                    document.body.appendChild(dummy);
-                    dummy.value = text;
-                    dummy.select();
-                    document.execCommand('copy'); // Deprecated but necessary fallback
-                    document.body.removeChild(dummy);
+                    document.body.appendChild(dummy); dummy.value = text; dummy.select();
+                    document.execCommand('copy'); document.body.removeChild(dummy);
                     showToast('Link Copied', 'fa-check');
                 }
             }
@@ -1064,61 +960,33 @@
                 const originalContent = toast.innerHTML;
                 toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
                 toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                    // Reset toast after hiding
-                    setTimeout(() => {
-                        toast.innerHTML = originalContent; 
-                    }, 300);
-                }, 2000);
+                setTimeout(() => { toast.classList.remove('show'); setTimeout(() => { toast.innerHTML = originalContent; }, 300); }, 2000);
             }
         }
         
-        // --- iOS Detection & Install Prompt ---
         function checkIosInstall() {
             const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
             const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
-            
-            if (isIos && !isInStandaloneMode) {
-                if (!sessionStorage.getItem('iosPromptShown')) {
-                    const modal = document.getElementById('ios-install-modal');
-                    if(modal) {
-                        modal.classList.remove('hidden');
-                        setTimeout(() => modal.classList.add('show'), 1000);
-                        sessionStorage.setItem('iosPromptShown', 'true');
-                    }
-                }
+            if (isIos && !isInStandaloneMode && !sessionStorage.getItem('iosPromptShown')) {
+                const modal = document.getElementById('ios-install-modal');
+                if(modal) { modal.classList.remove('hidden'); setTimeout(() => modal.classList.add('show'), 1000); sessionStorage.setItem('iosPromptShown', 'true'); }
             }
         }
         
         function closeIosModal() {
             const modal = document.getElementById('ios-install-modal');
-            if(modal) {
-                modal.classList.remove('show');
-                setTimeout(() => modal.classList.add('hidden'), 500);
-            }
+            if(modal) { modal.classList.remove('show'); setTimeout(() => modal.classList.add('hidden'), 500); }
         }
 
-        // --- Service Worker Registration (Stub for PWA) ---
         if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                // To enable offline PWA, you must serve a 'sw.js' file from your root directory.
-                // Example: navigator.serviceWorker.register('/sw.js');
-                console.log("Service Worker supported - requires sw.js");
-            });
+            window.addEventListener('load', () => { console.log("Service Worker supported - requires sw.js"); });
         }
 
         // --- 1. Preloader & Init ---
         window.addEventListener('load', () => {
             const loader = document.getElementById('preloader');
-            if(loader) {
-                setTimeout(() => {
-                    loader.classList.add('fade-out');
-                    setTimeout(() => loader.style.display = 'none', 500);
-                }, 100); // FIX: Faster fade-out to improve perceived load time
-            }
+            if(loader) { setTimeout(() => { loader.classList.add('fade-out'); setTimeout(() => loader.style.display = 'none', 500); }, 100); }
             
-            // Set dynamic footer year
             const yearEl = document.getElementById('year');
             if(yearEl) yearEl.textContent = new Date().getFullYear();
             
@@ -1129,17 +997,14 @@
             
             try {
                 loadUserPreferences();
-                // Persist currency choice if valid
                 const savedCurrency = localStorage.getItem('userCurrency');
                 if(savedCurrency) {
                     const sel = document.getElementById('convFrom');
                     if(sel) sel.value = savedCurrency;
-                    // Update UI text for from dropdown
                     const fromText = document.getElementById('text-from');
                     if(fromText) fromText.textContent = savedCurrency;
                 }
                 
-                // DEFERRED: Fetch rates only after main content is likely stable
                 if ('requestIdleCallback' in window) {
                     requestIdleCallback(() => fetchRates(savedCurrency || 'GEL'));
                 } else {
@@ -1152,16 +1017,13 @@
                 }
             } catch(e) {
                 console.warn("Storage access denied/failed", e);
-                // Fallback fetch
                 setTimeout(() => fetchRates('GEL'), 1000);
             }
             
-            // Date Picker Validation
             const dateFrom = document.getElementById('dateFrom');
             const dateTo = document.getElementById('dateTo');
             
             if(dateFrom) {
-                // Use Local Date to prevent Timezone bugs
                 const today = new Date();
                 const localIso = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
                 dateFrom.min = localIso;
@@ -1173,24 +1035,18 @@
                     if (dateFrom.value) {
                         dateTo.min = dateFrom.value; 
                         if (dateTo.value && dateTo.value < dateFrom.value) {
-                            dateTo.value = ""; 
-                            dateTo.classList.add('input-error');
-                            vibrate([50]);
-                        } else {
-                            dateTo.classList.remove('input-error');
-                        }
+                            dateTo.value = ""; dateTo.classList.add('input-error'); vibrate([50]);
+                        } else { dateTo.classList.remove('input-error'); }
                     }
                 };
                 dateFrom.addEventListener('change', validateRange);
                 dateTo.addEventListener('change', validateRange);
             }
             
-            // Map Lazy Loading
             const mapContainer = document.getElementById('map-container');
             if(mapContainer) {
                 const mapObserver = new IntersectionObserver((entries) => {
                     if(entries[0].isIntersecting) {
-                        // Using a generic embed URL without specific timestamps
                         mapContainer.innerHTML = '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47648.33742296416!2d44.75704155106659!3d41.71513711906941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40440cd7e64f626b%3A0x61d084ede2576ea3!2sTbilisi!5e0!3m2!1sen!2sge!4v1698000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
                         mapObserver.disconnect();
                     }
@@ -1200,14 +1056,10 @@
 
             if(window.innerWidth < 768) {
                 const hint = document.getElementById('swipe-hint');
-                if(hint) {
-                    hint.classList.add('show');
-                    setTimeout(() => hint.classList.remove('show'), 2500);
-                }
+                if(hint) { hint.classList.add('show'); setTimeout(() => hint.classList.remove('show'), 2500); }
             }
         });
         
-        // Modal Keyboard Trap & Close Logic
         const focusController = new AbortController();
         let lastFocusedElement;
 
@@ -1216,16 +1068,12 @@
             const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
             if(focusable.length) focusable[0].focus();
             
-            // Remove previous listener if exists (though usually controller handles one-off)
             modal.addEventListener('keydown', function(e) {
                 const first = focusable[0];
                 const last = focusable[focusable.length - 1];
                 if(e.key === 'Tab') {
-                    if(e.shiftKey && document.activeElement === first) {
-                        e.preventDefault(); last.focus();
-                    } else if(!e.shiftKey && document.activeElement === last) {
-                        e.preventDefault(); first.focus();
-                    }
+                    if(e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } 
+                    else if(!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
                 }
                 if(e.key === 'Escape') closeModalById(modal.id);
             }, { signal: focusController.signal });
@@ -1240,39 +1088,26 @@
         document.addEventListener('keydown', function(e) {
             if(e.key === "Escape") {
                 ['privacyModal', 'termsModal', 'successModal'].forEach(id => closeModalById(id));
-                // Also close mobile menu on Escape
                 const mobileMenu = document.getElementById('mobile-menu');
                 if(mobileMenu && mobileMenu.classList.contains('open')) toggleMenu();
             }
         });
 
-        // Fail-safe to hide preloader if load event hangs
         setTimeout(() => {
              const loader = document.getElementById('preloader');
-             if(loader && loader.style.display !== 'none') {
-                 loader.style.display = 'none';
-             }
-        }, 3000); // FIX: Reduced timeout
+             if(loader && loader.style.display !== 'none') { loader.style.display = 'none'; }
+        }, 3000); 
 
-        function acceptCookies() {
-            try { localStorage.setItem('cookieConsent', 'true'); } catch(e){}
-            document.getElementById('cookie-banner').classList.remove('active');
-        }
-        function declineCookies() {
-            try { localStorage.setItem('cookieConsent', 'false'); } catch(e){}
-            document.getElementById('cookie-banner').classList.remove('active');
-        }
+        function acceptCookies() { try { localStorage.setItem('cookieConsent', 'true'); } catch(e){} document.getElementById('cookie-banner').classList.remove('active'); }
+        function declineCookies() { try { localStorage.setItem('cookieConsent', 'false'); } catch(e){} document.getElementById('cookie-banner').classList.remove('active'); }
 
         function loadUserPreferences() {
             try {
                 const savedLang = localStorage.getItem('userLang');
-                if (savedLang && savedLang !== currentLang) {
-                    toggleLanguage(); 
-                }
+                if (savedLang && savedLang !== currentLang) { toggleLanguage(); }
             } catch(e){}
         }
 
-        // --- Auto-Save & Form Logic (Session Storage for Privacy) ---
         const formId = 'bookingForm';
         const storageKey = 'gh_booking_draft';
 
@@ -1289,7 +1124,6 @@
                 service: serviceVal,
                 notes: document.getElementById('notes')?.value || ''
             };
-            // Use SessionStorage instead of LocalStorage for PII safety
             sessionStorage.setItem(storageKey, JSON.stringify(formData));
         }
 
@@ -1309,19 +1143,13 @@
                         if(radio) radio.checked = true;
                     }
                     updatePriceEstimate();
-                } catch(e) { 
-                    sessionStorage.removeItem(storageKey);
-                }
+                } catch(e) { sessionStorage.removeItem(storageKey); }
             }
         }
 
         const formEl = document.getElementById(formId);
-        if(formEl) {
-            formEl.addEventListener('input', saveFormDraft);
-            formEl.addEventListener('change', saveFormDraft); 
-        }
+        if(formEl) { formEl.addEventListener('input', saveFormDraft); formEl.addEventListener('change', saveFormDraft); }
 
-        // --- Price Estimator Logic ---
         function updatePriceEstimate() {
             const dateFrom = document.getElementById('dateFrom')?.value;
             const dateTo = document.getElementById('dateTo')?.value;
@@ -1333,10 +1161,7 @@
                 const d1 = new Date(dateFrom);
                 const d2 = new Date(dateTo);
                 const diffTime = Math.abs(d2 - d1);
-                // Consistent day calculation: Math.ceil for full days
                 let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                
-                // If drop-off same day, count as 1 day
                 if (diffDays === 0) diffDays = 1;
 
                 if (d2 >= d1) {
@@ -1344,71 +1169,43 @@
                     const total = diffDays * rate;
                     if(totalEl) totalEl.innerText = total;
                     if(estimateEl) estimateEl.classList.remove('hidden');
-                } else {
-                    if(estimateEl) estimateEl.classList.add('hidden');
-                }
-            } else {
-                if(estimateEl) estimateEl.classList.add('hidden');
-            }
+                } else { if(estimateEl) estimateEl.classList.add('hidden'); }
+            } else { if(estimateEl) estimateEl.classList.add('hidden'); }
         }
 
-        // --- PWA Install Prompt (Android) ---
         let deferredPrompt;
         const installBtn = document.getElementById('install-btn');
-
         window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
+            e.preventDefault(); deferredPrompt = e;
             if(installBtn) {
                 installBtn.classList.remove('hidden');
                 installBtn.addEventListener('click', (e) => {
                     deferredPrompt.prompt();
                     deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted the A2HS prompt');
-                        }
-                        deferredPrompt = null;
-                        installBtn.classList.add('hidden');
+                        deferredPrompt = null; installBtn.classList.add('hidden');
                     });
                 });
             }
         });
 
-        // --- Currency Converter ---
         const currencies = [
             { code: 'GEL', flag: 'ge' }, { code: 'USD', flag: 'us' }, { code: 'EUR', flag: 'eu' },
             { code: 'AED', flag: 'ae' }, { code: 'SAR', flag: 'sa' }, { code: 'KWD', flag: 'kw' },
             { code: 'QAR', flag: 'qa' }, { code: 'OMR', flag: 'om' }
         ];
 
-        // Default fallback rates (Base: GEL)
-        const FALLBACK_RATES = { 
-            GEL: 1, 
-            USD: 0.37, // 1 GEL = 0.37 USD
-            EUR: 0.34, 
-            AED: 1.35, 
-            SAR: 1.38, 
-            KWD: 0.11, 
-            QAR: 1.34, 
-            OMR: 0.14 
-        };
-        
-        // Correct initialization without syntax error
+        const FALLBACK_RATES = { GEL: 1, USD: 0.37, EUR: 0.34, AED: 1.35, SAR: 1.38, KWD: 0.11, QAR: 1.34, OMR: 0.14 };
         let exchangeRates = { ...FALLBACK_RATES };
-        let rateBase = 'GEL'; // Track what base our rates are currently relative to
+        let rateBase = 'GEL'; 
         
         async function fetchRates(base) {
             const resultEl = document.getElementById('convResult');
             if(resultEl) resultEl.innerText = "...";
-            
-            // AbortController for timeout
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
 
             try {
-                const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`, {
-                    signal: controller.signal
-                });
+                const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`, { signal: controller.signal });
                 clearTimeout(timeoutId);
                 
                 if (!response.ok) throw new Error("API Failed");
@@ -1418,24 +1215,14 @@
                 convertCurrency(); 
             } catch (error) {
                 console.log("Using offline rates / fallback mode");
-                
-                // --- ROBUST FALLBACK LOGIC ---
-                // If API fails, we use our hardcoded GEL rates but normalize them 
-                // so the calculator still works relative to the requested 'base'.
                 const fallback = { ...FALLBACK_RATES }; 
-                
                 if (base && base !== 'GEL' && fallback[base]) {
-                    // Normalize all rates relative to the requested base
-                    const baseRate = fallback[base]; // e.g. 0.37 for USD
+                    const baseRate = fallback[base]; 
                     const normalized = {};
-                    Object.keys(fallback).forEach(k => {
-                        // New Rate = Old Rate / Base Rate
-                        normalized[k] = fallback[k] / baseRate;
-                    });
+                    Object.keys(fallback).forEach(k => { normalized[k] = fallback[k] / baseRate; });
                     exchangeRates = normalized;
                     rateBase = base;
                 } else {
-                    // Default to GEL base if normalization isn't possible
                     exchangeRates = fallback;
                     rateBase = 'GEL';
                 }
@@ -1453,29 +1240,21 @@
             const amountInput = document.getElementById('convAmount');
             const toInput = document.getElementById('convTo');
             const fromInput = document.getElementById('convFrom');
-            
             if(!amountInput || !toInput || !fromInput) return;
 
             const amount = parseFloat(amountInput.value) || 0;
             const targetCurrency = toInput.value;
             const fromCurrency = fromInput.value;
-            
             let finalRate = 1;
 
-            // Cross-rate calculation logic
-            // Since rateBase tracks the current base of 'exchangeRates', we compute:
             const rateFromBaseToTarget = exchangeRates[targetCurrency] || 1;
             const rateFromBaseToSource = exchangeRates[fromCurrency] || 1;
 
-            if (rateBase === fromCurrency) {
-                finalRate = rateFromBaseToTarget;
-            } else {
-                finalRate = rateFromBaseToTarget / rateFromBaseToSource;
-            }
+            if (rateBase === fromCurrency) { finalRate = rateFromBaseToTarget; } 
+            else { finalRate = rateFromBaseToTarget / rateFromBaseToSource; }
             
             const resultEl = document.getElementById('convResult');
             const labelEl = document.getElementById('convResultLabel');
-            
             if(resultEl) resultEl.innerText = (amount * finalRate).toFixed(2);
             if(labelEl) labelEl.innerText = targetCurrency;
         }
@@ -1500,12 +1279,9 @@
             items.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'flex items-center gap-3 p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-50 last:border-0 transition-colors';
-                div.setAttribute('tabindex', '0'); 
-                div.setAttribute('role', 'option');
+                div.setAttribute('tabindex', '0'); div.setAttribute('role', 'option');
                 div.onclick = () => selectCurrency(type, item.code, item.flag);
-                div.onkeydown = (e) => {
-                     if(e.key === 'Enter') selectCurrency(type, item.code, item.flag);
-                };
+                div.onkeydown = (e) => { if(e.key === 'Enter') selectCurrency(type, item.code, item.flag); };
                 div.innerHTML = `<img src="https://flagcdn.com/w40/${item.flag}.png" width="24" height="16" class="w-6 h-4 object-cover rounded-sm shadow-sm" alt="${item.code} flag"><span class="font-bold text-dark text-sm">${item.code}</span>`;
                 list.appendChild(div);
             });
@@ -1514,13 +1290,10 @@
         function toggleDropdown(type) {
             const list = document.getElementById(`list-${type}`);
             const btn = document.querySelector(`#select-${type} button`);
-            
             if(!list) return;
             const otherType = type === 'from' ? 'to' : 'from';
             const otherList = document.getElementById(`list-${otherType}`);
-            
             if(otherList) otherList.classList.add('hidden');
-            
             const isHidden = list.classList.toggle('hidden');
             if(btn) btn.setAttribute('aria-expanded', !isHidden);
         }
@@ -1533,35 +1306,21 @@
             if(type === 'from') updateBaseRate(); else convertCurrency();
         }
 
-        // --- Slider & Swipe ---
         function scrollSlider(direction) {
             vibrate();
             const slider = document.getElementById('tours-slider');
-            const scrollAmount = 320; 
-            if(slider) {
-                slider.scrollBy({
-                    left: direction * scrollAmount,
-                    behavior: 'smooth'
-                });
-            }
+            if(slider) { slider.scrollBy({ left: direction * 320, behavior: 'smooth' }); }
         }
 
         function initSwipeGestures() {
             const slider = document.getElementById('tours-slider');
             if(!slider) return;
-            let startX;
             slider.addEventListener('touchstart', (e) => {
-                startX = e.touches[0].pageX - slider.offsetLeft;
-            }, { passive: true });
-            
-            // Remove hint on interaction
-            slider.addEventListener('touchstart', () => {
                 const hint = document.getElementById('swipe-hint');
                 if(hint) hint.classList.remove('show');
             }, {once:true, passive: true});
         }
 
-        // --- Smart Scroll ---
         let lastScrollTop = 0;
         let ticking = false;
         const metaThemeColor = document.querySelector('meta[name="theme-color"]');
@@ -1574,16 +1333,11 @@
                     const backBtn = document.getElementById('backToTop');
                     const stickyBar = document.querySelector('.sticky-bar');
                     
-                    if(nav) {
-                        if (scrollY > 20) nav.classList.add('shadow-md'); else nav.classList.remove('shadow-md');
-                    }
+                    if(nav) { if (scrollY > 20) nav.classList.add('shadow-md'); else nav.classList.remove('shadow-md'); }
 
                     if (metaThemeColor) {
-                        if (scrollY > 100) {
-                            metaThemeColor.setAttribute('content', '#ffffff'); 
-                        } else {
-                            metaThemeColor.setAttribute('content', '#0F172A'); 
-                        }
+                        if (scrollY > 100) { metaThemeColor.setAttribute('content', '#ffffff'); } 
+                        else { metaThemeColor.setAttribute('content', '#0F172A'); }
                     }
 
                     if (scrollY > lastScrollTop && scrollY > 100) {
@@ -1594,9 +1348,7 @@
                         if(nav) nav.classList.remove('nav-hidden');
                     }
 
-                    if(backBtn) {
-                        if (scrollY > 500) backBtn.classList.add('show'); else backBtn.classList.remove('show');
-                    }
+                    if(backBtn) { if (scrollY > 500) backBtn.classList.add('show'); else backBtn.classList.remove('show'); }
 
                     lastScrollTop = scrollY;
                     ticking = false;
@@ -1605,7 +1357,6 @@
             }
         }, { passive: true });
 
-        // --- Mobile Menu ---
         const menuBtn = document.getElementById('mobile-menu-btn');
         const closeMenuBtn = document.getElementById('close-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -1616,16 +1367,12 @@
             if(mobileMenu) {
                 const isOpened = mobileMenu.classList.toggle('open');
                 if(menuBtn) menuBtn.setAttribute('aria-expanded', isOpened);
-                // Fix for A11y
                 mobileMenu.setAttribute('aria-hidden', !isOpened);
                 
                 if(isOpened) {
-                    // Focus Trap Logic for Menu
                     const firstFocusable = mobileMenu.querySelector('button, a');
                     if(firstFocusable) setTimeout(() => firstFocusable.focus(), 50);
-                } else {
-                    if(menuBtn) menuBtn.focus();
-                }
+                } else { if(menuBtn) menuBtn.focus(); }
                 
                 document.body.classList.toggle('overflow-hidden');
             }
@@ -1635,22 +1382,16 @@
         if(closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
         mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
 
-        // --- Validation & Submission ---
         function updateMinDate() {
             const from = document.getElementById('dateFrom');
             const to = document.getElementById('dateTo');
-            if(from && to && from.value) {
-                to.min = from.value;
-            }
+            if(from && to && from.value) { to.min = from.value; }
         }
 
         function prefillVehicle(type) {
             vibrate();
             const vehInput = document.getElementById('vehicle');
-            if(vehInput) {
-                vehInput.value = type;
-                updatePriceEstimate();
-            }
+            if(vehInput) { vehInput.value = type; updatePriceEstimate(); }
             const bookSec = document.getElementById('booking');
             if(bookSec) bookSec.scrollIntoView({ behavior: 'smooth' });
         }
@@ -1664,10 +1405,7 @@
             const dateTo = document.getElementById('dateTo');
 
             [name, phone, passengers, dateFrom, dateTo].forEach(el => { 
-                if(el) {
-                    el.classList.remove('input-error', 'animate-shake'); 
-                    el.classList.remove('input-success');
-                }
+                if(el) { el.classList.remove('input-error', 'animate-shake'); el.classList.remove('input-success'); }
             });
             document.querySelectorAll('.error-text').forEach(el => el.classList.add('hidden'));
 
@@ -1681,34 +1419,22 @@
             else if(passengers) passengers.classList.add('input-success');
 
             let validDates = true;
-            if (dateFrom && !dateFrom.value) { 
-                showError(dateFrom, document.getElementById('dateFromError')); 
-                isValid = false; validDates = false;
-            } else if(dateFrom) {
-                dateFrom.classList.add('input-success');
-            }
+            if (dateFrom && !dateFrom.value) { showError(dateFrom, document.getElementById('dateFromError')); isValid = false; validDates = false; } 
+            else if(dateFrom) { dateFrom.classList.add('input-success'); }
 
-            if (dateTo && !dateTo.value) { 
-                showError(dateTo, document.getElementById('dateToError')); 
-                isValid = false; validDates = false;
-            }
+            if (dateTo && !dateTo.value) { showError(dateTo, document.getElementById('dateToError')); isValid = false; validDates = false; }
 
             if (validDates && dateFrom && dateTo) {
                 const d1 = new Date(dateFrom.value);
                 const d2 = new Date(dateTo.value);
-                
                 if (d2 < d1) {
                     const errorSpan = document.getElementById('dateToError');
                     if(errorSpan) {
                         errorSpan.textContent = currentLang === 'ar' ? 'يجب أن يكون بعد تاريخ الاستلام' : 'Must be after pick-up date';
                         errorSpan.classList.remove('hidden');
                     }
-                    dateTo.classList.add('input-error', 'animate-shake');
-                    dateTo.classList.remove('input-success'); 
-                    isValid = false;
-                } else {
-                    dateTo.classList.add('input-success');
-                }
+                    dateTo.classList.add('input-error', 'animate-shake'); dateTo.classList.remove('input-success'); isValid = false;
+                } else { dateTo.classList.add('input-success'); }
             }
 
             if(!isValid) vibrate([50, 50, 50]); 
@@ -1722,7 +1448,6 @@
 
         function sanitizeInput(str) {
             if(!str) return '';
-            // Basic sanitization: trim and remove non-printable characters or dangerous URI components
             return str.trim().replace(/[\u0000-\u001F\u007F-\u009F]/g, "").substring(0, 500);
         }
 
@@ -1731,18 +1456,16 @@
             if(!validateForm()) return;
 
             vibrate([20]); 
-
+            const submitBtn = document.getElementById('submitBtn');
             const btnText = document.getElementById('btnText');
             const btnIcon = document.getElementById('btnIcon');
             const btnSpinner = document.getElementById('btnSpinner');
-            const submitBtn = document.getElementById('submitBtn');
 
             if(btnText) btnText.classList.add('opacity-0');
             if(btnIcon) btnIcon.classList.add('opacity-0');
             if(btnSpinner) btnSpinner.classList.remove('hidden');
             if(submitBtn) submitBtn.disabled = true;
 
-            // Defensive reading of values + Sanitization
             const rawData = {
                 name: document.getElementById('name')?.value || '',
                 phone: document.getElementById('phone')?.value || '',
@@ -1759,28 +1482,20 @@
                 phone: sanitizeInput(rawData.phone),
                 passengers: sanitizeInput(rawData.passengers),
                 vehicle: sanitizeInput(rawData.vehicle),
-                service: rawData.service, // radio value is safe
+                service: rawData.service, 
                 from: rawData.from,
                 to: rawData.to,
                 notes: sanitizeInput(rawData.notes)
             };
             
             const serviceText = formData.service === 'with_driver' ? (currentLang === 'en' ? 'With Driver' : 'مع سائق') : 'Self Drive';
-            
-            // Construct safe URL
             const msg = `Hello! Quote Request:\n\n👤 ${formData.name}\n📱 ${formData.phone}\n👥 Pax: ${formData.passengers}\n🚗 ${formData.vehicle}\n👔 ${serviceText}\n📅 ${formData.from} to ${formData.to}\n📝 ${formData.notes}`;
             const encodedMsg = encodeURIComponent(msg);
             
-            const safetyTimeout = setTimeout(() => {
-                if(submitBtn.disabled) {
-                    showSuccess(); 
-                }
-            }, 6000); 
+            const safetyTimeout = setTimeout(() => { if(submitBtn.disabled) { showSuccess(); } }, 6000); 
 
-            // Clear session draft on submit
             sessionStorage.removeItem(storageKey);
 
-            // Update the Modal Link Href for manual opening (Confirmation UI)
             const whatsappUrl = `https://wa.me/995579088537?text=${encodedMsg}`;
             const modalLink = document.getElementById('whatsappLink');
             if(modalLink) modalLink.href = whatsappUrl;
@@ -1797,22 +1512,9 @@
                     message: formData.notes
                 };
                 emailjs.send('service_booking', 'template_40h23xf', templateParams)
-                    .then(() => {
-                        clearTimeout(safetyTimeout);
-                        showSuccess();
-                    })
-                    .catch((e) => {
-                        console.error("EmailJS Failed", e);
-                        clearTimeout(safetyTimeout);
-                        showSuccess();
-                    });
-            } else {
-                 // Fallback if EmailJS not configured - just show modal immediately
-                 setTimeout(() => {
-                    clearTimeout(safetyTimeout);
-                    showSuccess();
-                 }, 600);
-            }
+                    .then(() => { clearTimeout(safetyTimeout); showSuccess(); })
+                    .catch((e) => { console.error("EmailJS Failed", e); clearTimeout(safetyTimeout); showSuccess(); });
+            } else { setTimeout(() => { clearTimeout(safetyTimeout); showSuccess(); }, 600); }
         }
 
         function showSuccess() {
@@ -1829,22 +1531,15 @@
             
             if(modal) {
                 modal.classList.remove('hidden');
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                    trapFocus(modal); // Trap focus when shown
-                }, 10);
+                setTimeout(() => { modal.classList.remove('opacity-0'); trapFocus(modal); }, 10);
             }
         }
 
         function closeModal() {
             const modal = document.getElementById('successModal');
-            if(modal) {
-                modal.classList.add('opacity-0');
-                setTimeout(() => modal.classList.add('hidden'), 300);
-            }
+            if(modal) { modal.classList.add('opacity-0'); setTimeout(() => modal.classList.add('hidden'), 300); }
         }
 
-        // --- Translations ---
         let currentLang = 'en';
         const translations = {
             en: {
@@ -1922,10 +1617,8 @@
                 footer_desc: "حلول نقل فاخرة في جورجيا. أمان وراحة وخبرة محلية في كل ميل.",
                 footer_links: "روابط سريعة", footer_contact: "اتصل بنا", footer_find_us: "موقعنا",
                 modal_title: "العرض جاهز!", modal_desc: "تم تجهيز التفاصيل. أرسلها عبر واتساب.", modal_btn_send: "فتح واتساب", modal_close: "إغلاق",
-                conv_title: "محول العملات", 
-                conv_desc: "تقدير تكلفة الرحلة",
-                label_amount: "المبلغ", label_from: "من", label_to: "إلى", 
-                label_result: "السعر التقريبي:",
+                conv_title: "محول العملات", conv_desc: "تقدير تكلفة الرحلة",
+                label_amount: "المبلغ", label_from: "من", label_to: "إلى", label_result: "السعر التقريبي:",
                 dest_label: "استكشف جورجيا",
                 dest_title: "وجهات سياحية شهيرة",
                 dest_subtitle: "اكتشف أجمل الأماكن في جورجيا التي يمكن الوصول إليها بالسيارة.",
@@ -1982,144 +1675,101 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-    const slider = document.getElementById('tours-slider');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    
-    // Config
-    const intervalTime = 3000;
-    let autoScrollInterval;
-    let isPaused = false;
+            const slider = document.getElementById('tours-slider');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const intervalTime = 3000;
+            let autoScrollInterval;
+            let isPaused = false;
+            const isRTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'ar';
+            let cardWidth = 0;
+            let originalItemCount = 0;
+            let cachedScrollWidth = 0;
+            let cachedClientWidth = 0;
 
-    // Detect RTL
-    const isRTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'ar';
+            const initSlider = () => {
+                Array.from(slider.children).forEach(child => { if (child.dataset.clone === 'true') child.remove(); });
+                const originalItems = Array.from(slider.children);
+                originalItemCount = originalItems.length;
+                if (originalItemCount === 0) return;
 
-    let cardWidth = 0;
-    let originalItemCount = 0;
-    // PERFORMANCE FIX: Cache dimensions to prevent forced reflows during scroll events
-    let cachedScrollWidth = 0;
-    let cachedClientWidth = 0;
+                const gap = parseFloat(window.getComputedStyle(slider).gap) || 0;
+                const firstCard = originalItems[0];
+                cardWidth = firstCard.offsetWidth + gap;
 
-    const initSlider = () => {
-        // 1. Clean up old clones if resizing
-        Array.from(slider.children).forEach(child => {
-            if (child.dataset.clone === 'true') child.remove();
+                originalItems.forEach(item => {
+                    const clone = item.cloneNode(true);
+                    clone.dataset.clone = 'true';
+                    clone.setAttribute('aria-hidden', 'true');
+                    slider.appendChild(clone);
+                });
+
+                originalItems.slice().reverse().forEach(item => {
+                    const clone = item.cloneNode(true);
+                    clone.dataset.clone = 'true';
+                    clone.setAttribute('aria-hidden', 'true');
+                    slider.prepend(clone);
+                });
+
+                const startPos = cardWidth * originalItemCount;
+                cachedScrollWidth = slider.scrollWidth;
+                cachedClientWidth = slider.clientWidth;
+                
+                if (isRTL) {
+                    slider.scrollLeft = -startPos; 
+                    if (slider.scrollLeft === 0) slider.scrollLeft = startPos; 
+                } else { slider.scrollLeft = startPos; }
+            };
+
+            const moveSlider = (direction) => {
+                const effectiveDirection = isRTL ? -direction : direction;
+                slider.scrollBy({ left: cardWidth * effectiveDirection, behavior: 'smooth' });
+            };
+
+            const checkInfiniteLoop = () => {
+                const currentScroll = slider.scrollLeft;
+                const singleSetWidth = cardWidth * originalItemCount;
+                const absScroll = Math.abs(currentScroll);
+
+                if (absScroll <= 5) { 
+                    slider.style.scrollBehavior = 'auto';
+                    const target = isRTL ? -(singleSetWidth) : singleSetWidth;
+                    slider.scrollLeft = target;
+                    setTimeout(() => { slider.style.scrollBehavior = ''; }, 10);
+                } 
+                else if (absScroll >= (singleSetWidth * 2) - 10) { 
+                    slider.style.scrollBehavior = 'auto';
+                    const target = isRTL ? -(singleSetWidth) : singleSetWidth;
+                    slider.scrollLeft = target;
+                    setTimeout(() => { slider.style.scrollBehavior = ''; }, 10);
+                }
+            };
+
+            const startAutoScroll = () => {
+                clearInterval(autoScrollInterval);
+                autoScrollInterval = setInterval(() => { if (!isPaused) moveSlider(1); }, intervalTime);
+            };
+
+            nextBtn?.addEventListener('click', () => { moveSlider(1); startAutoScroll(); });
+            prevBtn?.addEventListener('click', () => { moveSlider(-1); startAutoScroll(); });
+
+            let sliderTicking = false;
+            slider.addEventListener('scroll', () => {
+                if (!sliderTicking) {
+                    window.requestAnimationFrame(() => { checkInfiniteLoop(); sliderTicking = false; });
+                    sliderTicking = true;
+                }
+            }, { passive: true });
+
+            slider.addEventListener('mouseenter', () => isPaused = true);
+            slider.addEventListener('mouseleave', () => isPaused = false);
+            slider.addEventListener('touchstart', () => isPaused = true, { passive: true });
+            slider.addEventListener('touchend', () => setTimeout(() => isPaused = false, 2000), { passive: true });
+            window.addEventListener('resize', () => { initSlider(); });
+
+            initSlider();
+            startAutoScroll();
         });
-
-        // 2. Measure
-        const originalItems = Array.from(slider.children);
-        originalItemCount = originalItems.length;
-        if (originalItemCount === 0) return;
-
-        const gap = parseFloat(window.getComputedStyle(slider).gap) || 0;
-        const firstCard = originalItems[0];
-        cardWidth = firstCard.offsetWidth + gap;
-
-        // 3. Clone items (Start and End) for infinite loop
-        originalItems.forEach(item => {
-            const clone = item.cloneNode(true);
-            clone.dataset.clone = 'true';
-            clone.setAttribute('aria-hidden', 'true');
-            slider.appendChild(clone);
-        });
-
-        originalItems.slice().reverse().forEach(item => {
-            const clone = item.cloneNode(true);
-            clone.dataset.clone = 'true';
-            clone.setAttribute('aria-hidden', 'true');
-            slider.prepend(clone);
-        });
-
-        // 4. Initial positioning & Cache Dimensions
-        const startPos = cardWidth * originalItemCount;
-        cachedScrollWidth = slider.scrollWidth;
-        cachedClientWidth = slider.clientWidth;
-        
-        if (isRTL) {
-            slider.scrollLeft = -startPos; 
-            if (slider.scrollLeft === 0) {
-                 slider.scrollLeft = startPos; 
-            }
-        } else {
-            slider.scrollLeft = startPos;
-        }
-    };
-
-    const moveSlider = (direction) => {
-        const effectiveDirection = isRTL ? -direction : direction;
-        slider.scrollBy({
-            left: cardWidth * effectiveDirection,
-            behavior: 'smooth'
-        });
-    };
-
-    const checkInfiniteLoop = () => {
-        // Use cached dimensions to avoid layout thrashing
-        // We MUST read scrollLeft from DOM, but avoiding other layout reads helps
-        const currentScroll = slider.scrollLeft;
-        const singleSetWidth = cardWidth * originalItemCount;
-        const absScroll = Math.abs(currentScroll);
-
-        // Logic: If we scrolled past the last set or before the first set, teleport
-        if (absScroll <= 5) { // Too close to start
-            slider.style.scrollBehavior = 'auto';
-            const target = isRTL ? -(singleSetWidth) : singleSetWidth;
-            slider.scrollLeft = target;
-            setTimeout(() => { slider.style.scrollBehavior = ''; }, 10);
-        } 
-        else if (absScroll >= (singleSetWidth * 2) - 10) { // Too close to end
-            slider.style.scrollBehavior = 'auto';
-            const target = isRTL ? -(singleSetWidth) : singleSetWidth;
-            slider.scrollLeft = target;
-            setTimeout(() => { slider.style.scrollBehavior = ''; }, 10);
-        }
-    };
-
-    const startAutoScroll = () => {
-        clearInterval(autoScrollInterval);
-        autoScrollInterval = setInterval(() => {
-            if (!isPaused) moveSlider(1);
-        }, intervalTime);
-    };
-
-    // Event Listeners
-    nextBtn?.addEventListener('click', () => { 
-        moveSlider(1); 
-        startAutoScroll(); 
-    });
-    
-    prevBtn?.addEventListener('click', () => { 
-        moveSlider(-1); 
-        startAutoScroll(); 
-    });
-
-    // Debounced scroll handler to prevent reflow trashing
-    let sliderTicking = false;
-    slider.addEventListener('scroll', () => {
-        if (!sliderTicking) {
-            window.requestAnimationFrame(() => {
-                checkInfiniteLoop();
-                sliderTicking = false;
-            });
-            sliderTicking = true;
-        }
-    }, { passive: true });
-
-    // Pause on Hover/Touch
-    slider.addEventListener('mouseenter', () => isPaused = true);
-    slider.addEventListener('mouseleave', () => isPaused = false);
-    slider.addEventListener('touchstart', () => isPaused = true, { passive: true });
-    slider.addEventListener('touchend', () => setTimeout(() => isPaused = false, 2000), { passive: true });
-
-    // Handle Resize
-    window.addEventListener('resize', () => {
-        initSlider(); // This updates cached dimensions
-    });
-
-    // Init
-    initSlider();
-    startAutoScroll();
-});
     </script>
 </body>
 </html>
