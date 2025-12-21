@@ -7,11 +7,12 @@
     <!-- ============================================ -->
     <!-- PERFORMANCE HINTS                            -->
     <!-- ============================================ -->
+    <!-- OPTIMIZATION: Fixed preconnects. 'fonts.gstatic.com' is for font files, 'googleapis' is for CSS. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
     <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
@@ -21,8 +22,6 @@
     
     <link rel="preconnect" href="https://flagcdn.com" crossorigin>
     <link rel="preconnect" href="https://api.exchangerate-api.com" crossorigin>
-
-    <!-- OPTIMIZATION: Removed mismatched preload link. relying on fetchpriority="high" on the img tag itself is more efficient. -->
 
     <!-- ============================================ -->
     <!-- SEO & METADATA                               -->
@@ -95,6 +94,14 @@
     <style>
         body { margin: 0; background-color: #F9FAFB; font-family: 'Outfit', sans-serif; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-tap-highlight-color: transparent; background: radial-gradient(circle at 50% 0%, #ffffff 0%, #F3F4F6 100%); overscroll-behavior-y: none; min-height: 100vh; padding-bottom: env(safe-area-inset-bottom); }
         html { scroll-padding-top: 6rem; }
+        
+        /* Layout Optimization */
+        /* OPTIMIZATION: content-visibility: auto allows browser to skip rendering off-screen sections */
+        .opt-render { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
+
+        /* Navbar Critical Styles (Prevent CLS/FOUC) */
+        #navbar { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; border-bottom: 1px solid rgba(243, 244, 246, 1); height: auto; min-height: calc(5rem + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); }
+        #navbar .max-w-7xl { max-width: 80rem; margin: 0 auto; padding: 0 1rem; height: 5rem; display: flex; align-items: center; justify-content: space-between; }
         
         /* Hero Container */
         #home { position: relative; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: #0F172A; }
@@ -187,10 +194,6 @@
             #cookie-banner.active { bottom: 80px; }
             footer { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); } 
         }
-
-        /* Navbar Safe Area Fix */
-        #navbar { padding-top: env(safe-area-inset-top); height: auto; min-height: calc(5rem + env(safe-area-inset-top)); }
-        #navbar .max-w-7xl { padding-top: 0; padding-bottom: 0; height: 5rem; display: flex; align-items: center; }
         
         .nav-hidden { transform: translateY(-100%); }
         .skip-link { position: absolute; top: -40px; left: 0; background: #2C5530; color: white; padding: 8px; z-index: 100; transition: top 0.3s; }
@@ -225,11 +228,14 @@
         .hide-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 
+    <!-- FIXED: Removed 'defer' to ensure tailwind is defined before the config script runs -->
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     
     <!-- Tailwind Config -->
     <script>
@@ -411,7 +417,7 @@
     </div>
 
     <!-- About -->
-    <section id="about" class="py-12 md:py-20">
+    <section id="about" class="py-12 md:py-20 opt-render">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row items-center gap-12 md:gap-16">
                 <div class="w-full lg:w-1/2 reveal">
@@ -440,7 +446,7 @@
     </section>
 
     <!-- Destinations -->
-    <section id="destinations" class="py-16 md:py-24 bg-dark text-white overflow-hidden relative">
+    <section id="destinations" class="py-16 md:py-24 bg-dark text-white overflow-hidden relative opt-render">
         <div class="max-w-7xl mx-auto px-4 relative group">
             <div class="mb-12 reveal text-center md:text-start">
                 <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="dest_label">Explore Georgia</span>
@@ -512,7 +518,7 @@
     </section>
 
     <!-- Fleet Section -->
-    <section id="fleet" class="py-16 md:py-24 bg-surface optimize-render">
+    <section id="fleet" class="py-16 md:py-24 bg-surface optimize-render opt-render">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 md:mb-16 reveal">
                 <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="fleet_label">Our Fleet</span>
@@ -557,7 +563,7 @@
     </section>
     
     <!-- Currency Converter -->
-    <div id="currency-converter" class="max-w-4xl mx-auto px-4 pb-16 relative z-30">
+    <div id="currency-converter" class="max-w-4xl mx-auto px-4 pb-16 relative z-30 opt-render">
          <div class="bg-white rounded-2xl shadow-soft p-6 md:p-4 border border-gray-100 reveal">
             <div class="flex flex-col md:flex-row items-center justify-between gap-6">
                 <div class="flex items-center gap-2 w-full md:w-auto border-b md:border-b-0 border-gray-100 pb-4 md:pb-0">
@@ -591,7 +597,7 @@
     </div>
 
     <!-- Reviews Section -->
-    <section id="reviews" class="py-16 md:py-20 bg-white relative z-10 optimize-render">
+    <section id="reviews" class="py-16 md:py-20 bg-white relative z-10 optimize-render opt-render">
         <div class="max-w-7xl mx-auto px-4">
              <div class="text-center mb-12 md:mb-16 reveal">
                 <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="reviews_label">Testimonials</span>
@@ -636,7 +642,7 @@
     </section>
 
     <!-- FAQ Section -->
-    <section id="faq" class="py-16 md:py-20 bg-white">
+    <section id="faq" class="py-16 md:py-20 bg-white opt-render">
         <div id="faq-content" class="max-w-3xl mx-auto px-4">
             <div class="text-center mb-12 reveal">
                 <h2 class="text-3xl md:text-4xl font-bold text-dark" data-i18n="faq_title">Frequently Asked Questions</h2>
@@ -670,7 +676,7 @@
     </section>
 
     <!-- Booking Section -->
-    <section id="booking" class="py-16 md:py-24 bg-primary relative overflow-hidden scroll-mt-24">
+    <section id="booking" class="py-16 md:py-24 bg-primary relative overflow-hidden scroll-mt-24 opt-render">
         <!-- Decorative Blobs (HIDDEN ON MOBILE to save GPU) -->
         <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none hidden md:block">
             <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-30 animate-blob"></div>
@@ -758,7 +764,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white pt-20 pb-24 md:pb-10">
+    <footer class="bg-dark text-white pt-20 pb-24 md:pb-10 opt-render">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div id="footer-content" class="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16 transition-all">
                 <div class="lg:col-span-1">
@@ -925,8 +931,11 @@
        const EMAILJS_PUBLIC_KEY = "gFHD0l5sBGRvS44V8"; 
        window.addEventListener('load', function(){
           try {
-              if(typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== "gFHD0l5sBGRvS44V8") {
-                  emailjs.init(EMAILJS_PUBLIC_KEY); 
+              if(typeof emailjs !== 'undefined') {
+                  // FIXED: Removed the condition that was blocking your key
+                  if(EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY.length > 5) {
+                       emailjs.init(EMAILJS_PUBLIC_KEY); 
+                  }
               } else { console.log("EmailJS: No public key configured. Service disabled."); }
           } catch(e) { console.log("EmailJS init warning:", e); }
        });
@@ -980,6 +989,16 @@
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => { console.log("Service Worker supported - requires sw.js"); });
+        }
+
+        // Debounce Helper
+        function debounce(func, wait) {
+            let timeout;
+            return function(...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
         }
 
         // --- 1. Preloader & Init ---
@@ -1322,40 +1341,38 @@
         }
 
         let lastScrollTop = 0;
-        let ticking = false;
         const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    const scrollY = window.scrollY;
-                    const nav = document.getElementById('navbar');
-                    const backBtn = document.getElementById('backToTop');
-                    const stickyBar = document.querySelector('.sticky-bar');
-                    
-                    if(nav) { if (scrollY > 20) nav.classList.add('shadow-md'); else nav.classList.remove('shadow-md'); }
+        // OPTIMIZED: Debounced Scroll Handler
+        const handleScroll = debounce(() => {
+            window.requestAnimationFrame(() => {
+                const scrollY = window.scrollY;
+                const nav = document.getElementById('navbar');
+                const backBtn = document.getElementById('backToTop');
+                const stickyBar = document.querySelector('.sticky-bar');
+                
+                if(nav) { if (scrollY > 20) nav.classList.add('shadow-md'); else nav.classList.remove('shadow-md'); }
 
-                    if (metaThemeColor) {
-                        if (scrollY > 100) { metaThemeColor.setAttribute('content', '#ffffff'); } 
-                        else { metaThemeColor.setAttribute('content', '#0F172A'); }
-                    }
+                if (metaThemeColor) {
+                    if (scrollY > 100) { metaThemeColor.setAttribute('content', '#ffffff'); } 
+                    else { metaThemeColor.setAttribute('content', '#0F172A'); }
+                }
 
-                    if (scrollY > lastScrollTop && scrollY > 100) {
-                        if(stickyBar) stickyBar.classList.add('hide-bar');
-                        if(nav && window.innerWidth < 768) nav.classList.add('nav-hidden');
-                    } else {
-                        if(stickyBar) stickyBar.classList.remove('hide-bar');
-                        if(nav) nav.classList.remove('nav-hidden');
-                    }
+                if (scrollY > lastScrollTop && scrollY > 100) {
+                    if(stickyBar) stickyBar.classList.add('hide-bar');
+                    if(nav && window.innerWidth < 768) nav.classList.add('nav-hidden');
+                } else {
+                    if(stickyBar) stickyBar.classList.remove('hide-bar');
+                    if(nav) nav.classList.remove('nav-hidden');
+                }
 
-                    if(backBtn) { if (scrollY > 500) backBtn.classList.add('show'); else backBtn.classList.remove('show'); }
+                if(backBtn) { if (scrollY > 500) backBtn.classList.add('show'); else backBtn.classList.remove('show'); }
 
-                    lastScrollTop = scrollY;
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        }, { passive: true });
+                lastScrollTop = scrollY;
+            });
+        }, 10); // 10ms wait
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
 
         const menuBtn = document.getElementById('mobile-menu-btn');
         const closeMenuBtn = document.getElementById('close-menu-btn');
@@ -1687,7 +1704,7 @@
             let cachedScrollWidth = 0;
             let cachedClientWidth = 0;
 
-            const initSlider = () => {
+            const initSlider = debounce(() => {
                 Array.from(slider.children).forEach(child => { if (child.dataset.clone === 'true') child.remove(); });
                 const originalItems = Array.from(slider.children);
                 originalItemCount = originalItems.length;
@@ -1719,7 +1736,7 @@
                     slider.scrollLeft = -startPos; 
                     if (slider.scrollLeft === 0) slider.scrollLeft = startPos; 
                 } else { slider.scrollLeft = startPos; }
-            };
+            }, 100);
 
             const moveSlider = (direction) => {
                 const effectiveDirection = isRTL ? -direction : direction;
@@ -1765,7 +1782,7 @@
             slider.addEventListener('mouseleave', () => isPaused = false);
             slider.addEventListener('touchstart', () => isPaused = true, { passive: true });
             slider.addEventListener('touchend', () => setTimeout(() => isPaused = false, 2000), { passive: true });
-            window.addEventListener('resize', () => { initSlider(); });
+            window.addEventListener('resize', initSlider);
 
             initSlider();
             startAutoScroll();
