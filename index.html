@@ -4,35 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
-    <!-- ============================================ -->
-    <!-- PERFORMANCE HINTS                            -->
-    <!-- ============================================ -->
-    <!-- OPTIMIZATION: Fixed preconnects. 'fonts.gstatic.com' is for font files, 'googleapis' is for CSS. -->
+    <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
-    <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
-    
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
     <link rel="dns-prefetch" href="https://images.unsplash.com">
-    
     <link rel="preconnect" href="https://flagcdn.com" crossorigin>
     <link rel="preconnect" href="https://api.exchangerate-api.com" crossorigin>
 
-    <!-- ============================================ -->
-    <!-- SEO & METADATA                               -->
-    <!-- ============================================ -->
+    <!-- SEO & Metadata -->
     <title>Rent a Car in Georgia | سائق خاص في جورجيا | Georgia Hills</title>
     <meta name="description" content="Premium car rental with driver in Georgia. #1 Rated service for Arab families. Book directly via WhatsApp. Tours to Kazbegi, Batumi, and more.">
     <meta name="keywords" content="Georgia driver, Rent a car Tbilisi, Private driver Georgia, السياحة في جورجيا, سائق عربي في جورجيا, Georgia Hills">
     <meta name="author" content="Georgia Hills">
     <meta name="theme-color" content="#0F172A">
     
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://georgiahills.netlify.app/">
     <meta property="og:title" content="Georgia Hills - Premium Private Driver Service">
@@ -45,12 +34,12 @@
     <meta name="twitter:description" content="Explore Georgia in comfort. Professional drivers, family-friendly vans, and transparent pricing.">
     <meta name="twitter:image" content="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80">
 
-    <!-- Canonical & Alternates -->
+    <!-- Canonical -->
     <link rel="canonical" href="https://georgiahills.netlify.app/">
     <link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/">
     <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/?lang=ar">
 
-    <!-- JSON-LD Structured Data -->
+    <!-- JSON-LD -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -82,362 +71,1029 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Georgia Hills">
     
-    <!-- PWA Manifest (Embedded Data URI) -->
+    <!-- PWA Manifest -->
     <link rel="manifest" href='data:application/manifest+json,{"name":"Georgia Hills","short_name":"Georgia Hills","start_url":".","display":"standalone","background_color":"#F9FAFB","theme_color":"#0F172A","icons":[{"src":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAAZ0lEQVRYhe3WMQqAMBQF0ZyjF/D+h3JMLYQWwUU3XyGkb/gZExcT890697m11q455+oBJyK3gA6YgWl/QGblS8A+YAc0wP4F5ErWd2A2sALq/wFgB9Qj4L8C8g/4K+Ab8B3wR8C34APe2xo3iJ/a8gAAAABJRU5ErkJggg==","sizes":"192x192","type":"image/png"}]}'>
 
-    <!-- Favicon (Data URI) -->
-    <link rel="icon" type="image/png" href="favicon.ico">
-    <link rel="apple-touch-icon" href="favicon.ico">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAAZ0lEQVRYhe3WMQqAMBQF0ZyjF/D+h3JMLYQWwUU3XyGkb/gZExcT890697m11q455+oBJyK3gA6YgWl/QGblS8A+YAc0wP4F5ErWd2A2sALq/wFgB9Qj4L8C8g/4K+Ab8B3wR8C34APe2xo3iJ/a8gAAAABJRU5ErkJggg==">
 
-    <!-- Dependencies -->
-    <!-- CRITICAL CSS: Merged & Expanded to style Hero Text/Buttons before Tailwind loads -->
-    <style>
-        body { margin: 0; background-color: #F9FAFB; font-family: 'Outfit', sans-serif; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-tap-highlight-color: transparent; background: radial-gradient(circle at 50% 0%, #ffffff 0%, #F3F4F6 100%); overscroll-behavior-y: none; min-height: 100vh; padding-bottom: env(safe-area-inset-bottom); }
-        html { scroll-padding-top: 6rem; }
-        
-        /* Layout Optimization */
-        /* OPTIMIZATION: content-visibility: auto allows browser to skip rendering off-screen sections */
-        .opt-render { content-visibility: auto; contain-intrinsic-size: 1px 800px; }
-
-        /* Navbar Critical Styles (Prevent CLS/FOUC) */
-        #navbar { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; border-bottom: 1px solid rgba(243, 244, 246, 1); height: auto; min-height: calc(5rem + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top); background-color: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); }
-        #navbar .max-w-7xl { max-width: 80rem; margin: 0 auto; padding: 0 1rem; height: 5rem; display: flex; align-items: center; justify-content: space-between; }
-        
-        /* Hero Container */
-        #home { position: relative; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: #0F172A; }
-        #hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.4), transparent); }
-        .hero-content { position: relative; z-index: 10; text-align: center; color: white; padding: 0 1rem; max-width: 64rem; margin: 0 auto; margin-top: 2.5rem; }
-        
-        /* Typography Presets for Critical Path */
-        .hero-title { font-size: 2.25rem; line-height: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .hero-subtitle { font-size: 1rem; line-height: 1.5rem; margin-bottom: 2.5rem; max-width: 42rem; margin-left: auto; margin-right: auto; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        
-        @media (min-width: 768px) {
-            .hero-title { font-size: 3.75rem; line-height: 1; }
-            .hero-subtitle { font-size: 1.25rem; line-height: 1.75rem; }
-        }
-        
-        /* Buttons Critical Style */
-        .crit-btn { display: inline-block; padding: 1rem 2rem; border-radius: 9999px; font-weight: 700; text-decoration: none; margin: 0.5rem; transition: transform 0.2s; }
-        .crit-btn-primary { background-color: #8B5E34; color: white; }
-        .crit-btn-secondary { background-color: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; backdrop-filter: blur(12px); }
-        
-        /* Smooth Scroll */
-        .scroll-smooth { -webkit-overflow-scrolling: touch; }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #2C5530; }
-        
-        /* Glassmorphism */
-        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
-        
-        /* RTL Support */
-        html[lang="ar"] body { font-family: 'Cairo', sans-serif; }
-        html[lang="en"] body { font-family: 'Outfit', sans-serif; }
-        
-        html[lang="ar"] #bookingForm input, 
-        html[lang="ar"] #bookingForm select, 
-        html[lang="ar"] #bookingForm textarea,
-        html[lang="ar"] #currency-converter input { text-align: right; direction: rtl; }
-        
-        html[lang="ar"] #bookingForm input[type="tel"] { text-align: right !important; direction: ltr !important; }
-        html[lang="ar"] footer .fa-solid, html[lang="ar"] footer .fa-location-dot, html[lang="ar"] footer .fa-brands { margin-right: 0 !important; margin-left: 0.75rem !important; }
-        html[lang="ar"] footer { text-align: right; }
-        html[lang="ar"] footer ul li { justify-content: flex-start; }
-        html[lang="ar"] .faq-icon { margin-left: 0; margin-right: auto; }
-        html[lang="ar"] .faq-question { text-align: right; }
-        html[lang="ar"] .price-badge { left: auto; right: 1rem; } 
-        html[lang="ar"] .sticky-bar { flex-direction: row-reverse; }
-
-        .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s, transform 0.8s; }
-        .reveal.waiting { opacity: 0; transform: translateY(30px); } 
-
-        /* Mobile Menu Transitions */
-        #mobile-menu { transition: transform 0.3s; transform: translateX(100%); }
-        html[lang="ar"] #mobile-menu { transform: translateX(-100%); }
-        #mobile-menu.open { transform: translateX(0); }
-        
-        /* Form States */
-        .input-error { border-color: #EF4444 !important; background-color: #FEF2F2 !important; }
-        .input-success { border-color: #10B981 !important; background-color: #F0FDF4 !important; }
-        .error-text { display: block; font-size: 0.75rem; color: #EF4444; margin-top: 0.25rem; }
-        
-        /* Prevent font zooming on inputs on iPhone */
-        @media screen and (max-width: 768px) { input, select, textarea { font-size: 16px !important; } }
-        
-        /* Preloader */
-        #preloader { position: fixed; inset: 0; z-index: 9999; background: #fff; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; pointer-events: none; }
-        .fade-out { opacity: 0; }
-        
-        /* Network Toast */
-        #network-toast { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: #EF4444; color: white; padding: 10px 20px; border-radius: 9999px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 100; transition: top 0.3s; font-size: 0.875rem; font-weight: bold; display: flex; gap: 8px; align-items: center; }
-        #network-toast.show { top: env(safe-area-inset-top, 20px); }
-
-        #backToTop { visibility: hidden; opacity: 0; transition: all 0.3s; }
-        #backToTop.show { visibility: visible; opacity: 1; }
-        
-        /* Sticky Bar for Mobile */
-        .sticky-bar { display: none; transition: transform 0.3s ease-in-out; }
-        @media (max-width: 768px) {
-            .sticky-bar { 
-                display: flex; position: fixed; bottom: 0; left: 0; width: 100%; 
-                background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); 
-                box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 70; 
-                padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom));
-                gap: 12px; align-items: center; transform: translateY(0); 
-            }
-            .sticky-bar.hide-bar { transform: translateY(100%); }
-            #cookie-banner.active { bottom: 80px; }
-            footer { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); } 
-        }
-        
-        .nav-hidden { transform: translateY(-100%); }
-        .skip-link { position: absolute; top: -40px; left: 0; background: #2C5530; color: white; padding: 8px; z-index: 100; transition: top 0.3s; }
-        .skip-link:focus { top: 0; }
-        
-        .swipe-hint-overlay {
-            position: absolute; inset: 0; pointer-events: none; display: flex; align-items: center; justify-content: center; z-index: 30;
-            background: linear-gradient(to right, transparent, rgba(0,0,0,0.1), transparent);
-            opacity: 0; transition: opacity 0.5s;
-        }
-        .swipe-hint-overlay.show { opacity: 1; }
-
-        /* iOS Install Modal Styles */
-        #ios-install-modal {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #fff; z-index: 100;
-            border-top-left-radius: 20px; border-top-right-radius: 20px;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
-            padding: 20px 20px calc(20px + env(safe-area-inset-bottom)) 20px;
-            transform: translateY(120%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; flex-direction: column; gap: 15px;
-        }
-        #ios-install-modal.show { transform: translateY(0); }
-        .ios-action-icon { display: inline-block; vertical-align: middle; margin: 0 4px; color: #007AFF; }
-        
-        /* Flag styling for converter */
-        .currency-flag { width: 24px; height: 16px; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
-
-        /* Ensure horizontal touch panning is smooth on mobile */
-        #tours-slider { -webkit-overflow-scrolling: touch; touch-action: pan-x; overscroll-behavior-x: contain; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-    </style>
-
-    <!-- FIXED: Removed 'defer' to ensure tailwind is defined before the config script runs -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
     
+    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-    
-    <!-- Tailwind Config -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Outfit', 'sans-serif'], arabic: ['Cairo', 'sans-serif'] },
-                    colors: {
-                        primary: '#2C5530',    
-                        secondary: '#8BA888',
-                        accent: '#8B5E34',     
-                        surface: '#F9FAFB',    
-                        dark: '#0F172A',
-                        error: '#EF4444',
-                    },
-                    boxShadow: {
-                        'soft': '0 20px 40px -15px rgba(0,0,0,0.1)',
-                        'card': '0 0 0 1px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.04)',
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
-                        'spin': 'spin 1s linear infinite',
-                        'swipe-hint': 'swipeHint 2s ease-in-out infinite',
-                        'bounce-slow': 'bounce 3s infinite',
-                    },
-                    keyframes: {
-                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
-                        shake: { '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' }, '20%, 80%': { transform: 'translate3d(2px, 0, 0)' }, '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' }, '40%, 60%': { transform: 'translate3d(4px, 0, 0)' } },
-                        spin: { '0%': { transform: 'rotate(0deg)' }, '100%': { transform: 'rotate(360deg)' } },
-                        swipeHint: { '0%, 100%': { transform: 'translateX(0)', opacity: '0.5' }, '50%': { transform: 'translateX(-20px)', opacity: '1' } }
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-<body class="bg-surface text-gray-800 antialiased overflow-x-hidden" dir="ltr">
 
-    <!-- NOSCRIPT Fallback for Accessibility -->
+    <!-- MAIN CSS -->
+    <style>
+        /* =========================================
+           1. VARIABLES & RESET
+           ========================================= */
+        :root {
+            --color-primary: #2C5530;
+            --color-secondary: #8BA888;
+            --color-accent: #8B5E34;
+            --color-surface: #F9FAFB;
+            --color-dark: #0F172A;
+            --color-error: #EF4444;
+            --color-success: #16a34a;
+            --color-success-bg: #dcfce7;
+            --color-white: #ffffff;
+            --color-white-90: rgba(255, 255, 255, 0.9);
+            --color-white-20: rgba(255, 255, 255, 0.2);
+            --color-white-10: rgba(255, 255, 255, 0.1);
+            --color-white-05: rgba(255, 255, 255, 0.05);
+            --color-gray-50: #f9fafb;
+            --color-gray-100: #f3f4f6;
+            --color-gray-200: #e5e7eb;
+            --color-gray-300: #d1d5db;
+            --color-gray-400: #9ca3af;
+            --color-gray-500: #6b7280;
+            --color-gray-600: #4b5563;
+            --color-gray-700: #374151;
+            --color-gray-800: #1f2937;
+            
+            --font-sans: 'Outfit', sans-serif;
+            --font-arabic: 'Cairo', sans-serif;
+            
+            --shadow-soft: 0 20px 40px -15px rgba(0,0,0,0.1);
+            --shadow-card: 0 0 0 1px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            
+            --container-max: 80rem; /* 7xl */
+            --header-height: 5rem;
+            
+            /* Z-Index Layers */
+            --z-negative: 0;
+            --z-normal: 10;
+            --z-badge: 20;
+            --z-sticky: 30;
+            --z-navbar: 50;
+            --z-mobile-menu: 60;
+            --z-toast: 100;
+            --z-modal: 1000;
+            --z-preloader: 9999;
+        }
+
+        /* Base Reset */
+        *, *::before, *::after { box-sizing: border-box; }
+        
+        body { 
+            margin: 0; 
+            background-color: var(--color-surface); 
+            font-family: var(--font-sans); 
+            text-rendering: optimizeLegibility; 
+            -webkit-font-smoothing: antialiased; 
+            -moz-osx-font-smoothing: grayscale; 
+            -webkit-tap-highlight-color: transparent; 
+            background: radial-gradient(circle at 50% 0%, #ffffff 0%, #F3F4F6 100%); 
+            color: var(--color-gray-800);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+
+        a { text-decoration: none; color: inherit; }
+        button { cursor: pointer; border: none; background: none; font-family: inherit; }
+        input, select, textarea { font-family: inherit; }
+
+        /* Typography Utilities */
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+        .text-right { text-align: right; }
+        .text-white { color: var(--color-white); }
+        .text-primary { color: var(--color-primary); }
+        .text-accent { color: var(--color-accent); }
+        .text-dark { color: var(--color-dark); }
+        .font-bold { font-weight: 700; }
+        .font-extra-bold { font-weight: 800; }
+        .font-serif { font-family: 'Times New Roman', Times, serif; }
+        .uppercase { text-transform: uppercase; }
+        .italic { font-style: italic; }
+        .hidden { display: none !important; }
+        .block { display: block; }
+        .opacity-0 { opacity: 0; }
+        .opacity-80 { opacity: 0.8; }
+        
+        /* Flex & Grid Utils */
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-4 { gap: 1rem; }
+        .w-full { width: 100%; }
+        .h-full { height: 100%; }
+        .relative { position: relative; }
+        .absolute { position: absolute; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .object-cover { object-fit: cover; }
+        .object-contain { object-fit: contain; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--color-primary); }
+
+        /* RTL & Language Support */
+        html[lang="ar"] body { font-family: var(--font-arabic); }
+        html[lang="ar"] .rtl-flip { transform: scaleX(-1); }
+        html[lang="ar"] .fa-arrow-right { transform: rotate(180deg); }
+        html[lang="ar"] .rtl-rotate-180 { transform: rotate(180deg); }
+        
+        /* Layout Containers */
+        .container {
+            max-width: var(--container-max);
+            margin: 0 auto;
+            padding: 0 1rem;
+            width: 100%;
+        }
+
+        /* =========================================
+           2. COMPONENT STYLES
+           ========================================= */
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: var(--z-navbar);
+            background-color: var(--color-white-90);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--color-gray-100);
+            transition: all 0.3s;
+        }
+        .navbar.shadow-md { box-shadow: var(--shadow-lg); }
+        .navbar.nav-hidden { transform: translateY(-100%); }
+
+        .navbar-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: var(--header-height);
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+        .nav-logo-img {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            box-shadow: var(--shadow-xl);
+            object-fit: cover;
+        }
+        .nav-logo span {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--color-dark);
+            display: none;
+        }
+        @media (min-width: 768px) { .nav-logo span { display: block; } }
+
+        /* Desktop Menu */
+        .desktop-menu { display: none; gap: 2rem; align-items: center; }
+        @media (min-width: 768px) { .desktop-menu { display: flex; } }
+        
+        .nav-link {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-gray-600);
+            padding: 0.5rem 0;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .nav-link:hover {
+            color: var(--color-primary);
+            border-bottom-color: rgba(44, 85, 48, 0.3);
+        }
+
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-gray-600);
+            border: 1px solid var(--color-gray-200);
+            border-radius: 9999px;
+            padding: 0.375rem 1rem;
+            transition: background 0.2s;
+        }
+        .lang-btn:hover { background-color: var(--color-gray-50); color: var(--color-primary); }
+        
+        .lang-btn-mobile {
+            font-size: 0.75rem;
+            padding: 0.5rem 0.75rem;
+        }
+
+        .btn-book-nav {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--color-primary);
+            color: white;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.2s;
+        }
+        .btn-book-nav:hover { background-color: #1a331d; transform: translateY(-2px); }
+
+        /* Mobile Toggle */
+        .mobile-controls { display: flex; align-items: center; gap: 0.75rem; }
+        @media (min-width: 768px) { .mobile-controls { display: none; } }
+        .btn-mobile-menu { color: var(--color-dark); padding: 0.5rem; font-size: 1.5rem; }
+
+        /* Mobile Menu Overlay */
+        #mobile-menu {
+            position: fixed;
+            inset: 0;
+            z-index: var(--z-mobile-menu);
+            background-color: white;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            transition: transform 0.3s;
+            transform: translateX(100%);
+        }
+        html[lang="ar"] #mobile-menu { transform: translateX(-100%); }
+        #mobile-menu.open { transform: translateX(0); }
+        
+        .close-menu-btn { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.875rem; color: var(--color-gray-400); }
+        .mobile-link { font-size: 1.5rem; font-weight: 700; color: var(--color-dark); }
+        .mobile-link:hover { color: var(--color-primary); }
+        .mobile-btn-book { padding: 1rem 2rem; background: var(--color-primary); color: white; border-radius: 9999px; font-size: 1.25rem; font-weight: 700; box-shadow: var(--shadow-xl); }
+        
+        .mobile-social-container { display: flex; gap: 1.5rem; margin-top: 1rem; }
+        .mobile-social-btn { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--color-gray-500); }
+        .mobile-social-icon { width: 3rem; height: 3rem; background: var(--color-gray-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .mobile-social-text { font-size: 0.75rem; }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: var(--color-dark);
+        }
+        .hero-bg-container {
+            position: absolute;
+            inset: 0;
+            z-index: var(--z-negative);
+        }
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.4), transparent);
+        }
+        .hero-content {
+            position: relative;
+            z-index: var(--z-normal);
+            text-align: center;
+            color: white;
+            padding: 0 1rem;
+            max-width: 64rem;
+            margin-top: 2.5rem;
+        }
+        .hero-logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .hero-logo-circle {
+            width: 6rem;
+            height: 6rem;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 1rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(4px);
+        }
+        .hero-title {
+            font-size: 2.25rem;
+            line-height: 1.2;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            margin-top: 0;
+        }
+        @media (min-width: 768px) { .hero-title { font-size: 3.75rem; } }
+        @media (min-width: 1024px) { .hero-title { font-size: 6rem; } }
+        
+        .hero-subtitle {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 2.5rem;
+            max-width: 42rem;
+            margin-left: auto;
+            margin-right: auto;
+            color: #f3f4f6;
+            font-weight: 300;
+        }
+        @media (min-width: 768px) { .hero-subtitle { font-size: 1.25rem; } }
+
+        .hero-buttons { display: flex; flex-direction: column; gap: 1rem; justify-content: center; }
+        @media (min-width: 640px) { .hero-buttons { flex-direction: row; } }
+
+        .btn-hero {
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 1.125rem;
+            transition: all 0.3s;
+        }
+        .btn-hero-primary {
+            background-color: var(--color-accent);
+            color: white;
+            box-shadow: var(--shadow-xl);
+        }
+        .btn-hero-primary:hover { background-color: #724c2a; transform: translateY(-4px); }
+        
+        .btn-hero-secondary {
+            background-color: var(--color-white-10);
+            border: 1px solid var(--color-white-20);
+            color: white;
+            backdrop-filter: blur(12px);
+        }
+        .btn-hero-secondary:hover { background-color: var(--color-white-20); }
+
+        /* Stats Section */
+        .stats-wrapper {
+            position: relative;
+            z-index: var(--z-badge);
+            margin-top: -4rem;
+            margin-bottom: 3rem;
+        }
+        .stats-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-soft);
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+        @media (min-width: 768px) {
+            .stats-card { grid-template-columns: repeat(3, 1fr); gap: 0; }
+            .stats-item:not(:last-child) { border-right: 1px solid var(--color-gray-100); }
+        }
+        .stats-item { text-center; }
+        .stats-num { font-size: 2.25rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem; }
+        .stats-label { color: var(--color-gray-600); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+
+        /* Common Section Styles */
+        .section-py { padding-top: 4rem; padding-bottom: 4rem; }
+        @media (min-width: 768px) { .section-py { padding-top: 6rem; padding-bottom: 6rem; } }
+        
+        /* About Section */
+        .about-grid { display: flex; flex-direction: column; gap: 3rem; }
+        @media (min-width: 1024px) { .about-grid { flex-direction: row; align-items: center; gap: 4rem; } }
+        .about-img-container { flex: 1; position: relative; }
+        .about-content { flex: 1; }
+        
+        .about-blob { position: absolute; top: -1rem; left: -1rem; width: 6rem; height: 6rem; background: rgba(139, 94, 52, 0.2); border-radius: 50%; filter: blur(24px); }
+        .about-img { border-radius: 1.5rem; box-shadow: var(--shadow-2xl); position: relative; z-index: var(--z-normal); width: 100%; height: auto; }
+        
+        .section-label { color: var(--color-accent); font-weight: 700; letter-spacing: 0.1em; font-size: 0.875rem; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
+        .section-title { font-size: 1.875rem; font-weight: 700; color: var(--color-dark); margin-bottom: 1.5rem; line-height: 1.2; margin-top: 0; }
+        @media (min-width: 768px) { .section-title { font-size: 2.25rem; } }
+        .section-desc { color: var(--color-gray-600); margin-bottom: 1.5rem; line-height: 1.625; }
+        .feature-grid { margin-top: 2rem; }
+
+        .feature-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-card);
+            transition: box-shadow 0.3s;
+            margin-bottom: 1rem;
+        }
+        .feature-box:hover { box-shadow: var(--shadow-lg); }
+        .feature-icon {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .icon-green { background: #f0fdf4; color: var(--color-primary); }
+        .icon-blue { background: #eff6ff; color: #2563eb; }
+        .feature-title { font-weight: 700; color: var(--color-dark); font-size: 1.125rem; margin: 0; }
+        .feature-text { font-size: 0.875rem; color: var(--color-gray-600); margin: 0; }
+
+        /* Destinations Slider */
+        .bg-dark-section { background-color: var(--color-dark); color: white; }
+        .slider-container { position: relative; }
+        .slider-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: var(--z-badge);
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--color-white-10);
+            backdrop-filter: blur(4px);
+            border: 1px solid var(--color-white-20);
+            color: white;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        @media (min-width: 768px) { .slider-nav-btn { display: flex; } }
+        .slider-nav-btn:hover { background: white; color: var(--color-dark); transform: translateY(-50%) scale(1.1); }
+        .slider-prev { left: -1.5rem; }
+        .slider-next { right: -1.5rem; }
+
+        .tours-slider {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 2rem;
+            scrollbar-width: none; /* Firefox */
+        }
+        .tours-slider::-webkit-scrollbar { display: none; }
+        
+        .tour-card {
+            min-width: 280px;
+            scroll-snap-align: start;
+            position: relative;
+            height: 24rem;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: var(--color-gray-800);
+            border: 1px solid var(--color-white-10);
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        @media (min-width: 768px) { .tour-card { min-width: 380px; } }
+        
+        .tour-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s;
+        }
+        .tour-card:hover .tour-img { transform: scale(1.1); }
+        .tour-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.2), transparent);
+        }
+        .tour-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            padding: 2rem;
+            width: 100%;
+        }
+        .tour-title { font-weight: 700; font-size: 1.5rem; margin-bottom: 0.5rem; margin-top: 0; }
+        .tour-desc { color: var(--color-gray-300); font-size: 0.875rem; margin-bottom: 1rem; margin-top: 0; }
+        .tour-btn { color: var(--color-accent); font-weight: 700; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem; }
+
+        /* Fleet Section */
+        .fleet-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            max-width: 56rem;
+            margin: 0 auto;
+        }
+        @media (min-width: 768px) { .fleet-grid { grid-template-columns: repeat(2, 1fr); } }
+        
+        .fleet-card {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid var(--color-gray-100);
+            position: relative;
+        }
+        .fleet-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
+        .fleet-card.featured { border: 2px solid var(--color-accent); transform: scale(1.05); z-index: var(--z-normal); }
+        .fleet-card.featured:hover { transform: scale(1.05) translateY(-4px); }
+        
+        .fleet-img-wrap { height: 14rem; position: relative; background: var(--color-gray-100); overflow: hidden; }
+        .fleet-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
+        .fleet-card:hover .fleet-img { transform: scale(1.1); }
+        
+        .price-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: var(--color-white-90);
+            backdrop-filter: blur(4px);
+            color: var(--color-dark);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+            z-index: var(--z-badge);
+        }
+        html[lang="ar"] .price-badge { left: auto; right: 1rem; }
+        
+        .popular-tag {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--color-accent);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            z-index: var(--z-badge);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .fleet-body { padding: 2rem; }
+        .fleet-title { font-weight: 700; color: var(--color-dark); font-size: 1.5rem; margin-bottom: 0.25rem; margin-top: 0; }
+        .fleet-desc { font-size: 0.875rem; color: var(--color-gray-600); margin-bottom: 1rem; margin-top: 0; }
+        .fleet-specs { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
+        .spec-tag { padding: 0.25rem 0.5rem; background: var(--color-gray-50); border-radius: 0.25rem; font-size: 0.875rem; color: var(--color-gray-600); }
+        
+        .btn-fleet { width: 100%; padding: 0.75rem; border-radius: 0.75rem; font-weight: 600; transition: background 0.2s; }
+        .btn-fleet-outline { border: 1px solid var(--color-primary); color: var(--color-primary); }
+        .btn-fleet-outline:hover { background: var(--color-primary); color: white; }
+        .btn-fleet-fill { background: var(--color-primary); color: white; }
+        .btn-fleet-fill:hover { background: #1a331d; }
+
+        /* Currency Converter */
+        .currency-section { padding-bottom: 4rem; position: relative; z-index: var(--z-sticky); }
+        .converter-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-soft);
+            padding: 1.5rem;
+            border: 1px solid var(--color-gray-100);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .converter-card { flex-direction: row; align-items: center; justify-content: space-between; padding: 1rem; }
+        }
+        .conv-header { display: flex; align-items: center; gap: 0.5rem; }
+        .conv-icon-box { width: 2.5rem; height: 2.5rem; background: rgba(139, 94, 52, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--color-accent); }
+        .conv-title-text h3 { font-weight: 700; color: var(--color-dark); font-size: 0.875rem; margin: 0; }
+        .conv-title-text p { font-size: 0.625rem; color: var(--color-gray-600); margin: 0; }
+        
+        .conv-controls { flex: 1; display: flex; gap: 1rem; width: 100%; flex-direction: column; }
+        .conv-amount-group { flex: 1; }
+        .conv-select-group { display: flex; gap: 0.5rem; }
+        .conv-input {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            background: var(--color-gray-50);
+            border: 1px solid var(--color-gray-200);
+            font-weight: 700;
+            color: var(--color-dark);
+        }
+        .conv-select-wrapper { position: relative; flex: 1; }
+        .conv-select-btn { background: white; display: flex; align-items: center; gap: 0.5rem; justify-content: space-between; cursor: pointer; }
+        .conv-select-content { display: flex; align-items: center; gap: 0.5rem; }
+        .conv-arrow { display: flex; align-items: center; padding-top: 1.5rem; color: var(--color-gray-300); }
+        .conv-result-box { text-align: right; min-width: 6rem; }
+        .conv-result-label { font-size: 0.625rem; color: var(--color-gray-600); display: block; margin-bottom: 0.25rem; }
+        .conv-result-value { font-size: 1.5rem; font-weight: 800; color: var(--color-primary); }
+        .conv-result-unit { font-size: 0.75rem; margin-left: 0.25rem; color: var(--color-gray-600); }
+        
+        /* Reviews */
+        .reviews-bg { background: white; }
+        .reviews-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+        @media (min-width: 768px) { .reviews-grid { grid-template-columns: repeat(3, 1fr); } }
+        .review-card {
+            background: var(--color-gray-50);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            border: 1px solid var(--color-gray-100);
+            transition: all 0.3s;
+        }
+        .review-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
+        .stars { color: #facc15; font-size: 0.875rem; margin-bottom: 1rem; }
+        .review-text { font-style: italic; color: var(--color-gray-600); margin-bottom: 1.5rem; line-height: 1.6; margin-top: 0; }
+        .review-author { display: flex; align-items: center; gap: 0.75rem; }
+        .review-avatar { width: 2.5rem; height: 2.5rem; background: rgba(44,85,48,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--color-primary); font-weight: 700; }
+        .review-name { font-weight: 700; color: var(--color-dark); font-size: 0.875rem; }
+        .review-country { font-size: 0.75rem; color: var(--color-gray-700); }
+        
+        /* FAQ */
+        .faq-container { max-width: 48rem; }
+        .faq-list { display: flex; flex-direction: column; gap: 1rem; }
+        .faq-item {
+            background: var(--color-surface);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+            border: 1px solid var(--color-gray-100);
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .faq-item:hover { border-color: rgba(44, 85, 48, 0.3); }
+        .faq-header { display: flex; justify-content: space-between; align-items: center; }
+        .faq-question { font-weight: 700; font-size: 1.125rem; margin: 0; }
+        .faq-answer { margin-top: 1rem; font-size: 0.875rem; color: var(--color-gray-600); line-height: 1.6; margin-bottom: 0; }
+
+        /* Booking Section */
+        .booking-section {
+            background-color: var(--color-primary);
+            position: relative;
+            overflow: hidden;
+            padding: 4rem 1rem;
+        }
+        .booking-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-2xl);
+            max-width: 64rem;
+            margin: 0 auto;
+            position: relative;
+            z-index: var(--z-normal);
+        }
+        @media (min-width: 768px) { .booking-card { padding: 3rem; } }
+
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media (min-width: 768px) { .form-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; } }
+        .col-span-full { grid-column: 1 / -1; }
+
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-gray-700);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            background: white;
+            border: 1px solid var(--color-gray-200);
+            outline: none;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        .form-input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 2px rgba(44, 85, 48, 0.2); }
+        
+        .radio-group { display: flex; padding: 0.25rem; background: white; border-radius: 0.75rem; border: 1px solid var(--color-gray-200); }
+        .radio-label {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--color-gray-500);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .radio-input:checked + .radio-content { background: var(--color-primary); color: white; }
+        .radio-content { display: block; width: 100%; height: 100%; padding: 0.5rem; border-radius: 0.5rem; }
+
+        .btn-submit {
+            width: 100%;
+            margin-top: 1rem;
+            background-color: var(--color-primary);
+            color: white;
+            font-weight: 700;
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 1.125rem;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover { background-color: #1a331d; }
+        
+        .price-estimate-box {
+            margin-top: 1.5rem; 
+            padding: 1rem; 
+            background: rgba(44, 85, 48, 0.05); 
+            border-radius: 0.75rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+
+        /* Footer */
+        .footer { background-color: var(--color-dark); color: white; padding-top: 5rem; padding-bottom: 6rem; }
+        .footer-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 4rem; }
+        @media (min-width: 1024px) { .footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1.5fr; } }
+        
+        .footer-brand { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; }
+        .footer-brand-icon { width: 2rem; height: 2rem; background: var(--color-white-10); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; }
+        .footer-brand-text { font-weight: 700; font-size: 1.5rem; }
+        
+        .footer-social { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        .social-btn { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--color-white-05); display: flex; align-items: center; justify-content: center; transition: background 0.2s; color: white; }
+        .social-btn:hover { background: var(--color-accent); }
+        
+        .footer h3 { font-weight: 700; font-size: 1.125rem; margin-bottom: 1.5rem; margin-top: 0; }
+        .footer ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+        .footer a { color: var(--color-gray-300); font-size: 0.875rem; transition: color 0.2s; }
+        .footer a:hover { color: var(--color-accent); }
+        
+        .footer-contact-item { display: flex; align-items: center; gap: 0.75rem; }
+        
+        .footer-map-container {
+            width: 100%;
+            height: 10rem;
+            background: var(--color-gray-800);
+            border-radius: 0.75rem;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .footer-map-overlay { font-size: 0.875rem; font-weight: 700; color: var(--color-gray-400); z-index: var(--z-normal); display: flex; gap: 0.5rem; align-items: center; }
+        
+        .footer-bottom { border-top: 1px solid var(--color-gray-800); padding-top: 2rem; text-align: center; font-size: 0.75rem; color: var(--color-gray-400); }
+
+        /* Animation Keyframes */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes bounce-slow { 0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8,0,1,1); } 50% { transform: translateY(0); animation-timing-function: cubic-bezier(0,0,0.2,1); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+        .animate-bounce { animation: bounce-slow 2s infinite; }
+        .animate-spin { animation: spin 1s linear infinite; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-shake { animation: shake 0.3s ease-in-out; }
+        
+        /* Utils */
+        .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s, transform 0.8s; }
+        .reveal.waiting { opacity: 0; transform: translateY(30px); } 
+        
+        .sticky-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: var(--z-sticky);
+            padding: 12px 16px;
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            display: none;
+            gap: 12px;
+            align-items: center;
+        }
+        @media (max-width: 768px) { .sticky-bar { display: flex; } }
+        .sticky-bar.hide-bar { transform: translateY(100%); transition: transform 0.3s; }
+        
+        .glass-btn-primary { flex: 1; background: #0F6B60; color: white; padding: 0.75rem; border-radius: 0.5rem; text-align: center; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .glass-btn-accent { flex: 1; background: var(--color-primary); color: white; padding: 0.75rem; border-radius: 0.5rem; text-align: center; font-weight: 700; }
+        
+        /* Preloader & Toasts */
+        #preloader { position: fixed; inset: 0; z-index: var(--z-preloader); background: #fff; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
+        .preloader-circle { width: 5rem; height: 5rem; border-radius: 50%; background: rgba(44,85,48,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; }
+        .preloader-text { font-size: 0.875rem; font-weight: 700; color: var(--color-gray-400); letter-spacing: 0.1em; text-transform: uppercase; }
+        .fade-out { opacity: 0; pointer-events: none; }
+        
+        #network-toast { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: var(--color-error); color: white; padding: 10px 20px; border-radius: 9999px; z-index: var(--z-toast); transition: top 0.3s; font-size: 0.875rem; font-weight: bold; display: flex; gap: 8px; align-items: center; }
+        #network-toast.show { top: env(safe-area-inset-top, 20px); }
+
+        /* Currency Flags */
+        .currency-flag { width: 24px; height: 16px; object-fit: cover; border-radius: 2px; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+        .dropdown-menu { position: absolute; top: 100%; left: 0; width: 100%; margin-top: 4px; background: white; border: 1px solid var(--color-gray-200); border-radius: 0.5rem; box-shadow: var(--shadow-xl); z-index: var(--z-navbar); display: none; max-height: 15rem; overflow-y: auto; }
+        .dropdown-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; cursor: pointer; border-bottom: 1px solid var(--color-gray-50); transition: background 0.2s; }
+        .dropdown-item:hover { background: var(--color-gray-50); }
+        .dropdown-item:last-child { border-bottom: none; }
+        .dropdown-code { font-weight: 700; font-size: 0.875rem; color: var(--color-dark); }
+        
+        /* Input Errors */
+        .input-error { border-color: var(--color-error) !important; background-color: #FEF2F2 !important; }
+        .input-success { border-color: var(--color-success) !important; background-color: var(--color-success-bg) !important; }
+        .error-text { display: block; font-size: 0.75rem; color: var(--color-error); margin-top: 0.25rem; }
+
+        /* Floating Actions */
+        .fab-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: var(--z-navbar); display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-end; }
+        .fab-scroll { padding: 0.75rem; background: white; color: var(--color-primary); border-radius: 50%; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .fab-scroll.show { opacity: 1; pointer-events: auto; }
+        .fab-whatsapp { width: 3.5rem; height: 3.5rem; background: #0F6B60; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-xl); transition: transform 0.2s; }
+
+        /* Modal */
+        .modal-overlay { position: fixed; inset: 0; z-index: var(--z-modal); background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-content { background: white; border-radius: 1.5rem; padding: 2.5rem; max-width: 24rem; width: 100%; text-align: center; position: relative; }
+        .modal-close { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: var(--color-gray-400); }
+        .modal-icon-circle { width: 5rem; height: 5rem; background: var(--color-success-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem auto; color: var(--color-success); }
+        .modal-title { font-weight: 700; color: var(--color-dark); font-size: 1.5rem; margin-bottom: 0.5rem; margin-top: 0; }
+        .modal-desc { color: var(--color-gray-500); margin-bottom: 2rem; margin-top: 0; }
+        .modal-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 1rem; background: #0F6B60; color: white; border-radius: 0.75rem; font-weight: 700; }
+
+        /* Privacy/Terms Modal */
+        .info-modal-content { background: white; border-radius: 1rem; max-width: 42rem; width: 100%; max-height: 80vh; overflow-y: auto; padding: 2rem; position: relative; }
+
+        /* Cookie Banner */
+        .cookie-banner { background: white; border-top: 1px solid var(--color-gray-200); padding: 1rem; box-shadow: var(--shadow-2xl); position: fixed; bottom: 0; left: 0; width: 100%; z-index: var(--z-navbar); display: flex; flex-direction: column; gap: 1rem; transform: translateY(100%); transition: transform 0.5s; }
+        .cookie-banner.active { transform: translateY(0); }
+        .cookie-buttons { display: flex; gap: 0.75rem; }
+        .btn-cookie-accept { padding: 0.5rem 1.5rem; background: var(--color-primary); color: white; border-radius: 0.5rem; font-weight: 700; font-size: 0.875rem; }
+        .btn-cookie-decline { padding: 0.5rem 1.5rem; background: var(--color-gray-100); color: var(--color-gray-600); border-radius: 0.5rem; font-weight: 700; font-size: 0.875rem; }
+
+        /* JS Fallback */
+        .no-js-overlay { position: fixed; inset: 0; z-index: 10000; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; }
+    </style>
+</head>
+<body dir="ltr">
+
+    <!-- Accessibilty & Network -->
     <noscript>
-        <div class="fixed inset-0 z-[10000] bg-white flex flex-col items-center justify-center text-center p-6">
-            <h1 class="text-2xl font-bold text-red-600 mb-2">JavaScript Required</h1>
-            <p class="text-gray-600">Please enable JavaScript to use Georgia Hills car rental services.</p>
+        <div class="no-js-overlay">
+            <h1 style="font-size:1.5rem; font-weight:bold; color:#EF4444; margin-bottom:0.5rem;">JavaScript Required</h1>
+            <p style="color:#4B5563;">Please enable JavaScript to use Georgia Hills car rental services.</p>
             <style>#preloader { display: none; }</style>
         </div>
     </noscript>
 
-    <!-- Accessibility Skip Link -->
-    <a href="#home" class="skip-link">Skip to content</a>
-    
-    <!-- Offline Indicator -->
     <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>You are offline</span></div>
 
     <!-- Preloader -->
-    <div id="preloader" style="pointer-events: auto;">
+    <div id="preloader">
         <div class="text-center">
-            <!-- Mountain Icon Fallback -->
-            <div class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 animate-bounce">
-                <img src="favicon.ico" width="80" height="80" class="object-contain" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
-                <i class="fa-solid fa-mountain-sun text-4xl text-primary hidden"></i>
+            <div class="preloader-circle animate-bounce">
+                <img src="favicon.ico" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
+                <i class="fa-solid fa-mountain-sun text-primary hidden" style="font-size:2.25rem;"></i>
             </div>
-            <div class="text-sm font-bold text-gray-400 tracking-widest uppercase">Loading</div>
+            <div class="preloader-text">Loading</div>
         </div>
     </div>
 
     <!-- Navbar -->
-    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-            <div class="flex justify-between h-full items-center w-full">
+    <nav id="navbar" class="navbar">
+        <div class="container">
+            <div class="navbar-inner">
                 <!-- Logo -->
-                <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
-                    <div class="w-14 h-14 flex items-center justify-center text-white">
-                        <img src="favicon.ico" width="56" height="56" class="w-14 h-14 rounded-full shadow-xl object-cover" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
-                        <div class="w-14 h-14 rounded-full bg-primary flex items-center justify-center shadow-xl hidden">
-                            <i class="fa-solid fa-mountain text-white text-xl"></i>
-                        </div>
+                <div class="nav-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                    <div>
+                        <img src="favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img">
                     </div>
-                    <span class="font-bold text-xl text-dark tracking-tight hidden md:block">Georgia Hills</span>
+                    <span>Georgia Hills</span>
                 </div>
 
                 <!-- Desktop Menu -->
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#home" data-i18n="nav_home" class="nav-link text-sm font-semibold text-gray-600 hover:text-primary transition-colors tracking-wide py-2 border-b-2 border-transparent hover:border-primary/30">Home</a>
-                    <a href="#destinations" data-i18n="nav_tours" class="nav-link text-sm font-semibold text-gray-600 hover:text-primary transition-colors tracking-wide py-2 border-b-2 border-transparent hover:border-primary/30">Destinations</a>
-                    <a href="#fleet" data-i18n="nav_fleet" class="nav-link text-sm font-semibold text-gray-600 hover:text-primary transition-colors tracking-wide py-2 border-b-2 border-transparent hover:border-primary/30">Fleet</a>
-                    <a href="#reviews" data-i18n="nav_reviews" class="nav-link text-sm font-semibold text-gray-600 hover:text-primary transition-colors tracking-wide py-2 border-b-2 border-transparent hover:border-primary/30">Reviews</a>
-                    <button onclick="toggleLanguage()" class="flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-primary border border-gray-200 rounded-full px-4 py-1.5 hover:bg-gray-50 transition-all" aria-label="Toggle Language">
+                <div class="desktop-menu">
+                    <a href="#home" data-i18n="nav_home" class="nav-link">Home</a>
+                    <a href="#destinations" data-i18n="nav_tours" class="nav-link">Destinations</a>
+                    <a href="#fleet" data-i18n="nav_fleet" class="nav-link">Fleet</a>
+                    <a href="#reviews" data-i18n="nav_reviews" class="nav-link">Reviews</a>
+                    <button onclick="toggleLanguage()" class="lang-btn" aria-label="Toggle Language">
                         <i class="fa-solid fa-globe"></i><span class="lang-text">العربية</span>
                     </button>
-                    <a href="#booking" data-i18n="nav_book" class="px-6 py-3 bg-primary text-white rounded-full text-sm font-bold hover:bg-green-900 transition-all shadow-lg transform hover:-translate-y-0.5">Book Now</a>
+                    <a href="#booking" data-i18n="nav_book" class="btn-book-nav">Book Now</a>
                 </div>
 
                 <!-- Mobile Toggle -->
-                <div class="md:hidden flex items-center gap-3">
-                    <button onclick="toggleLanguage()" class="flex items-center gap-2 text-xs font-bold text-gray-700 bg-gray-100 border border-gray-200 px-3 py-2 rounded-full hover:bg-gray-200 transition-all shadow-sm" aria-label="Toggle Language Mobile">
+                <div class="mobile-controls">
+                    <button onclick="toggleLanguage()" class="lang-btn lang-btn-mobile" aria-label="Toggle Language Mobile">
                         <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">العربية</span>
                     </button>
-                    <button id="mobile-menu-btn" class="text-dark p-2" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars text-2xl"></i></button>
+                    <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-white w-full h-screen flex flex-col justify-center items-center space-y-8" aria-hidden="true">
-        <button id="close-menu-btn" class="absolute top-6 right-6 text-3xl text-gray-400 hover:text-dark transition-colors" aria-label="Close Menu"><i class="fa-solid fa-xmark"></i></button>
-        <a href="#home" data-i18n="nav_home" class="text-2xl font-bold text-dark hover:text-primary mobile-link">Home</a>
-        <a href="#destinations" data-i18n="nav_tours" class="text-2xl font-bold text-dark hover:text-primary mobile-link">Destinations</a>
-        <a href="#fleet" data-i18n="nav_fleet" class="text-2xl font-bold text-dark hover:text-primary mobile-link">Fleet</a>
-        <a href="#booking" data-i18n="nav_book" class="px-8 py-4 bg-primary text-white rounded-full text-xl font-bold shadow-xl mobile-link">Book Now</a>
+    <div id="mobile-menu" aria-hidden="true">
+        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Menu"><i class="fa-solid fa-xmark"></i></button>
+        <a href="#home" data-i18n="nav_home" class="mobile-link">Home</a>
+        <a href="#destinations" data-i18n="nav_tours" class="mobile-link">Destinations</a>
+        <a href="#fleet" data-i18n="nav_fleet" class="mobile-link">Fleet</a>
+        <a href="#booking" data-i18n="nav_book" class="mobile-btn-book">Book Now</a>
         
-        <div class="flex gap-6 mt-4">
-             <button onclick="shareApp()" class="flex flex-col items-center gap-2 text-gray-500" aria-label="Share">
-                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-share-nodes text-xl"></i></div>
-                <span class="text-xs">Share</span>
+        <div class="mobile-social-container">
+             <button onclick="shareApp()" class="mobile-social-btn" aria-label="Share App">
+                <div class="mobile-social-icon"><i class="fa-solid fa-share-nodes" style="font-size:1.25rem;"></i></div>
+                <span class="mobile-social-text">Share</span>
             </button>
-            <a href="https://wa.me/995579088537" class="flex flex-col items-center gap-2 text-gray-500" aria-label="WhatsApp" target="_blank" rel="noopener noreferrer">
-                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-brands fa-whatsapp text-xl"></i></div>
-                <span class="text-xs">WhatsApp</span>
+            <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="mobile-social-btn" aria-label="Contact via WhatsApp">
+                <div class="mobile-social-icon"><i class="fa-brands fa-whatsapp" style="font-size:1.25rem;"></i></div>
+                <span class="mobile-social-text">WhatsApp</span>
             </a>
-            <!-- Install Btn for Android -->
-            <button id="install-btn" class="flex flex-col items-center gap-2 text-gray-500 hidden" aria-label="Install App">
-                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center"><i class="fa-solid fa-download text-xl"></i></div>
-                <span class="text-xs">Install</span>
-            </button>
         </div>
     </div>
 
     <!-- Hero -->
-    <section id="home" class="relative h-[90vh] flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 z-0">
-             <img
-              id="hero-img"
-              src="image-640.webp"
-              srcset="
-                image-320.webp 320w,
-                image-640.webp 640w,
-                image-1024.webp 1024w,
-                image-1600.webp 1600w" 
-              sizes="(max-width: 768px) 100vw, 1200px" 
-              width="1200" 
-              height="700" 
-              fetchpriority="high" 
-              class="w-full h-full object-cover" 
-              alt="Scenic Georgia Mountains">
+    <section id="home" class="hero">
+        <div class="hero-bg-container">
+             <img id="hero-img" src="image-640.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="Scenic Georgia Mountains" fetchpriority="high">
             <div class="hero-overlay"></div>
         </div>
-        <div class="hero-content relative z-10 max-w-5xl mx-auto px-4 text-center text-white mt-10 reveal">
-            <div class="mb-8 flex justify-center">
-                <div class="w-24 h-24 flex items-center justify-center">
-                    <img src="favicon.ico" width="96" height="96" class="w-24 h-24 rounded-full mb-4 shadow-xl object-cover" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
-                    <div class="w-24 h-24 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center mb-4 shadow-xl hidden">
-                        <i class="fa-solid fa-mountain text-white text-4xl"></i>
-                    </div>
+        <div class="hero-content reveal">
+            <div class="hero-logo-container">
+                <div class="hero-logo-circle">
+                    <img src="favicon.ico" width="96" height="96" style="width:100%; height:100%; object-fit:cover;" alt="Georgia Hills Logo">
                 </div>
             </div>
             
-            <div class="inline-flex items-center gap-2 py-1 px-4 border border-white/30 rounded-full text-sm font-medium tracking-widest mb-6 bg-white/10 backdrop-blur-sm">
-                <i class="fa-solid fa-star text-yellow-400 text-xs"></i> #1 FOR FAMILIES
+            <div class="hero-badge">
+                <i class="fa-solid fa-star" style="color:#facc15; font-size:0.75rem;"></i> #1 FOR FAMILIES
             </div>
-            <h1 class="hero-title text-4xl md:text-6xl lg:text-8xl font-extrabold mb-6 leading-tight" data-i18n="hero_title">Discover Georgia <br><span class="text-accent italic font-serif">Without Limits</span></h1>
-            <p class="hero-subtitle text-base md:text-xl mb-10 text-gray-100 max-w-2xl mx-auto font-light" data-i18n="hero_subtitle">Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.</p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#booking" data-i18n="cta_start" class="crit-btn crit-btn-primary px-8 py-4 bg-accent text-white rounded-full font-bold text-lg hover:bg-yellow-600 transition-all shadow-xl transform hover:-translate-y-1">Get a Quote</a>
-                <a href="#fleet" data-i18n="cta_fleet" class="crit-btn crit-btn-secondary px-8 py-4 bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full font-bold text-lg hover:bg-white/20 transition-all">View Fleet</a>
+            <h1 class="hero-title" data-i18n="hero_title">Discover Georgia <br><span class="text-accent italic font-serif">Without Limits</span></h1>
+            <p class="hero-subtitle" data-i18n="hero_subtitle">Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.</p>
+            <div class="hero-buttons">
+                <a href="#booking" data-i18n="cta_start" class="btn-hero btn-hero-primary">Get a Quote</a>
+                <a href="#fleet" data-i18n="cta_fleet" class="btn-hero btn-hero-secondary">View Fleet</a>
             </div>
         </div>
     </section>
 
     <!-- Stats -->
-    <div class="relative z-20 max-w-6xl mx-auto px-4 -mt-16 mb-12 md:mb-20">
-        <div class="bg-white rounded-2xl shadow-soft p-8 grid grid-cols-1 md:grid-cols-3 gap-8 divide-y md:divide-y-0 md:divide-x divide-gray-100 reveal">
-            <div class="text-center pt-4 md:pt-0"><div class="text-4xl font-bold text-primary mb-1">500+</div><div class="text-gray-600 text-xs md:text-sm uppercase tracking-wide font-semibold" data-i18n="stat_trips">5-Star Trips</div></div>
-            <div class="text-center pt-4 md:pt-0"><div class="text-4xl font-bold text-primary mb-1">100%</div><div class="text-gray-600 text-xs md:text-sm uppercase tracking-wide font-semibold" data-i18n="stat_safe">Safety Record</div></div>
-            <div class="text-center pt-4 md:pt-0"><div class="text-4xl font-bold text-primary mb-1">24/7</div><div class="text-gray-600 text-xs md:text-sm uppercase tracking-wide font-semibold" data-i18n="stat_support">Live Support</div></div>
+    <div class="container stats-wrapper">
+        <div class="stats-card reveal">
+            <div class="stats-item">
+                <div class="stats-num">500+</div>
+                <div class="stats-label" data-i18n="stat_trips">5-Star Trips</div>
+            </div>
+            <div class="stats-item">
+                <div class="stats-num">100%</div>
+                <div class="stats-label" data-i18n="stat_safe">Safety Record</div>
+            </div>
+            <div class="stats-item">
+                <div class="stats-num">24/7</div>
+                <div class="stats-label" data-i18n="stat_support">Live Support</div>
+            </div>
         </div>
     </div>
 
     <!-- About -->
-    <section id="about" class="py-12 md:py-20 opt-render">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row items-center gap-12 md:gap-16">
-                <div class="w-full lg:w-1/2 reveal">
-                    <div class="relative group">
-                        <div class="absolute -top-4 -left-4 w-24 h-24 bg-accent/20 rounded-full blur-2xl transition-all group-hover:bg-accent/30"></div>
-                        <img src="Tbilisi_old_Town.webp" width="600" height="400" loading="lazy" decoding="async" class="rounded-3xl shadow-2xl relative z-10 transform transition-transform duration-700 group-hover:scale-[1.02] w-full h-auto" alt="Tbilisi Old Town">
-                    </div>
+    <section id="about" class="section-py">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-img-container reveal">
+                    <div class="about-blob"></div>
+                    <img src="Tbilisi_old_Town.webp" width="600" height="400" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town">
                 </div>
-                <div id="about-content" class="w-full lg:w-1/2 reveal">
-                    <span class="text-accent font-bold tracking-widest text-sm uppercase mb-2 block" data-i18n="about_label">Why Choose Georgia Hills?</span>
-                    <h2 class="text-3xl md:text-4xl font-bold text-dark mb-6 leading-tight" data-i18n="about_title">More Than Just A Ride, <br>It's Your Journey.</h2>
-                    <p class="text-gray-600 mb-6 leading-relaxed" data-i18n="about_p1">Navigating Georgia's mountain passes requires skill. We provide professional, English-speaking drivers ensuring you don't miss hidden gems.</p>
-                    <div class="space-y-6 mt-8">
-                        <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-card hover:shadow-md transition-shadow">
-                            <div class="w-12 h-12 bg-green-50 rounded-full flex items-center justify-center text-primary flex-shrink-0"><i class="fa-solid fa-user-shield text-xl"></i></div>
-                            <div><h3 class="font-bold text-dark text-lg" data-i18n="feat_safety_title">Verified Drivers</h3><p class="text-sm text-gray-600" data-i18n="feat_safety_desc">Background checked professionals.</p></div>
+                <div id="about-content" class="about-content reveal">
+                    <span class="section-label" data-i18n="about_label">Why Choose Georgia Hills?</span>
+                    <h2 class="section-title" data-i18n="about_title">More Than Just A Ride, <br>It's Your Journey.</h2>
+                    <p class="section-desc" data-i18n="about_p1">Navigating Georgia's mountain passes requires skill. We provide professional, English-speaking drivers ensuring you don't miss hidden gems.</p>
+                    <div class="feature-grid">
+                        <div class="feature-box">
+                            <div class="feature-icon icon-green"><i class="fa-solid fa-user-shield" style="font-size:1.25rem;"></i></div>
+                            <div><h3 class="feature-title" data-i18n="feat_safety_title">Verified Drivers</h3><p class="feature-text" data-i18n="feat_safety_desc">Background checked professionals.</p></div>
                         </div>
-                        <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-card hover:shadow-md transition-shadow">
-                            <div class="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 flex-shrink-0"><i class="fa-solid fa-tag text-xl"></i></div>
-                            <div><h3 class="font-bold text-dark text-lg" data-i18n="feat_price_title">Transparent Pricing</h3><p class="text-sm text-gray-600" data-i18n="feat_price_desc">All-inclusive quotes via WhatsApp.</p></div>
+                        <div class="feature-box">
+                            <div class="feature-icon icon-blue"><i class="fa-solid fa-tag" style="font-size:1.25rem;"></i></div>
+                            <div><h3 class="feature-title" data-i18n="feat_price_title">Transparent Pricing</h3><p class="feature-text" data-i18n="feat_price_desc">All-inclusive quotes via WhatsApp.</p></div>
                         </div>
                     </div>
                 </div>
@@ -446,71 +1102,56 @@
     </section>
 
     <!-- Destinations -->
-    <section id="destinations" class="py-16 md:py-24 bg-dark text-white overflow-hidden relative opt-render">
-        <div class="max-w-7xl mx-auto px-4 relative group">
-            <div class="mb-12 reveal text-center md:text-start">
-                <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="dest_label">Explore Georgia</span>
-                <h2 class="text-3xl md:text-4xl font-bold mt-2" data-i18n="dest_title">Popular Places</h2>
-                <p class="text-slate-400 mt-4 max-w-2xl" data-i18n="dest_subtitle">Discover the most beautiful locations accessible comfortably by car.</p>
+    <section id="destinations" class="section-py bg-dark-section">
+        <div class="container slider-container">
+            <div class="reveal text-center" style="margin-bottom:3rem;">
+                <span class="section-label" data-i18n="dest_label">Explore Georgia</span>
+                <h2 class="section-title text-white" style="margin-top:0.5rem;" data-i18n="dest_title">Popular Places</h2>
+                <p style="color:var(--color-gray-400); max-width:42rem; margin:1rem auto 0 auto;" data-i18n="dest_subtitle">Discover the most beautiful locations accessible comfortably by car.</p>
             </div>
 
-            <div class="relative group/slider">
-                <button id="prevBtn" aria-label="Previous Slide" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -ml-4 md:-ml-6 hidden md:flex hover:scale-110 active:scale-95">
-                    <i class="fa-solid fa-chevron-left rtl:rotate-180"></i>
-                </button>
-                
-                <button id="nextBtn" aria-label="Next Slide" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-white hover:text-dark transition-all shadow-lg -mr-4 md:-mr-6 hidden md:flex hover:scale-110 active:scale-95">
-                    <i class="fa-solid fa-chevron-right rtl:rotate-180"></i>
-                </button>
+            <button id="prevBtn" class="slider-nav-btn slider-prev" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left rtl:rotate-180"></i></button>
+            <button id="nextBtn" class="slider-nav-btn slider-next" aria-label="Next Slide"><i class="fa-solid fa-chevron-right rtl:rotate-180"></i></button>
 
-                <div id="tours-slider" class="flex gap-6 overflow-x-auto hide-scrollbar snap-x snap-mandatory pb-8 touch-pan-x">
-                    <!-- Tbilisi -->
-                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
-                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                            <img src="Tbilisi.webp" width="380" height="475" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Tbilisi">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-8 w-full">
-                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_Tbilisi">Tbilisi</h3>
-                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_Tbilisi">The heart of Georgia.</p>
-                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
-                            </div>
-                        </div>
+            <div id="tours-slider" class="tours-slider">
+                <!-- Tbilisi -->
+                <div class="tour-card group">
+                    <img src="Tbilisi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Tbilisi">
+                    <div class="tour-overlay"></div>
+                    <div class="tour-content">
+                        <h3 class="tour-title" data-i18n="dest_Tbilisi">Tbilisi</h3>
+                        <p class="tour-desc" data-i18n="desc_Tbilisi">The heart of Georgia.</p>
+                        <span class="tour-btn">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
                     </div>
-                    <!-- Kazbegi -->
-                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
-                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                            <img src="Kazbegi.webp" width="380" height="475" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Kazbegi Mountains">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-8 w-full">
-                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kazbegi">Kazbegi</h3>
-                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kazbegi">The heart of the Caucasus Mountains.</p>
-                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
-                            </div>
-                        </div>
+                </div>
+                <!-- Kazbegi -->
+                <div class="tour-card group">
+                    <img src="Kazbegi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Kazbegi">
+                    <div class="tour-overlay"></div>
+                    <div class="tour-content">
+                        <h3 class="tour-title" data-i18n="dest_kazbegi">Kazbegi</h3>
+                        <p class="tour-desc" data-i18n="desc_kazbegi">The heart of the Caucasus Mountains.</p>
+                        <span class="tour-btn">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
                     </div>
-                    <!-- Martvili -->
-                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
-                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                            <img src="Martvili.webp" width="380" height="475" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Martvili Canyon">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-8 w-full">
-                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_martvili">Martvili</h3>
-                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_martvili">Emerald canyon boat ride.</p>
-                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
-                            </div>
-                        </div>
+                </div>
+                <!-- Martvili -->
+                <div class="tour-card group">
+                    <img src="Martvili.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Martvili">
+                    <div class="tour-overlay"></div>
+                    <div class="tour-content">
+                        <h3 class="tour-title" data-i18n="dest_martvili">Martvili</h3>
+                        <p class="tour-desc" data-i18n="desc_martvili">Emerald canyon boat ride.</p>
+                        <span class="tour-btn">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
                     </div>
-                    <!-- Signagi -->
-                    <div class="min-w-[280px] md:min-w-[380px] snap-start relative h-96 rounded-2xl overflow-hidden group bg-gray-800 border border-white/10 shrink-0 cursor-pointer">
-                        <div class="relative w-full h-full aspect-[4/5] md:aspect-square">
-                            <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80" width="380" height="475" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="Signagi City of Love">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-                            <div class="absolute bottom-0 left-0 p-8 w-full">
-                                <h3 class="text-2xl font-bold mb-2" data-i18n="dest_kakheti">Signagi</h3>
-                                <p class="text-gray-300 text-sm mb-4" data-i18n="desc_kakheti">City of Love with valley views.</p>
-                                <span class="text-accent text-sm font-bold uppercase tracking-wider flex items-center gap-2">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180 transition-transform group-hover:translate-x-1 rtl:group-hover:-translate-x-1"></i></span>
-                            </div>
-                        </div>
+                </div>
+                <!-- Signagi -->
+                <div class="tour-card group">
+                    <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Signagi">
+                    <div class="tour-overlay"></div>
+                    <div class="tour-content">
+                        <h3 class="tour-title" data-i18n="dest_kakheti">Signagi</h3>
+                        <p class="tour-desc" data-i18n="desc_kakheti">City of Love with valley views.</p>
+                        <span class="tour-btn">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
                     </div>
                 </div>
             </div>
@@ -518,44 +1159,44 @@
     </section>
 
     <!-- Fleet Section -->
-    <section id="fleet" class="py-16 md:py-24 bg-surface optimize-render opt-render">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12 md:mb-16 reveal">
-                <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="fleet_label">Our Fleet</span>
-                <h2 class="text-3xl md:text-4xl font-bold mt-2 text-dark" data-i18n="fleet_title">Choose Your Comfort</h2>
+    <section id="fleet" class="section-py">
+        <div class="container">
+            <div class="reveal text-center" style="margin-bottom:3rem;">
+                <span class="section-label" data-i18n="fleet_label">Our Fleet</span>
+                <h2 class="section-title" data-i18n="fleet_title">Choose Your Comfort</h2>
             </div>
-            <div id="fleet-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div id="fleet-grid" class="fleet-grid">
                 <!-- Sedan -->
-                <div class="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-2xl transition-all group reveal border border-gray-100 hover:-translate-y-1">
-                    <div class="h-56 overflow-hidden relative bg-gray-100 h-56">
-                        <div class="price-badge absolute top-4 left-4 bg-white/90 backdrop-blur text-dark text-xs font-bold px-3 py-1 rounded-lg z-20 shadow-sm" data-i18n="price_sedan">From 150 GEL</div>
-                        <img src="Sedan.webp" width="600" height="400" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Sedan Car">
+                <div class="fleet-card reveal">
+                    <div class="fleet-img-wrap">
+                        <div class="price-badge" data-i18n="price_sedan">From 150 GEL</div>
+                        <img src="Sedan.webp" width="600" height="400" loading="lazy" decoding="async" class="fleet-img" alt="Sedan Car">
                     </div>
-                    <div class="p-8">
-                        <h3 class="text-2xl font-bold text-dark mb-1" data-i18n="sedan_title">Sedan</h3>
-                        <p class="text-sm text-gray-600 mb-4" data-i18n="sedan_desc">Perfect for couples or solo travelers.</p>
-                        <div class="flex gap-3 mb-6 text-sm text-gray-600">
-                            <span class="px-2 py-1 bg-gray-50 rounded"><i class="fa-solid fa-suitcase mr-1"></i> 2</span>
-                            <span class="px-2 py-1 bg-gray-50 rounded"><i class="fa-solid fa-snowflake mr-1"></i> A/C</span>
+                    <div class="fleet-body">
+                        <h3 class="fleet-title" data-i18n="sedan_title">Sedan</h3>
+                        <p class="fleet-desc" data-i18n="sedan_desc">Perfect for couples or solo travelers.</p>
+                        <div class="fleet-specs">
+                            <span class="spec-tag"><i class="fa-solid fa-suitcase"></i> 2</span>
+                            <span class="spec-tag"><i class="fa-solid fa-snowflake"></i> A/C</span>
                         </div>
-                        <button onclick="prefillVehicle('Sedan')" class="w-full py-3 border border-primary text-primary font-semibold rounded-xl hover:bg-primary hover:text-white transition-colors" data-i18n="btn_select_sedan">Book Sedan</button>
+                        <button onclick="prefillVehicle('Sedan')" class="btn-fleet btn-fleet-outline" data-i18n="btn_select_sedan">Book Sedan</button>
                     </div>
                 </div>
                 <!-- Minivan -->
-                <div class="bg-white rounded-3xl overflow-hidden shadow-card hover:shadow-2xl transition-all group reveal relative border-2 border-accent scale-105 z-10 hover:-translate-y-1">
-                     <div class="absolute top-4 right-4 bg-accent text-white text-xs font-bold px-3 py-1 rounded-full z-20 shadow-md rtl:right-auto rtl:left-4" data-i18n="tag_popular">POPULAR</div>
-                    <div class="h-56 overflow-hidden relative bg-gray-100 h-56">
-                        <div class="price-badge absolute top-4 left-4 bg-white/90 backdrop-blur text-dark text-xs font-bold px-3 py-1 rounded-lg z-20 shadow-sm" data-i18n="price_minivan">From 250 GEL</div>
-                        <img src="Minivan.webp" width="600" height="400" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Minivan Car">
+                <div class="fleet-card featured reveal">
+                     <div class="popular-tag" data-i18n="tag_popular">POPULAR</div>
+                    <div class="fleet-img-wrap">
+                        <div class="price-badge" data-i18n="price_minivan">From 250 GEL</div>
+                        <img src="Minivan.webp" width="600" height="400" loading="lazy" decoding="async" class="fleet-img" alt="Minivan Car">
                     </div>
-                    <div class="p-8">
-                        <h3 class="text-2xl font-bold text-dark mb-1" data-i18n="minivan_title">Minivan</h3>
-                        <p class="text-sm text-gray-600 mb-4" data-i18n="minivan_desc">Spacious comfort for groups.</p>
-                         <div class="flex gap-3 mb-6 text-sm text-gray-600">
-                            <span class="px-2 py-1 bg-gray-50 rounded"><i class="fa-solid fa-suitcase mr-1"></i> 5</span>
-                            <span class="px-2 py-1 bg-gray-50 rounded"><i class="fa-solid fa-wifi mr-1"></i> WiFi</span>
+                    <div class="fleet-body">
+                        <h3 class="fleet-title" data-i18n="minivan_title">Minivan</h3>
+                        <p class="fleet-desc" data-i18n="minivan_desc">Spacious comfort for groups.</p>
+                         <div class="fleet-specs">
+                            <span class="spec-tag"><i class="fa-solid fa-suitcase"></i> 5</span>
+                            <span class="spec-tag"><i class="fa-solid fa-wifi"></i> WiFi</span>
                         </div>
-                        <button onclick="prefillVehicle('Minivan')" class="w-full py-3 bg-primary text-white font-semibold rounded-xl hover:bg-green-900 transition-colors shadow-lg shadow-green-900/20" data-i18n="btn_select_minivan">Book Minivan</button>
+                        <button onclick="prefillVehicle('Minivan')" class="btn-fleet btn-fleet-fill" data-i18n="btn_select_minivan">Book Minivan</button>
                     </div>
                 </div>
             </div>
@@ -563,77 +1204,85 @@
     </section>
     
     <!-- Currency Converter -->
-    <div id="currency-converter" class="max-w-4xl mx-auto px-4 pb-16 relative z-30 opt-render">
-         <div class="bg-white rounded-2xl shadow-soft p-6 md:p-4 border border-gray-100 reveal">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-2 w-full md:w-auto border-b md:border-b-0 border-gray-100 pb-4 md:pb-0">
-                     <div class="w-10 h-10 bg-accent/10 rounded-full flex items-center justify-center text-accent"><i class="fa-solid fa-coins"></i></div>
-                    <div><h3 class="text-sm font-bold text-dark" data-i18n="conv_title">Currency Converter</h3><p class="text-[10px] text-gray-600" data-i18n="conv_desc">Estimate price</p></div>
-                </div>
-                <div class="flex flex-col md:flex-row items-center gap-3 flex-1 w-full">
-                    <div class="w-full md:flex-1"><label for="convAmount" class="block text-[10px] font-bold text-gray-600 uppercase mb-1" data-i18n="label_amount">Amount</label><input type="number" id="convAmount" value="150" inputmode="decimal" oninput="convertCurrency()" class="w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-200 outline-none font-bold text-dark text-sm focus:ring-1 focus:ring-accent/50 focus:border-accent transition-colors"></div>
-                    <div class="flex w-full md:w-auto gap-2">
-                        <div class="flex-1 md:min-w-[140px] relative z-20" id="select-from">
-                            <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1" data-i18n="label_from">From</label>
-                            <button type="button" class="w-full px-3 py-2 rounded-lg bg-white border border-gray-200 flex items-center gap-2 focus:border-primary outline-none" onclick="toggleDropdown('from')" aria-haspopup="listbox" aria-expanded="false"><img src="https://flagcdn.com/w40/ge.png" width="24" height="16" class="currency-flag" id="flag-from" alt=""><span class="font-bold text-dark text-sm" id="text-from">GEL</span></button>
-                            <input type="hidden" id="convFrom" value="GEL">
-                            <div class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 hidden max-h-60 overflow-y-auto" id="list-from" role="listbox"></div>
-                        </div>
-                        <div class="text-gray-300 self-end mb-2"><i class="fa-solid fa-arrow-right rtl:rotate-180 transform rotate-90 md:rotate-0"></i></div>
-                        <div class="flex-1 md:min-w-[140px] relative" id="select-to" style="z-index: 20;">
-                            <label class="block text-[10px] font-bold text-gray-600 uppercase mb-1" data-i18n="label_to">To</label>
-                            <button type="button" class="w-full px-3 py-2 rounded-lg bg-white border border-gray-200 flex items-center gap-2 focus:border-primary outline-none" onclick="toggleDropdown('to')" aria-haspopup="listbox" aria-expanded="false"><img src="https://flagcdn.com/w40/us.png" width="24" height="16" class="currency-flag" id="flag-to" alt=""><span class="font-bold text-dark text-sm" id="text-to">USD</span></button>
-                            <input type="hidden" id="convTo" value="USD">
-                            <div class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 hidden max-h-60 overflow-y-auto" id="list-to" role="listbox"></div>
-                        </div>
+    <div class="container currency-section">
+         <div class="converter-card reveal">
+            <div class="conv-header">
+                 <div class="conv-icon-box"><i class="fa-solid fa-coins"></i></div>
+                <div class="conv-title-text"><h3 data-i18n="conv_title">Currency Converter</h3><p data-i18n="conv_desc">Estimate price</p></div>
+            </div>
+            <div class="conv-controls">
+                <div class="conv-amount-group"><label for="convAmount" class="form-label" data-i18n="label_amount">Amount</label><input type="number" id="convAmount" value="150" inputmode="decimal" oninput="convertCurrency()" class="conv-input"></div>
+                <div class="conv-select-group">
+                    <!-- From Select -->
+                    <div class="conv-select-wrapper" id="select-from">
+                        <label class="form-label" data-i18n="label_from">From</label>
+                        <button type="button" class="conv-input conv-select-btn" onclick="toggleDropdown('from')" aria-haspopup="listbox" aria-expanded="false" id="btn-from">
+                            <div class="conv-select-content"><img src="https://flagcdn.com/w40/ge.png" width="24" height="16" class="currency-flag" id="flag-from" alt=""><span id="text-from">GEL</span></div>
+                        </button>
+                        <div class="dropdown-menu" id="list-from" role="listbox"></div>
+                    </div>
+                    <div class="conv-arrow"><i class="fa-solid fa-arrow-right rtl:rotate-180"></i></div>
+                    <!-- To Select -->
+                    <div class="conv-select-wrapper" id="select-to">
+                        <label class="form-label" data-i18n="label_to">To</label>
+                        <button type="button" class="conv-input conv-select-btn" onclick="toggleDropdown('to')" aria-haspopup="listbox" aria-expanded="false" id="btn-to">
+                             <div class="conv-select-content"><img src="https://flagcdn.com/w40/us.png" width="24" height="16" class="currency-flag" id="flag-to" alt=""><span id="text-to">USD</span></div>
+                        </button>
+                        <div class="dropdown-menu" id="list-to" role="listbox"></div>
                     </div>
                 </div>
-                <div class="text-center md:text-right md:pl-6 md:border-l border-gray-100 pt-4 md:pt-0 border-t md:border-t-0">
-                    <span class="text-[10px] text-gray-600 block mb-1" data-i18n="label_result">Estimated:</span>
-                    <div class="text-2xl font-extrabold text-primary"><span id="convResult">...</span><span id="convResultLabel" class="text-xs font-medium text-gray-600 ml-1">USD</span></div>
-                </div>
+            </div>
+            <div class="conv-result-box">
+                <span class="conv-result-label" data-i18n="label_result">Estimated:</span>
+                <div><span id="convResult" class="conv-result-value">...</span><span id="convResultLabel" class="conv-result-unit">USD</span></div>
             </div>
         </div>
+        <!-- Hidden Inputs for logic -->
+        <input type="hidden" id="convFrom" value="GEL">
+        <input type="hidden" id="convTo" value="USD">
     </div>
 
     <!-- Reviews Section -->
-    <section id="reviews" class="py-16 md:py-20 bg-white relative z-10 optimize-render opt-render">
-        <div class="max-w-7xl mx-auto px-4">
-             <div class="text-center mb-12 md:mb-16 reveal">
-                <span class="text-accent font-bold tracking-widest text-sm uppercase" data-i18n="reviews_label">Testimonials</span>
-                <h2 class="text-3xl md:text-4xl font-bold mt-2 text-dark" data-i18n="reviews_title">Trusted by Travelers</h2>
+    <section id="reviews" class="section-py reviews-bg">
+        <div class="container">
+             <div class="reveal text-center" style="margin-bottom:3rem;">
+                <span class="section-label" data-i18n="reviews_label">Testimonials</span>
+                <h2 class="section-title" data-i18n="reviews_title">Trusted by Travelers</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-gray-50 p-8 rounded-3xl reveal hover:shadow-card transition-all border border-gray-100 hover:-translate-y-1">
-                    <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="text-gray-600 italic mb-6 leading-relaxed testimonial-text" data-i18n="review_1_text">"Our driver Giorgi was amazing! He showed us hidden spots on the way to Kazbegi that we would have never found alone. The car was spotless."</p>
-                    <div class="flex items-center gap-3">
-                         <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">M</div>
+            <div class="reviews-grid">
+                <!-- Review 1 -->
+                <div class="review-card reveal">
+                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text" data-i18n="review_1_text">"Our driver Giorgi was amazing! He showed us hidden spots on the way to Kazbegi that we would have never found alone. The car was spotless."</p>
+                    <div class="review-author">
+                         <div class="review-avatar">M</div>
                          <div>
-                             <div class="font-bold text-dark text-sm" data-i18n="review_1_name">Mohammed Al-Farsi</div>
-                             <div class="text-xs text-gray-700" data-i18n="review_1_country">Saudi Arabia 🇸🇦</div>
+                             <div class="review-name" data-i18n="review_1_name">Mohammed Al-Farsi</div>
+                             <div class="review-country" data-i18n="review_1_country">Saudi Arabia 🇸🇦</div>
                          </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 p-8 rounded-3xl reveal hover:shadow-card transition-all border border-gray-100 hover:-translate-y-1" style="transition-delay: 100ms;">
-                    <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="text-gray-600 italic mb-6 leading-relaxed testimonial-text" data-i18n="review_2_text">"Booking via WhatsApp was very smooth. The Minivan for our family of 6 was comfortable and spacious. Highly recommended."</p>
-                     <div class="flex items-center gap-3">
-                         <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">F</div>
+                <!-- Review 2 -->
+                <div class="review-card reveal">
+                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text" data-i18n="review_2_text">"Booking via WhatsApp was very smooth. The Minivan for our family of 6 was comfortable and spacious. Highly recommended."</p>
+                     <div class="review-author">
+                         <div class="review-avatar">F</div>
                          <div>
-                             <div class="font-bold text-dark text-sm" data-i18n="review_2_name">Fatima Al-Qasimi</div>
-                             <div class="text-xs text-gray-700" data-i18n="review_2_country">UAE 🇦🇪</div>
+                             <div class="review-name" data-i18n="review_2_name">Fatima Al-Qasimi</div>
+                             <div class="review-country" data-i18n="review_2_country">UAE 🇦🇪</div>
                          </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 p-8 rounded-3xl reveal hover:shadow-card transition-all border border-gray-100 hover:-translate-y-1" style="transition-delay: 200ms;">
-                    <div class="flex text-yellow-400 mb-4 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="text-gray-600 italic mb-6 leading-relaxed testimonial-text" data-i18n="review_3_text">"Excellent service. The car arrived on time and the driver was very polite. Will use Georgia Hills again."</p>
-                     <div class="flex items-center gap-3">
-                         <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">Y</div>
+                <!-- Review 3 -->
+                <div class="review-card reveal">
+                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text" data-i18n="review_3_text">"Excellent service. The car arrived on time and the driver was very polite. Will use Georgia Hills again."</p>
+                     <div class="review-author">
+                         <div class="review-avatar">Y</div>
                          <div>
-                             <div class="font-bold text-dark text-sm" data-i18n="review_3_name">Yousef Kamal</div>
-                             <div class="text-xs text-gray-700" data-i18n="review_3_country">Kuwait 🇰🇼</div>
+                             <div class="review-name" data-i18n="review_3_name">Yousef Kamal</div>
+                             <div class="review-country" data-i18n="review_3_country">Kuwait 🇰🇼</div>
                          </div>
                     </div>
                 </div>
@@ -642,121 +1291,125 @@
     </section>
 
     <!-- FAQ Section -->
-    <section id="faq" class="py-16 md:py-20 bg-white opt-render">
-        <div id="faq-content" class="max-w-3xl mx-auto px-4">
-            <div class="text-center mb-12 reveal">
-                <h2 class="text-3xl md:text-4xl font-bold text-dark" data-i18n="faq_title">Frequently Asked Questions</h2>
+    <section id="faq" class="section-py">
+        <div class="container faq-container">
+            <div class="text-center reveal" style="margin-bottom:3rem;">
+                <h2 class="section-title" data-i18n="faq_title">Frequently Asked Questions</h2>
             </div>
-            <div class="space-y-4 reveal">
-                <div class="bg-surface rounded-xl p-6 shadow-sm cursor-pointer border border-gray-100 hover:border-primary/30 transition-colors group" onclick="this.querySelector('p').classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-lg faq-question group-hover:text-primary transition-colors" data-i18n="faq_q2">Do I need to pay in advance?</h3>
-                        <i class="fa-solid fa-chevron-down transition-transform text-gray-400 faq-icon"></i>
+            <div class="faq-list reveal">
+                <div class="faq-item" onclick="this.querySelector('p').classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')">
+                    <div class="faq-header">
+                        <h3 class="faq-question" data-i18n="faq_q2">Do I need to pay in advance?</h3>
+                        <i class="fa-solid fa-chevron-down" style="color:var(--color-gray-400);"></i>
                     </div>
-                    <p class="text-gray-600 mt-4 hidden text-sm leading-relaxed" data-i18n="faq_a2">No, payment is strictly upon arrival. You can pay the driver in cash (GEL, USD, EUR) when you meet.</p>
+                    <p class="faq-answer hidden" data-i18n="faq_a2">No, payment is strictly upon arrival. You can pay the driver in cash (GEL, USD, EUR) when you meet.</p>
                 </div>
                 
-                <div class="bg-surface rounded-xl p-6 shadow-sm cursor-pointer border border-gray-100 hover:border-primary/30 transition-colors group" onclick="this.querySelector('p').classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-lg faq-question group-hover:text-primary transition-colors" data-i18n="faq_q3">Do drivers speak Arabic?</h3>
-                        <i class="fa-solid fa-chevron-down transition-transform text-gray-400 faq-icon"></i>
+                <div class="faq-item" onclick="this.querySelector('p').classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')">
+                    <div class="faq-header">
+                        <h3 class="faq-question" data-i18n="faq_q3">Do drivers speak Arabic?</h3>
+                        <i class="fa-solid fa-chevron-down" style="color:var(--color-gray-400);"></i>
                     </div>
-                    <p class="text-gray-600 mt-4 hidden text-sm leading-relaxed" data-i18n="faq_a3">Yes! We have professional drivers who speak Arabic, as well as English and Russian. Please mention this in your booking notes.</p>
+                    <p class="faq-answer hidden" data-i18n="faq_a3">Yes! We have professional drivers who speak Arabic, as well as English and Russian. Please mention this in your booking notes.</p>
                 </div>
 
-                <div class="bg-surface rounded-xl p-6 shadow-sm cursor-pointer border border-gray-100 hover:border-primary/30 transition-colors group" onclick="this.querySelector('p').classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-lg faq-question group-hover:text-primary transition-colors" data-i18n="faq_q1">Is fuel included in the price?</h3>
-                        <i class="fa-solid fa-chevron-down transition-transform text-gray-400 faq-icon"></i>
+                <div class="faq-item" onclick="this.querySelector('p').classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')">
+                    <div class="faq-header">
+                        <h3 class="faq-question" data-i18n="faq_q1">Is fuel included in the price?</h3>
+                        <i class="fa-solid fa-chevron-down" style="color:var(--color-gray-400);"></i>
                     </div>
-                    <p class="text-gray-600 mt-4 hidden text-sm leading-relaxed" data-i18n="faq_a1">Yes, for all tours with a driver, fuel is completely included in your quote. For self-drive rentals, you receive the car full and return it full.</p>
+                    <p class="faq-answer hidden" data-i18n="faq_a1">Yes, for all tours with a driver, fuel is completely included in your quote. For self-drive rentals, you receive the car full and return it full.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Booking Section -->
-    <section id="booking" class="py-16 md:py-24 bg-primary relative overflow-hidden scroll-mt-24 opt-render">
-        <!-- Decorative Blobs (HIDDEN ON MOBILE to save GPU) -->
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden opacity-20 pointer-events-none hidden md:block">
-            <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl opacity-30 animate-blob"></div>
-            <div class="absolute top-0 right-0 w-96 h-96 bg-accent rounded-full mix-blend-overlay filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-        </div>
-
-        <div class="max-w-5xl mx-auto px-4 relative z-10">
-            <div class="text-center mb-8 md:mb-12 reveal">
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4" data-i18n="book_title">Start Your Journey</h2>
-                <p class="text-white/80" data-i18n="book_desc">Get a custom quote directly to your WhatsApp in seconds.</p>
+    <section id="booking" class="booking-section">
+        <div class="container relative z-10">
+            <div class="reveal text-center" style="margin-bottom:2rem; color:white;">
+                <h2 class="font-bold" style="font-size:2.25rem; margin-bottom:1rem;" data-i18n="book_title">Start Your Journey</h2>
+                <p class="opacity-80" data-i18n="book_desc">Get a custom quote directly to your WhatsApp in seconds.</p>
             </div>
 
-            <div id="booking-container" class="glass rounded-[2rem] p-6 md:p-12 shadow-2xl reveal transition-all border-0">
+            <div id="booking-container" class="booking-card reveal">
                 <form id="bookingForm" onsubmit="handleBooking(event)" novalidate>
-                    <div class="grid grid-cols-2 gap-6 md:gap-8">
-                        
+                    <div class="form-grid">
                         <!-- Name -->
-                        <div class="col-span-2 md:col-span-1 group">
-                            <label for="name" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 pl-1" data-i18n="label_name">Full Name</label>
-                            <input type="text" id="name" name="user_name" autocomplete="name" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all focus:bg-white" placeholder="Your Name">
+                        <div>
+                            <label for="name" class="form-label" data-i18n="label_name">Full Name</label>
+                            <input type="text" id="name" name="user_name" autocomplete="name" class="form-input" placeholder="Your Name">
                             <span class="error-text hidden" id="nameError">Please enter your name</span>
                         </div>
 
                         <!-- Contact -->
-                        <div class="col-span-2 md:col-span-1">
-                            <label for="phone" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2 pl-1" data-i18n="label_phone">WhatsApp Number</label>
-                            <input type="tel" id="phone" name="user_phone" autocomplete="tel" inputmode="tel" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all focus:bg-white" placeholder="+995 579 08 85 37">
+                        <div>
+                            <label for="phone" class="form-label" data-i18n="label_phone">WhatsApp Number</label>
+                            <input type="tel" id="phone" name="user_phone" autocomplete="tel" inputmode="tel" class="form-input" placeholder="+995 579 08 85 37">
                             <span class="error-text hidden" id="phoneError">Enter a valid phone</span>
                         </div>
 
                         <!-- Vehicle & Passengers -->
-                        <div class="col-span-2 md:col-span-1">
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label for="vehicle" class="block text-xs font-bold text-gray-700 uppercase mb-2" data-i18n="label_vehicle">Vehicle</label>
-                                    <select id="vehicle" onchange="updatePriceEstimate()" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20">
-                                        <option value="Sedan" data-i18n="opt_sedan">Sedan</option>
-                                        <option value="Minivan" data-i18n="opt_minivan">Minivan</option>
-                                    </select>
-                                </div>
-                                <div><label for="passengers" class="block text-xs font-bold text-gray-700 uppercase mb-2" data-i18n="label_passengers">Passengers</label><input type="number" id="passengers" min="1" inputmode="numeric" pattern="[0-9]*" class="w-full px-4 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20" placeholder="2"> <span class="error-text hidden" id="passengersError">Min 1 passenger</span></div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                            <div>
+                                <label for="vehicle" class="form-label" data-i18n="label_vehicle">Vehicle</label>
+                                <select id="vehicle" onchange="updatePriceEstimate()" class="form-select">
+                                    <option value="Sedan" data-i18n="opt_sedan">Sedan</option>
+                                    <option value="Minivan" data-i18n="opt_minivan">Minivan</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="passengers" class="form-label" data-i18n="label_passengers">Passengers</label>
+                                <input type="number" id="passengers" min="1" inputmode="numeric" pattern="[0-9]*" class="form-input" placeholder="2"> 
+                                <span class="error-text hidden" id="passengersError">Min 1 passenger</span>
                             </div>
                         </div>
 
                         <!-- Service Type -->
-                         <div class="col-span-2 md:col-span-1">
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-2" data-i18n="label_service">Service Type</label>
-                            <div class="flex p-1 bg-white rounded-xl border border-gray-200">
-                                <label class="flex-1 cursor-pointer"><input type="radio" name="driver" value="with_driver" checked class="peer sr-only"><div class="py-3 text-center rounded-lg text-sm font-bold text-gray-500 peer-checked:bg-primary peer-checked:text-white transition-all"><span data-i18n="opt_driver">With Driver</span></div></label>
-                                <label class="flex-1 cursor-pointer"><input type="radio" name="driver" value="no_driver" class="peer sr-only"><div class="py-3 text-center rounded-lg text-sm font-bold text-gray-500 peer-checked:bg-primary peer-checked:text-white transition-all"><span data-i18n="opt_self">Self Drive</span></div></label>
+                         <div>
+                            <label class="form-label" data-i18n="label_service">Service Type</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="driver" value="with_driver" checked class="radio-input hidden">
+                                    <span class="radio-content" data-i18n="opt_driver">With Driver</span>
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="driver" value="no_driver" class="radio-input hidden">
+                                    <span class="radio-content" data-i18n="opt_self">Self Drive</span>
+                                </label>
                             </div>
                         </div>
 
-                        <!-- Responsive Date Fields -->
-                        <div class="grid grid-cols-2 gap-2 md:gap-4 col-span-2 md:col-span-2">
-                            <div class="col-span-1">
-                                <label for="dateFrom" class="block text-xs font-bold text-gray-700 uppercase mb-2" data-i18n="label_from">Pick-up Date</label>
-                                <input type="date" id="dateFrom" onchange="updateMinDate(); updatePriceEstimate()" autocomplete="off" class="w-full px-3 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20 text-sm">
+                        <!-- Dates -->
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;" class="col-span-full">
+                            <div>
+                                <label for="dateFrom" class="form-label" data-i18n="label_from">Pick-up Date</label>
+                                <input type="date" id="dateFrom" onchange="updateMinDate(); updatePriceEstimate()" autocomplete="off" class="form-input">
                                 <span class="error-text hidden" id="dateFromError">Required</span>
                             </div>
-                            <div class="col-span-1">
-                                <label for="dateTo" class="block text-xs font-bold text-gray-700 uppercase mb-2" data-i18n="label_to">Drop-off Date</label>
-                                <input type="date" id="dateTo" onchange="updatePriceEstimate()" autocomplete="off" class="w-full px-3 py-4 rounded-xl bg-white border border-gray-200 outline-none focus:ring-2 focus:ring-primary/20 text-sm">
+                            <div>
+                                <label for="dateTo" class="form-label" data-i18n="label_to">Drop-off Date</label>
+                                <input type="date" id="dateTo" onchange="updatePriceEstimate()" autocomplete="off" class="form-input">
                                 <span class="error-text hidden" id="dateToError">Required</span>
                             </div>
                         </div>
                         
-                        <div class="col-span-2 md:col-span-2"><label for="notes" class="block text-xs font-bold text-gray-700 uppercase mb-2" data-i18n="label_notes">Notes</label><textarea id="notes" rows="3" class="w-full px-6 py-4 rounded-xl bg-white border border-gray-200 outline-none resize-none focus:ring-2 focus:ring-primary/20"></textarea></div>
+                        <div class="col-span-full">
+                            <label for="notes" class="form-label" data-i18n="label_notes">Notes</label>
+                            <textarea id="notes" rows="3" class="form-textarea"></textarea>
+                        </div>
                     </div>
 
                     <!-- Live Price Estimate -->
-                    <div id="price-estimate" class="mt-6 p-4 bg-primary/5 rounded-xl flex justify-between items-center hidden animate-fade-in">
-                        <span class="text-sm font-bold text-gray-600">Estimated Total:</span>
-                        <span class="text-2xl font-extrabold text-primary"><span id="total-price">0</span> <span class="text-sm">GEL</span></span>
+                    <div id="price-estimate" class="hidden price-estimate-box">
+                        <span style="font-size:0.875rem; font-weight:700; color:var(--color-gray-600);">Estimated Total:</span>
+                        <span style="font-size:1.5rem; font-weight:800; color:var(--color-primary);"><span id="total-price">0</span> <span style="font-size:0.875rem;">GEL</span></span>
                     </div>
 
-                    <button type="submit" id="submitBtn" class="w-full mt-4 bg-primary hover:bg-green-900 text-white font-bold py-5 rounded-xl shadow-xl transition-all active:scale-95 flex items-center justify-center gap-3 text-lg relative overflow-hidden">
+                    <button type="submit" id="submitBtn" class="btn-submit">
                          <span id="btnText" data-i18n="btn_request">Get WhatsApp Quote</span>
-                         <i id="btnIcon" class="fa-brands fa-whatsapp text-2xl rtl:ml-2 rtl:mr-0"></i>
-                         <div id="btnSpinner" class="hidden absolute inset-0 flex items-center justify-center bg-primary"><svg class="animate-spin h-6 w-6 text-white" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div>
+                         <i id="btnIcon" class="fa-brands fa-whatsapp" style="font-size:1.5rem;"></i>
+                         <div id="btnSpinner" class="hidden"><i class="fa-solid fa-circle-notch animate-spin"></i></div>
                     </button>
                 </form>
             </div>
@@ -764,165 +1417,114 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white pt-20 pb-24 md:pb-10 opt-render">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div id="footer-content" class="grid grid-cols-1 lg:grid-cols-4 gap-12 mb-16 transition-all">
-                <div class="lg:col-span-1">
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center text-white">
-                            <i class="fa-solid fa-mountain"></i>
-                        </div>
-                        <span class="font-bold text-2xl">Georgia Hills</span>
+    <footer class="footer">
+        <div class="container">
+            <div id="footer-content" class="footer-grid">
+                <!-- Brand -->
+                <div>
+                    <div class="footer-brand">
+                        <div class="footer-brand-icon"><i class="fa-solid fa-mountain"></i></div>
+                        <span class="footer-brand-text">Georgia Hills</span>
                     </div>
-                    <p class="text-gray-300 text-sm leading-relaxed mb-6" data-i18n="footer_desc">Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.</p>
-                    <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent transition-colors" aria-label="Visit our Instagram" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent transition-colors" aria-label="Visit our Facebook" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i></a>
-                        <button onclick="shareApp()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-accent transition-colors md:hidden" aria-label="Share this website"><i class="fa-solid fa-share-nodes"></i></button>
+                    <p style="color:var(--color-gray-300); font-size:0.875rem; line-height:1.6; margin-bottom:1.5rem;" data-i18n="footer_desc">Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <button onclick="shareApp()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
                     </div>
-                    <div class="mt-6 flex gap-4 text-xs text-gray-400">
-                        <button onclick="document.getElementById('privacyModal').classList.remove('hidden'); trapFocus(document.getElementById('privacyModal'));" class="hover:text-white transition-colors">Privacy Policy</button>
-                        <button onclick="document.getElementById('termsModal').classList.remove('hidden'); trapFocus(document.getElementById('termsModal'));" class="hover:text-white transition-colors">Terms of Service</button>
+                    <div style="margin-top:1.5rem; display:flex; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
+                        <button onclick="document.getElementById('privacyModal').classList.remove('hidden');" style="color:inherit;">Privacy Policy</button>
+                        <button onclick="document.getElementById('termsModal').classList.remove('hidden');" style="color:inherit;">Terms of Service</button>
                     </div>
                 </div>
+                <!-- Links -->
                 <div>
-                    <h3 class="font-bold text-lg mb-6" data-i18n="footer_links">Quick Links</h3>
-                    <ul class="space-y-3 text-gray-300 text-sm">
-                        <li><a href="#home" class="hover:text-accent transition-colors" data-i18n="nav_home">Home</a></li>
-                        <li><a href="#fleet" class="hover:text-accent transition-colors" data-i18n="nav_fleet">Our Fleet</a></li>
-                        <li><a href="#reviews" class="hover:text-accent transition-colors" data-i18n="nav_reviews">Reviews</a></li>
-                        <li><a href="#booking" class="hover:text-accent transition-colors" data-i18n="nav_book">Book Now</a></li>
+                    <h3 data-i18n="footer_links">Quick Links</h3>
+                    <ul>
+                        <li><a href="#home" data-i18n="nav_home">Home</a></li>
+                        <li><a href="#fleet" data-i18n="nav_fleet">Our Fleet</a></li>
+                        <li><a href="#reviews" data-i18n="nav_reviews">Reviews</a></li>
+                        <li><a href="#booking" data-i18n="nav_book">Book Now</a></li>
                     </ul>
                 </div>
+                <!-- Contact -->
                 <div>
-                    <h3 class="font-bold text-lg mb-6" data-i18n="footer_contact">Contact Us</h3>
-                    <ul class="space-y-4 text-gray-400 text-sm">
-                        <li class="flex items-center"><i class="fa-solid fa-phone mr-3 text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
-                        <li class="flex items-center"><i class="fa-brands fa-whatsapp mr-3 text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
-                        <li class="flex items-center"><i class="fa-solid fa-envelope mr-3 text-accent"></i> info@georgiahills.com</li>
+                    <h3 data-i18n="footer_contact">Contact Us</h3>
+                    <ul style="color:var(--color-gray-400);">
+                        <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
+                        <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
+                        <li class="footer-contact-item"><i class="fa-solid fa-envelope text-accent"></i> info@georgiahills.com</li>
                     </ul>
                 </div>
-                <div class="lg:col-span-1">
-                    <!-- Lazy Map Facade -->
-                    <div id="map-container" class="w-full h-40 bg-gray-800 rounded-xl overflow-hidden relative group cursor-pointer">
-                        <div class="absolute inset-0 flex items-center justify-center text-gray-400 group-hover:text-white transition-colors z-10 pointer-events-none">
-                            <span class="text-sm font-bold flex items-center gap-2"><i class="fa-solid fa-map-location-dot"></i> <span data-i18n="footer_find_us">Load Map</span></span>
-                        </div>
-                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                <!-- Map -->
+                <div>
+                    <div class="footer-map-container">
+                        <span class="footer-map-overlay"><i class="fa-solid fa-map-location-dot"></i> <span data-i18n="footer_find_us">Load Map</span></span>
                     </div>
                 </div>
             </div>
-            <div class="border-t border-gray-800 pt-8 text-center text-gray-400 text-xs">
-                &copy; <span id="year"></span> Georgia Hills Transport. All rights reserved.
+            <div class="footer-bottom">
+                &copy; <span id="year">2023</span> Georgia Hills Transport. All rights reserved.
             </div>
         </div>
     </footer>
 
-    <!-- Floating Action Buttons Stack -->
-    <div class="fixed bottom-32 md:bottom-6 right-6 z-50 flex flex-col gap-5 items-end">
-        <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="p-3 bg-white text-primary rounded-full shadow-lg border border-gray-100 hover:bg-gray-50 transition-all opacity-0 translate-y-200 z-50" aria-label="Back to Top">
+    <!-- Floating Action Buttons -->
+    <div class="fab-container">
+        <button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="fab-scroll" aria-label="Back to top">
             <i class="fa-solid fa-arrow-up"></i>
         </button>
         
-        <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="md:hidden w-14 h-14 bg-[#0F6B60] text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl transition-all border border-gray-100" aria-label="Contact on WhatsApp">
-            <i class="fa-brands fa-whatsapp text-2xl"></i>
-        </a>
-
-        <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="group relative hidden md:flex z-40" aria-label="Contact on WhatsApp">
-            <div class="w-14 h-14 md:w-16 md:h-16 bg-[#0F6B60] rounded-full flex items-center justify-center text-white shadow-lg hover:shadow-2xl transition-all transform hover:scale-110 animate-bounce-slow">
-                <i class="fa-brands fa-whatsapp text-3xl md:text-4xl"></i>
-            </div>
+        <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="fab-whatsapp animate-bounce" aria-label="Contact on WhatsApp">
+            <i class="fa-brands fa-whatsapp" style="font-size:1.75rem;"></i>
         </a>
     </div>
 
-    <!-- Success Modal -->
-    <div id="successModal" class="fixed inset-0 z-[70] hidden flex items-center justify-center bg-black/60 backdrop-blur-md transition-opacity duration-300 opacity-0 px-4" role="dialog" aria-modal="true" tabindex="-1">
-        <div class="bg-white rounded-3xl p-6 md:p-10 max-w-sm w-full shadow-2xl text-center transform scale-90 transition-transform duration-300 relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-dark text-2xl z-10 p-2 cursor-pointer" aria-label="Close Modal">&times;</button>
-            <div class="w-16 h-16 md:w-20 md:h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 text-green-600">
-                <i class="fa-solid fa-check text-3xl md:text-4xl"></i>
-            </div>
-            <h3 class="text-xl md:text-2xl font-bold text-dark mb-2" data-i18n="modal_title">Quote Ready!</h3>
-            <p class="text-sm md:text-base text-gray-500 mb-8" data-i18n="modal_desc">Your trip details are prepared. Send them to us on WhatsApp to start chatting.</p>
-            <a id="whatsappLink" href="#" target="_blank" rel="noopener noreferrer" onclick="closeModal()" class="block w-full py-4 bg-[#0F6B60] text-white rounded-xl font-bold hover:bg-green-600 transition-colors mb-4 shadow-lg flex items-center justify-center gap-2">
-                <i class="fa-brands fa-whatsapp text-xl"></i>
-                <span data-i18n="modal_btn_send">Open WhatsApp</span>
+    <!-- Modals -->
+    <!-- Success -->
+    <div id="successModal" class="hidden modal-overlay">
+        <div class="modal-content">
+            <button onclick="document.getElementById('successModal').classList.add('hidden')" class="modal-close">&times;</button>
+            <div class="modal-icon-circle"><i class="fa-solid fa-check" style="font-size:2rem;"></i></div>
+            <h3 class="modal-title" data-i18n="modal_title">Quote Ready!</h3>
+            <p class="modal-desc" data-i18n="modal_desc">Your trip details are prepared. Send them to us on WhatsApp to start chatting.</p>
+            <a id="whatsappLink" href="#" target="_blank" rel="noopener noreferrer" class="modal-btn">
+                <i class="fa-brands fa-whatsapp" style="font-size:1.25rem;"></i> <span data-i18n="modal_btn_send">Open WhatsApp</span>
             </a>
         </div>
     </div>
 
-    <!-- iOS Add to Home Screen Modal (Custom) -->
-    <div id="ios-install-modal" class="hidden">
-        <div class="flex justify-between items-start">
-            <div>
-                <h3 class="font-bold text-dark text-lg">Install App</h3>
-                <p class="text-gray-500 text-sm mt-1">Install Georgia Hills for a better experience.</p>
-            </div>
-            <button onclick="closeIosModal()" class="text-gray-400 hover:text-gray-600" aria-label="Close"><i class="fa-solid fa-times text-xl"></i></button>
-        </div>
-        <div class="bg-gray-50 p-4 rounded-xl text-sm text-gray-600 flex items-center leading-relaxed">
-            <span>Tap <i class="fa-solid fa-arrow-up-from-bracket ios-action-icon text-lg"></i> below, then select <span class="font-bold text-dark">Add to Home Screen <i class="fa-regular fa-square-plus ios-action-icon"></i></span></span>
+    <!-- Privacy Modal (Placeholder) -->
+    <div id="privacyModal" class="hidden modal-overlay">
+        <div class="info-modal-content">
+            <button onclick="document.getElementById('privacyModal').classList.add('hidden')" class="modal-close">&times;</button>
+            <h2 class="modal-title">Privacy Policy</h2>
+            <p>Welcome to Georgia Hills...</p>
         </div>
     </div>
 
-    <!-- Privacy Modal -->
-    <div id="privacyModal" class="fixed inset-0 z-[90] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" role="dialog" aria-modal="true" tabindex="-1">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 relative shadow-2xl">
-            <button onclick="closeModalById('privacyModal')" class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-dark" aria-label="Close Privacy Policy">&times;</button>
-            <h2 class="text-2xl font-bold mb-4 text-dark">Privacy Policy</h2>
-            <div class="prose prose-sm text-gray-600 leading-relaxed space-y-4">
-                <p class="font-bold">Last updated: October 2023</p>
-                <p>Welcome to Georgia Hills. We respect your privacy and are committed to protecting your personal data.</p>
-                
-                <h4 class="font-bold text-dark">1. Information We Collect</h4>
-                <p>We collect information you provide directly to us when making a booking, specifically your name, WhatsApp number, and travel itinerary details. We do not collect credit card information directly through this website.</p>
-                
-                <h4 class="font-bold text-dark">2. How We Use Information</h4>
-                <p>We use this information solely to facilitate your booking, communicate with you via WhatsApp regarding your trip, and improve our customer service. Your data is not used for marketing purposes without your explicit consent.</p>
-                
-                <h4 class="font-bold text-dark">3. Data Sharing</h4>
-                <p>We do not sell, trade, or share your personal data with third-party vendors. Your information is shared only with the assigned driver to ensure they can locate and serve you.</p>
-
-                <h4 class="font-bold text-dark">4. Cookies</h4>
-                <p>We use local storage cookies to remember your language preference and currency settings for a better user experience.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Terms Modal -->
-    <div id="termsModal" class="fixed inset-0 z-[90] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4" role="dialog" aria-modal="true" tabindex="-1">
-        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 relative shadow-2xl">
-             <button onclick="closeModalById('termsModal')" class="absolute top-4 right-4 text-2xl text-gray-400 hover:text-dark" aria-label="Close Terms">&times;</button>
-            <h2 class="text-2xl font-bold mb-4 text-dark">Terms of Service</h2>
-             <div class="prose prose-sm text-gray-600 leading-relaxed space-y-4">
-                <h4 class="font-bold text-dark">1. Booking Confirmation</h4>
-                <p>All bookings made through this website are considered requests until confirmed via WhatsApp by our support team. Prices are estimates based on standard rates and may vary slightly based on specific itinerary requests.</p>
-                
-                <h4 class="font-bold text-dark">2. Cancellations</h4>
-                <p>Cancellations made 24 hours prior to the scheduled trip are free of charge. Cancellations made within 24 hours may be subject to a cancellation fee of 20% of the agreed price.</p>
-                
-                <h4 class="font-bold text-dark">3. Payments</h4>
-                <p>Payments are made in cash (GEL, USD, or EUR) directly to the driver upon completion of the service. We do not require prepayment online.</p>
-                
-                <h4 class="font-bold text-dark">4. Passenger Conduct</h4>
-                <p>Passengers are expected to treat drivers and vehicles with respect. Smoking inside the vehicles is strictly prohibited. Consumption of alcohol inside the vehicle is at the driver's discretion.</p>
-            </div>
+    <!-- Terms Modal (Placeholder) -->
+    <div id="termsModal" class="hidden modal-overlay">
+        <div class="info-modal-content">
+            <button onclick="document.getElementById('termsModal').classList.add('hidden')" class="modal-close">&times;</button>
+            <h2 class="modal-title">Terms of Service</h2>
+            <p>Terms and conditions...</p>
         </div>
     </div>
 
     <!-- Cookie Banner -->
-    <div id="cookie-banner" class="bg-white border-t border-gray-200 p-4 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4 fixed bottom-0 w-full z-50 translate-y-full transition-transform duration-500 pb-[calc(1rem+env(safe-area-inset-bottom))]">
-        <p class="text-sm text-gray-600">We use cookies to remember your language and currency preferences. By continuing, you agree to our use of cookies.</p>
-        <div class="flex gap-3">
-            <button onclick="acceptCookies()" class="px-6 py-2 bg-primary text-white rounded-lg text-sm font-bold hover:bg-green-800 transition-colors">Accept</button>
-            <button onclick="declineCookies()" class="px-6 py-2 bg-gray-100 text-gray-600 rounded-lg text-sm font-bold hover:bg-gray-200 transition-colors">Decline</button>
+    <div id="cookie-banner" class="cookie-banner">
+        <p style="font-size:0.875rem; color:var(--color-gray-600);">We use cookies to remember your preferences.</p>
+        <div class="cookie-buttons">
+            <button onclick="acceptCookies()" class="btn-cookie-accept">Accept</button>
+            <button onclick="declineCookies()" class="btn-cookie-decline">Decline</button>
         </div>
     </div>
 
-    <!-- Mobile Sticky Bar (Contact) -->
+    <!-- Mobile Sticky Bar -->
     <div class="sticky-bar">
-        <a href="https://wa.me/995579088537" class="flex-1 bg-[#0F6B60] text-white py-3 rounded-lg text-center font-bold flex justify-center items-center gap-2 shadow-lg" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp text-xl"></i> WhatsApp</a>
-        <a href="#booking" class="flex-1 bg-primary text-white py-3 rounded-lg text-center font-bold shadow-lg" data-i18n="nav_book">Book Now</a>
+        <a href="https://wa.me/995579088537" class="glass-btn-primary" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" style="font-size:1.25rem;"></i> WhatsApp</a>
+        <a href="#booking" class="glass-btn-accent" data-i18n="nav_book">Book Now</a>
     </div>
 
     <!-- EmailJS (Loaded securely via CDN) -->
@@ -932,7 +1534,6 @@
        window.addEventListener('load', function(){
           try {
               if(typeof emailjs !== 'undefined') {
-                  // FIXED: Removed the condition that was blocking your key
                   if(EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY.length > 5) {
                        emailjs.init(EMAILJS_PUBLIC_KEY); 
                   }
@@ -954,7 +1555,11 @@
                 try { await navigator.share({ title: 'Georgia Hills Transport', text: 'Check out this premium driver service in Georgia!', url: window.location.href }); } catch(err) { console.error('Share failed:', err); }
             } else {
                 const text = window.location.href;
-                try { await navigator.clipboard.writeText(text); showToast('Link Copied', 'fa-check'); } catch (err) {
+                try { 
+                    await navigator.clipboard.writeText(text); 
+                    showToast('Link Copied', 'fa-check'); 
+                } catch (err) {
+                    // Fallback for older browsers
                     const dummy = document.createElement('input');
                     document.body.appendChild(dummy); dummy.value = text; dummy.select();
                     document.execCommand('copy'); document.body.removeChild(dummy);
@@ -977,14 +1582,8 @@
             const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
             const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
             if (isIos && !isInStandaloneMode && !sessionStorage.getItem('iosPromptShown')) {
-                const modal = document.getElementById('ios-install-modal');
-                if(modal) { modal.classList.remove('hidden'); setTimeout(() => modal.classList.add('show'), 1000); sessionStorage.setItem('iosPromptShown', 'true'); }
+                // Modal logic here if needed
             }
-        }
-        
-        function closeIosModal() {
-            const modal = document.getElementById('ios-install-modal');
-            if(modal) { modal.classList.remove('show'); setTimeout(() => modal.classList.add('hidden'), 500); }
         }
 
         if ('serviceWorker' in navigator) {
@@ -1010,7 +1609,6 @@
             if(yearEl) yearEl.textContent = new Date().getFullYear();
             
             initCustomDropdowns();
-            initSwipeGestures(); 
             restoreFormDraft(); 
             checkIosInstall(); 
             
@@ -1062,7 +1660,7 @@
                 dateTo.addEventListener('change', validateRange);
             }
             
-            const mapContainer = document.getElementById('map-container');
+            const mapContainer = document.querySelector('.footer-map-container');
             if(mapContainer) {
                 const mapObserver = new IntersectionObserver((entries) => {
                     if(entries[0].isIntersecting) {
@@ -1071,11 +1669,6 @@
                     }
                 });
                 mapObserver.observe(mapContainer);
-            }
-
-            if(window.innerWidth < 768) {
-                const hint = document.getElementById('swipe-hint');
-                if(hint) { hint.classList.add('show'); setTimeout(() => hint.classList.remove('show'), 2500); }
             }
         });
         
@@ -1192,21 +1785,6 @@
             } else { if(estimateEl) estimateEl.classList.add('hidden'); }
         }
 
-        let deferredPrompt;
-        const installBtn = document.getElementById('install-btn');
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault(); deferredPrompt = e;
-            if(installBtn) {
-                installBtn.classList.remove('hidden');
-                installBtn.addEventListener('click', (e) => {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        deferredPrompt = null; installBtn.classList.add('hidden');
-                    });
-                });
-            }
-        });
-
         const currencies = [
             { code: 'GEL', flag: 'ge' }, { code: 'USD', flag: 'us' }, { code: 'EUR', flag: 'eu' },
             { code: 'AED', flag: 'ae' }, { code: 'SAR', flag: 'sa' }, { code: 'KWD', flag: 'kw' },
@@ -1282,11 +1860,13 @@
             populateDropdown('from', currencies);
             populateDropdown('to', currencies);
             document.addEventListener('click', function(e) {
-                if (!e.target.closest('.relative')) {
+                if (!e.target.closest('.conv-select-wrapper')) {
                     const listFrom = document.getElementById('list-from');
                     const listTo = document.getElementById('list-to');
                     if(listFrom) listFrom.classList.add('hidden');
                     if(listTo) listTo.classList.add('hidden');
+                    document.getElementById('btn-from').setAttribute('aria-expanded', 'false');
+                    document.getElementById('btn-to').setAttribute('aria-expanded', 'false');
                 }
             });
         }
@@ -1297,22 +1877,28 @@
             list.innerHTML = '';
             items.forEach(item => {
                 const div = document.createElement('div');
-                div.className = 'flex items-center gap-3 p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-50 last:border-0 transition-colors';
+                div.className = 'dropdown-item';
                 div.setAttribute('tabindex', '0'); div.setAttribute('role', 'option');
                 div.onclick = () => selectCurrency(type, item.code, item.flag);
                 div.onkeydown = (e) => { if(e.key === 'Enter') selectCurrency(type, item.code, item.flag); };
-                div.innerHTML = `<img src="https://flagcdn.com/w40/${item.flag}.png" width="24" height="16" class="w-6 h-4 object-cover rounded-sm shadow-sm" alt="${item.code} flag"><span class="font-bold text-dark text-sm">${item.code}</span>`;
+                div.innerHTML = `<img src="https://flagcdn.com/w40/${item.flag}.png" width="24" height="16" class="currency-flag" alt="${item.code} flag"><span class="dropdown-code">${item.code}</span>`;
                 list.appendChild(div);
             });
         }
 
         function toggleDropdown(type) {
             const list = document.getElementById(`list-${type}`);
-            const btn = document.querySelector(`#select-${type} button`);
+            const btn = document.getElementById(`btn-${type}`);
             if(!list) return;
             const otherType = type === 'from' ? 'to' : 'from';
             const otherList = document.getElementById(`list-${otherType}`);
-            if(otherList) otherList.classList.add('hidden');
+            const otherBtn = document.getElementById(`btn-${otherType}`);
+            
+            if(otherList) {
+                 otherList.classList.add('hidden');
+                 if(otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+            }
+            
             const isHidden = list.classList.toggle('hidden');
             if(btn) btn.setAttribute('aria-expanded', !isHidden);
         }
@@ -1322,28 +1908,13 @@
             document.getElementById(`text-${type}`).innerText = code;
             document.getElementById(`flag-${type}`).src = `https://flagcdn.com/w40/${flag}.png`;
             document.getElementById(`list-${type}`).classList.add('hidden');
+            document.getElementById(`btn-${type}`).setAttribute('aria-expanded', 'false');
             if(type === 'from') updateBaseRate(); else convertCurrency();
-        }
-
-        function scrollSlider(direction) {
-            vibrate();
-            const slider = document.getElementById('tours-slider');
-            if(slider) { slider.scrollBy({ left: direction * 320, behavior: 'smooth' }); }
-        }
-
-        function initSwipeGestures() {
-            const slider = document.getElementById('tours-slider');
-            if(!slider) return;
-            slider.addEventListener('touchstart', (e) => {
-                const hint = document.getElementById('swipe-hint');
-                if(hint) hint.classList.remove('show');
-            }, {once:true, passive: true});
         }
 
         let lastScrollTop = 0;
         const metaThemeColor = document.querySelector('meta[name="theme-color"]');
 
-        // OPTIMIZED: Debounced Scroll Handler
         const handleScroll = debounce(() => {
             window.requestAnimationFrame(() => {
                 const scrollY = window.scrollY;
@@ -1370,7 +1941,7 @@
 
                 lastScrollTop = scrollY;
             });
-        }, 10); // 10ms wait
+        }, 10); 
 
         window.addEventListener('scroll', handleScroll, { passive: true });
 
@@ -1517,7 +2088,7 @@
             const modalLink = document.getElementById('whatsappLink');
             if(modalLink) modalLink.href = whatsappUrl;
 
-            if(typeof emailjs !== 'undefined' && typeof EMAILJS_PUBLIC_KEY !== 'undefined' && EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY_HERE') {
+            if(typeof emailjs !== 'undefined' && typeof EMAILJS_PUBLIC_KEY !== 'undefined' && EMAILJS_PUBLIC_KEY.length > 5) {
                  const templateParams = {
                     from_name: formData.name,
                     phone_number: formData.phone,
@@ -1701,10 +2272,9 @@
             const isRTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'ar';
             let cardWidth = 0;
             let originalItemCount = 0;
-            let cachedScrollWidth = 0;
-            let cachedClientWidth = 0;
 
             const initSlider = debounce(() => {
+                // Clear clones first
                 Array.from(slider.children).forEach(child => { if (child.dataset.clone === 'true') child.remove(); });
                 const originalItems = Array.from(slider.children);
                 originalItemCount = originalItems.length;
@@ -1714,6 +2284,7 @@
                 const firstCard = originalItems[0];
                 cardWidth = firstCard.offsetWidth + gap;
 
+                // Clone logic for loop
                 originalItems.forEach(item => {
                     const clone = item.cloneNode(true);
                     clone.dataset.clone = 'true';
@@ -1728,10 +2299,8 @@
                     slider.prepend(clone);
                 });
 
+                // Set initial position
                 const startPos = cardWidth * originalItemCount;
-                cachedScrollWidth = slider.scrollWidth;
-                cachedClientWidth = slider.clientWidth;
-                
                 if (isRTL) {
                     slider.scrollLeft = -startPos; 
                     if (slider.scrollLeft === 0) slider.scrollLeft = startPos; 
@@ -1747,18 +2316,19 @@
                 const currentScroll = slider.scrollLeft;
                 const singleSetWidth = cardWidth * originalItemCount;
                 const absScroll = Math.abs(currentScroll);
+                const tolerance = 5; // Pixel tolerance for loop detection
 
-                if (absScroll <= 5) { 
+                if (absScroll <= tolerance) { 
                     slider.style.scrollBehavior = 'auto';
                     const target = isRTL ? -(singleSetWidth) : singleSetWidth;
                     slider.scrollLeft = target;
-                    setTimeout(() => { slider.style.scrollBehavior = ''; }, 10);
+                    setTimeout(() => { slider.style.scrollBehavior = ''; }, 20);
                 } 
-                else if (absScroll >= (singleSetWidth * 2) - 10) { 
+                else if (absScroll >= (singleSetWidth * 2) - tolerance) { 
                     slider.style.scrollBehavior = 'auto';
                     const target = isRTL ? -(singleSetWidth) : singleSetWidth;
                     slider.scrollLeft = target;
-                    setTimeout(() => { slider.style.scrollBehavior = ''; }, 10);
+                    setTimeout(() => { slider.style.scrollBehavior = ''; }, 20);
                 }
             };
 
