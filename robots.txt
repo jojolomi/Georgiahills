@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.google.com/search?q=https://geodrive.ge/sitemap.xml
+# FIXED: Direct link to the sitemap (assuming your netlify domain is the primary one based on index.html)
+Sitemap: https://georgiahills.netlify.app/sitemap.xml

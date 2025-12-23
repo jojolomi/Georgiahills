@@ -3,16 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <!-- Indexing Control -->
+    <meta name="robots" content="index, follow"> 
     
+    <!-- 1. Google Consent Mode -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('consent', 'default', {
+          'ad_storage': 'denied',
+          'ad_user_data': 'denied',
+          'ad_personalization': 'denied',
+          'analytics_storage': 'denied'
+        });
+    </script>
+
+    <!-- 2. Google Tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6GT03GSW49"></script>
+    <script>
+      gtag('js', new Date());
+      gtag('config', 'G-6GT03GSW49');
+    </script>
+
+    <!-- FAQ Schema (SEO) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "Do I need to pay in advance?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No, payment is strictly upon arrival."
+        }
+      }, {
+        "@type": "Question",
+        "name": "Do drivers speak Arabic?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! We have professional drivers who speak Arabic, English and Russian."
+        }
+      }]
+    }
+    </script>
+
     <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-    <link rel="dns-prefetch" href="https://images.unsplash.com">
     <link rel="preconnect" href="https://flagcdn.com" crossorigin>
     <link rel="preconnect" href="https://api.exchangerate-api.com" crossorigin>
+    
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
     <!-- Preload LCP Image -->
     <link rel="preload" as="image" 
@@ -22,9 +68,9 @@
           fetchpriority="high">
 
     <!-- SEO & Metadata -->
-    <title>Rent a Car in Georgia | سائق خاص في جورجيا | Georgia Hills</title>
-    <meta name="description" content="Premium car rental with driver in Georgia. #1 Rated service for Arab families. Book directly via WhatsApp. Tours to Kazbegi, Batumi, and more.">
-    <meta name="keywords" content="Georgia driver, Rent a car Tbilisi, Private driver Georgia, السياحة في جورجيا, سائق عربي في جورجيا, Georgia Hills">
+    <title>Georgia Hills | Private Driver & Car Rental</title>
+    <meta name="description" content="Explore Georgia comfortably with our private drivers and rental cars. Specialized tours for families. Book easily via WhatsApp.">
+    <meta name="keywords" content="Driver Georgia, Car rental Tbilisi, Family tours">
     <meta name="author" content="Georgia Hills">
     <meta name="theme-color" content="#0F172A">
     
@@ -53,7 +99,7 @@
       "@type": "AutoRental",
       "name": "Georgia Hills",
       "image": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c",
-      "description": "Premium car rental with driver in Georgia. Specialized in tours for families.",
+      "description": "Premium car rental with driver in Georgia.",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Tbilisi",
@@ -61,15 +107,7 @@
       },
       "priceRange": "$$",
       "telephone": "+995579088537",
-      "url": "https://georgiahills.netlify.app/",
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": [
-          "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-        ],
-        "opens": "00:00",
-        "closes": "23:59"
-      }
+      "url": "https://georgiahills.netlify.app/"
     }
     </script>
 
@@ -95,7 +133,6 @@
         :root {
             --color-primary: #2C5530;
             --color-secondary: #8BA888;
-            /* Changed to a comfortable Muted Gold/Bronze */
             --color-accent: #C59D5F;
             --color-accent-light: #E6CCAA;
             --color-surface: #F9FAFB;
@@ -159,7 +196,7 @@
             line-height: 1.6;
         }
         
-        @media (max-width: 768px) { body { padding-bottom: 4rem; } }
+        @media (max-width: 768px) { body { padding-bottom: 7rem; } }
 
         html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
 
@@ -167,7 +204,7 @@
         button { cursor: pointer; border: none; background: none; font-family: inherit; }
         input, select, textarea { font-family: inherit; }
 
-        /* Typography Utilities */
+        /* Utilities */
         .text-center { text-align: center !important; }
         .text-left { text-align: left !important; }
         .text-right { text-align: right !important; }
@@ -176,12 +213,13 @@
         .text-accent { color: var(--color-accent) !important; }
         .text-accent-light { color: var(--color-accent-light) !important; }
         .text-dark { color: var(--color-dark) !important; }
+        .text-xs { font-size: 0.75rem; }
         
-        /* Force LTR for Price Displays */
         .price-display { direction: ltr; unicode-bidi: isolate; display: inline-block; }
         
         .font-bold { font-weight: 700; }
         .font-extra-bold { font-weight: 800; }
+        .font-normal { font-weight: 400; }
         .font-serif { font-family: 'Times New Roman', Times, serif; }
         .uppercase { text-transform: uppercase; }
         .italic { font-style: italic; }
@@ -190,7 +228,7 @@
         .opacity-0 { opacity: 0; }
         .opacity-80 { opacity: 0.8; }
         
-        /* Layout Utils */
+        /* Flex & Layout */
         .flex { display: flex; }
         .flex-col { flex-direction: column; }
         .items-center { align-items: center; }
@@ -198,6 +236,9 @@
         .justify-between { justify-content: space-between; }
         .gap-2 { gap: 0.5rem; }
         .gap-4 { gap: 1rem; }
+        .ml-2 { margin-left: 0.5rem; }
+        html[lang="ar"] .ml-2 { margin-left: 0; margin-right: 0.5rem; }
+        
         .w-full { width: 100%; }
         .h-full { height: 100%; }
         .relative { position: relative; }
@@ -214,9 +255,6 @@
 
         /* RTL Support */
         html[lang="ar"] body { font-family: var(--font-arabic); text-align: right; }
-        html[lang="ar"] .rtl-flip { transform: scaleX(-1); }
-        html[lang="ar"] .fa-arrow-right { transform: rotate(180deg); }
-        html[lang="ar"] .rtl-rotate-180 { transform: rotate(180deg); }
         html[lang="ar"] .text-left { text-align: right !important; }
         html[lang="ar"] .text-center { text-align: center !important; }
         
@@ -228,11 +266,7 @@
             width: 100%;
         }
 
-        /* =========================================
-           2. COMPONENT STYLES
-           ========================================= */
-
-        /* Navbar */
+        /* Nav & Menus */
         .navbar {
             position: fixed;
             top: 0;
@@ -248,96 +282,27 @@
         .navbar.shadow-md { box-shadow: var(--shadow-lg); }
         .navbar.nav-hidden { transform: translateY(-100%); }
 
-        .navbar-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: var(--header-height);
-        }
-        .nav-logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            cursor: pointer;
-        }
-        .nav-logo-img {
-            width: 3.5rem;
-            height: 3.5rem;
-            border-radius: 50%;
-            box-shadow: var(--shadow-xl);
-            object-fit: cover;
-        }
-        .nav-logo span {
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: var(--color-dark);
-            display: none;
-        }
+        .navbar-inner { display: flex; justify-content: space-between; align-items: center; height: var(--header-height); }
+        .nav-logo { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
+        .nav-logo-img { width: 3.5rem; height: 3.5rem; border-radius: 50%; box-shadow: var(--shadow-xl); object-fit: cover; }
+        .nav-logo span { font-weight: 700; font-size: 1.25rem; color: var(--color-dark); display: none; }
         @media (min-width: 768px) { .nav-logo span { display: block; } }
 
-        /* Desktop Menu */
         .desktop-menu { display: none; gap: 1.5rem; align-items: center; }
         @media (min-width: 1024px) { .desktop-menu { display: flex; } }
         
-        .nav-link {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--color-gray-600);
-            padding: 0.5rem 0;
-            border-bottom: 2px solid transparent;
-            transition: color 0.2s, border-color 0.2s;
-        }
-        .nav-link:hover {
-            color: var(--color-primary);
-            border-bottom-color: rgba(44, 85, 48, 0.3);
-        }
+        .nav-link { font-size: 0.875rem; font-weight: 600; color: var(--color-gray-600); padding: 0.5rem 0; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+        .nav-link:hover { color: var(--color-primary); border-bottom-color: rgba(44, 85, 48, 0.3); }
 
-        .action-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--color-gray-600);
-            border: 1px solid var(--color-gray-200);
-            border-radius: 9999px;
-            padding: 0.375rem 1rem;
-            transition: background 0.2s;
-            background: white;
-        }
+        .action-btn { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; color: var(--color-gray-600); border: 1px solid var(--color-gray-200); border-radius: 9999px; padding: 0.375rem 1rem; transition: background 0.2s; background: white; }
         .action-btn:hover { background-color: var(--color-gray-50); color: var(--color-primary); }
 
-        .btn-book-nav {
-            padding: 0.75rem 1.5rem;
-            background-color: var(--color-primary);
-            color: white;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 700;
-            box-shadow: var(--shadow-lg);
-            transition: all 0.2s;
-        }
+        .btn-book-nav { padding: 0.75rem 1.5rem; background-color: var(--color-primary); color: white; border-radius: 9999px; font-size: 0.875rem; font-weight: 700; box-shadow: var(--shadow-lg); transition: all 0.2s; }
         .btn-book-nav:hover { background-color: #1a331d; transform: translateY(-2px); }
 
-        /* Custom Select for Navbar */
         .custom-select-wrapper { position: relative; display: inline-block; }
         .custom-select-trigger { cursor: pointer; display: flex; align-items: center; gap: 0.5rem; }
-        .custom-options {
-            position: absolute;
-            top: 120%;
-            right: 0;
-            background: white;
-            border: 1px solid var(--color-gray-200);
-            border-radius: 0.75rem;
-            box-shadow: var(--shadow-xl);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.2s;
-            z-index: var(--z-toast);
-            min-width: 140px;
-            overflow: hidden;
-        }
+        .custom-options { position: absolute; top: 120%; right: 0; background: white; border: 1px solid var(--color-gray-200); border-radius: 0.75rem; box-shadow: var(--shadow-xl); opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s; z-index: var(--z-toast); min-width: 140px; overflow: hidden; }
         html[lang="ar"] .custom-options { right: auto; left: 0; }
         .custom-select-wrapper.open .custom-options { opacity: 1; visibility: visible; transform: translateY(0); }
         .custom-option { padding: 0.75rem 1rem; cursor: pointer; display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; font-weight: 600; color: var(--color-dark); transition: background 0.2s; }
@@ -345,32 +310,13 @@
         .custom-option.selected { background: var(--color-success-bg); color: var(--color-success); }
         .currency-flag-sm { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 
-        /* Mobile Toggle */
         .mobile-controls { display: flex; align-items: center; gap: 0.75rem; }
         @media (min-width: 1024px) { .mobile-controls { display: none; } }
         .btn-mobile-menu { color: var(--color-dark); padding: 0.5rem; font-size: 1.5rem; }
 
-        /* Mobile Menu Overlay */
-        #mobile-menu {
-            position: fixed;
-            inset: 0;
-            z-index: var(--z-mobile-menu);
-            background-color: white;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 1.5rem;
-            transition: transform 0.3s;
-            transform: translateX(100%);
-            overflow-y: auto;
-            padding: 2rem 0;
-        }
+        #mobile-menu { position: fixed; inset: 0; z-index: var(--z-mobile-menu); background-color: white; width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.5rem; transition: transform 0.3s; transform: translateX(100%); overflow-y: auto; padding: 2rem 0; }
         html[lang="ar"] #mobile-menu { transform: translateX(-100%); }
         #mobile-menu.open { transform: translateX(0); }
-        html[lang="ar"] #mobile-menu.open { transform: translateX(0); } /* Critical Fix for Arabic Mobile Menu */
         
         .close-menu-btn { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.875rem; color: var(--color-gray-400); }
         html[lang="ar"] .close-menu-btn { right: auto; left: 1.5rem; }
@@ -386,343 +332,135 @@
         .mobile-social-icon { width: 3rem; height: 3rem; background: var(--color-gray-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .mobile-social-text { font-size: 0.75rem; }
 
-        /* Hero Section */
-        .hero {
-            position: relative;
-            height: 90vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            background-color: var(--color-dark);
-        }
-        .hero-bg-container {
-            position: absolute;
-            inset: 0;
-            z-index: var(--z-negative);
-        }
-        .hero-img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.4), transparent);
-        }
-        .hero-content {
-            position: relative;
-            z-index: var(--z-normal);
-            text-align: center;
-            color: white;
-            padding: 0 1rem;
-            max-width: 64rem;
-            margin-top: 2.5rem;
-        }
-        .hero-logo-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-        }
-        .hero-logo-circle {
-            width: 6rem;
-            height: 6rem;
-            border-radius: 50%;
-            overflow: hidden;
-            box-shadow: var(--shadow-xl);
-        }
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.25rem 1rem;
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            margin-bottom: 1.5rem;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(4px);
-        }
-        .hero-title {
-            font-size: 2.25rem;
-            line-height: 1.2;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            margin-top: 0;
-        }
+        /* Hero */
+        .hero { position: relative; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: var(--color-dark); }
+        .hero-bg-container { position: absolute; inset: 0; z-index: var(--z-negative); }
+        .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.4), transparent); }
+        .hero-content { position: relative; z-index: var(--z-normal); text-align: center; color: white; padding: 0 1rem; max-width: 64rem; margin-top: 2.5rem; }
+        .hero-logo-container { display: flex; justify-content: center; margin-bottom: 2rem; }
+        .hero-logo-circle { width: 6rem; height: 6rem; border-radius: 50%; overflow: hidden; box-shadow: var(--shadow-xl); }
+        .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 1rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 9999px; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.05em; margin-bottom: 1.5rem; background: rgba(255,255,255,0.1); backdrop-filter: blur(4px); }
+        .hero-title { font-size: 2.25rem; line-height: 1.2; font-weight: 800; margin-bottom: 1.5rem; margin-top: 0; }
         @media (min-width: 768px) { .hero-title { font-size: 3.75rem; } }
         @media (min-width: 1024px) { .hero-title { font-size: 6rem; } }
-        
-        .hero-subtitle {
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 2.5rem;
-            max-width: 42rem;
-            margin-left: auto;
-            margin-right: auto;
-            color: #f3f4f6;
-            font-weight: 300;
-        }
+        .hero-subtitle { font-size: 1rem; line-height: 1.5; margin-bottom: 2.5rem; max-width: 42rem; margin-left: auto; margin-right: auto; color: #f3f4f6; font-weight: 300; }
         @media (min-width: 768px) { .hero-subtitle { font-size: 1.25rem; } }
-
         .hero-buttons { display: flex; flex-direction: column; gap: 1rem; justify-content: center; }
         @media (min-width: 640px) { .hero-buttons { flex-direction: row; } }
-
-        .btn-hero {
-            padding: 1rem 2rem;
-            border-radius: 9999px;
-            font-weight: 700;
-            font-size: 1.125rem;
-            transition: all 0.3s;
-        }
-        .btn-hero-primary {
-            background-color: var(--color-accent);
-            color: white;
-            box-shadow: var(--shadow-xl);
-        }
+        .btn-hero { padding: 1rem 2rem; border-radius: 9999px; font-weight: 700; font-size: 1.125rem; transition: all 0.3s; }
+        .btn-hero-primary { background-color: var(--color-accent); color: white; box-shadow: var(--shadow-xl); }
         .btn-hero-primary:hover { background-color: #724c2a; transform: translateY(-4px); }
-        
-        .btn-hero-secondary {
-            background-color: var(--color-white-10);
-            border: 1px solid var(--color-white-20);
-            color: white;
-            backdrop-filter: blur(12px);
-        }
+        .btn-hero-secondary { background-color: var(--color-white-10); border: 1px solid var(--color-white-20); color: white; backdrop-filter: blur(12px); }
         .btn-hero-secondary:hover { background-color: var(--color-white-20); }
 
-        /* Stats Section */
-        .stats-wrapper {
-            position: relative;
-            z-index: var(--z-badge);
-            margin-top: -4rem;
-            margin-bottom: 3rem;
-        }
-        .stats-card {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: var(--shadow-soft);
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-        }
+        /* Stats */
+        .stats-wrapper { position: relative; z-index: var(--z-badge); margin-top: -4rem; margin-bottom: 3rem; }
+        .stats-card { background: white; border-radius: 1rem; box-shadow: var(--shadow-soft); padding: 2rem; display: grid; grid-template-columns: 1fr; gap: 2rem; }
         @media (min-width: 768px) {
             .stats-card { grid-template-columns: repeat(3, 1fr); gap: 0; }
             .stats-item:not(:last-child) { border-right: 1px solid var(--color-gray-100); }
         }
-        /* RTL Desktop Border Fix */
-        html[lang="ar"] @media (min-width: 768px) {
-            .stats-item:not(:last-child) { border-right: none; border-left: 1px solid var(--color-gray-100); }
+        @media (min-width: 768px) {
+            html[lang="ar"] .stats-item:not(:last-child) { border-right: none; border-left: 1px solid var(--color-gray-100); }
         }
-
         .stats-item { text-align: center; }
-        /* Force LTR for numbers but keep alignment centered */
         .stats-num { font-size: 2.25rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem; direction: ltr; unicode-bidi: isolate; display: block; }
         .stats-label { color: var(--color-gray-600); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
 
-        /* Common Section Styles */
         .section-py { padding-top: 4rem; padding-bottom: 4rem; }
         @media (min-width: 768px) { .section-py { padding-top: 6rem; padding-bottom: 6rem; } }
         
-        /* About Section */
+        /* About */
         .about-grid { display: flex; flex-direction: column; gap: 3rem; }
         @media (min-width: 1024px) { .about-grid { flex-direction: row; align-items: center; gap: 4rem; } }
         .about-img-container { flex: 1; position: relative; }
         .about-content { flex: 1; }
-        
         .about-blob { position: absolute; top: -1rem; left: -1rem; width: 6rem; height: 6rem; background: rgba(139, 94, 52, 0.2); border-radius: 50%; filter: blur(24px); }
         .about-img { border-radius: 1.5rem; box-shadow: var(--shadow-2xl); position: relative; z-index: var(--z-normal); width: 100%; height: auto; }
-        
         .section-label { color: var(--color-accent); font-weight: 700; letter-spacing: 0.1em; font-size: 0.875rem; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
         .section-title { font-size: 1.875rem; font-weight: 700; color: var(--color-dark); margin-bottom: 1.5rem; line-height: 1.2; margin-top: 0; }
         @media (min-width: 768px) { .section-title { font-size: 2.25rem; } }
         .section-desc { color: var(--color-gray-600); margin-bottom: 1.5rem; line-height: 1.625; }
         .feature-grid { margin-top: 2rem; }
-
-        .feature-box {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 1rem;
-            background: white;
-            border-radius: 0.75rem;
-            box-shadow: var(--shadow-card);
-            transition: box-shadow 0.3s;
-            margin-bottom: 1rem;
-        }
+        .feature-box { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; background: white; border-radius: 0.75rem; box-shadow: var(--shadow-card); transition: box-shadow 0.3s; margin-bottom: 1rem; }
         .feature-box:hover { box-shadow: var(--shadow-lg); }
-        .feature-icon {
-            width: 3rem;
-            height: 3rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
+        .feature-icon { width: 3rem; height: 3rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .icon-green { background: #f0fdf4; color: var(--color-primary); }
         .icon-blue { background: #eff6ff; color: #2563eb; }
         .feature-title { font-weight: 700; color: var(--color-dark); font-size: 1.125rem; margin: 0; }
         .feature-text { font-size: 0.875rem; color: var(--color-gray-600); margin: 0; }
 
         /* Destinations Slider */
+        /* FORCE LTR FOR SLIDER LAYOUT MECHANICS TO FIX ARABIC SCROLLING */
         .bg-dark-section { background-color: var(--color-dark); color: white; }
-        .slider-container { position: relative; }
-        .slider-nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: var(--z-badge);
-            width: 3rem;
-            height: 3rem;
-            border-radius: 50%;
-            background: var(--color-white-10);
-            backdrop-filter: blur(4px);
-            border: 1px solid var(--color-white-20);
-            color: white;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-        @media (min-width: 768px) { .slider-nav-btn { display: flex; } }
-        .slider-nav-btn:hover { background: white; color: var(--color-dark); transform: translateY(-50%) scale(1.1); }
-        .slider-prev { left: -1.5rem; }
-        .slider-next { right: -1.5rem; }
+        .slider-container { position: relative; direction: ltr !important; }
+        .slider-header-wrapper { position: relative; margin-bottom: 3rem; display: flex; flex-direction: column; align-items: center; }
+        @media (min-width: 768px) { .slider-header-wrapper { flex-direction: row; justify-content: space-between; align-items: flex-end; } }
 
-        .tours-slider {
-            display: flex;
-            gap: 1.5rem;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            padding-bottom: 2rem;
-            scrollbar-width: none; /* Firefox */
+        .slider-nav-container { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; position: relative; z-index: var(--z-badge); direction: ltr !important; }
+        
+        /* Mobile Only Class */
+        @media (min-width: 1024px) { .lg-hidden { display: none !important; } }
+
+        .slider-nav-btn { width: 3.5rem; height: 3.5rem; border-radius: 50%; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); cursor: pointer; }
+        .slider-nav-btn:hover { background: var(--color-accent); border-color: var(--color-accent); transform: scale(1.1); }
+        .slider-nav-btn:focus { outline: 2px solid white; }
+
+        @media (min-width: 1024px) {
+            .slider-nav-container.desktop-only { position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(25%); justify-content: space-between; pointer-events: none; padding: 0 1rem; display: flex !important; margin: 0; }
+            .slider-nav-btn { pointer-events: auto; background: rgba(255, 255, 255, 0.15); width: 4rem; height: 4rem; font-size: 1.5rem; }
         }
+
+        .tours-slider { display: flex; gap: 1.5rem; overflow-x: auto; padding-bottom: 2rem; scrollbar-width: none; direction: ltr !important; }
+        .tours-slider:focus { outline: 2px solid var(--color-accent); border-radius: 1rem; }
         .tours-slider::-webkit-scrollbar { display: none; }
         
-        .tour-card {
-            min-width: 280px;
-            scroll-snap-align: start;
-            position: relative;
-            height: 24rem;
-            border-radius: 1rem;
-            overflow: hidden;
-            background: var(--color-gray-800);
-            border: 1px solid var(--color-white-10);
-            flex-shrink: 0;
-            cursor: pointer;
-        }
-        @media (min-width: 768px) { .tour-card { min-width: 380px; } }
+        /* Ensure content inside cards flips correctly for Arabic even if slider is LTR */
+        html[lang="ar"] .tour-card { direction: rtl; text-align: right; }
         
-        .tour-img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.7s;
-        }
+        .tour-card { min-width: 85%; position: relative; height: 24rem; border-radius: 1rem; overflow: hidden; background: var(--color-gray-800); border: 1px solid var(--color-white-10); flex-shrink: 0; cursor: pointer; }
+        @media (min-width: 640px) { .tour-card { min-width: calc(50% - 0.75rem); } }
+        /* Exactly 3 cards on desktop: (100% - 2 gaps of 1.5rem) / 3 */
+        @media (min-width: 1024px) { .tour-card { min-width: calc((100% - 3rem) / 3); } }
+        
+        .tour-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
         .tour-card:hover .tour-img { transform: scale(1.1); }
-        .tour-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.2), transparent);
-        }
-        .tour-content {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            padding: 2rem;
-            width: 100%;
-        }
-        .tour-title { font-weight: 700; font-size: 1.5rem; margin-bottom: 0.5rem; margin-top: 0; }
-        .tour-desc { color: var(--color-gray-300); font-size: 0.875rem; margin-bottom: 1rem; margin-top: 0; }
+        .tour-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.5) 50%, transparent 100%); }
+        .tour-content { position: absolute; bottom: 0; left: 0; padding: 2rem; width: 100%; }
+        .tour-title { font-weight: 700; font-size: 1.5rem; margin-bottom: 0.5rem; margin-top: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .tour-desc { color: var(--color-gray-300); font-size: 0.875rem; margin-bottom: 1rem; margin-top: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .tour-btn { color: var(--color-accent); font-weight: 700; text-transform: uppercase; font-size: 0.875rem; letter-spacing: 0.05em; display: flex; align-items: center; gap: 0.5rem; }
 
-        /* Fleet Section */
-        .fleet-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            max-width: 56rem;
-            margin: 0 auto;
-        }
+        /* Fleet */
+        .fleet-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; max-width: 56rem; margin: 0 auto; }
         @media (min-width: 768px) { .fleet-grid { grid-template-columns: repeat(2, 1fr); } }
-        
-        .fleet-card {
-            background: white;
-            border-radius: 1.5rem;
-            overflow: hidden;
-            box-shadow: var(--shadow-card);
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: 1px solid var(--color-gray-100);
-            position: relative;
-        }
+        .fleet-card { background: white; border-radius: 1.5rem; overflow: hidden; box-shadow: var(--shadow-card); transition: transform 0.3s, box-shadow 0.3s; border: 1px solid var(--color-gray-100); position: relative; cursor: pointer; }
         .fleet-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-xl); }
         .fleet-card.featured { border: 2px solid var(--color-accent); transform: scale(1.05); z-index: var(--z-normal); }
         .fleet-card.featured:hover { transform: scale(1.05) translateY(-4px); }
-        
         .fleet-img-wrap { height: 14rem; position: relative; background: var(--color-gray-100); overflow: hidden; }
         .fleet-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
         .fleet-card:hover .fleet-img { transform: scale(1.1); }
-        
-        .price-badge {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background: var(--color-white-90);
-            backdrop-filter: blur(4px);
-            color: var(--color-dark);
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.25rem 0.75rem;
-            border-radius: 0.5rem;
-            z-index: var(--z-badge);
-        }
+        .price-badge { position: absolute; top: 1rem; left: 1rem; background: var(--color-white-90); backdrop-filter: blur(4px); color: var(--color-dark); font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.75rem; border-radius: 0.5rem; z-index: var(--z-badge); }
         html[lang="ar"] .price-badge { left: auto; right: 1rem; }
-        
-        .popular-tag {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: var(--color-accent);
-            color: white;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            z-index: var(--z-badge);
-            box-shadow: var(--shadow-lg);
-        }
-
+        .popular-tag { position: absolute; top: 1rem; right: 1rem; background: var(--color-accent); color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 9999px; z-index: var(--z-badge); box-shadow: var(--shadow-lg); }
         .fleet-body { padding: 2rem; }
         .fleet-title { font-weight: 700; color: var(--color-dark); font-size: 1.5rem; margin-bottom: 0.25rem; margin-top: 0; }
         .fleet-desc { font-size: 0.875rem; color: var(--color-gray-600); margin-bottom: 1rem; margin-top: 0; }
         .fleet-specs { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
         .spec-tag { padding: 0.25rem 0.5rem; background: var(--color-gray-50); border-radius: 0.25rem; font-size: 0.875rem; color: var(--color-gray-600); }
-        
         .btn-fleet { width: 100%; padding: 0.75rem; border-radius: 0.75rem; font-weight: 600; transition: background 0.2s; }
         .btn-fleet-outline { border: 1px solid var(--color-primary); color: var(--color-primary); }
         .btn-fleet-outline:hover { background: var(--color-primary); color: white; }
         .btn-fleet-fill { background: var(--color-primary); color: white; }
         .btn-fleet-fill:hover { background: #1a331d; }
 
-        /* Reviews */
+        /* Reviews, FAQ, Booking, Footer (Same as original but compacted here for brevity if needed) */
         .reviews-bg { background: white; }
         .reviews-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
         @media (min-width: 768px) { .reviews-grid { grid-template-columns: repeat(3, 1fr); } }
-        .review-card {
-            background: var(--color-gray-50);
-            padding: 2rem;
-            border-radius: 1.5rem;
-            border: 1px solid var(--color-gray-100);
-            transition: all 0.3s;
-        }
+        .review-card { background: var(--color-gray-50); padding: 2rem; border-radius: 1.5rem; border: 1px solid var(--color-gray-100); transition: all 0.3s; }
         .review-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
         .stars { color: #facc15; font-size: 0.875rem; margin-bottom: 1rem; }
         .review-text { font-style: italic; color: var(--color-gray-600); margin-bottom: 1.5rem; line-height: 1.6; margin-top: 0; }
@@ -731,212 +469,85 @@
         .review-name { font-weight: 700; color: var(--color-dark); font-size: 0.875rem; }
         .review-country { font-size: 0.75rem; color: var(--color-gray-700); }
         
-        /* FAQ */
         .faq-container { max-width: 48rem; }
         .faq-list { display: flex; flex-direction: column; gap: 1rem; }
-        .faq-item {
-            background: var(--color-surface);
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
-            border: 1px solid var(--color-gray-100);
-            cursor: pointer;
-            transition: border-color 0.2s;
-        }
+        .faq-item { background: var(--color-surface); border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); border: 1px solid var(--color-gray-100); cursor: pointer; transition: border-color 0.2s; }
         .faq-item:hover { border-color: rgba(44, 85, 48, 0.3); }
         .faq-header { display: flex; justify-content: space-between; align-items: center; }
         .faq-question { font-weight: 700; font-size: 1.125rem; margin: 0; }
         .faq-answer { margin-top: 1rem; font-size: 0.875rem; color: var(--color-gray-600); line-height: 1.6; margin-bottom: 0; }
-        
-        /* Explicitly fix Arabic alignment in FAQ */
         html[lang="ar"] .faq-question { text-align: right !important; }
         html[lang="ar"] .faq-answer { text-align: right !important; }
 
-        /* Booking Section */
-        .booking-section {
-            background-color: var(--color-primary);
-            position: relative;
-            overflow: hidden;
-            padding: 4rem 1rem;
-        }
-        .booking-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border-radius: 2rem;
-            padding: 1.5rem;
-            box-shadow: var(--shadow-2xl);
-            max-width: 64rem;
-            margin: 0 auto;
-            position: relative;
-            z-index: var(--z-normal);
-        }
+        .booking-section { background-color: var(--color-primary); position: relative; overflow: hidden; padding: 4rem 1rem; }
+        .booking-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 2rem; padding: 1.5rem; box-shadow: var(--shadow-2xl); max-width: 64rem; margin: 0 auto; position: relative; z-index: var(--z-normal); }
         @media (min-width: 768px) { .booking-card { padding: 3rem; } }
-
         .form-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
         @media (min-width: 768px) { .form-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; } }
         .col-span-full { grid-column: 1 / -1; }
-        
-        /* Responsive Grid for Form Rows */
         .form-row-responsive { display: grid; grid-template-columns: 1fr; gap: 1rem; }
         @media (min-width: 640px) { .form-row-responsive { grid-template-columns: 1fr 1fr; } }
-
-        .form-label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--color-gray-700);
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-        .form-input, .form-select, .form-textarea {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            border-radius: 0.75rem;
-            background: white;
-            border: 1px solid var(--color-gray-200);
-            outline: none;
-            transition: all 0.2s;
-            font-size: 1rem;
-        }
+        .form-label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--color-gray-700); text-transform: uppercase; margin-bottom: 0.5rem; }
+        .form-input, .form-select, .form-textarea { width: 100%; padding: 1rem 1.5rem; border-radius: 0.75rem; background: white; border: 1px solid var(--color-gray-200); outline: none; transition: all 0.2s; font-size: 1rem; }
         .form-input:focus { border-color: var(--color-primary); box-shadow: 0 0 0 2px rgba(44, 85, 48, 0.2); }
-        
         .radio-group { display: flex; padding: 0.25rem; background: white; border-radius: 0.75rem; border: 1px solid var(--color-gray-200); }
-        .radio-label {
-            flex: 1;
-            text-align: center;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 700;
-            color: var(--color-gray-500);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+        .radio-label { flex: 1; text-align: center; padding: 0.75rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 700; color: var(--color-gray-500); cursor: pointer; transition: all 0.2s; }
         .radio-input:checked + .radio-content { background: var(--color-primary); color: white; }
         .radio-content { display: block; width: 100%; height: 100%; padding: 0.5rem; border-radius: 0.5rem; }
-
-        .btn-submit {
-            width: 100%;
-            margin-top: 1rem;
-            background-color: var(--color-primary);
-            color: white;
-            font-weight: 700;
-            padding: 1.25rem;
-            border-radius: 0.75rem;
-            box-shadow: var(--shadow-xl);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            font-size: 1.125rem;
-            transition: background 0.2s;
-        }
+        .btn-submit { width: 100%; margin-top: 1rem; background-color: var(--color-primary); color: white; font-weight: 700; padding: 1.25rem; border-radius: 0.75rem; box-shadow: var(--shadow-xl); display: flex; align-items: center; justify-content: center; gap: 0.75rem; font-size: 1.125rem; transition: background 0.2s; }
         .btn-submit:hover { background-color: #1a331d; }
-        
-        .price-estimate-box {
-            margin-top: 1.5rem; 
-            padding: 1rem; 
-            background: rgba(44, 85, 48, 0.05); 
-            border-radius: 0.75rem; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center;
-        }
+        .price-estimate-box { margin-top: 1.5rem; padding: 1rem; background: rgba(44, 85, 48, 0.05); border-radius: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
 
-        /* Footer */
         .footer { background-color: var(--color-dark); color: white; padding-top: 5rem; padding-bottom: 6rem; }
         .footer-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 4rem; }
         @media (min-width: 1024px) { .footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1.5fr; } }
-        
         .footer-brand { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem; }
         .footer-brand-icon { width: 2rem; height: 2rem; background: var(--color-white-10); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; }
         .footer-brand-text { font-weight: 700; font-size: 1.5rem; }
-        
         .footer-social { display: flex; gap: 1rem; margin-top: 1.5rem; }
         .social-btn { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--color-white-05); display: flex; align-items: center; justify-content: center; transition: background 0.2s; color: white; }
         .social-btn:hover { background: var(--color-accent); }
-        
         .footer h3 { font-weight: 700; font-size: 1.125rem; margin-bottom: 1.5rem; margin-top: 0; }
         .footer ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
         .footer a { color: var(--color-gray-300); font-size: 0.875rem; transition: color 0.2s; }
         .footer a:hover { color: var(--color-accent); }
-        
         .footer-contact-item { display: flex; align-items: center; gap: 0.75rem; }
-        
-        .footer-map-container {
-            width: 100%;
-            height: 10rem;
-            background: var(--color-gray-800);
-            border-radius: 0.75rem;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
+        .footer-map-container { width: 100%; height: 10rem; background: var(--color-gray-800); border-radius: 0.75rem; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .footer-map-overlay { font-size: 0.875rem; font-weight: 700; color: var(--color-gray-400); z-index: var(--z-normal); display: flex; gap: 0.5rem; align-items: center; }
-        
         .footer-bottom { border-top: 1px solid var(--color-gray-800); padding-top: 2rem; text-align: center; font-size: 0.75rem; color: var(--color-gray-400); }
 
-        /* Animation Keyframes */
+        /* Animation */
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         @keyframes bounce-slow { 0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8,0,1,1); } 50% { transform: translateY(0); animation-timing-function: cubic-bezier(0,0,0.2,1); } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-
         .animate-bounce { animation: bounce-slow 2s infinite; }
         .animate-spin { animation: spin 1s linear infinite; }
         .animate-float { animation: float 6s ease-in-out infinite; }
-        .animate-shake { animation: shake 0.3s ease-in-out; }
         
-        /* Utils */
         .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s, transform 0.8s; }
         .reveal.waiting { opacity: 0; transform: translateY(30px); } 
         
-        .sticky-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            z-index: var(--z-sticky);
-            padding: 12px 16px;
-            padding-bottom: calc(12px + env(safe-area-inset-bottom));
-            display: none;
-            gap: 12px;
-            align-items: center;
-        }
+        .sticky-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: var(--z-sticky); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); display: none; gap: 12px; align-items: center; }
         @media (max-width: 768px) { .sticky-bar { display: flex; } }
         .sticky-bar.hide-bar { transform: translateY(100%); transition: transform 0.3s; }
-        
         .glass-btn-primary { flex: 1; background: #0F6B60; color: white; padding: 0.75rem; border-radius: 0.5rem; text-align: center; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
         .glass-btn-accent { flex: 1; background: var(--color-primary); color: white; padding: 0.75rem; border-radius: 0.5rem; text-align: center; font-weight: 700; }
         
-        /* Preloader & Toasts */
         #preloader { position: fixed; inset: 0; z-index: var(--z-preloader); background: #fff; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
         .preloader-circle { width: 5rem; height: 5rem; border-radius: 50%; background: rgba(44,85,48,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; }
         .preloader-text { font-size: 0.875rem; font-weight: 700; color: var(--color-gray-400); letter-spacing: 0.1em; text-transform: uppercase; }
-        .fade-out { opacity: 0; pointer-events: none; }
         
         #network-toast { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: var(--color-error); color: white; padding: 10px 20px; border-radius: 9999px; z-index: var(--z-toast); transition: top 0.3s; font-size: 0.875rem; font-weight: bold; display: flex; gap: 8px; align-items: center; }
         #network-toast.show { top: env(safe-area-inset-top, 20px); }
 
-        /* Input Errors */
         .input-error { border-color: var(--color-error) !important; background-color: #FEF2F2 !important; }
-        .input-success { border-color: var(--color-success) !important; background-color: var(--color-success-bg) !important; }
         .error-text { display: block; font-size: 0.75rem; color: var(--color-error); margin-top: 0.25rem; }
 
-        /* Floating Actions */
         .fab-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: var(--z-navbar); display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-end; }
         .fab-scroll { padding: 0.75rem; background: white; color: var(--color-primary); border-radius: 50%; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .fab-scroll.show { opacity: 1; pointer-events: auto; }
         .fab-whatsapp { width: 3.5rem; height: 3.5rem; background: #0F6B60; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-xl); transition: transform 0.2s; }
 
-        /* Modal */
         .modal-overlay { position: fixed; inset: 0; z-index: var(--z-modal); background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1rem; }
         .modal-content { background: white; border-radius: 1.5rem; padding: 2.5rem; max-width: 24rem; width: 100%; text-align: center; position: relative; }
         .modal-close { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: var(--color-gray-400); }
@@ -944,18 +555,14 @@
         .modal-title { font-weight: 700; color: var(--color-dark); font-size: 1.5rem; margin-bottom: 0.5rem; margin-top: 0; }
         .modal-desc { color: var(--color-gray-500); margin-bottom: 2rem; margin-top: 0; }
         .modal-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 1rem; background: #0F6B60; color: white; border-radius: 0.75rem; font-weight: 700; }
-
-        /* Privacy/Terms Modal */
         .info-modal-content { background: white; border-radius: 1rem; max-width: 42rem; width: 100%; max-height: 80vh; overflow-y: auto; padding: 2rem; position: relative; }
 
-        /* Cookie Banner */
         .cookie-banner { background: white; border-top: 1px solid var(--color-gray-200); padding: 1rem; box-shadow: var(--shadow-2xl); position: fixed; bottom: 0; left: 0; width: 100%; z-index: var(--z-navbar); display: flex; flex-direction: column; gap: 1rem; transform: translateY(100%); transition: transform 0.5s; }
         .cookie-banner.active { transform: translateY(0); }
         .cookie-buttons { display: flex; gap: 0.75rem; }
         .btn-cookie-accept { padding: 0.5rem 1.5rem; background: var(--color-primary); color: white; border-radius: 0.5rem; font-weight: 700; font-size: 0.875rem; }
         .btn-cookie-decline { padding: 0.5rem 1.5rem; background: var(--color-gray-100); color: var(--color-gray-600); border-radius: 0.5rem; font-weight: 700; font-size: 0.875rem; }
 
-        /* JS Fallback */
         .no-js-overlay { position: fixed; inset: 0; z-index: 10000; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; }
     </style>
 </head>
@@ -976,7 +583,7 @@
     <div id="preloader">
         <div class="text-center">
             <div class="preloader-circle animate-bounce">
-                <img src="favicon.webp" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
+                <img src="favicon.ico" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
                 <i class="fa-solid fa-mountain-sun text-primary hidden" style="font-size:2.25rem;"></i>
             </div>
             <div class="preloader-text">Loading</div>
@@ -990,7 +597,7 @@
                 <!-- Logo -->
                 <div class="nav-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
                     <div>
-                        <img src="favicon.webp" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img">
+                        <img src="favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img">
                     </div>
                     <span>Georgia Hills</span>
                 </div>
@@ -1006,7 +613,7 @@
                     <div style="display:flex; gap:0.75rem;">
                         <!-- Currency Dropdown (Desktop) -->
                         <div class="custom-select-wrapper" id="currency-desktop">
-                            <button class="action-btn custom-select-trigger" onclick="toggleCurrencyDropdown('desktop')" aria-haspopup="true">
+                            <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('desktop')" aria-haspopup="true">
                                 <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-desktop">
                                 <span id="curr-code-desktop">GEL</span>
                                 <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
@@ -1017,7 +624,7 @@
                         </div>
 
                         <!-- Language Btn -->
-                        <button onclick="toggleLanguage()" class="action-btn" aria-label="Toggle Language">
+                        <button onclick="LangManager.toggle()" class="action-btn" aria-label="Toggle Language">
                             <i class="fa-solid fa-globe"></i><span class="lang-text">العربية</span>
                         </button>
                     </div>
@@ -1027,8 +634,8 @@
 
                 <!-- Mobile Toggle -->
                 <div class="mobile-controls">
-                    <!-- Mobile Language Switcher Added Here -->
-                    <button onclick="toggleLanguage()" class="action-btn" aria-label="Toggle Language Mobile" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
+                    <!-- Mobile Language Switcher -->
+                    <button onclick="LangManager.toggle()" class="action-btn" aria-label="Toggle Language Mobile" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
                         <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">العربية</span>
                     </button>
                     <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
@@ -1048,7 +655,7 @@
         <div class="mobile-settings">
              <!-- Currency Dropdown (Mobile) -->
              <div class="custom-select-wrapper" id="currency-mobile">
-                <button class="action-btn custom-select-trigger" onclick="toggleCurrencyDropdown('mobile')" aria-haspopup="true">
+                <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('mobile')" aria-haspopup="true">
                     <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-mobile">
                     <span id="curr-code-mobile">GEL</span>
                     <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
@@ -1062,7 +669,7 @@
         <a href="#booking" data-i18n="nav_book" class="mobile-btn-book">Book Now</a>
         
         <div class="mobile-social-container">
-             <button onclick="shareApp()" class="mobile-social-btn" aria-label="Share App">
+             <button onclick="App.share()" class="mobile-social-btn" aria-label="Share App">
                 <div class="mobile-social-icon"><i class="fa-solid fa-share-nodes" style="font-size:1.25rem;"></i></div>
                 <span class="mobile-social-text">Share</span>
             </button>
@@ -1146,16 +753,23 @@
     <!-- Destinations -->
     <section id="destinations" class="section-py bg-dark-section">
         <div class="container slider-container">
-            <div class="reveal text-center" style="margin-bottom:3rem;">
-                <span class="section-label text-accent-light" data-i18n="dest_label">Explore Georgia</span>
-                <h2 class="section-title text-white" style="margin-top:0.5rem;" data-i18n="dest_title">Popular Places</h2>
-                <p style="color:var(--color-gray-400); max-width:42rem; margin:1rem auto 0 auto;" data-i18n="dest_subtitle">Discover the most beautiful locations accessible comfortably by car.</p>
+            <!-- Header & Nav Wrapper -->
+            <div class="slider-header-wrapper reveal">
+                <div style="text-align: center; width: 100%;">
+                    <span class="section-label text-accent-light" data-i18n="dest_label">Explore Georgia</span>
+                    <h2 class="section-title text-white" style="margin-top:0.5rem;" data-i18n="dest_title">Popular Places</h2>
+                    <p style="color:var(--color-gray-400); max-width:42rem; margin:1rem auto 0 auto;" data-i18n="dest_subtitle">Discover the most beautiful locations accessible comfortably by car.</p>
+                </div>
+            </div>
+            
+            <!-- Desktop Floating Navigation (Placed here for context) -->
+            <div class="slider-nav-container desktop-only hidden lg:flex">
+                <button id="prevBtnDesk" class="slider-nav-btn prev-btn" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
+                <button id="nextBtnDesk" class="slider-nav-btn next-btn" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
 
-            <button id="prevBtn" class="slider-nav-btn slider-prev" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left rtl:rotate-180"></i></button>
-            <button id="nextBtn" class="slider-nav-btn slider-next" aria-label="Next Slide"><i class="fa-solid fa-chevron-right rtl:rotate-180"></i></button>
-
-            <div id="tours-slider" class="tours-slider">
+            <!-- Slider Track -->
+            <div id="tours-slider" class="tours-slider" tabindex="0" aria-label="Destinations Slider">
                 <!-- Tbilisi -->
                 <div class="tour-card group">
                     <img src="Tbilisi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Tbilisi">
@@ -1197,6 +811,12 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Mobile Controls (Bottom Center) -->
+            <div class="slider-nav-container lg-hidden">
+                 <button id="prevBtnMob" class="slider-nav-btn" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
+                 <button id="nextBtnMob" class="slider-nav-btn" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
         </div>
     </section>
 
@@ -1209,7 +829,7 @@
             </div>
             <div id="fleet-grid" class="fleet-grid">
                 <!-- Sedan -->
-                <div class="fleet-card reveal">
+                <div class="fleet-card reveal" onclick="App.prefillVehicle('Sedan')">
                     <div class="fleet-img-wrap">
                         <div class="price-badge">
                             <span data-i18n="price_start">From</span> 
@@ -1224,11 +844,11 @@
                             <span class="spec-tag"><i class="fa-solid fa-suitcase"></i> 2</span>
                             <span class="spec-tag"><i class="fa-solid fa-snowflake"></i> A/C</span>
                         </div>
-                        <button onclick="prefillVehicle('Sedan')" class="btn-fleet btn-fleet-outline" data-i18n="btn_select_sedan">Book Sedan</button>
+                        <button class="btn-fleet btn-fleet-outline" data-i18n="btn_select_sedan">Book Sedan</button>
                     </div>
                 </div>
                 <!-- Minivan -->
-                <div class="fleet-card featured reveal">
+                <div class="fleet-card featured reveal" onclick="App.prefillVehicle('Minivan')">
                      <div class="popular-tag" data-i18n="tag_popular">POPULAR</div>
                     <div class="fleet-img-wrap">
                         <div class="price-badge">
@@ -1244,7 +864,7 @@
                             <span class="spec-tag"><i class="fa-solid fa-suitcase"></i> 5</span>
                             <span class="spec-tag"><i class="fa-solid fa-wifi"></i> WiFi</span>
                         </div>
-                        <button onclick="prefillVehicle('Minivan')" class="btn-fleet btn-fleet-fill" data-i18n="btn_select_minivan">Book Minivan</button>
+                        <button class="btn-fleet btn-fleet-fill" data-i18n="btn_select_minivan">Book Minivan</button>
                     </div>
                 </div>
             </div>
@@ -1342,7 +962,7 @@
             </div>
 
             <div id="booking-container" class="booking-card reveal">
-                <form id="bookingForm" onsubmit="handleBooking(event)" novalidate>
+                <form id="bookingForm" onsubmit="BookingManager.handleSubmit(event)" novalidate>
                     <div class="form-grid">
                         <!-- Name -->
                         <div>
@@ -1362,7 +982,7 @@
                         <div class="form-row-responsive">
                             <div>
                                 <label for="vehicle" class="form-label" data-i18n="label_vehicle">Vehicle</label>
-                                <select id="vehicle" onchange="updatePriceEstimate()" class="form-select">
+                                <select id="vehicle" onchange="BookingManager.updateEstimate()" class="form-select">
                                     <option value="Sedan" data-i18n="opt_sedan">Sedan</option>
                                     <option value="Minivan" data-i18n="opt_minivan">Minivan</option>
                                 </select>
@@ -1389,18 +1009,14 @@
                             </div>
                         </div>
 
-                        <!-- Dates -->
-                        <div class="col-span-full form-row-responsive">
-                            <div>
-                                <label for="dateFrom" class="form-label" data-i18n="label_from">Pick-up Date</label>
-                                <input type="date" id="dateFrom" onchange="updateMinDate(); updatePriceEstimate()" autocomplete="off" class="form-input">
-                                <span class="error-text hidden" id="dateFromError">Required</span>
-                            </div>
-                            <div>
-                                <label for="dateTo" class="form-label" data-i18n="label_to">Drop-off Date</label>
-                                <input type="date" id="dateTo" onchange="updatePriceEstimate()" autocomplete="off" class="form-input">
-                                <span class="error-text hidden" id="dateToError">Required</span>
-                            </div>
+                        <!-- Dates (Flatpickr Range) -->
+                        <div class="col-span-full">
+                            <label for="dateRange" class="form-label">
+                                <span data-i18n="label_dates">Trip Dates</span>
+                                <span id="dates-helper" class="text-primary text-xs font-normal ml-2 hidden"></span>
+                            </label>
+                            <input type="text" id="dateRange" class="form-input" placeholder="Select Pick-up & Drop-off Dates">
+                            <span class="error-text hidden" id="dateError">Please select date range</span>
                         </div>
                         
                         <div class="col-span-full">
@@ -1411,8 +1027,12 @@
 
                     <!-- Live Price Estimate -->
                     <div id="price-estimate" class="hidden price-estimate-box">
-                        <span style="font-size:0.875rem; font-weight:700; color:var(--color-gray-600);" data-i18n="label_result">Estimated Total:</span>
-                        <span style="font-size:1.5rem; font-weight:800; color:var(--color-primary);" class="price-display" id="total-price-display">0 GEL</span>
+                         <div>
+                            <span style="font-size:0.875rem; font-weight:700; color:var(--color-gray-600);" data-i18n="label_result">Estimated Total:</span>
+                            <span style="font-size:1.5rem; font-weight:800; color:var(--color-primary);" class="price-display" id="total-price-display">0 GEL</span>
+                        </div>
+                        <!-- Added Duration Display -->
+                        <div id="trip-duration" class="text-sm text-gray-600 mt-1" style="font-weight: 600;"></div>
                     </div>
 
                     <button type="submit" id="submitBtn" class="btn-submit">
@@ -1439,11 +1059,10 @@
                     <div class="footer-social">
                         <a href="#" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                         <a href="#" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                        <button onclick="shareApp()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
+                        <button onclick="App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
                     </div>
                     <div style="margin-top:1.5rem; display:flex; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
-                        <button onclick="document.getElementById('privacyModal').classList.remove('hidden');" style="color:inherit;">Privacy Policy</button>
-                        <button onclick="document.getElementById('termsModal').classList.remove('hidden');" style="color:inherit;">Terms of Service</button>
+                        <button onclick="UIManager.openModal('privacyModal')" style="color:inherit;">Privacy Policy</button>
                     </div>
                 </div>
                 <!-- Links -->
@@ -1493,7 +1112,7 @@
     <!-- Success -->
     <div id="successModal" class="hidden modal-overlay">
         <div class="modal-content">
-            <button onclick="document.getElementById('successModal').classList.add('hidden')" class="modal-close">&times;</button>
+            <button onclick="UIManager.closeModal('successModal')" class="modal-close">&times;</button>
             <div class="modal-icon-circle"><i class="fa-solid fa-check" style="font-size:2rem;"></i></div>
             <h3 class="modal-title" data-i18n="modal_title">Quote Ready!</h3>
             <p class="modal-desc" data-i18n="modal_desc">Your trip details are prepared. Send them to us on WhatsApp to start chatting.</p>
@@ -1503,30 +1122,28 @@
         </div>
     </div>
 
-    <!-- Privacy Modal (Placeholder) -->
+    <!-- Privacy Modal -->
     <div id="privacyModal" class="hidden modal-overlay">
         <div class="info-modal-content">
-            <button onclick="document.getElementById('privacyModal').classList.add('hidden')" class="modal-close">&times;</button>
+            <button onclick="UIManager.closeModal('privacyModal')" class="modal-close">&times;</button>
             <h2 class="modal-title">Privacy Policy</h2>
-            <p>Welcome to Georgia Hills...</p>
-        </div>
-    </div>
-
-    <!-- Terms Modal (Placeholder) -->
-    <div id="termsModal" class="hidden modal-overlay">
-        <div class="info-modal-content">
-            <button onclick="document.getElementById('termsModal').classList.add('hidden')" class="modal-close">&times;</button>
-            <h2 class="modal-title">Terms of Service</h2>
-            <p>Terms and conditions...</p>
+            <p><strong>Last Updated: [Date]</strong></p>
+            <p>At Georgia Hills ("we," "us," or "our"), we respect your privacy. This policy explains how we handle your information.</p>
+            <h3>1. Information We Collect</h3>
+            <p>We collect personal information you provide directly to us via our booking form or WhatsApp, including your Name, Phone Number, and Trip Details.</p>
+            <h3>2. How We Use Your Information</h3>
+            <p>We use this information solely to facilitate your transportation booking and communicate with you regarding your trip.</p>
+            <h3>3. Data Sharing</h3>
+            <p>We do not sell your personal data. We share your contact details only with the assigned driver to ensure smooth pickup.</p>
         </div>
     </div>
 
     <!-- Cookie Banner -->
     <div id="cookie-banner" class="cookie-banner">
-        <p style="font-size:0.875rem; color:var(--color-gray-600);">We use cookies to remember your preferences.</p>
+        <p style="font-size:0.875rem; color:var(--color-gray-600);">We use cookies to remember your preferences (Language & Currency).</p>
         <div class="cookie-buttons">
-            <button onclick="acceptCookies()" class="btn-cookie-accept">Accept</button>
-            <button onclick="declineCookies()" class="btn-cookie-decline">Decline</button>
+            <button onclick="App.acceptCookies()" class="btn-cookie-accept">Accept</button>
+            <button onclick="App.declineCookies()" class="btn-cookie-decline">Decline</button>
         </div>
     </div>
 
@@ -1536,9 +1153,9 @@
         <a href="#booking" class="glass-btn-accent" data-i18n="nav_book">Book Now</a>
     </div>
 
-    <!-- EmailJS (Loaded securely via CDN) -->
-    <!-- CRITICAL FIX: Added defer to prevent render blocking -->
+    <!-- EmailJS & Flatpickr Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
        const EMAILJS_PUBLIC_KEY = "gFHD0l5sBGRvS44V8"; 
        window.addEventListener('load', function(){
@@ -1547,817 +1164,759 @@
                   if(EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY.length > 5) {
                        emailjs.init(EMAILJS_PUBLIC_KEY); 
                   }
-              } else { console.log("EmailJS: No public key configured. Service disabled."); }
+              }
           } catch(e) { console.log("EmailJS init warning:", e); }
        });
     </script>
 
 
     <script>
-        // === JS LOGIC ===
-        const VEHICLE_RATES = { 'Sedan': 150, 'Minivan': 250 };
-        
-        // Currency Config
-        const currencies = [
-            { code: 'GEL', flag: 'ge' }, { code: 'USD', flag: 'us' }, { code: 'EUR', flag: 'eu' },
-            { code: 'AED', flag: 'ae' }, { code: 'SAR', flag: 'sa' }, { code: 'KWD', flag: 'kw' },
-            { code: 'QAR', flag: 'qa' }, { code: 'OMR', flag: 'om' }
-        ];
-        
-        let currentCurrency = 'GEL';
-        let exchangeRates = { GEL: 1, USD: 0.37, EUR: 0.34, AED: 1.35, SAR: 1.38, KWD: 0.11, QAR: 1.34, OMR: 0.14 }; // Default/Fallback
+        /**
+         * Georgia Hills - Main Application Logic
+         */
 
-        function vibrate(pattern = [10]) { if (navigator.vibrate) navigator.vibrate(pattern); }
+        // --- Configuration Module ---
+        const AppConfig = {
+            vehicleRates: { 'Sedan': 150, 'Minivan': 250 },
+            currencies: [
+                { code: 'GEL', flag: 'ge' }, { code: 'USD', flag: 'us' }, { code: 'EUR', flag: 'eu' },
+                { code: 'AED', flag: 'ae' }, { code: 'SAR', flag: 'sa' }, { code: 'KWD', flag: 'kw' },
+                { code: 'QAR', flag: 'qa' }, { code: 'OMR', flag: 'om' }
+            ],
+            defaultRates: { GEL: 1, USD: 0.37, EUR: 0.34, AED: 1.35, SAR: 1.38, KWD: 0.11, QAR: 1.34, OMR: 0.14 }
+        };
 
-        async function shareApp() {
-            vibrate();
-            if (navigator.share) {
-                try { await navigator.share({ title: 'Georgia Hills Transport', text: 'Check out this premium driver service in Georgia!', url: window.location.href }); } catch(err) { console.error('Share failed:', err); }
-            } else {
-                const text = window.location.href;
-                try { 
-                    await navigator.clipboard.writeText(text); 
-                    showToast('Link Copied', 'fa-check'); 
-                } catch (err) {
-                    const dummy = document.createElement('input');
-                    document.body.appendChild(dummy); dummy.value = text; dummy.select();
-                    document.execCommand('copy'); document.body.removeChild(dummy);
-                    showToast('Link Copied', 'fa-check');
-                }
-            }
-        }
+        // --- Currency Manager ---
+        const CurrencyManager = {
+            current: 'GEL',
+            rates: { ...AppConfig.defaultRates },
 
-        function showToast(message, icon) {
-            const toast = document.getElementById('network-toast');
-            if (toast) {
-                const originalContent = toast.innerHTML;
-                toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
-                toast.classList.add('show');
-                setTimeout(() => { toast.classList.remove('show'); setTimeout(() => { toast.innerHTML = originalContent; }, 300); }, 2000);
-            }
-        }
-        
-        function checkIosInstall() {
-            try {
-                const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-                const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
-                if (isIos && !isInStandaloneMode && !sessionStorage.getItem('iosPromptShown')) {
-                    // Modal logic here if needed
-                }
-            } catch(e) { console.log("iOS check failed/blocked"); }
-        }
-
-        // Debounce Helper
-        function debounce(func, wait) {
-            let timeout;
-            return function(...args) {
-                const context = this;
-                clearTimeout(timeout);
-                timeout = setTimeout(() => func.apply(context, args), wait);
-            };
-        }
-
-        // --- 1. Preloader & Init ---
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('preloader');
-            if(loader) { setTimeout(() => { loader.classList.add('fade-out'); setTimeout(() => loader.style.display = 'none', 500); }, 100); }
-            
-            const yearEl = document.getElementById('year');
-            if(yearEl) yearEl.textContent = new Date().getFullYear();
-            
-            initCurrencyDropdowns();
-            restoreFormDraft(); 
-            checkIosInstall(); 
-            
-            try {
-                loadUserPreferences();
-                
-                // Fetch rates independently
-                if ('requestIdleCallback' in window) {
-                    requestIdleCallback(() => fetchRates('GEL'));
-                } else {
-                    setTimeout(() => fetchRates('GEL'), 1000);
-                }
-
-                if (!localStorage.getItem('cookieConsent')) {
-                    const banner = document.getElementById('cookie-banner');
-                    if(banner) banner.classList.add('active');
-                }
-            } catch(e) {
-                console.warn("Storage access denied/failed", e);
-                setTimeout(() => fetchRates('GEL'), 1000);
-            }
-            
-            // Date Logic
-            const dateFrom = document.getElementById('dateFrom');
-            const dateTo = document.getElementById('dateTo');
-            
-            if(dateFrom) {
-                const today = new Date();
-                const localIso = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
-                dateFrom.min = localIso;
-                if(dateTo) dateTo.min = localIso;
-            }
-            
-            if (dateFrom && dateTo) {
-                const validateRange = () => {
-                    if (dateFrom.value) {
-                        dateTo.min = dateFrom.value; 
-                        if (dateTo.value && dateTo.value < dateFrom.value) {
-                            dateTo.value = ""; dateTo.classList.add('input-error'); vibrate([50]);
-                        } else { dateTo.classList.remove('input-error'); }
+            init() {
+                try {
+                    const saved = localStorage.getItem('userCurrency');
+                    if (saved && AppConfig.currencies.find(c => c.code === saved)) {
+                        this.current = saved;
                     }
-                };
-                dateFrom.addEventListener('change', validateRange);
-                dateTo.addEventListener('change', validateRange);
-            }
-            
-            const mapContainer = document.querySelector('.footer-map-container');
-            if(mapContainer) {
-                const mapObserver = new IntersectionObserver((entries) => {
-                    if(entries[0].isIntersecting) {
-                        mapContainer.innerHTML = '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d47648.33742296416!2d44.75704155106659!3d41.71513711906941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40440cd7e64f626b%3A0x61d084ede2576ea3!2sTbilisi!5e0!3m2!1sen!2sge!4v1698000000000" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
-                        mapObserver.disconnect();
-                    }
-                });
-                mapObserver.observe(mapContainer);
-            }
-        });
-        
-        // --- Currency Logic ---
-        function initCurrencyDropdowns() {
-            ['desktop', 'mobile'].forEach(type => {
-                const container = document.getElementById(`curr-options-${type}`);
-                if(!container) return;
-                
-                currencies.forEach(curr => {
-                    const opt = document.createElement('div');
-                    opt.className = 'custom-option';
-                    opt.innerHTML = `<img src="https://flagcdn.com/w40/${curr.flag}.png" class="currency-flag-sm" alt="${curr.code}"> ${curr.code}`;
-                    opt.onclick = () => changeCurrency(curr.code, curr.flag);
-                    container.appendChild(opt);
-                });
-            });
-            
-            // Close dropdowns on click outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.closest('.custom-select-wrapper')) {
-                    document.querySelectorAll('.custom-select-wrapper').forEach(el => el.classList.remove('open'));
-                }
-            });
-        }
-
-        function toggleCurrencyDropdown(type) {
-            const wrapper = document.getElementById(`currency-${type}`);
-            if(wrapper) wrapper.classList.toggle('open');
-        }
-
-        function changeCurrency(code, flag) {
-            currentCurrency = code;
-            try { localStorage.setItem('userCurrency', code); } catch(e){}
-            
-            // Update UI buttons
-            const flagUrl = flag ? `https://flagcdn.com/w40/${flag}.png` : `https://flagcdn.com/w40/${currencies.find(c=>c.code===code).flag}.png`;
-            
-            ['desktop', 'mobile'].forEach(type => {
-                const codeEl = document.getElementById(`curr-code-${type}`);
-                const flagEl = document.getElementById(`curr-flag-${type}`);
-                if(codeEl) codeEl.innerText = code;
-                if(flagEl) flagEl.src = flagUrl;
-            });
-            
-            // Close all dropdowns immediately after selection
-            document.querySelectorAll('.custom-select-wrapper').forEach(el => el.classList.remove('open'));
-            
-            updateSitePrices();
-        }
-
-        async function fetchRates(base) {
-            try {
-                const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    exchangeRates = data.rates;
-                    updateSitePrices();
-                }
-            } catch (error) {
-                console.log("Using offline rates / fallback mode");
-                // Rates already initialized with fallback
-                updateSitePrices();
-            }
-        }
-
-        function updateSitePrices() {
-            // Update global prices (Fleet tags)
-            const rate = exchangeRates[currentCurrency] || 1;
-            
-            document.querySelectorAll('.price-display').forEach(el => {
-                const basePrice = parseFloat(el.getAttribute('data-base-price'));
-                if(basePrice) {
-                    // If currency is GEL, show exact base. Otherwise convert.
-                    // Assuming base prices are in GEL.
-                    // If rate base was GEL: value * rate.
-                    // If rate base was something else, we need logic. We fetched base=GEL above.
-                    
-                    let finalPrice = basePrice;
-                    if(currentCurrency !== 'GEL') {
-                        finalPrice = Math.ceil((basePrice * rate) / 5) * 5; // Round to nearest 5
-                    }
-                    el.innerText = `${finalPrice} ${currentCurrency}`;
-                }
-            });
-            
-            updatePriceEstimate(); // Update Booking form total
-        }
-
-        // --- Standard Logic ---
-
-        const focusController = new AbortController();
-        let lastFocusedElement;
-
-        function trapFocus(modal) {
-            lastFocusedElement = document.activeElement;
-            const focusable = modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-            if(focusable.length) focusable[0].focus();
-            
-            modal.addEventListener('keydown', function(e) {
-                const first = focusable[0];
-                const last = focusable[focusable.length - 1];
-                if(e.key === 'Tab') {
-                    if(e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); } 
-                    else if(!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-                }
-                if(e.key === 'Escape') closeModalById(modal.id);
-            }, { signal: focusController.signal });
-        }
-
-        function closeModalById(id) {
-            const el = document.getElementById(id);
-            if(el) el.classList.add('hidden');
-            if(lastFocusedElement) lastFocusedElement.focus();
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if(e.key === "Escape") {
-                ['privacyModal', 'termsModal', 'successModal'].forEach(id => closeModalById(id));
-                const mobileMenu = document.getElementById('mobile-menu');
-                if(mobileMenu && mobileMenu.classList.contains('open')) toggleMenu();
-            }
-        });
-
-        function acceptCookies() { try { localStorage.setItem('cookieConsent', 'true'); } catch(e){} document.getElementById('cookie-banner').classList.remove('active'); }
-        function declineCookies() { try { localStorage.setItem('cookieConsent', 'false'); } catch(e){} document.getElementById('cookie-banner').classList.remove('active'); }
-
-        function loadUserPreferences() {
-            try {
-                const savedLang = localStorage.getItem('userLang');
-                if (savedLang && savedLang !== currentLang) { toggleLanguage(); }
-                
-                const savedCurr = localStorage.getItem('userCurrency');
-                if(savedCurr) {
-                    const c = currencies.find(x => x.code === savedCurr);
-                    if(c) changeCurrency(savedCurr, c.flag);
-                }
-            } catch(e){}
-        }
-
-        const formId = 'bookingForm';
-        const storageKey = 'gh_booking_draft';
-
-        function saveFormDraft() {
-            const serviceEls = document.querySelectorAll('input[name="driver"]');
-            let serviceVal = 'with_driver'; 
-            serviceEls.forEach(el => { if(el.checked) serviceVal = el.value; });
-
-            const formData = {
-                name: document.getElementById('name')?.value || '',
-                phone: document.getElementById('phone')?.value || '',
-                passengers: document.getElementById('passengers')?.value || '',
-                vehicle: document.getElementById('vehicle')?.value || '',
-                service: serviceVal,
-                notes: document.getElementById('notes')?.value || ''
-            };
-            try { sessionStorage.setItem(storageKey, JSON.stringify(formData)); } catch(e){}
-        }
-
-        function restoreFormDraft() {
-            try {
-                const saved = sessionStorage.getItem(storageKey);
-                if (saved) {
-                    const data = JSON.parse(saved);
-                    if(data.name && document.getElementById('name')) document.getElementById('name').value = data.name;
-                    if(data.phone && document.getElementById('phone')) document.getElementById('phone').value = data.phone;
-                    if(data.passengers && document.getElementById('passengers')) document.getElementById('passengers').value = data.passengers;
-                    if(data.vehicle && document.getElementById('vehicle')) document.getElementById('vehicle').value = data.vehicle;
-                    if(data.notes && document.getElementById('notes')) document.getElementById('notes').value = data.notes;
-                    
-                    if(data.service) {
-                        const radio = document.querySelector(`input[name="driver"][value="${data.service}"]`);
-                        if(radio) radio.checked = true;
-                    }
-                    updatePriceEstimate();
-                }
-            } catch(e) { 
-                try { sessionStorage.removeItem(storageKey); } catch(e2){}
-            }
-        }
-
-        const formEl = document.getElementById(formId);
-        if(formEl) { formEl.addEventListener('input', saveFormDraft); formEl.addEventListener('change', saveFormDraft); }
-
-        function updatePriceEstimate() {
-            const dateFrom = document.getElementById('dateFrom')?.value;
-            const dateTo = document.getElementById('dateTo')?.value;
-            const vehicleType = document.getElementById('vehicle')?.value;
-            const estimateEl = document.getElementById('price-estimate');
-            const totalEl = document.getElementById('total-price-display');
-
-            if (dateFrom && dateTo && vehicleType) {
-                const d1 = new Date(dateFrom);
-                const d2 = new Date(dateTo);
-                const diffTime = Math.abs(d2 - d1);
-                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                if (diffDays === 0) diffDays = 1;
-
-                if (d2 >= d1) {
-                    const rate = VEHICLE_RATES[vehicleType] || 150;
-                    const totalGEL = diffDays * rate;
-                    
-                    // Convert total
-                    const exRate = exchangeRates[currentCurrency] || 1;
-                    const finalTotal = currentCurrency === 'GEL' ? totalGEL : Math.ceil((totalGEL * exRate) / 5) * 5;
-                    
-                    if(totalEl) {
-                        // Store raw total for submission logic if needed, but display converted
-                        totalEl.innerText = `${finalTotal} ${currentCurrency}`;
-                    }
-                    
-                    if(estimateEl) estimateEl.classList.remove('hidden');
-                } else { if(estimateEl) estimateEl.classList.add('hidden'); }
-            } else { if(estimateEl) estimateEl.classList.add('hidden'); }
-        }
-
-        let lastScrollTop = 0;
-        const metaThemeColor = document.querySelector('meta[name="theme-color"]');
-
-        const handleScroll = debounce(() => {
-            window.requestAnimationFrame(() => {
-                const scrollY = window.scrollY;
-                const nav = document.getElementById('navbar');
-                const backBtn = document.getElementById('backToTop');
-                const stickyBar = document.querySelector('.sticky-bar');
-                
-                if(nav) { if (scrollY > 20) nav.classList.add('shadow-md'); else nav.classList.remove('shadow-md'); }
-
-                if (metaThemeColor) {
-                    if (scrollY > 100) { metaThemeColor.setAttribute('content', '#ffffff'); } 
-                    else { metaThemeColor.setAttribute('content', '#0F172A'); }
-                }
-
-                if (scrollY > lastScrollTop && scrollY > 100) {
-                    if(stickyBar) stickyBar.classList.add('hide-bar');
-                    if(nav && window.innerWidth < 768) nav.classList.add('nav-hidden');
-                } else {
-                    if(stickyBar) stickyBar.classList.remove('hide-bar');
-                    if(nav) nav.classList.remove('nav-hidden');
-                }
-
-                if(backBtn) { if (scrollY > 500) backBtn.classList.add('show'); else backBtn.classList.remove('show'); }
-
-                lastScrollTop = scrollY;
-            });
-        }, 10); 
-
-        window.addEventListener('scroll', handleScroll, { passive: true });
-
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const closeMenuBtn = document.getElementById('close-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
-
-        function toggleMenu() {
-            vibrate();
-            if(mobileMenu) {
-                const isOpened = mobileMenu.classList.toggle('open');
-                if(menuBtn) menuBtn.setAttribute('aria-expanded', isOpened);
-                mobileMenu.setAttribute('aria-hidden', !isOpened);
-                
-                if(isOpened) {
-                    const firstFocusable = mobileMenu.querySelector('button, a');
-                    if(firstFocusable) setTimeout(() => firstFocusable.focus(), 50);
-                } else { if(menuBtn) menuBtn.focus(); }
-                
-                document.body.classList.toggle('overflow-hidden');
-            }
-        }
-
-        if(menuBtn) menuBtn.addEventListener('click', toggleMenu);
-        if(closeMenuBtn) closeMenuBtn.addEventListener('click', toggleMenu);
-        mobileLinks.forEach(link => link.addEventListener('click', toggleMenu));
-        
-        // Add Close menu functionality to Book Now button in mobile menu
-        const mobileBtnBook = document.querySelector('.mobile-btn-book');
-        if(mobileBtnBook) mobileBtnBook.addEventListener('click', toggleMenu);
-
-        function updateMinDate() {
-            const from = document.getElementById('dateFrom');
-            const to = document.getElementById('dateTo');
-            if(from && to && from.value) { to.min = from.value; }
-        }
-
-        function prefillVehicle(type) {
-            vibrate();
-            const vehInput = document.getElementById('vehicle');
-            if(vehInput) { vehInput.value = type; updatePriceEstimate(); }
-            const bookSec = document.getElementById('booking');
-            if(bookSec) bookSec.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function validateForm() {
-            let isValid = true;
-            const name = document.getElementById('name');
-            const phone = document.getElementById('phone');
-            const passengers = document.getElementById('passengers');
-            const dateFrom = document.getElementById('dateFrom');
-            const dateTo = document.getElementById('dateTo');
-
-            [name, phone, passengers, dateFrom, dateTo].forEach(el => { 
-                if(el) { el.classList.remove('input-error', 'animate-shake'); el.classList.remove('input-success'); }
-            });
-            document.querySelectorAll('.error-text').forEach(el => el.classList.add('hidden'));
-
-            if (name && !name.value.trim()) { showError(name, document.getElementById('nameError')); isValid = false; } 
-            else if(name) name.classList.add('input-success');
-
-            // Fixed Regex: Requires at least 5 digits to be a valid phone number (preventing ----)
-            if (phone && (!/^[+\d\s-]{5,}$/.test(phone.value.trim()) || !/\d{5,}/.test(phone.value.replace(/\D/g,'')))) { 
-                showError(phone, document.getElementById('phoneError')); isValid = false; 
-            }
-            else if(phone) phone.classList.add('input-success');
-
-            if (passengers && (!passengers.value || passengers.value < 1)) { showError(passengers, document.getElementById('passengersError')); isValid = false; }
-            else if(passengers) passengers.classList.add('input-success');
-
-            let validDates = true;
-            if (dateFrom && !dateFrom.value) { showError(dateFrom, document.getElementById('dateFromError')); isValid = false; validDates = false; } 
-            else if(dateFrom) { dateFrom.classList.add('input-success'); }
-
-            if (dateTo && !dateTo.value) { showError(dateTo, document.getElementById('dateToError')); isValid = false; validDates = false; }
-
-            if (validDates && dateFrom && dateTo) {
-                const d1 = new Date(dateFrom.value);
-                const d2 = new Date(dateTo.value);
-                if (d2 < d1) {
-                    const errorSpan = document.getElementById('dateToError');
-                    if(errorSpan) {
-                        errorSpan.textContent = currentLang === 'ar' ? 'يجب أن يكون بعد تاريخ الاستلام' : 'Must be after pick-up date';
-                        errorSpan.classList.remove('hidden');
-                    }
-                    dateTo.classList.add('input-error', 'animate-shake'); dateTo.classList.remove('input-success'); isValid = false;
-                } else { dateTo.classList.add('input-success'); }
-            }
-
-            if(!isValid) vibrate([50, 50, 50]); 
-            return isValid;
-        }
-
-        function showError(input, text) {
-            if(input) input.classList.add('input-error', 'animate-shake');
-            if(text) text.classList.remove('hidden');
-        }
-
-        function sanitizeInput(str) {
-            if(!str) return '';
-            return str.trim().replace(/[\u0000-\u001F\u007F-\u009F]/g, "").substring(0, 500);
-        }
-
-        function handleBooking(e) {
-            e.preventDefault();
-            if(!validateForm()) return;
-
-            vibrate([20]); 
-            const submitBtn = document.getElementById('submitBtn');
-            const btnText = document.getElementById('btnText');
-            const btnIcon = document.getElementById('btnIcon');
-            const btnSpinner = document.getElementById('btnSpinner');
-
-            if(btnText) btnText.classList.add('opacity-0');
-            if(btnIcon) btnIcon.classList.add('opacity-0');
-            if(btnSpinner) btnSpinner.classList.remove('hidden');
-            if(submitBtn) submitBtn.disabled = true;
-
-            const rawData = {
-                name: document.getElementById('name')?.value || '',
-                phone: document.getElementById('phone')?.value || '',
-                passengers: document.getElementById('passengers')?.value || '',
-                vehicle: document.getElementById('vehicle')?.value || '',
-                service: document.querySelector('input[name="driver"]:checked')?.value || 'with_driver',
-                from: document.getElementById('dateFrom')?.value || '',
-                to: document.getElementById('dateTo')?.value || '',
-                notes: document.getElementById('notes')?.value || ''
-            };
-
-            const formData = {
-                name: sanitizeInput(rawData.name),
-                phone: sanitizeInput(rawData.phone),
-                passengers: sanitizeInput(rawData.passengers),
-                vehicle: sanitizeInput(rawData.vehicle),
-                service: rawData.service, 
-                from: rawData.from,
-                to: rawData.to,
-                notes: sanitizeInput(rawData.notes)
-            };
-            
-            const serviceText = formData.service === 'with_driver' ? (currentLang === 'en' ? 'With Driver' : 'مع سائق') : 'Self Drive';
-            // Get estimated price string
-            const priceText = document.getElementById('total-price-display')?.innerText || '';
-            
-            const msg = `Hello! Quote Request:\n\n👤 ${formData.name}\n📱 ${formData.phone}\n👥 Pax: ${formData.passengers}\n🚗 ${formData.vehicle}\n👔 ${serviceText}\n📅 ${formData.from} to ${formData.to}\n💰 Est: ${priceText}\n📝 ${formData.notes}`;
-            const encodedMsg = encodeURIComponent(msg);
-            
-            const safetyTimeout = setTimeout(() => { if(submitBtn.disabled) { showSuccess(); } }, 6000); 
-
-            try { sessionStorage.removeItem(storageKey); } catch(e){}
-
-            const whatsappUrl = `https://wa.me/995579088537?text=${encodedMsg}`;
-            const modalLink = document.getElementById('whatsappLink');
-            if(modalLink) modalLink.href = whatsappUrl;
-
-            if(typeof emailjs !== 'undefined' && typeof EMAILJS_PUBLIC_KEY !== 'undefined' && EMAILJS_PUBLIC_KEY.length > 5) {
-                 const templateParams = {
-                    from_name: formData.name,
-                    phone_number: formData.phone,
-                    passengers: formData.passengers,
-                    vehicle: formData.vehicle,
-                    service_type: serviceText,
-                    date_from: formData.from,
-                    date_to: formData.to,
-                    message: formData.notes,
-                    estimated_price: priceText
-                };
-                emailjs.send('service_booking', 'template_40h23xf', templateParams)
-                    .then(() => { clearTimeout(safetyTimeout); showSuccess(); })
-                    .catch((e) => { console.error("EmailJS Failed", e); clearTimeout(safetyTimeout); showSuccess(); });
-            } else { setTimeout(() => { clearTimeout(safetyTimeout); showSuccess(); }, 600); }
-        }
-
-        function showSuccess() {
-            const btnText = document.getElementById('btnText');
-            const btnIcon = document.getElementById('btnIcon');
-            const btnSpinner = document.getElementById('btnSpinner');
-            const submitBtn = document.getElementById('submitBtn');
-            const modal = document.getElementById('successModal');
-
-            if(btnText) btnText.classList.remove('opacity-0');
-            if(btnIcon) btnIcon.classList.remove('opacity-0');
-            if(btnSpinner) btnSpinner.classList.add('hidden');
-            if(submitBtn) submitBtn.disabled = false;
-            
-            if(modal) {
-                modal.classList.remove('hidden');
-                setTimeout(() => { modal.classList.remove('opacity-0'); trapFocus(modal); }, 10);
-            }
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('successModal');
-            if(modal) { modal.classList.add('opacity-0'); setTimeout(() => modal.classList.add('hidden'), 300); }
-        }
-
-        let currentLang = 'en';
-        const translations = {
-            en: {
-                nav_home: "Home", nav_about: "About", nav_fleet: "Fleet", nav_reviews: "Reviews", nav_book: "Book Now", nav_tours: "Destinations",
-                hero_title: "Discover Georgia <br/> <span class='text-accent-light italic font-serif'>Without Limits</span>",
-                hero_subtitle: "Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.",
-                cta_start: "Get a Quote", cta_fleet: "View Fleet",
-                stat_trips: "5-Star Trips", stat_safe: "Safety Record", stat_support: "Live Support",
-                about_label: "Why Choose Georgia Hills?", about_title: "More Than Just A Ride, <br>It's Your Journey.",
-                about_p1: "Navigating Georgia's mountain passes requires skill and local knowledge. We provide professional, English-speaking drivers who act as your personal guide.",
-                feat_safety_title: "Verified & Safe Drivers", feat_safety_desc: "Background checked professionals with extensive mountain driving expertise.",
-                feat_price_title: "Transparent Pricing", feat_price_desc: "All-inclusive quotes via WhatsApp. Fuel, parking, and insurance included.",
-                fleet_label: "Our Fleet", fleet_title: "Choose Your Comfort",
-                sedan_title: "Sedan", sedan_desc: "Perfect for couples or solo travelers.", btn_select_sedan: "Book Sedan", price_start: "From",
-                minivan_title: "Minivan", minivan_desc: "Spacious comfort for groups & families.", btn_select_minivan: "Book Minivan", tag_popular: "POPULAR",
-                reviews_label: "Testimonials", reviews_title: "Trusted by Travelers",
-                review_1_text: "\"Our driver Giorgi was amazing! He showed us hidden spots on the way to Kazbegi that we would have never found alone. The car was spotless.\"", review_1_name: "Sarah Johnson", review_1_country: "United Kingdom",
-                review_2_text: "\"Booking was super easy via WhatsApp. The Minivan for our family of 6 was comfortable and spacious. Highly recommended.\"", review_2_name: "Ahmed Khalil", review_2_country: "UAE",
-                review_3_text: "\"Best service in Tbilisi. The driver was punctual and very polite. Price was exactly as quoted. Will use again.\"", review_3_name: "Elena M.", review_3_country: "Germany",
-                faq_title: "Frequently Asked Questions", 
-                faq_q1: "Is fuel included?", faq_a1: "Yes, for driver tours fuel is included.",
-                faq_q2: "Do I need to pay in advance?", faq_a2: "No, payment is strictly upon arrival. You can pay the driver in cash (GEL, USD, EUR) when you meet.",
-                faq_q3: "Do drivers speak Arabic?", faq_a3: "Yes! We have professional drivers who speak Arabic. Please request one in the notes.",
-                book_title: "Start Your Journey", book_desc: "Get a custom quote directly to your WhatsApp in seconds.",
-                label_name: "Full Name", label_phone: "WhatsApp Number", label_vehicle: "Vehicle", label_passengers: "Passengers",
-                opt_sedan: "Sedan", opt_minivan: "Minivan", 
-                label_service: "Service Type", opt_driver: "With Driver", opt_self: "Self Drive",
-                label_from: "Pick-up Date", label_to: "Drop-off Date", label_notes: "Trip Details / Questions",
-                btn_request: "Get WhatsApp Quote",
-                footer_desc: "Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.",
-                footer_links: "Quick Links", footer_contact: "Contact Us", footer_find_us: "Find Us",
-                modal_title: "Quote Ready!", modal_desc: "Your details are ready. Send via WhatsApp.", modal_btn_send: "Open WhatsApp", modal_close: "Close",
-                conv_title: "Currency Converter", conv_desc: "Estimate price",
-                label_amount: "Amount", label_from: "From", label_to: "To", label_result: "Estimated Total:",
-                dest_label: "Explore Georgia",
-                dest_title: "Popular Places to Visit",
-                dest_subtitle: "Discover the most beautiful locations in Georgia accessible comfortably by car.",
-                dest_Tbilisi: "Tbilisi", desc_Tbilisi: "The heart of Georgia.",
-                dest_kazbegi: "Kazbegi", desc_kazbegi: "The heart of the Caucasus Mountains.",
-                dest_kakheti: "Signagi", desc_kakheti: "City of Love with valley views.",
-                dest_batumi: "Batumi", desc_batumi: "The pearl of the Black Sea coast.",
-                dest_martvili: "Martvili Canyon", desc_martvili: "Emerald canyon boat ride.",
-                dest_gudauri: "Gudauri", desc_gudauri: "Breathtaking mountain views.",
-                dest_vardzia: "Vardzia", desc_vardzia: "Ancient cave city monastery.",
-                btn_visit: "Drive Here"
+                } catch (e) {}
+                this.updateUI();
+                this.fetchRates();
             },
-            ar: {
-                nav_home: "الرئيسية", nav_about: "من نحن", nav_fleet: "السيارات", nav_reviews: "الآراء", nav_book: "احجز الآن", nav_tours: "وجهات",
-                hero_title: "اكتشف جورجيا <br/> <span class='text-accent-light italic font-serif'>بلا حدود</span>",
-                hero_subtitle: "سائقون محترفون وأسطول فاخر. من الاستقبال في المطار إلى الرحلات الجبلية.",
-                cta_start: "احصل على عرض", cta_fleet: "شاهد السيارات",
-                stat_trips: "رحلة سعيدة", stat_safe: "سجل أمان", stat_support: "دعم مباشر",
-                about_label: "لماذا جيو درايف؟", about_title: "أكثر من مجرد رحلة، <br>إنها مغامرتك.",
-                about_p1: "تتطلب القيادة في جبال جورجيا مهارة عالية. نوفر سائقين محترفين يتحدثون الإنجليزية ويعملون كمرشدين لك.",
-                feat_safety_title: "سائقون معتمدون", feat_safety_desc: "محترفون تم فحصهم مع خبرة في القيادة الجبلية.",
-                feat_price_title: "أسعار شفافة", feat_price_desc: "عروض شاملة عبر واتساب. شامل الوقود والمواقف والتأمين.",
-                fleet_label: "أسطولنا", fleet_title: "اختر راحتك",
-                sedan_title: "سيدان رجال أعمال", sedan_desc: "مثالية للأزواج أو المسافرين المنفردين.", btn_select_sedan: "حجز سيدان", price_start: "يبدأ من",
-                minivan_title: "ميني فان عائلي", minivan_desc: "راحة واسعة للمجموعات والعائلات.", btn_select_minivan: "حجز ميني فان", tag_popular: "الأكثر طلباً",
-                reviews_label: "تجارب ضيوفنا", 
-                reviews_title: "تجارب مسافرين حقيقية",
-                review_1_text: "\"السائق جورجي كان رائعاً! أرشدنا لأماكن ساحرة في طريق كازبيجي لم نكن لنكتشفها وحدنا. السيارة كانت في غاية النظافة.\"", review_1_name: "سارة جونسون", review_1_country: "المملكة المتحدة",
-                review_2_text: "\"تجربة الحجز عبر الواتساب كانت سلسة للغاية. سيارة الميني فان كانت واسعة ومريحة جداً لعائلتنا (6 أشخاص). أنصح بالتعامل معهم بشدة.\"", review_2_name: "أحمد خليل", review_2_country: "الإمارات",
-                review_3_text: "\"من أفضل خدمات النقل في تبليسي. السائق خلوق جداً وملتزم بالمواعيد. والسعر كان مطابقاً للاتفاق دون أي زيادات.\"", review_3_name: "إيلينا م.", review_3_country: "ألمانيا",
-                faq_title: "أسئلة شائعة", 
-                faq_q1: "هل الوقود مشمول؟", faq_a1: "نعم، الوقود مشمول بالكامل في جميع الرحلات التي تشمل سائقاً.",
-                faq_q2: "هل يجب علي الدفع مسبقاً؟", faq_a2: "لا، الدفع يتم بالكامل عند الوصول. يمكنك الدفع نقداً للسائق (لاري، دولار، يورو) عند بدء الرحلة.",
-                faq_q3: "هل يتحدث السائقون العربية؟", faq_a3: "نعم! لدينا سائقون محترفون يتحدثون العربية. يرجى طلب ذلك في الملاحظات.",
-                book_title: "ابدأ رحلتك", book_desc: "احصل على عرض سعر مخصص عبر واتساب فوراً.",
-                label_name: "الاسم الكامل", label_phone: "رقم واتساب", label_vehicle: "نوع السيارة",
-                label_passengers: "عدد الركاب",
-                opt_sedan: "سيدان (1-4)", opt_minivan: "ميني فان (5-7)",
-                label_service: "نوع الخدمة", opt_driver: "مع سائق", opt_self: "قيادة ذاتية",
-                label_from: "تاريخ الاستلام", label_to: "تاريخ التسليم", label_notes: "تفاصيل الرحلة / أسئلة",
-                btn_request: "طلب عبر واتساب",
-                footer_desc: "حلول نقل فاخرة في جورجيا. أمان وراحة وخبرة محلية في كل ميل.",
-                footer_links: "روابط سريعة", footer_contact: "اتصل بنا", footer_find_us: "موقعنا",
-                modal_title: "العرض جاهز!", modal_desc: "تم تجهيز التفاصيل. أرسلها عبر واتساب.", modal_btn_send: "فتح واتساب", modal_close: "إغلاق",
-                conv_title: "محول العملات", conv_desc: "تقدير تكلفة الرحلة",
-                label_amount: "المبلغ", label_from: "من", label_to: "إلى", label_result: "السعر التقريبي:",
-                dest_label: "استكشف جورجيا",
-                dest_title: "وجهات سياحية شهيرة",
-                dest_subtitle: "اكتشف أجمل الأماكن في جورجيا التي يمكن الوصول إليها بالسيارة.",
-                dest_Tbilisi: "تبليسي", desc_Tbilisi: "قلب جورجيا.",
-                dest_kazbegi: "كازبيجي", desc_kazbegi: "قلب جبال القوقاز الخلابة.",
-                dest_kakheti: "سغناغي", desc_kakheti: "مدينة الحب المطلة على وادي ألازاني الساحر.",
-                dest_batumi: "باتومي", desc_batumi: "لؤلؤة ساحل البحر الأسود.",
-                dest_martvili: "وادي مارتفيلي", desc_martvili: "مياه زمردية ورحلات بالقوارب.",
-                dest_gudauri: "غوداوری", desc_gudauri: "مناظر جبلية خلابة.",
-                dest_vardzia: "فاردزيا", desc_vardzia: "مدينة الكهوف الأثرية.",
-                btn_visit: "اكتشف المزيد"
+
+            set(code) {
+                this.current = code;
+                try { localStorage.setItem('userCurrency', code); } catch (e) {}
+                this.updateUI();
+                this.updatePrices();
+            },
+
+            async fetchRates() {
+                try {
+                    const response = await fetch(`https://api.exchangerate-api.com/v4/latest/GEL`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.rates = data.rates;
+                        this.updatePrices();
+                    }
+                } catch (e) { console.warn("Using offline rates"); }
+            },
+
+            convert(amountGEL) {
+                if (this.current === 'GEL') return amountGEL;
+                const rate = this.rates[this.current] || 1;
+                const converted = amountGEL * rate;
+                // Always round to the nearest 5
+                return Math.ceil(converted / 5) * 5;
+            },
+
+            updateUI() {
+                const flagUrl = `https://flagcdn.com/w40/${AppConfig.currencies.find(c => c.code === this.current).flag}.png`;
+                ['desktop', 'mobile'].forEach(type => {
+                    const codeEl = document.getElementById(`curr-code-${type}`);
+                    const flagEl = document.getElementById(`curr-flag-${type}`);
+                    if (codeEl) codeEl.innerText = this.current;
+                    if (flagEl) flagEl.src = flagUrl;
+                });
+            },
+
+            updatePrices() {
+                // Update Badge Prices
+                document.querySelectorAll('.price-display').forEach(el => {
+                    const base = parseFloat(el.dataset.basePrice); // Base price in GEL
+                    if (base) {
+                        el.innerText = `${this.convert(base)} ${this.current}`;
+                    }
+                });
+                // Update Booking Total
+                BookingManager.updateEstimate();
             }
         };
 
-        function toggleLanguage() {
-            vibrate();
-            currentLang = currentLang === 'en' ? 'ar' : 'en';
-            try { localStorage.setItem('userLang', currentLang); } catch(e){}
-            document.documentElement.lang = currentLang;
-            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr'; 
-            
-            document.querySelectorAll('.lang-text').forEach(el => {
-                el.textContent = currentLang === 'en' ? 'العربية' : 'English';
-            });
+        // --- Language & Translation Manager ---
+        const LangManager = {
+            current: 'en',
+            translations: {
+                 en: {
+                    nav_home: "Home", nav_about: "About", nav_fleet: "Fleet", nav_reviews: "Reviews", nav_book: "Book Now", nav_tours: "Destinations",
+                    hero_title: "Discover Georgia <br/> <span class='text-accent-light italic font-serif'>Without Limits</span>",
+                    hero_subtitle: "Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.",
+                    cta_start: "Get a Quote", cta_fleet: "View Fleet",
+                    stat_trips: "5-Star Trips", stat_safe: "Safety Record", stat_support: "Live Support",
+                    about_label: "Why Choose Georgia Hills?", about_title: "More Than Just A Ride, <br>It's Your Journey.",
+                    about_p1: "Navigating Georgia's mountain passes requires skill and local knowledge. We provide professional, English-speaking drivers who act as your personal guide.",
+                    feat_safety_title: "Verified & Safe Drivers", feat_safety_desc: "Background checked professionals with extensive mountain driving expertise.",
+                    feat_price_title: "Transparent Pricing", feat_price_desc: "All-inclusive quotes via WhatsApp. Fuel, parking, and insurance included.",
+                    fleet_label: "Our Fleet", fleet_title: "Choose Your Comfort",
+                    sedan_title: "Sedan", sedan_desc: "Perfect for couples or solo travelers.", btn_select_sedan: "Book Sedan", price_start: "From",
+                    minivan_title: "Minivan", minivan_desc: "Spacious comfort for groups & families.", btn_select_minivan: "Book Minivan", tag_popular: "POPULAR",
+                    reviews_label: "Testimonials", reviews_title: "Trusted by Travelers",
+                    review_1_text: "\"Our driver Giorgi was amazing! He showed us hidden spots on the way to Kazbegi that we would have never found alone. The car was spotless.\"", review_1_name: "Sarah Johnson", review_1_country: "United Kingdom",
+                    review_2_text: "\"Booking was super easy via WhatsApp. The Minivan for our family of 6 was comfortable and spacious. Highly recommended.\"", review_2_name: "Ahmed Khalil", review_2_country: "UAE",
+                    review_3_text: "\"Best service in Tbilisi. The driver was punctual and very polite. Price was exactly as quoted. Will use again.\"", review_3_name: "Elena M.", review_3_country: "Germany",
+                    faq_title: "Frequently Asked Questions", 
+                    faq_q1: "Is fuel included?", faq_a1: "Yes, for driver tours fuel is included.",
+                    faq_q2: "Do I need to pay in advance?", faq_a2: "No, payment is strictly upon arrival. You can pay the driver in cash (GEL, USD, EUR) when you meet.",
+                    faq_q3: "Do drivers speak Arabic?", faq_a3: "Yes! We have professional drivers who speak Arabic. Please request one in the notes.",
+                    book_title: "Start Your Journey", book_desc: "Get a custom quote directly to your WhatsApp in seconds.",
+                    label_name: "Full Name", label_phone: "WhatsApp Number", label_vehicle: "Vehicle", label_passengers: "Passengers",
+                    label_dates: "Trip Dates",
+                    opt_sedan: "Sedan", opt_minivan: "Minivan", 
+                    label_service: "Service Type", opt_driver: "With Driver", opt_self: "Self Drive",
+                    label_from: "Pick-up Date", label_to: "Drop-off Date", label_notes: "Trip Details / Questions",
+                    btn_request: "Get WhatsApp Quote",
+                    footer_desc: "Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.",
+                    footer_links: "Quick Links", footer_contact: "Contact Us", footer_find_us: "Find Us",
+                    modal_title: "Quote Ready!", modal_desc: "Your details are ready. Send via WhatsApp.", modal_btn_send: "Open WhatsApp", modal_close: "Close",
+                    conv_title: "Currency Converter", conv_desc: "Estimate price",
+                    label_amount: "Amount", label_from: "From", label_to: "To", label_result: "Estimated Total:",
+                    dest_label: "Explore Georgia",
+                    dest_title: "Popular Places to Visit",
+                    dest_subtitle: "Discover the most beautiful locations in Georgia accessible comfortably by car.",
+                    dest_Tbilisi: "Tbilisi", desc_Tbilisi: "The heart of Georgia.",
+                    dest_kazbegi: "Kazbegi", desc_kazbegi: "The heart of the Caucasus Mountains.",
+                    dest_kakheti: "Signagi", desc_kakheti: "City of Love with valley views.",
+                    dest_batumi: "Batumi", desc_batumi: "The pearl of the Black Sea coast.",
+                    dest_martvili: "Martvili Canyon", desc_martvili: "Emerald canyon boat ride.",
+                    dest_gudauri: "Gudauri", desc_gudauri: "Breathtaking mountain views.",
+                    dest_vardzia: "Vardzia", desc_vardzia: "Ancient cave city monastery.",
+                    btn_visit: "Drive Here"
+                },
+                ar: {
+                    nav_home: "الرئيسية", nav_about: "من نحن", nav_fleet: "السيارات", nav_reviews: "الآراء", nav_book: "احجز الآن", nav_tours: "وجهات",
+                    hero_title: "اكتشف جورجيا <br/> <span class='text-accent-light italic font-serif'>بلا حدود</span>",
+                    hero_subtitle: "سائقون محترفون وأسطول فاخر. من الاستقبال في المطار إلى الرحلات الجبلية.",
+                    cta_start: "احصل على عرض", cta_fleet: "شاهد السيارات",
+                    stat_trips: "رحلة سعيدة", stat_safe: "سجل أمان", stat_support: "دعم مباشر",
+                    about_label: "لماذا جيو درايف؟", about_title: "أكثر من مجرد رحلة، <br>إنها مغامرتك.",
+                    about_p1: "تتطلب القيادة في جبال جورجيا مهارة عالية. نوفر سائقين محترفين يتحدثون الإنجليزية ويعملون كمرشدين لك.",
+                    feat_safety_title: "سائقون معتمدون", feat_safety_desc: "محترفون تم فحصهم مع خبرة في القيادة الجبلية.",
+                    feat_price_title: "أسعار شفافة", feat_price_desc: "عروض شاملة عبر واتساب. شامل الوقود والمواقف والتأمين.",
+                    fleet_label: "أسطولنا", fleet_title: "اختر راحتك",
+                    sedan_title: "سيدان رجال أعمال", sedan_desc: "مثالية للأزواج أو المسافرين المنفردين.", btn_select_sedan: "حجز سيدان", price_start: "يبدأ من",
+                    minivan_title: "ميني فان عائلي", minivan_desc: "راحة واسعة للمجموعات والعائلات.", btn_select_minivan: "حجز ميني فان", tag_popular: "الأكثر طلباً",
+                    reviews_label: "تجارب ضيوفنا", 
+                    reviews_title: "تجارب مسافرين حقيقية",
+                    review_1_text: "\"السائق جورجي كان رائعاً! أرشدنا لأماكن ساحرة في طريق كازبيجي لم نكن لنكتشفها وحدنا. السيارة كانت في غاية النظافة.\"", review_1_name: "سارة جونسون", review_1_country: "المملكة المتحدة",
+                    review_2_text: "\"تجربة الحجز عبر الواتساب كانت سلسة للغاية. سيارة الميني فان كانت واسعة ومريحة جداً لعائلتنا (6 أشخاص). أنصح بالتعامل معهم بشدة.\"", review_2_name: "أحمد خليل", review_2_country: "الإمارات",
+                    review_3_text: "\"من أفضل خدمات النقل في تبليسي. السائق خلوق جداً وملتزم بالمواعيد. والسعر كان مطابقاً للاتفاق دون أي زيادات.\"", review_3_name: "إيلينا م.", review_3_country: "ألمانيا",
+                    faq_title: "أسئلة شائعة", 
+                    faq_q1: "هل الوقود مشمول؟", faq_a1: "نعم، الوقود مشمول بالكامل في جميع الرحلات التي تشمل سائقاً.",
+                    faq_q2: "هل يجب علي الدفع مسبقاً؟", faq_a2: "لا، الدفع يتم بالكامل عند الوصول. يمكنك الدفع نقداً للسائق (لاري، دولار، يورو) عند بدء الرحلة.",
+                    faq_q3: "هل يتحدث السائقون العربية؟", faq_a3: "نعم! لدينا سائقون محترفون يتحدثون العربية. يرجى طلب ذلك في الملاحظات.",
+                    book_title: "ابدأ رحلتك", book_desc: "احصل على عرض سعر مخصص عبر واتساب فوراً.",
+                    label_name: "الاسم الكامل", label_phone: "رقم واتساب", label_vehicle: "نوع السيارة",
+                    label_passengers: "عدد الركاب",
+                    label_dates: "تواريخ الرحلة",
+                    opt_sedan: "سيدان (1-4)", opt_minivan: "ميني فان (5-7)",
+                    label_service: "نوع الخدمة", opt_driver: "مع سائق", opt_self: "قيادة ذاتية",
+                    label_from: "تاريخ الاستلام", label_to: "تاريخ التسليم", label_notes: "تفاصيل الرحلة / أسئلة",
+                    btn_request: "طلب عبر واتساب",
+                    footer_desc: "حلول نقل فاخرة في جورجيا. أمان وراحة وخبرة محلية في كل ميل.",
+                    footer_links: "روابط سريعة", footer_contact: "اتصل بنا", footer_find_us: "موقعنا",
+                    modal_title: "العرض جاهز!", modal_desc: "تم تجهيز التفاصيل. أرسلها عبر واتساب.", modal_btn_send: "فتح واتساب", modal_close: "إغلاق",
+                    conv_title: "محول العملات", conv_desc: "تقدير تكلفة الرحلة",
+                    label_amount: "المبلغ", label_from: "من", label_to: "إلى", label_result: "السعر التقريبي:",
+                    dest_label: "استكشف جورجيا",
+                    dest_title: "وجهات سياحية شهيرة",
+                    dest_subtitle: "اكتشف أجمل الأماكن في جورجيا التي يمكن الوصول إليها بالسيارة.",
+                    dest_Tbilisi: "تبليسي", desc_Tbilisi: "قلب جورجيا.",
+                    dest_kazbegi: "كازبيجي", desc_kazbegi: "قلب جبال القوقاز الخلابة.",
+                    dest_kakheti: "سغناغي", desc_kakheti: "مدينة الحب المطلة على وادي ألازاني الساحر.",
+                    dest_batumi: "باتومي", desc_batumi: "لؤلؤة ساحل البحر الأسود.",
+                    dest_martvili: "وادي مارتفيلي", desc_martvili: "مياه زمردية ورحلات بالقوارب.",
+                    dest_gudauri: "غوداوری", desc_gudauri: "مناظر جبلية خلابة.",
+                    dest_vardzia: "فاردزيا", desc_vardzia: "مدينة الكهوف الأثرية.",
+                    btn_visit: "اكتشف المزيد"
+                }
+            },
 
-            const rtlElements = ['hero-content', 'about-content', 'fleet-grid', 'footer-content', 'booking-container', 'faq-list', 'destinations', 'reviews', 'currency-converter'];
-            rtlElements.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-            });
-            
-            const placeholders = {
-                name: { en: "Your Name", ar: "الاسم الكريم" },
-                phone: { en: "+995 579 08 85 37", ar: "+995 579 08 85 37" },
-                passengers: { en: "2", ar: "2" }
-            };
-            const nameInput = document.getElementById('name');
-            if(nameInput) nameInput.placeholder = placeholders.name[currentLang];
-            const phoneInput = document.getElementById('phone');
-            if(phoneInput) phoneInput.placeholder = placeholders.phone[currentLang];
-            const passInput = document.getElementById('passengers');
-            if(passInput) passInput.placeholder = placeholders.passengers[currentLang];
+            init() {
+                try {
+                    const saved = localStorage.getItem('userLang');
+                    if (saved) this.current = saved;
+                } catch (e) {}
+                this.apply();
+            },
 
-            document.querySelectorAll('[data-i18n]').forEach(element => {
-                const key = element.getAttribute('data-i18n');
-                if (translations[currentLang][key]) {
-                     if(translations[currentLang][key].includes('<')) {
-                        element.innerHTML = translations[currentLang][key];
-                    } else {
-                        element.textContent = translations[currentLang][key];
+            toggle() {
+                this.current = this.current === 'en' ? 'ar' : 'en';
+                try { localStorage.setItem('userLang', this.current); } catch (e) {}
+                this.apply();
+            },
+
+            apply() {
+                document.documentElement.lang = this.current;
+                document.documentElement.dir = this.current === 'ar' ? 'rtl' : 'ltr';
+
+                document.querySelectorAll('.lang-text').forEach(el => {
+                    el.textContent = this.current === 'en' ? 'العربية' : 'English';
+                });
+
+                // Apply text content
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.dataset.i18n;
+                    if (this.translations[this.current][key]) {
+                        if (this.translations[this.current][key].includes('<')) {
+                            el.innerHTML = this.translations[this.current][key];
+                        } else {
+                            el.textContent = this.translations[this.current][key];
+                        }
+                    }
+                });
+
+                // Apply Directional Classes
+                const rtlElements = ['hero-content', 'about-content', 'fleet-grid', 'footer-content', 'booking-container', 'faq-list', 'destinations', 'reviews', 'currency-converter'];
+                rtlElements.forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.dir = this.current === 'ar' ? 'rtl' : 'ltr';
+                });
+
+                // Input Placeholders
+                const phs = {
+                    name: { en: "Your Name", ar: "الاسم الكريم" },
+                    phone: { en: "+995 579 08 85 37", ar: "+995 579 08 85 37" },
+                    passengers: { en: "2", ar: "2" },
+                    dateRange: { en: "Select Pick-up & Drop-off Dates", ar: "اختر تواريخ الاستلام والتسليم" }
+                };
+                if (document.getElementById('name')) document.getElementById('name').placeholder = phs.name[this.current];
+                if (document.getElementById('phone')) document.getElementById('phone').placeholder = phs.phone[this.current];
+                if (document.getElementById('passengers')) document.getElementById('passengers').placeholder = phs.passengers[this.current];
+                if (document.getElementById('dateRange')) document.getElementById('dateRange').placeholder = phs.dateRange[this.current];
+
+                // Refresh prices to ensure correct formatting logic if needed
+                CurrencyManager.updatePrices();
+            }
+        };
+
+        // --- UI Manager ---
+        const UIManager = {
+            init() {
+                this.setupMobileMenu();
+                this.setupScrollListener();
+                CurrencyManager.init(); // Initialize currency dropdowns
+                this.initDropdowns();
+            },
+
+            initDropdowns() {
+                 ['desktop', 'mobile'].forEach(type => {
+                    const container = document.getElementById(`curr-options-${type}`);
+                    if(!container) return;
+                    container.innerHTML = ''; // Clear first
+                    AppConfig.currencies.forEach(curr => {
+                        const opt = document.createElement('div');
+                        opt.className = 'custom-option';
+                        opt.innerHTML = `<img src="https://flagcdn.com/w40/${curr.flag}.png" class="currency-flag-sm" alt="${curr.code}"> ${curr.code}`;
+                        opt.onclick = () => {
+                            CurrencyManager.set(curr.code);
+                            // Close dropdowns
+                            document.querySelectorAll('.custom-select-wrapper').forEach(el => el.classList.remove('open'));
+                        };
+                        container.appendChild(opt);
+                    });
+                });
+
+                // Close on outside click
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.custom-select-wrapper')) {
+                        document.querySelectorAll('.custom-select-wrapper').forEach(el => el.classList.remove('open'));
+                    }
+                });
+            },
+
+            toggleCurrencyDropdown(type) {
+                document.getElementById(`currency-${type}`).classList.toggle('open');
+            },
+
+            setupMobileMenu() {
+                const menuBtn = document.getElementById('mobile-menu-btn');
+                const closeBtn = document.getElementById('close-menu-btn');
+                const menu = document.getElementById('mobile-menu');
+                const links = document.querySelectorAll('.mobile-link, .mobile-btn-book');
+
+                const toggle = () => {
+                    const isOpen = menu.classList.toggle('open');
+                    menuBtn.setAttribute('aria-expanded', isOpen);
+                    document.body.classList.toggle('overflow-hidden', isOpen);
+                };
+
+                menuBtn?.addEventListener('click', toggle);
+                closeBtn?.addEventListener('click', toggle);
+                links.forEach(l => l.addEventListener('click', toggle));
+            },
+
+            setupScrollListener() {
+                let lastScroll = 0;
+                window.addEventListener('scroll', () => {
+                    const currentScroll = window.scrollY;
+                    const nav = document.getElementById('navbar');
+                    const sticky = document.querySelector('.sticky-bar');
+                    const backBtn = document.getElementById('backToTop');
+                    
+                    if (nav) nav.classList.toggle('shadow-md', currentScroll > 20);
+                    if (backBtn) backBtn.classList.toggle('show', currentScroll > 500);
+
+                    // Mobile Sticky Bar Logic
+                    if (sticky) {
+                         if (currentScroll > lastScroll && currentScroll > 100) {
+                             sticky.classList.add('hide-bar');
+                             if(nav && window.innerWidth < 1024) nav.classList.add('nav-hidden');
+                         } else {
+                             sticky.classList.remove('hide-bar');
+                             if(nav) nav.classList.remove('nav-hidden');
+                         }
+                    }
+                    lastScroll = currentScroll;
+                }, { passive: true });
+            },
+
+            openModal(id) {
+                const modal = document.getElementById(id);
+                if (modal) modal.classList.remove('hidden');
+            },
+
+            closeModal(id) {
+                const modal = document.getElementById(id);
+                if (modal) modal.classList.add('hidden');
+            },
+            
+            showToast(msg) {
+                 const toast = document.getElementById('network-toast');
+                if (toast) {
+                    toast.innerHTML = `<i class="fa-solid fa-check"></i> <span>${msg}</span>`;
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 3000);
+                }
+            }
+        };
+
+        // --- Booking Manager ---
+        const BookingManager = {
+            fpInstance: null,
+
+            init() {
+                // Initialize Flatpickr
+                this.fpInstance = flatpickr("#dateRange", {
+                    mode: "range",
+                    minDate: "today",
+                    dateFormat: "Y-m-d",
+                    disableMobile: "true", // Use custom UI on mobile for better range selection
+                    onChange: (selectedDates) => {
+                        if (selectedDates.length === 2) {
+                            this.updateEstimate();
+                        }
+                    }
+                });
+
+                this.loadDraft();
+                const form = document.getElementById('bookingForm');
+                if(form) form.addEventListener('input', () => this.saveDraft());
+            },
+
+            saveDraft() {
+                const data = {
+                    name: document.getElementById('name').value,
+                    phone: document.getElementById('phone').value,
+                    passengers: document.getElementById('passengers').value,
+                    vehicle: document.getElementById('vehicle').value,
+                    notes: document.getElementById('notes').value
+                };
+                try { sessionStorage.setItem('booking_draft', JSON.stringify(data)); } catch(e){}
+            },
+
+            loadDraft() {
+                try {
+                    const data = JSON.parse(sessionStorage.getItem('booking_draft'));
+                    if(data) {
+                        document.getElementById('name').value = data.name || '';
+                        document.getElementById('phone').value = data.phone || '';
+                        document.getElementById('passengers').value = data.passengers || '';
+                        document.getElementById('vehicle').value = data.vehicle || 'Sedan';
+                        document.getElementById('notes').value = data.notes || '';
+                    }
+                } catch(e){}
+            },
+
+            updateEstimate() {
+                // FIX: Guard clause to prevent error if Flatpickr isn't loaded yet
+                if (!this.fpInstance) return;
+
+                const dates = this.fpInstance.selectedDates;
+                const veh = document.getElementById('vehicle').value;
+                const display = document.getElementById('price-estimate');
+                const priceEl = document.getElementById('total-price-display');
+                const durationEl = document.getElementById('trip-duration');
+                const helperEl = document.getElementById('dates-helper');
+                
+                if (dates && dates.length === 2 && veh) {
+                    const d1 = dates[0];
+                    const d2 = dates[1];
+                    const days = Math.max(1, Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24)));
+                    
+                    const nights = Math.max(0, days - 1);
+                    const durationText = LangManager.current === 'ar' 
+                        ? `${days} أيام / ${nights} ليالي` 
+                        : `${days} Days / ${nights} Nights`;
+                    
+                    // Update main duration
+                    if(durationEl) durationEl.innerText = durationText;
+                    
+                    // Update Helper Label
+                    if(helperEl) {
+                        helperEl.innerText = `(${days} days)`;
+                        helperEl.classList.remove('hidden');
+                    }
+
+                    const baseTotal = days * AppConfig.vehicleRates[veh];
+                    const final = CurrencyManager.convert(baseTotal);
+                    priceEl.innerText = `${final} ${CurrencyManager.current}`;
+                    display.classList.remove('hidden');
+                } else {
+                    display.classList.add('hidden');
+                    if(helperEl) helperEl.classList.add('hidden');
+                }
+            },
+
+            handleSubmit(e) {
+                e.preventDefault();
+                if (!this.validate()) return;
+                
+                const btn = document.getElementById('submitBtn');
+                btn.disabled = true;
+                document.getElementById('btnSpinner').classList.remove('hidden');
+                document.getElementById('btnText').classList.add('opacity-0');
+
+                // Get Dates
+                const dates = this.fpInstance.selectedDates;
+                const dString = dates.length === 2 
+                    ? `${this.fpInstance.formatDate(dates[0], "Y-m-d")} to ${this.fpInstance.formatDate(dates[1], "Y-m-d")}` 
+                    : "No dates selected";
+                
+                const priceText = document.getElementById('total-price-display').innerText;
+                const durationText = document.getElementById('trip-duration').innerText;
+
+                // Gather Data
+                const data = {
+                    name: document.getElementById('name').value,
+                    phone: document.getElementById('phone').value,
+                    passengers: document.getElementById('passengers').value,
+                    vehicle: document.getElementById('vehicle').value,
+                    service: document.querySelector('input[name="driver"]:checked').nextElementSibling.innerText.trim(),
+                    dates: dString,
+                    duration: durationText,
+                    price: priceText,
+                    notes: document.getElementById('notes').value
+                };
+
+                // WhatsApp
+                const text = `New Booking Request:\n👤 ${data.name}\n📱 ${data.phone}\n🚗 ${data.vehicle} (${data.passengers} pax)\n📅 ${data.dates} (${data.duration})\n💰 Estimate: ${data.price}\n📝 ${data.notes}`;
+                const waUrl = `https://wa.me/995579088537?text=${encodeURIComponent(text)}`;
+                document.getElementById('whatsappLink').href = waUrl;
+
+                // EmailJS (Optional/Backup)
+                if(typeof emailjs !== 'undefined') {
+                    emailjs.send('service_booking', 'template_40h23xf', { ...data, message: text })
+                           .finally(() => this.finishSubmit());
+                } else {
+                    setTimeout(() => this.finishSubmit(), 1000);
+                }
+            },
+
+            validate() {
+                let valid = true;
+                // 'dateRange' is validated separately via flatpickr state check
+                const reqIds = ['name', 'phone', 'passengers'];
+                
+                reqIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    el.classList.remove('input-error');
+                    if (!el.value.trim()) {
+                        el.classList.add('input-error');
+                        valid = false;
+                    }
+                });
+                
+                // Date Check
+                const dateInput = document.getElementById('dateRange');
+                dateInput.classList.remove('input-error');
+                if (this.fpInstance.selectedDates.length !== 2) {
+                     dateInput.classList.add('input-error');
+                     document.getElementById('dateError').classList.remove('hidden');
+                     valid = false;
+                } else {
+                    document.getElementById('dateError').classList.add('hidden');
+                }
+                
+                // Specific Phone Regex
+                const phone = document.getElementById('phone').value;
+                if (!/^\+?[\d\s-]{5,}$/.test(phone)) {
+                    document.getElementById('phone').classList.add('input-error');
+                    valid = false;
+                }
+
+                if(!valid) {
+                     if(navigator.vibrate) navigator.vibrate([50, 50, 50]);
+                }
+                return valid;
+            },
+
+            finishSubmit() {
+                const btn = document.getElementById('submitBtn');
+                btn.disabled = false;
+                document.getElementById('btnSpinner').classList.add('hidden');
+                document.getElementById('btnText').classList.remove('opacity-0');
+                UIManager.openModal('successModal');
+                try { sessionStorage.removeItem('booking_draft'); } catch(e){}
+            }
+        };
+
+        // --- App Initialization ---
+        const App = {
+            start() {
+                UIManager.init();
+                BookingManager.init(); // Initialize first to create fpInstance
+                LangManager.init();    // Now safe to run localization
+                this.initSlider();
+                this.initAnimations(); // New Animations
+                
+                // Remove preloader
+                setTimeout(() => {
+                    document.getElementById('preloader').style.display = 'none';
+                }, 800);
+            },
+            
+            initAnimations() {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.remove('waiting');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                
+                document.querySelectorAll('.reveal').forEach(el => {
+                    el.classList.add('waiting'); // Force hidden state initially
+                    observer.observe(el);
+                });
+            },
+
+            share() {
+                if (navigator.share) {
+                    navigator.share({ title: 'Georgia Hills', url: window.location.href });
+                } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    UIManager.showToast('Link Copied!');
+                }
+            },
+            
+            acceptCookies() {
+                try { localStorage.setItem('cookieConsent', 'true'); } catch(e){}
+                // Consent Granted
+                if(typeof gtag === 'function') {
+                    gtag('consent', 'update', {
+                      'ad_storage': 'granted',
+                      'ad_user_data': 'granted',
+                      'ad_personalization': 'granted',
+                      'analytics_storage': 'granted'
+                    });
+                }
+                document.getElementById('cookie-banner').classList.remove('active');
+            },
+            
+            declineCookies() {
+                try { localStorage.setItem('cookieConsent', 'false'); } catch(e){}
+                // Consent Denied (explicit)
+                if(typeof gtag === 'function') {
+                    gtag('consent', 'update', {
+                      'ad_storage': 'denied',
+                      'ad_user_data': 'denied',
+                      'ad_personalization': 'denied',
+                      'analytics_storage': 'denied'
+                    });
+                }
+                document.getElementById('cookie-banner').classList.remove('active');
+            },
+            
+            // Check for cookies on load
+            checkCookies() {
+                const consent = localStorage.getItem('cookieConsent');
+                if (!consent) {
+                    document.getElementById('cookie-banner').classList.add('active');
+                } else if (consent === 'true') {
+                    // Re-apply grant if already accepted
+                    if(typeof gtag === 'function') {
+                        gtag('consent', 'update', {
+                          'ad_storage': 'granted',
+                          'ad_user_data': 'granted',
+                          'ad_personalization': 'granted',
+                          'analytics_storage': 'granted'
+                        });
                     }
                 }
-            });
-        }
+            },
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const slider = document.getElementById('tours-slider');
-            const prevBtn = document.getElementById('prevBtn');
-            const nextBtn = document.getElementById('nextBtn');
-            const intervalTime = 3000;
-            let autoScrollInterval;
-            let isPaused = false;
-            const isRTL = document.documentElement.dir === 'rtl' || document.documentElement.lang === 'ar';
-            let cardWidth = 0;
-            let originalItemCount = 0;
+            initSlider() {
+                 const slider = document.getElementById('tours-slider');
+                 if(!slider) return;
 
-            const initSlider = debounce(() => {
-                // Clear clones first
-                Array.from(slider.children).forEach(child => { if (child.dataset.clone === 'true') child.remove(); });
-                const originalItems = Array.from(slider.children);
-                originalItemCount = originalItems.length;
-                if (originalItemCount === 0) return;
+                 const prevBtns = [document.getElementById('prevBtnDesk'), document.getElementById('prevBtnMob')];
+                 const nextBtns = [document.getElementById('nextBtnDesk'), document.getElementById('nextBtnMob')];
 
-                const gap = parseFloat(window.getComputedStyle(slider).gap) || 0;
-                const firstCard = originalItems[0];
-                cardWidth = firstCard.offsetWidth + gap;
+                 let autoScrollInterval;
+                 const intervalTime = 3500;
+                 let isPaused = false;
+                 
+                 // Robust Infinite Scroll Logic
+                 const originalCards = Array.from(slider.children);
+                 if(originalCards.length === 0) return;
 
-                // Clone logic for loop
-                originalItems.forEach(item => {
-                    const clone = item.cloneNode(true);
-                    clone.dataset.clone = 'true';
-                    clone.setAttribute('aria-hidden', 'true');
-                    slider.appendChild(clone);
-                });
+                 // Clone logic: Append clones to end
+                 originalCards.forEach(card => {
+                     const clone = card.cloneNode(true);
+                     clone.setAttribute('aria-hidden', 'true');
+                     slider.appendChild(clone);
+                 });
+                 // Prepend clones to start (for backward loop)
+                 originalCards.slice().reverse().forEach(card => {
+                     const clone = card.cloneNode(true);
+                     clone.setAttribute('aria-hidden', 'true');
+                     slider.insertBefore(clone, slider.firstChild);
+                 });
 
-                originalItems.slice().reverse().forEach(item => {
-                    const clone = item.cloneNode(true);
-                    clone.dataset.clone = 'true';
-                    clone.setAttribute('aria-hidden', 'true');
-                    slider.prepend(clone);
-                });
+                 const getMetrics = () => {
+                     const style = window.getComputedStyle(slider);
+                     const gap = parseFloat(style.gap) || 0;
+                     const itemWidth = originalCards[0].offsetWidth + gap;
+                     const totalWidth = itemWidth * originalCards.length;
+                     return { itemWidth, totalWidth };
+                 };
 
-                // Set initial position - Disable snap temporarily
-                slider.style.scrollSnapType = 'none';
-                const startPos = cardWidth * originalItemCount;
-                if (isRTL) {
-                    slider.scrollLeft = -startPos; 
-                    if (slider.scrollLeft === 0) slider.scrollLeft = startPos; 
-                } else { slider.scrollLeft = startPos; }
-                
-                // Re-enable snap after a tiny delay
-                setTimeout(() => { slider.style.scrollSnapType = 'x mandatory'; }, 50);
-            }, 100);
+                 // Initial Scroll Position: Jump to center of the 3 sets [Clones][Originals][Clones]
+                 // This ensures we can scroll left or right immediately
+                 const jumpToStart = () => {
+                     const { totalWidth } = getMetrics();
+                     slider.scrollLeft = totalWidth; 
+                 };
+                 
+                 // Run after layout paint
+                 setTimeout(() => {
+                     slider.style.scrollBehavior = 'auto';
+                     jumpToStart();
+                     slider.style.scrollBehavior = 'smooth';
+                 }, 100);
 
-            const moveSlider = (direction) => {
-                const effectiveDirection = isRTL ? -direction : direction;
-                slider.scrollBy({ left: cardWidth * effectiveDirection, behavior: 'smooth' });
-            };
+                 // Move slider
+                 const moveSlider = (direction) => { // 1 = Next, -1 = Prev
+                    const { itemWidth } = getMetrics();
+                    
+                    // Fixed: Always assume LTR scroll logic because we forced dir="ltr" on slider container
+                    let scrollAmount = direction * itemWidth;
+                    
+                    slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                 };
 
-            const checkInfiniteLoop = () => {
-                const currentScroll = slider.scrollLeft;
-                const singleSetWidth = cardWidth * originalItemCount;
-                const absScroll = Math.abs(currentScroll);
-                const tolerance = 5; // Pixel tolerance for loop detection
+                 // Infinite Loop Monitor
+                 const checkScroll = () => {
+                    const { totalWidth } = getMetrics();
+                    const tolerance = 10; // px
+                    const maxScroll = slider.scrollWidth - slider.clientWidth;
+                    
+                    // If scrolled near the very end (end of 3rd set)
+                    if (slider.scrollLeft >= (totalWidth * 2) - tolerance) {
+                        slider.style.scrollBehavior = 'auto';
+                        slider.scrollLeft = totalWidth; // Jump back to middle
+                        slider.style.scrollBehavior = 'smooth';
+                    }
+                    // If scrolled near the very start (start of 1st set)
+                    else if (slider.scrollLeft <= tolerance) {
+                        slider.style.scrollBehavior = 'auto';
+                        slider.scrollLeft = totalWidth; // Jump forward to middle
+                        slider.style.scrollBehavior = 'smooth';
+                    }
+                 };
 
-                if (absScroll <= tolerance) { 
+                 slider.addEventListener('scroll', checkScroll);
+
+                 // Auto Scroll
+                 const startAuto = () => {
+                     clearInterval(autoScrollInterval);
+                     autoScrollInterval = setInterval(() => {
+                         if(!isPaused) moveSlider(1);
+                     }, intervalTime);
+                 };
+                 
+                 const resetAuto = () => {
+                     clearInterval(autoScrollInterval);
+                     startAuto();
+                 };
+                 
+                 // Bind Buttons
+                 nextBtns.forEach(btn => btn?.addEventListener('click', () => { moveSlider(1); resetAuto(); }));
+                 prevBtns.forEach(btn => btn?.addEventListener('click', () => { moveSlider(-1); resetAuto(); }));
+                 
+                 // Pause on hover/touch
+                 slider.addEventListener('mouseenter', () => isPaused = true);
+                 slider.addEventListener('touchstart', () => isPaused = true);
+                 slider.addEventListener('mouseleave', () => isPaused = false);
+                 slider.addEventListener('touchend', () => isPaused = false);
+                 
+                 // Handle resize
+                 window.addEventListener('resize', () => {
                     slider.style.scrollBehavior = 'auto';
-                    const target = isRTL ? -(singleSetWidth) : singleSetWidth;
-                    slider.scrollLeft = target;
-                    setTimeout(() => { slider.style.scrollBehavior = ''; }, 20);
-                } 
-                else if (absScroll >= (singleSetWidth * 2) - tolerance) { 
-                    slider.style.scrollBehavior = 'auto';
-                    const target = isRTL ? -(singleSetWidth) : singleSetWidth;
-                    slider.scrollLeft = target;
-                    setTimeout(() => { slider.style.scrollBehavior = ''; }, 20);
+                    jumpToStart();
+                    setTimeout(() => { slider.style.scrollBehavior = 'smooth'; }, 50);
+                 });
+                 
+                 startAuto();
+            },
+            
+            // Allow button clicks to call methods
+            prefillVehicle(type) {
+                const sel = document.getElementById('vehicle');
+                if(sel) {
+                    sel.value = type;
+                    BookingManager.updateEstimate();
+                    document.getElementById('booking').scrollIntoView({ behavior: 'smooth' });
                 }
-            };
+            },
+            
+            updateMinDate() {
+                // Handled by flatpickr config now
+            }
+        };
 
-            const startAutoScroll = () => {
-                clearInterval(autoScrollInterval);
-                autoScrollInterval = setInterval(() => { if (!isPaused) moveSlider(1); }, intervalTime);
-            };
-
-            nextBtn?.addEventListener('click', () => { moveSlider(1); startAutoScroll(); });
-            prevBtn?.addEventListener('click', () => { moveSlider(-1); startAutoScroll(); });
-
-            let sliderTicking = false;
-            slider.addEventListener('scroll', () => {
-                if (!sliderTicking) {
-                    window.requestAnimationFrame(() => { checkInfiniteLoop(); sliderTicking = false; });
-                    sliderTicking = true;
-                }
-            }, { passive: true });
-
-            slider.addEventListener('mouseenter', () => isPaused = true);
-            slider.addEventListener('mouseleave', () => isPaused = false);
-            slider.addEventListener('touchstart', () => isPaused = true, { passive: true });
-            slider.addEventListener('touchend', () => setTimeout(() => isPaused = false, 2000), { passive: true });
-            window.addEventListener('resize', initSlider);
-
-            initSlider();
-            startAutoScroll();
+        // Boot
+        window.addEventListener('DOMContentLoaded', () => {
+            App.start();
+            App.checkCookies();
         });
+
+        // Expose to Window for HTML event handlers
+        window.App = App;
+        window.UIManager = UIManager;
+        window.LangManager = LangManager;
+        window.CurrencyManager = CurrencyManager;
+        window.BookingManager = BookingManager;
+
     </script>
 </body>
 </html>
