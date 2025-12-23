@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -26,9 +26,9 @@
     </script>
 
     <!-- SEO: Multilingual Support -->
-    <link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/" />
-    <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/?lang=ar" />
+    <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/" />
     <link rel="alternate" hreflang="x-default" href="https://georgiahills.netlify.app/" />
+    <link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/?lang=en" />
     <link rel="canonical" href="https://georgiahills.netlify.app/">
 
     <!-- SEO: Structured Data -->
@@ -38,9 +38,9 @@
         "@context": "https://schema.org",
         "@type": "AutoRental",
         "name": "Georgia Hills",
-        "alternateName": "جورجيا هيلز للسياحة",
+        "alternateName": "جورجيا هيلز للسياحة والسفر",
         "image": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80",
-        "description": "Premium car rental with driver in Georgia. Best service for families and honeymooners.",
+        "description": "أفضل خدمة سائق خاص في جورجيا وتأجير سيارات في تبليسي. متخصصون في البرامج السياحية للعوائل وشهر العسل. سيارات حديثة وسائقين يتحدثون العربية.",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Tbilisi",
@@ -53,7 +53,8 @@
           "@type": "Country",
           "name": "Georgia",
           "alternateName": "جورجيا"
-        }
+        },
+        "knowsLanguage": ["ar", "en", "ru"]
       }
     ]
     </script>
@@ -67,28 +68,35 @@
     <link rel="preconnect" href="https://flagcdn.com" crossorigin>
     <link rel="preconnect" href="https://api.exchangerate-api.com" crossorigin>
     
-    <!-- Optimized CSS Loading (Non-blocking to fix LCP) -->
+    <!-- Optimized CSS Loading -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"></noscript>
     
-    <!-- Preload Hero Image (High Priority) -->
+    <!-- Inline Critical CSS for Icons (Replaces Blocking FontAwesome Request) -->
+    <style>
+        /* SVGs don't need a font request! */
+        .icon-svg { width: 1em; height: 1em; display: inline-block; fill: currentColor; vertical-align: -0.125em; }
+    </style>
+
+    <!-- Preload Hero Image -->
     <link rel="preload" as="image" 
           href="image-640.webp" 
           imagesrcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" 
           imagesizes="100vw"
           fetchpriority="high">
 
-    <title>Rent a Car in Georgia | سائق خاص في جورجيا | Georgia Hills</title>
-    <meta name="description" content="Best private driver & car rental in Georgia for families. Book your trip to Tbilisi, Batumi & Kazbegi via WhatsApp.">
-    <meta name="keywords" content="سائق خاص في جورجيا, استئجار سيارة في تبليسي, السياحة في جورجيا للعوائل, سائق عربي جورجيا, Private driver Georgia, Car rental Tbilisi">
+    <!-- Primary Keywords in Title -->
+    <title>سائق خاص في جورجيا | السياحة في جورجيا | Georgia Hills</title>
+    <meta name="description" content="أفضل خدمة سائق خاص في جورجيا للعوائل. سيارات حديثة وسائقين عرب. احجز رحلتك إلى تبليسي، باتومي، وكازبيجي عبر واتساب مباشرة.">
+    <meta name="keywords" content="سائق خاص في جورجيا, السياحة في جورجيا, استئجار سيارة في تبليسي, سائق عربي في جورجيا, عروض جورجيا للعوائل, تكلفة السياحة في جورجيا, شركات سياحية في جورجيا">
     <meta name="author" content="Georgia Hills">
     <meta name="theme-color" content="#0F172A">
     
     <!-- Open Graph & Twitter -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://georgiahills.netlify.app/">
-    <meta property="og:title" content="Georgia Hills - سائق خاص في جورجيا">
-    <meta property="og:description" content="اكتشف جمال جورجيا مع خدمة سائق خاص محترف. سيارات عائلية وأسعار مميزة.">
+    <meta property="og:title" content="سائق خاص في جورجيا | Georgia Hills">
+    <meta property="og:description" content="اكتشف جمال جورجيا مع سائق خاص محترف. خدمة VIP للعوائل والمسافرين العرب.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80">
     <meta name="twitter:card" content="summary_large_image">
 
@@ -100,19 +108,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
     
-    <!-- Icons (Non-blocking) -->
+    <!-- Load FontAwesome Deferred (Low Priority) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
     <!-- MAIN CSS -->
     <style>
-        /* =========================================
-           1. VARIABLES & RESET
-           ========================================= */
         :root {
             --color-primary: #2C5530;
             --color-secondary: #8BA888;
-            /* Darkened accent for better contrast */
             --color-accent: #b08d55; 
             --color-accent-light: #E6CCAA;
             --color-surface: #F9FAFB;
@@ -122,16 +126,15 @@
             --color-success-bg: #dcfce7;
             --color-white: #ffffff;
             --color-white-90: rgba(255, 255, 255, 0.9);
-            /* Improved Gray Scale for Contrast */
             --color-gray-50: #f9fafb;
             --color-gray-100: #f3f4f6;
             --color-gray-200: #e5e7eb;
-            --color-gray-300: #9ca3af; /* Darkened from d1d5db */
-            --color-gray-400: #6b7280; /* Darkened from 9ca3af */
-            --color-gray-500: #4b5563;
-            --color-gray-600: #374151;
-            --color-gray-700: #1f2937;
-            --color-gray-800: #111827;
+            --color-gray-300: #9ca3af;
+            --color-gray-400: #4b5563; /* Darkened for accessibility */
+            --color-gray-500: #374151; /* Darkened for accessibility */
+            --color-gray-600: #1f2937;
+            --color-gray-700: #111827;
+            --color-gray-800: #0f172a;
             
             --font-sans: 'Outfit', sans-serif;
             --font-arabic: 'Cairo', sans-serif;
@@ -142,7 +145,7 @@
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             
-            --container-max: 80rem; /* 7xl */
+            --container-max: 80rem; 
             --header-height: 5rem;
             
             --z-negative: 0;
@@ -162,7 +165,7 @@
         body { 
             margin: 0; 
             background-color: var(--color-surface); 
-            font-family: var(--font-sans); 
+            font-family: var(--font-arabic); /* Default to Arabic Font */
             text-rendering: optimizeLegibility; 
             -webkit-font-smoothing: antialiased; 
             -moz-osx-font-smoothing: grayscale; 
@@ -172,18 +175,19 @@
             overflow-x: hidden;
             min-height: 100vh;
             line-height: 1.6;
+            text-align: right; /* Default RTL Alignment */
         }
         
-        /* Mobile Bar Fix */
         @media (max-width: 768px) { body { padding-bottom: 7rem; } }
 
         html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+        html[lang="en"] body { font-family: var(--font-sans); text-align: left; direction: ltr; }
 
         a { text-decoration: none; color: inherit; }
         button { cursor: pointer; border: none; background: none; font-family: inherit; }
         input, select, textarea { font-family: inherit; }
 
-        /* Typography Utilities */
+        /* Utilities */
         .text-center { text-align: center !important; }
         .text-left { text-align: left !important; }
         .text-right { text-align: right !important; }
@@ -193,22 +197,17 @@
         .text-accent-light { color: var(--color-accent-light) !important; }
         .text-dark { color: var(--color-dark) !important; }
         .text-xs { font-size: 0.75rem; }
-        
-        /* Force LTR for Price Displays */
         .price-display { direction: ltr; unicode-bidi: isolate; display: inline-block; }
-        
         .font-bold { font-weight: 700; }
         .font-extra-bold { font-weight: 800; }
-        .font-normal { font-weight: 400; }
         .font-serif { font-family: 'Times New Roman', Times, serif; }
-        .uppercase { text-transform: uppercase; }
         .italic { font-style: italic; }
         .hidden { display: none !important; }
         .block { display: block; }
         .opacity-0 { opacity: 0; }
         .opacity-80 { opacity: 0.8; }
         
-        /* Layout Utils */
+        /* Flex & Layout */
         .flex { display: flex; }
         .flex-col { flex-direction: column; }
         .items-center { align-items: center; }
@@ -218,14 +217,13 @@
         .gap-4 { gap: 1rem; }
         .ml-2 { margin-left: 0.5rem; }
         html[lang="ar"] .ml-2 { margin-left: 0; margin-right: 0.5rem; }
-        
         .w-full { width: 100%; }
         .h-full { height: 100%; }
         .relative { position: relative; }
         .absolute { position: absolute; }
         .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
         .object-cover { object-fit: cover; }
-        .object-contain { object-fit: contain; }
+        .container { max-width: var(--container-max); margin: 0 auto; padding: 0 1rem; width: 100%; }
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
@@ -237,44 +235,22 @@
         html[lang="ar"] body { font-family: var(--font-arabic); text-align: right; }
         html[lang="ar"] .text-left { text-align: right !important; }
         html[lang="ar"] .text-center { text-align: center !important; }
-        html[lang="ar"] .rtl-flip { transform: scaleX(-1); }
-        html[lang="ar"] .fa-arrow-right { transform: rotate(180deg); }
-        html[lang="ar"] .fa-chevron-right { transform: rotate(180deg); }
-        
-        /* Layout Containers */
-        .container {
-            max-width: var(--container-max);
-            margin: 0 auto;
-            padding: 0 1rem;
-            width: 100%;
-        }
 
-        /* Nav & Menus */
-        .navbar {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: var(--z-navbar);
-            background-color: var(--color-white-90); backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--color-gray-100);
-            transition: all 0.3s;
-        }
+        /* Nav */
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; z-index: var(--z-navbar); background-color: var(--color-white-90); backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-gray-100); transition: all 0.3s; }
         .navbar.shadow-md { box-shadow: var(--shadow-lg); }
         .navbar.nav-hidden { transform: translateY(-100%); }
-
         .navbar-inner { display: flex; justify-content: space-between; align-items: center; height: var(--header-height); }
         .nav-logo { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
         .nav-logo-img { width: 3.5rem; height: 3.5rem; border-radius: 50%; box-shadow: var(--shadow-xl); object-fit: cover; }
         .nav-logo span { font-weight: 700; font-size: 1.25rem; color: var(--color-dark); display: none; }
         @media (min-width: 768px) { .nav-logo span { display: block; } }
-
         .desktop-menu { display: none; gap: 1.5rem; align-items: center; }
         @media (min-width: 1024px) { .desktop-menu { display: flex; } }
-        
         .nav-link { font-size: 0.875rem; font-weight: 600; color: var(--color-gray-600); padding: 0.5rem 0; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
         .nav-link:hover { color: var(--color-primary); border-bottom-color: rgba(44, 85, 48, 0.3); }
-
         .action-btn { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; color: var(--color-gray-600); border: 1px solid var(--color-gray-200); border-radius: 9999px; padding: 0.375rem 1rem; transition: background 0.2s; background: white; }
         .action-btn:hover { background-color: var(--color-gray-50); color: var(--color-primary); }
-
         .btn-book-nav { padding: 0.75rem 1.5rem; background-color: var(--color-primary); color: white; border-radius: 9999px; font-size: 0.875rem; font-weight: 700; box-shadow: var(--shadow-lg); transition: all 0.2s; }
         .btn-book-nav:hover { background-color: #1a331d; transform: translateY(-2px); }
 
@@ -288,24 +264,18 @@
         .custom-option.selected { background: var(--color-success-bg); color: var(--color-success); }
         .currency-flag-sm { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 
+        /* Mobile Menu */
         .mobile-controls { display: flex; align-items: center; gap: 0.75rem; }
         @media (min-width: 1024px) { .mobile-controls { display: none; } }
         .btn-mobile-menu { color: var(--color-dark); padding: 0.5rem; font-size: 1.5rem; }
-
         #mobile-menu { position: fixed; inset: 0; z-index: var(--z-mobile-menu); background-color: white; width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.5rem; transition: transform 0.3s; transform: translateX(100%); overflow-y: auto; padding: 2rem 0; }
         html[lang="ar"] #mobile-menu { transform: translateX(-100%); }
         #mobile-menu.open { transform: translateX(0); }
-        html[lang="ar"] #mobile-menu.open { transform: translateX(0); }
-        
         .close-menu-btn { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.875rem; color: var(--color-gray-400); }
         html[lang="ar"] .close-menu-btn { right: auto; left: 1.5rem; }
-        
         .mobile-link { font-size: 1.5rem; font-weight: 700; color: var(--color-dark); }
-        .mobile-link:hover { color: var(--color-primary); }
         .mobile-btn-book { padding: 1rem 2rem; background: var(--color-primary); color: white; border-radius: 9999px; font-size: 1.25rem; font-weight: 700; box-shadow: var(--shadow-xl); }
-        
         .mobile-settings { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
-        
         .mobile-social-container { display: flex; gap: 1.5rem; margin-top: 1rem; }
         .mobile-social-btn { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--color-gray-500); }
         .mobile-social-icon { width: 3rem; height: 3rem; background: var(--color-gray-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
@@ -345,7 +315,7 @@
         }
         .stats-item { text-align: center; }
         .stats-num { font-size: 2.25rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem; direction: ltr; unicode-bidi: isolate; display: block; }
-        .stats-label { color: var(--color-gray-600); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+        .stats-label { color: var(--color-gray-400); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
 
         .section-py { padding-top: 4rem; padding-bottom: 4rem; }
         @media (min-width: 768px) { .section-py { padding-top: 6rem; padding-bottom: 6rem; } }
@@ -360,7 +330,7 @@
         .section-label { color: var(--color-accent); font-weight: 700; letter-spacing: 0.1em; font-size: 0.875rem; text-transform: uppercase; margin-bottom: 0.5rem; display: block; }
         .section-title { font-size: 1.875rem; font-weight: 700; color: var(--color-dark); margin-bottom: 1.5rem; line-height: 1.2; margin-top: 0; }
         @media (min-width: 768px) { .section-title { font-size: 2.25rem; } }
-        .section-desc { color: var(--color-gray-600); margin-bottom: 1.5rem; line-height: 1.625; }
+        .section-desc { color: var(--color-gray-400); margin-bottom: 1.5rem; line-height: 1.625; }
         .feature-grid { margin-top: 2rem; }
         .feature-box { display: flex; align-items: flex-start; gap: 1rem; padding: 1rem; background: white; border-radius: 0.75rem; box-shadow: var(--shadow-card); transition: box-shadow 0.3s; margin-bottom: 1rem; }
         .feature-box:hover { box-shadow: var(--shadow-lg); }
@@ -368,7 +338,7 @@
         .icon-green { background: #f0fdf4; color: var(--color-primary); }
         .icon-blue { background: #eff6ff; color: #2563eb; }
         .feature-title { font-weight: 700; color: var(--color-dark); font-size: 1.125rem; margin: 0; }
-        .feature-text { font-size: 0.875rem; color: var(--color-gray-600); margin: 0; }
+        .feature-text { font-size: 0.875rem; color: var(--color-gray-400); margin: 0; }
 
         /* Destinations Slider */
         /* FORCE LTR FOR SLIDER LAYOUT MECHANICS TO FIX ARABIC SCROLLING */
@@ -429,16 +399,16 @@
         .popular-tag { position: absolute; top: 1rem; right: 1rem; background: var(--color-accent); color: white; font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 9999px; z-index: var(--z-badge); box-shadow: var(--shadow-lg); }
         .fleet-body { padding: 2rem; }
         .fleet-title { font-weight: 700; color: var(--color-dark); font-size: 1.5rem; margin-bottom: 0.25rem; margin-top: 0; }
-        .fleet-desc { font-size: 0.875rem; color: var(--color-gray-600); margin-bottom: 1rem; margin-top: 0; }
+        .fleet-desc { font-size: 0.875rem; color: var(--color-gray-400); margin-bottom: 1rem; margin-top: 0; }
         .fleet-specs { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
-        .spec-tag { padding: 0.25rem 0.5rem; background: var(--color-gray-50); border-radius: 0.25rem; font-size: 0.875rem; color: var(--color-gray-600); }
+        .spec-tag { padding: 0.25rem 0.5rem; background: var(--color-gray-50); border-radius: 0.25rem; font-size: 0.875rem; color: var(--color-gray-400); }
         .btn-fleet { width: 100%; padding: 0.75rem; border-radius: 0.75rem; font-weight: 600; transition: background 0.2s; }
         .btn-fleet-outline { border: 1px solid var(--color-primary); color: var(--color-primary); }
         .btn-fleet-outline:hover { background: var(--color-primary); color: white; }
         .btn-fleet-fill { background: var(--color-primary); color: white; }
         .btn-fleet-fill:hover { background: #1a331d; }
 
-        /* Packages */
+        /* Packages (New) */
         .packages-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }
         @media (min-width: 768px) { .packages-grid { grid-template-columns: repeat(3, 1fr); } }
         /* Add some variation for 5 items */
@@ -463,43 +433,45 @@
         .pkg-subtitle { font-size: 0.875rem; opacity: 0.9; position: relative; z-index: 10; }
         .pkg-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
         .pkg-list { list-style: none; padding: 0; margin: 0 0 1.5rem 0; flex: 1; }
-        .pkg-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--color-gray-600); }
+        .pkg-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--color-gray-400); }
         .pkg-item i { color: var(--color-success); margin-top: 0.25rem; }
         .pkg-price { font-size: 1.25rem; font-weight: 800; color: var(--color-primary); margin-bottom: 1rem; }
         .btn-pkg { width: 100%; padding: 0.75rem; background: var(--color-gray-100); color: var(--color-dark); font-weight: 700; border-radius: 0.5rem; text-align: center; transition: all 0.2s; }
         .btn-pkg:hover { background: var(--color-primary); color: white; }
 
-        /* Guide */
+        /* Guide (New) */
         .guide-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }
         @media (min-width: 768px) { .guide-grid { grid-template-columns: repeat(3, 1fr); } }
         .guide-box { background: white; padding: 2rem; border-radius: 1rem; box-shadow: var(--shadow-card); border-top: 4px solid var(--color-accent); }
         .guide-icon { width: 3rem; height: 3rem; background: var(--color-accent-light); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; margin-bottom: 1rem; }
         .guide-title { font-weight: 700; font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--color-dark); }
-        .guide-text { font-size: 0.9rem; color: var(--color-gray-600); line-height: 1.6; }
+        .guide-text { font-size: 0.9rem; color: var(--color-gray-400); line-height: 1.6; }
 
-        /* Reviews, FAQ, Booking, Footer (Same as original but compacted here for brevity if needed) */
+        /* Reviews Section */
         .reviews-bg { background: white; }
         .reviews-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
         @media (min-width: 768px) { .reviews-grid { grid-template-columns: repeat(3, 1fr); } }
         .review-card { background: var(--color-gray-50); padding: 2rem; border-radius: 1.5rem; border: 1px solid var(--color-gray-100); transition: all 0.3s; }
         .review-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
         .stars { color: #facc15; font-size: 0.875rem; margin-bottom: 1rem; }
-        .review-text { font-style: italic; color: var(--color-gray-600); margin-bottom: 1.5rem; line-height: 1.6; margin-top: 0; }
+        .review-text { font-style: italic; color: var(--color-gray-400); margin-bottom: 1.5rem; line-height: 1.6; margin-top: 0; }
         .review-author { display: flex; align-items: center; gap: 0.75rem; }
         .review-avatar { width: 2.5rem; height: 2.5rem; background: rgba(44,85,48,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--color-primary); font-weight: 700; }
         .review-name { font-weight: 700; color: var(--color-dark); font-size: 0.875rem; }
         .review-country { font-size: 0.75rem; color: var(--color-gray-700); }
         
+        /* FAQ Section */
         .faq-container { max-width: 48rem; }
         .faq-list { display: flex; flex-direction: column; gap: 1rem; }
         .faq-item { background: var(--color-surface); border-radius: 0.75rem; padding: 1.5rem; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); border: 1px solid var(--color-gray-100); cursor: pointer; transition: border-color 0.2s; }
         .faq-item:hover { border-color: rgba(44, 85, 48, 0.3); }
         .faq-header { display: flex; justify-content: space-between; align-items: center; }
         .faq-question { font-weight: 700; font-size: 1.125rem; margin: 0; }
-        .faq-answer { margin-top: 1rem; font-size: 0.875rem; color: var(--color-gray-600); line-height: 1.6; margin-bottom: 0; }
+        .faq-answer { margin-top: 1rem; font-size: 0.875rem; color: var(--color-gray-400); line-height: 1.6; margin-bottom: 0; }
         html[lang="ar"] .faq-question { text-align: right !important; }
         html[lang="ar"] .faq-answer { text-align: right !important; }
 
+        /* Booking Section */
         .booking-section { background-color: var(--color-primary); position: relative; overflow: hidden; padding: 4rem 1rem; }
         .booking-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-radius: 2rem; padding: 1.5rem; box-shadow: var(--shadow-2xl); max-width: 64rem; margin: 0 auto; position: relative; z-index: var(--z-normal); }
         @media (min-width: 768px) { .booking-card { padding: 3rem; } }
@@ -519,6 +491,7 @@
         .btn-submit:hover { background-color: #1a331d; }
         .price-estimate-box { margin-top: 1.5rem; padding: 1rem; background: rgba(44, 85, 48, 0.05); border-radius: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
 
+        /* Footer */
         .footer { background-color: var(--color-dark); color: white; padding-top: 5rem; padding-bottom: 6rem; }
         .footer-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 4rem; }
         @media (min-width: 1024px) { .footer-grid { grid-template-columns: 1.5fr 1fr 1fr 1.5fr; } }
@@ -537,37 +510,14 @@
         .footer-map-overlay { font-size: 0.875rem; font-weight: 700; color: var(--color-gray-400); z-index: var(--z-normal); display: flex; gap: 0.5rem; align-items: center; }
         .footer-bottom { border-top: 1px solid var(--color-gray-800); padding-top: 2rem; text-align: center; font-size: 0.75rem; color: var(--color-gray-400); }
 
-        /* Animation & Misc */
-        @keyframes bounce-slow { 0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8,0,1,1); } 50% { transform: translateY(0); animation-timing-function: cubic-bezier(0,0,0.2,1); } }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-        .animate-bounce { animation: bounce-slow 2s infinite; }
-        .animate-spin { animation: spin 1s linear infinite; }
-        
-        .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s, transform 0.8s; }
-        .reveal.waiting { opacity: 0; transform: translateY(30px); } 
-        
-        .sticky-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: var(--z-sticky); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); display: none; gap: 12px; align-items: center; }
-        @media (max-width: 768px) { .sticky-bar { display: flex; } }
-        .sticky-bar.hide-bar { transform: translateY(100%); transition: transform 0.3s; }
-        .glass-btn-primary { flex: 1; background: #0F6B60; color: white; padding: 0.75rem; border-radius: 0.5rem; text-align: center; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-        .glass-btn-accent { flex: 1; background: var(--color-primary); color: white; padding: 0.75rem; border-radius: 0.5rem; text-align: center; font-weight: 700; }
-        
-        #preloader { position: fixed; inset: 0; z-index: var(--z-preloader); background: #fff; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
-        .preloader-circle { width: 5rem; height: 5rem; border-radius: 50%; background: rgba(44,85,48,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; }
-        .preloader-text { font-size: 0.875rem; font-weight: 700; color: var(--color-gray-400); letter-spacing: 0.1em; text-transform: uppercase; }
-        
-        #network-toast { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: var(--color-error); color: white; padding: 10px 20px; border-radius: 9999px; z-index: var(--z-toast); transition: top 0.3s; font-size: 0.875rem; font-weight: bold; display: flex; gap: 8px; align-items: center; }
-        #network-toast.show { top: env(safe-area-inset-top, 20px); }
-
-        .input-error { border-color: var(--color-error) !important; background-color: #FEF2F2 !important; }
-        .error-text { display: block; font-size: 0.75rem; color: var(--color-error); margin-top: 0.25rem; }
-
+        /* Floating Action Buttons */
         .fab-container { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: var(--z-navbar); display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-end; }
         .fab-scroll { padding: 0.75rem; background: white; color: var(--color-primary); border-radius: 50%; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .fab-scroll.show { opacity: 1; pointer-events: auto; }
         .fab-whatsapp { width: 3.5rem; height: 3.5rem; background: #0F6B60; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-xl); transition: transform 0.2s; }
         .fab-whatsapp:hover { transform: scale(1.1); }
 
+        /* Modals */
         .modal-overlay { position: fixed; inset: 0; z-index: var(--z-modal); background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1rem; }
         .modal-content { background: white; border-radius: 1.5rem; padding: 2.5rem; max-width: 24rem; width: 100%; text-align: center; position: relative; }
         .modal-close { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; color: var(--color-gray-400); }
@@ -577,12 +527,36 @@
         .modal-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 1rem; background: #0F6B60; color: white; border-radius: 0.75rem; font-weight: 700; }
         .info-modal-content { background: white; border-radius: 1rem; max-width: 42rem; width: 100%; max-height: 80vh; overflow-y: auto; padding: 2rem; position: relative; }
 
+        /* Cookie Banner */
         .cookie-banner { background: white; border-top: 1px solid var(--color-gray-200); padding: 1rem; box-shadow: var(--shadow-2xl); position: fixed; bottom: 0; left: 0; width: 100%; z-index: var(--z-navbar); display: flex; flex-direction: column; gap: 1rem; transform: translateY(100%); transition: transform 0.5s; }
         .cookie-banner.active { transform: translateY(0); }
         .cookie-buttons { display: flex; gap: 0.75rem; }
         .btn-cookie-accept { padding: 0.5rem 1.5rem; background: var(--color-primary); color: white; border-radius: 0.5rem; font-weight: 700; font-size: 0.875rem; }
         .btn-cookie-decline { padding: 0.5rem 1.5rem; background: var(--color-gray-100); color: var(--color-gray-600); border-radius: 0.5rem; font-weight: 700; font-size: 0.875rem; }
 
+        /* Mobile Sticky Bar */
+        .sticky-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: var(--z-sticky); padding: 12px 16px; padding-bottom: calc(12px + env(safe-area-inset-bottom)); display: none; gap: 12px; align-items: center; }
+        @media (max-width: 768px) { .sticky-bar { display: flex; } }
+        .sticky-bar.hide-bar { transform: translateY(100%); transition: transform 0.3s; }
+        .glass-btn-primary { flex: 1; background: #0F6B60; color: white; padding: 0.75rem; border-radius: 0.5rem; text-align: center; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        .glass-btn-accent { flex: 1; background: var(--color-primary); color: white; padding: 0.75rem; border-radius: 0.5rem; text-align: center; font-weight: 700; }
+
+        /* Loading & Animations */
+        #preloader { position: fixed; inset: 0; z-index: var(--z-preloader); background: #fff; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s ease-out; }
+        .preloader-circle { width: 5rem; height: 5rem; border-radius: 50%; background: rgba(44,85,48,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; }
+        .preloader-text { font-size: 0.875rem; font-weight: 700; color: var(--color-gray-400); letter-spacing: 0.1em; text-transform: uppercase; }
+        #network-toast { position: fixed; top: -60px; left: 50%; transform: translateX(-50%); background: var(--color-error); color: white; padding: 10px 20px; border-radius: 9999px; z-index: var(--z-toast); transition: top 0.3s; font-size: 0.875rem; font-weight: bold; display: flex; gap: 8px; align-items: center; }
+        #network-toast.show { top: env(safe-area-inset-top, 20px); }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes bounce-slow { 0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8,0,1,1); } 50% { transform: translateY(0); animation-timing-function: cubic-bezier(0,0,0.2,1); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .animate-bounce { animation: bounce-slow 2s infinite; }
+        .animate-spin { animation: spin 1s linear infinite; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s, transform 0.8s; }
+        .reveal.waiting { opacity: 0; transform: translateY(30px); } 
+        
+        /* Fallback for No JS */
         .no-js-overlay { position: fixed; inset: 0; z-index: 10000; background: white; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; }
     </style>
 </head>
