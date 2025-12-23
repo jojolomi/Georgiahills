@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Dynamic SEO Placeholders -->
+    <title>Destination - Georgia Hills</title>
+    <meta name="description" content="Explore the beauty of Georgia with our premium car rental and driver services.">
+    <meta property="og:title" content="Georgia Hills Destinations">
+    <meta property="og:description" content="Discover amazing places in Georgia.">
+    <meta property="og:image" content="">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="https://georgiahills.netlify.app/destination.html">
+
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- 1. Variables & Reset --- */
+        :root {
+            --color-primary: #2C5530;
+            --color-secondary: #8BA888;
+            --color-accent: #b08d55; 
+            --color-surface: #F9FAFB;
+            --color-dark: #0F172A;
+            --color-white: #ffffff;
+            --color-white-90: rgba(255, 255, 255, 0.95);
+            --color-gray-100: #f3f4f6;
+            --color-gray-200: #e5e7eb;
+            --color-gray-500: #6b7280;
+            --color-gray-600: #4b5563;
+            --color-gray-800: #1f2937;
+            
+            --font-sans: 'Outfit', sans-serif;
+            --font-arabic: 'Cairo', sans-serif;
+            
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            
+            --container-max: 80rem; 
+            --header-height: 5rem;
+            
+            /* Layering - Critical for Layout */
+            --z-negative: -1;
+            --z-normal: 10;
+            --z-sticky: 40;
+            --z-navbar: 50;
+            --z-mobile-menu: 100; /* Higher than navbar */
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body { 
+            margin: 0; 
+            background-color: var(--color-surface); 
+            font-family: var(--font-sans); 
+            color: var(--color-dark);
+            -webkit-font-smoothing: antialiased; 
+            line-height: 1.6;
+            padding-bottom: 5rem; /* Space for mobile CTA */
+        }
+        
+        /* RTL Support */
+        html[lang="ar"] body { font-family: var(--font-arabic); direction: rtl; text-align: right; }
+        html[lang="ar"] .rtl-flip { transform: scaleX(-1); }
+        html[lang="ar"] .fa-arrow-right { transform: rotate(180deg); }
+        html[lang="ar"] .fa-chevron-right { transform: rotate(180deg); }
+        html[lang="ar"] .text-left { text-align: right !important; }
+
+        /* Utilities */
+        .container { max-width: var(--container-max); margin: 0 auto; padding: 0 1rem; width: 100%; }
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .gap-2 { gap: 0.5rem; }
+        
+        a { text-decoration: none; color: inherit; transition: color 0.2s; }
+        button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+        .text-primary { color: var(--color-primary); }
+        .text-accent { color: var(--color-accent); }
+        .text-success { color: #16a34a; }
+        .font-bold { font-weight: 700; }
+        .bg-gray-50 { background-color: var(--color-gray-50); }
+        
+        /* --- 2. Navbar (Fixed & Styled) --- */
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; 
+            z-index: var(--z-navbar);
+            background-color: var(--color-white-90);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--color-gray-100);
+            height: var(--header-height);
+            transition: all 0.3s;
+            direction: ltr !important; /* Force LTR Layout for Header */
+        }
+        
+        .navbar-inner {
+            display: flex; justify-content: space-between; align-items: center; height: 100%;
+        }
+
+        .nav-logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--color-dark); }
+        .nav-logo img { width: 3rem; height: 3rem; border-radius: 50%; box-shadow: 0 4px 6px rgba(0,0,0,0.1); object-fit: cover; }
+        .nav-logo span { font-weight: 700; font-size: 1.25rem; display: none; }
+        @media (min-width: 768px) { .nav-logo span { display: block; } }
+
+        /* Desktop Menu */
+        .desktop-menu { display: none; gap: 1.5rem; align-items: center; }
+        @media (min-width: 1024px) { .desktop-menu { display: flex; } }
+
+        .nav-link { font-size: 0.9rem; font-weight: 600; color: var(--color-gray-600); padding: 0.5rem 0; border-bottom: 2px solid transparent; transition: all 0.2s; }
+        .nav-link:hover { color: var(--color-primary); border-bottom-color: rgba(44, 85, 48, 0.3); }
+
+        .action-btn { 
+            display: flex; align-items: center; gap: 0.5rem; cursor: pointer;
+            font-size: 0.85rem; font-weight: 600; color: var(--color-gray-600); 
+            border: 1px solid var(--color-gray-200); border-radius: 9999px; 
+            padding: 0.375rem 1rem; background: white; transition: all 0.2s; 
+        }
+        .action-btn:hover { background-color: var(--color-gray-100); border-color: var(--color-primary); color: var(--color-primary); }
+
+        .btn-book-nav { 
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 0.75rem 1.5rem; background-color: var(--color-primary); color: white; 
+            border-radius: 9999px; font-size: 0.875rem; font-weight: 700; 
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); transition: all 0.2s; 
+        }
+        .btn-book-nav:hover { background-color: #1a331d; transform: translateY(-2px); }
+
+        /* Mobile Controls */
+        .mobile-controls { display: flex; align-items: center; gap: 0.75rem; }
+        @media (min-width: 1024px) { .mobile-controls { display: none; } }
+        
+        .btn-mobile-menu { font-size: 1.5rem; padding: 0.5rem; color: var(--color-dark); }
+
+        /* --- 3. Mobile Menu Overlay --- */
+        #mobile-menu {
+            position: fixed; inset: 0; z-index: var(--z-mobile-menu); 
+            background-color: white; width: 100%; height: 100vh; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem;
+            transform: translateX(100%); transition: transform 0.3s ease-in-out;
+            padding: 2rem;
+            /* Reset direction for content inside menu */
+            text-align: center;
+        }
+        html[lang="ar"] #mobile-menu { transform: translateX(-100%); direction: rtl; }
+        /* Force override to show menu */
+        #mobile-menu.open, html[lang="ar"] #mobile-menu.open { transform: translateX(0) !important; }
+
+        .close-menu-btn { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 2rem; color: var(--color-gray-500); }
+        html[lang="ar"] .close-menu-btn { right: auto; left: 1.5rem; }
+        
+        .mobile-link { font-size: 1.5rem; font-weight: 700; color: var(--color-dark); }
+        .mobile-link:hover { color: var(--color-primary); }
+
+        /* --- 4. Page Layout --- */
+        
+        /* Hero */
+        .dest-hero { 
+            position: relative; height: 60vh; width: 100%; overflow: hidden; 
+            background: var(--color-gray-800); margin-top: var(--header-height);
+        }
+        @media (max-width: 768px) { .dest-hero { height: 50vh; margin-top: var(--header-height); } }
+        
+        .dest-hero img { 
+            width: 100%; height: 110%; object-fit: cover; opacity: 0; animation: fadeIn 1s forwards; 
+        }
+        .dest-hero-overlay { 
+            position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); 
+        }
+
+        /* Main Grid */
+        .page-grid { 
+            display: grid; grid-template-columns: 1fr; gap: 3rem; 
+            margin-top: -6rem; /* Overlap Hero */
+            position: relative; z-index: var(--z-normal);
+            padding-bottom: 4rem;
+        }
+        @media (min-width: 1024px) { 
+            .page-grid { grid-template-columns: 2fr 1fr; }
+            .sidebar-col { position: sticky; top: 7rem; height: fit-content; }
+        }
+        @media (max-width: 1023px) {
+            .page-grid { display: flex; flex-direction: column; }
+            .sidebar-col { order: 2; } /* Move Sidebar below content on mobile */
+            .content-card-wrapper { order: 1; }
+        }
+
+        /* Content Card */
+        .content-card {
+            background: white; border-radius: 1.5rem; padding: 2rem; box-shadow: var(--shadow-xl);
+        }
+        @media (min-width: 768px) { .content-card { padding: 3rem; } }
+        @media (max-width: 640px) { .content-card { padding: 1.5rem; border-radius: 1rem; } }
+
+        .breadcrumbs {
+            display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; 
+            font-size: 0.85rem; color: var(--color-gray-500); margin-bottom: 1.5rem; 
+            text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700;
+        }
+        .breadcrumbs a:hover { color: var(--color-primary); }
+        .breadcrumbs span { color: var(--color-accent); }
+
+        .title-large { font-size: 2rem; font-weight: 800; color: var(--color-dark); line-height: 1.1; margin-bottom: 1.5rem; }
+        @media (min-width: 768px) { .title-large { font-size: 3.5rem; } }
+
+        .rich-text { font-size: 1.1rem; color: var(--color-gray-600); line-height: 1.8; white-space: pre-wrap; margin-bottom: 2rem; }
+        @media (max-width: 640px) { .rich-text { font-size: 1rem; } }
+
+        /* Highlights List */
+        .highlights-list {
+            list-style: none; padding: 0; margin: 0 0 2.5rem 0;
+            display: grid; gap: 0.75rem;
+        }
+        .highlights-list li {
+            display: flex; align-items: center; gap: 0.75rem;
+            font-weight: 600; color: var(--color-gray-800);
+            background: var(--color-gray-100); padding: 0.75rem 1rem;
+            border-radius: 0.75rem; font-size: 0.95rem;
+        }
+        .highlights-list li i { color: var(--color-accent); }
+
+        /* Gallery */
+        .section-heading { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: var(--color-dark); }
+        .gallery-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        @media (min-width: 640px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+        .gallery-img { width: 100%; border-radius: 1rem; height: 16rem; object-fit: cover; transition: transform 0.3s; cursor: zoom-in; background-color: var(--color-gray-200); }
+        .gallery-img:hover { transform: scale(1.02); }
+
+        /* Sidebar Box */
+        .booking-box { 
+            background: white; padding: 2rem; border-radius: 1.5rem; 
+            border: 1px solid var(--color-gray-200); text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+        .booking-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-dark); }
+        .booking-subtitle { font-size: 0.9rem; color: var(--color-gray-500); margin-bottom: 1.5rem; }
+        
+        .trust-list { margin-top: 1.5rem; text-align: left; font-size: 0.9rem; color: var(--color-gray-600); }
+        html[lang="ar"] .trust-list { text-align: right; }
+        .trust-item { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+        .icon-check { color: var(--color-success); }
+        
+        .btn-map {
+            display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1rem;
+            color: var(--color-primary); font-weight: 600; font-size: 0.9rem;
+            border-bottom: 1px solid transparent; transition: all 0.2s;
+        }
+        .btn-map:hover { border-color: var(--color-primary); }
+
+        /* Next Link */
+        .next-card {
+            display: flex; align-items: center; gap: 1.5rem; text-decoration: none;
+            background: var(--color-surface); border-radius: 1rem; padding: 1rem;
+            transition: all 0.3s; margin-top: 4rem; border: 1px solid var(--color-gray-200);
+        }
+        .next-card:hover { border-color: var(--color-accent); transform: translateX(5px); }
+        html[lang="ar"] .next-card:hover { transform: translateX(-5px); }
+        
+        .next-img { width: 5rem; height: 5rem; border-radius: 0.75rem; object-fit: cover; }
+        .next-name { font-size: 1.25rem; font-weight: 800; color: var(--color-dark); margin: 0; line-height: 1.2; }
+
+        /* Footer */
+        .footer { background-color: var(--color-dark); color: white; padding: 4rem 0; margin-top: auto; }
+        .footer-content { display: flex; flex-direction: column; gap: 2rem; text-align: center; }
+        .footer-logo { font-size: 1.5rem; font-weight: 700; display: block; margin-bottom: 0.5rem; }
+        .footer-links a { color: var(--color-gray-500); margin: 0 0.75rem; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--color-accent); }
+
+        /* Mobile Sticky Bar */
+        .mobile-cta-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: white; padding: 1rem 1.5rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+            z-index: 90; display: flex; align-items: center; justify-content: space-between;
+            padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+        }
+        @media (min-width: 1024px) { .mobile-cta-bar { display: none; } }
+
+        /* Animation */
+        @keyframes fadeIn { to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .skeleton {
+            background: #e5e7eb;
+            background-image: linear-gradient(to right, #e5e7eb 0%, #f3f4f6 20%, #e5e7eb 40%, #e5e7eb 100%);
+            background-size: 800px 104px;
+            animation: shimmer 1.5s infinite linear forwards;
+            color: transparent !important; border-radius: 0.5rem;
+        }
+        @keyframes shimmer { 0% { background-position: -468px 0 } 100% { background-position: 468px 0 } }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="container navbar-inner">
+            <!-- Logo -->
+            <a href="index.html" class="nav-logo">
+                <img src="favicon.ico" alt="GH">
+                <span>Georgia Hills</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="desktop-menu">
+                <a href="index.html" class="nav-link" data-i18n="nav_home">Home</a>
+                <a href="index.html#destinations" class="nav-link" data-i18n="nav_tours">Destinations</a>
+                <a href="index.html#packages" class="nav-link" data-i18n="nav_packages">Packages</a>
+                <a href="index.html#fleet" class="nav-link" data-i18n="nav_fleet">Fleet</a>
+                
+                <button onclick="LangManager.toggle()" class="action-btn">
+                    <i class="fa-solid fa-globe"></i> <span class="lang-text">العربية</span>
+                </button>
+
+                <a href="index.html#booking" class="btn-book-nav" style="color:white; text-decoration:none;">
+                    <span data-i18n="nav_book">Book Now</span>
+                </a>
+            </div>
+
+            <!-- Mobile Toggle -->
+            <div class="mobile-controls">
+                <button onclick="LangManager.toggle()" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;">
+                    <i class="fa-solid fa-globe"></i> <span class="lang-text">العربية</span>
+                </button>
+                <button onclick="document.getElementById('mobile-menu').classList.add('open')" class="btn-mobile-menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu">
+        <button class="close-menu-btn" onclick="document.getElementById('mobile-menu').classList.remove('open')">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <a href="index.html" class="mobile-link" data-i18n="nav_home">Home</a>
+        <a href="index.html#destinations" class="mobile-link" data-i18n="nav_tours">Destinations</a>
+        <a href="index.html#packages" class="mobile-link" data-i18n="nav_packages">Packages</a>
+        <a href="index.html#booking" class="btn-book-nav" style="font-size:1.25rem; padding:1rem 2rem; color:white; text-decoration:none;" data-i18n="nav_book">Book Now</a>
+    </div>
+
+    <!-- Hero -->
+    <div class="dest-hero">
+        <img id="hero-img" class="skeleton" src="" alt="Hero">
+        <div class="dest-hero-overlay"></div>
+    </div>
+
+    <div class="container">
+        <div class="page-grid">
+            <!-- Left: Main Content -->
+            <div class="content-card-wrapper">
+                <div class="content-card">
+                    <div class="breadcrumbs">
+                        <a href="index.html" data-i18n="nav_home">Home</a> 
+                        <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i> 
+                        <a href="index.html#destinations" data-i18n="nav_tours">Destinations</a> 
+                        <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+                        <span id="crumb-title" class="skeleton" style="color:var(--color-accent);">Loading</span>
+                    </div>
+
+                    <h1 id="page-title" class="title-large skeleton">Loading Destination</h1>
+                    <div id="page-desc" class="rich-text skeleton">Loading description...</div>
+                    
+                    <!-- Top Sights -->
+                    <h3 class="section-heading" data-i18n="label_highlights">Top Sights</h3>
+                    <ul id="highlights" class="highlights-list">
+                        <!-- Injected via JS -->
+                        <li class="skeleton" style="width:60%;"></li>
+                        <li class="skeleton" style="width:80%;"></li>
+                        <li class="skeleton" style="width:50%;"></li>
+                    </ul>
+
+                    <h3 class="section-heading" data-i18n="label_gallery">Photo Gallery</h3>
+                    <div id="gallery" class="gallery-grid">
+                        <div class="skeleton" style="height:16rem;"></div>
+                        <div class="skeleton" style="height:16rem;"></div>
+                    </div>
+
+                    <!-- Next Destination -->
+                    <div style="margin-top:4rem;">
+                        <span style="font-size:0.8rem; font-weight:700; color:var(--color-gray-500); text-transform:uppercase; display:block; margin-bottom:0.5rem;" data-i18n="label_next">Explore Next</span>
+                        <a id="next-link" href="#" class="next-card">
+                            <img id="next-img" src="" class="skeleton" style="width:5rem; height:5rem; border-radius:0.75rem; object-fit:cover;">
+                            <div>
+                                <h4 id="next-title" style="margin:0; font-size:1.25rem; font-weight:700;">Next Place</h4>
+                                <span style="font-size:0.85rem; color:var(--color-primary); font-weight:600;">
+                                    <span data-i18n="btn_view">View Details</span> <i class="fa-solid fa-arrow-right"></i>
+                                </span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Sticky Sidebar -->
+            <div class="sidebar-col">
+                <div class="booking-box">
+                    <h3 class="booking-title" data-i18n="cta_title">Plan Your Trip</h3>
+                    <p class="booking-subtitle" data-i18n="cta_subtitle">Personal Driver & Car</p>
+                    <a href="index.html#booking" class="btn-book-nav" style="width:100%; display:flex; justify-content:center; color:white; text-decoration:none;">
+                        <span data-i18n="nav_book">Book Now</span>
+                    </a>
+                    
+                    <!-- Map Link -->
+                    <a id="map-link" href="#" target="_blank" class="btn-map">
+                        <i class="fa-solid fa-map-location-dot"></i> <span data-i18n="label_map">View on Google Maps</span>
+                    </a>
+                    
+                    <div class="trust-list">
+                        <div class="trust-item"><i class="fa-solid fa-check icon-check"></i> <span data-i18n="trust_1">Free Cancellation</span></div>
+                        <div class="trust-item"><i class="fa-solid fa-check icon-check"></i> <span data-i18n="trust_2">Pay on Arrival</span></div>
+                        <div class="trust-item"><i class="fa-solid fa-check icon-check"></i> <span data-i18n="trust_3">English/Arabic Driver</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Sticky CTA (Hidden on Desktop) -->
+    <div class="mobile-cta-bar">
+        <div style="font-weight:700; font-size:0.9rem;">
+            <span id="mob-cta-label" data-i18n="cta_title">Plan Your Trip</span>
+        </div>
+        <a href="index.html#booking" class="btn-book-nav" style="padding:0.75rem 1.5rem; color:white; text-decoration:none;">
+            <span id="mob-btn-text" data-i18n="nav_book">Book Now</span>
+        </a>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div>
+                <span class="footer-logo">Georgia Hills</span>
+                <p style="opacity:0.7; max-width:30rem; margin:0 auto;" data-i18n="footer_desc">Premium transport solutions in Georgia. Safety, comfort, and local expertise.</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html" data-i18n="nav_home">Home</a>
+                <a href="index.html#fleet" data-i18n="nav_fleet">Fleet</a>
+                <a href="index.html#reviews" data-i18n="nav_reviews">Reviews</a>
+            </div>
+            <div style="font-size:0.8rem; opacity:0.5; margin-top:2rem;">&copy; 2024 Georgia Hills</div>
+        </div>
+    </footer>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json" id="json-ld-data"></script>
+
+    <script>
+        // Translations
+        const Translations = {
+            en: {
+                nav_home: "Home", nav_tours: "Destinations", nav_packages: "Packages", nav_fleet: "Fleet", nav_reviews: "Reviews", nav_book: "Book Now",
+                label_gallery: "Photo Gallery", label_highlights: "Top Sights", label_next: "Explore Next", btn_view: "View Details", label_map: "View on Google Maps",
+                cta_title: "Plan Your Trip", cta_subtitle: "Personal Driver & Car",
+                trust_1: "Free Cancellation", trust_2: "Pay on Arrival", trust_3: "English/Arabic Driver",
+                footer_desc: "Premium transport solutions in Georgia. Safety, comfort, and local expertise."
+            },
+            ar: {
+                nav_home: "الرئيسية", nav_tours: "وجهات", nav_packages: "باقات", nav_fleet: "السيارات", nav_reviews: "الآراء", nav_book: "احجز الآن",
+                label_gallery: "معرض الصور", label_highlights: "أبرز المعالم", label_next: "وجهتك القادمة", btn_view: "شاهد التفاصيل", label_map: "الموقع على الخريطة",
+                cta_title: "خطط لرحلتك", cta_subtitle: "سيارة مع سائق خاص",
+                trust_1: "إلغاء مجاني", trust_2: "الدفع عند الوصول", trust_3: "سائقين يتحدثون العربية",
+                footer_desc: "حلول نقل فاخرة في جورجيا. أمان وراحة وخبرة محلية."
+            }
+        };
+
+        // Data
+        const DestData = {
+            'tbilisi': {
+                img: 'Tbilisi.webp',
+                mapUrl: 'https://goo.gl/maps/example', // Placeholder for real maps URL
+                gallery: [
+                    'https://images.unsplash.com/photo-1539656206689-d4198db85834?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1582236357876-0f836526154b?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1569947936662-81438903c734?auto=format&fit=crop&w=800&q=80'
+                ],
+                highlights_en: ["Old Town & Sulphur Baths", "Narikala Fortress", "Peace Bridge", "Rustaveli Avenue"],
+                highlights_ar: ["المدينة القديمة وحمامات الكبريت", "قلعة ناريكالا", "جسر السلام", "شارع روستافيلي"],
+                title_en: "Tbilisi: The Heart of Georgia",
+                title_ar: "تبليسي: قلب جورجيا النابض",
+                desc_en: "Tbilisi, the capital of Georgia, is a city where old meets new in a spectacular fashion. Founded in the 5th century, its diverse history is reflected in its architecture, which is a mix of medieval, neoclassical, Beaux Arts, Art Nouveau, Stalinist and Modern structures.\n\nWander through the narrow streets of the Old Town, relax in the famous sulfur baths (Abanotubani), and enjoy the stunning panoramic views from Narikala Fortress. Whether you're looking for history, modern nightlife, or culinary adventures, Tbilisi has it all.",
+                desc_ar: "تبليسي، عاصمة جورجيا، هي مدينة يلتقي فيها التاريخ بالحداثة في مشهد مذهل. تأسست في القرن الخامس، وتتميز بتاريخها المتنوع الذي ينعكس في عمارتها الفريدة.\n\nتجوّل في الأزقة الضيقة للمدينة القديمة، واسترخِ في حمامات الكبريت الشهيرة (أبانوتوباني)، واستمتع بإطلالات بانورامية خلابة من قلعة ناريكالا. سواء كنت تبحث عن التاريخ، الحياة العصرية، أو تجربة المطبخ الجورجي الأصيل، فإن تبليسي هي وجهتك المثالية."
+            },
+            'kazbegi': {
+                img: 'Kazbegi.webp',
+                mapUrl: 'https://goo.gl/maps/example',
+                gallery: [
+                    'https://images.unsplash.com/photo-1549466540-349079f2913e?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1560965377-63a236087b32?auto=format&fit=crop&w=800&q=80'
+                ],
+                highlights_en: ["Gergeti Trinity Church", "Mount Kazbek View", "Gveleti Waterfall", "Dariali Gorge"],
+                highlights_ar: ["كنيسة الثالوث جيرجيتي", "إطلالة جبل كازبيك", "شلال جفيليتي", "مضيق داريالي"],
+                title_en: "Kazbegi: Peaks Above the Clouds",
+                title_ar: "كازبيجي: قمم تعانق السحاب",
+                desc_en: "Step into a postcard at Kazbegi (Stepantsminda). This region is home to the breathtaking Mount Kazbek and the iconic Gergeti Trinity Church, sitting high at 2,170 meters under the glacier.\n\nThe drive along the Georgian Military Highway is an adventure in itself, passing the Ananuri Fortress and the Russia-Georgia Friendship Monument. It is a perfect destination for nature lovers, hikers, and anyone seeking fresh mountain air.",
+                desc_ar: "استمتع بمشهد خيالي في كازبيجي (ستيبانتسميندا). هذه المنطقة هي موطن جبل كازبيك الشاهق وكنيسة الثالوث جيرجيتي الشهيرة التي تتربع على ارتفاع 2170 متراً تحت النهر الجليدي.\n\nالطريق عبر الطريق العسكري الجورجي هو مغامرة بحد ذاته، مروراً بقلعة أنانوري ونصب الصداقة. إنها الوجهة المثالية لعشاق الطبيعة والمشي لمسافات طويلة وكل من يبحث عن هواء الجبل النقي."
+            },
+            'martvili': {
+                img: 'Martvili.webp',
+                mapUrl: 'https://goo.gl/maps/example',
+                gallery: [
+                    'https://images.unsplash.com/photo-1570701123490-67c858561d2d?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=800&q=80'
+                ],
+                highlights_en: ["Boat Ride in Canyon", "Walking Trails", "Dadiani Palace", "Waterfalls"],
+                highlights_ar: ["جولة بالقارب في الوادي", "مسارات المشي", "قصر دادياني", "الشلالات"],
+                title_en: "Martvili Canyon: Emerald Waters",
+                title_ar: "وادي مارتفيلي: المياه الزمردية",
+                desc_en: "Discover the hidden gem of Western Georgia. Martvili Canyon offers a surreal experience with its emerald green waters, waterfalls, and white limestone cliffs.\n\nThe highlight of any trip here is a boat ride through the stunning gorges. Historically, this was a bathing place for the Dadiani noble family. Today, it stands as one of the most photogenic spots in the country.",
+                desc_ar: "اكتشف الجوهرة المخفية في غرب جورجيا. يقدم وادي مارتفيلي تجربة خيالية بمياهه الخضراء الزمردية، والشلالات، والمنحدرات الصخرية البيضاء.\n\nأبرز ما في الرحلة هنا هو ركوب القارب عبر المضائق المذهلة. تاريخياً، كان هذا المكان مسبحاً لعائلة دادياني النبيلة. اليوم، يعد واحداً من أجمل المواقع للتصوير في البلاد."
+            },
+            'signagi': {
+                img: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80',
+                mapUrl: 'https://goo.gl/maps/example',
+                gallery: [
+                    'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
+                    'https://images.unsplash.com/photo-1534065662709-b6814b73b578?auto=format&fit=crop&w=800&q=80'
+                ],
+                highlights_en: ["City Walls Walk", "Bodbe Monastery", "Wine Tasting", "Alazani Valley View"],
+                highlights_ar: ["المشي على أسوار المدينة", "دير بودبي", "تذوق النبيذ", "إطلالة وادي ألازاني"],
+                title_en: "Signagi: The City of Love",
+                title_ar: "سغناغي: مدينة الحب",
+                desc_en: "Perched on a hilltop overlooking the vast Alazani Valley and the Caucasus Mountains, Signagi is one of Georgia's most charming towns. Known as the 'City of Love', it is famous for its 24/7 wedding house and romantic atmosphere.\n\nWander through cobblestone streets, admire the 18th-century architecture, and explore the ancient city walls. As the heart of the Kakheti wine region, it is also the best place to taste traditional Georgian wine.",
+                desc_ar: "تتربع سغناغي على قمة تل يطل على وادي ألازاني الشاسع وجبال القوقاز، وهي واحدة من أكثر المدن سحراً في جورجيا. تُعرف بـ 'مدينة الحب'، وتشتهر بأجوائها الرومانسية ومكتب الزواج الذي يعمل على مدار الساعة.\n\nتجول في الشوارع المرصوفة بالحصى، وتأمل العمارة من القرن الثامن عشر، واستكشف أسوار المدينة القديمة. وباعتبارها قلب منطقة كاخيتي للنبيذ، فهي أفضل مكان لتذوق النبيذ الجورجي التقليدي."
+            }
+        };
+
+        const DestKeys = Object.keys(DestData);
+
+        // --- Logic ---
+        const LangManager = {
+            current: localStorage.getItem('userLang') || 'en',
+            toggle() {
+                const newLang = this.current === 'en' ? 'ar' : 'en';
+                localStorage.setItem('userLang', newLang);
+                location.reload(); 
+            },
+            apply() {
+                const isAr = this.current === 'ar';
+                document.documentElement.lang = this.current;
+                document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+                
+                // Update Text
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.dataset.i18n;
+                    if(Translations[this.current][key]) el.innerText = Translations[this.current][key];
+                });
+                
+                // Update Lang Btn
+                document.querySelectorAll('.lang-text').forEach(el => {
+                    el.innerText = isAr ? 'English' : 'العربية';
+                });
+            }
+        };
+
+        const App = {
+            init() {
+                LangManager.apply();
+                
+                // Scroll Header Effect
+                window.addEventListener('scroll', () => {
+                    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+                    // Parallax
+                    const hero = document.getElementById('hero-img');
+                    if(hero) hero.style.transform = `translateY(${window.scrollY * 0.4}px)`;
+                });
+
+                // Load Data
+                const params = new URLSearchParams(window.location.search);
+                const id = params.get('id') || 'tbilisi';
+                const data = DestData[id];
+                const lang = LangManager.current;
+
+                if(data) {
+                    // Update Canonical for SEO
+                    document.querySelector('link[rel="canonical"]').href = window.location.href;
+
+                    // Populate Content
+                    const title = data[`title_${lang}`];
+                    document.title = title + " - Georgia Hills";
+                    document.getElementById('hero-img').src = data.img;
+                    document.getElementById('hero-img').classList.remove('skeleton');
+                    
+                    document.getElementById('crumb-title').innerText = title;
+                    document.getElementById('crumb-title').classList.remove('skeleton');
+                    
+                    document.getElementById('page-title').innerText = title;
+                    document.getElementById('page-title').classList.remove('skeleton');
+                    
+                    document.getElementById('page-desc').innerText = data[`desc_${lang}`];
+                    document.getElementById('page-desc').classList.remove('skeleton');
+                    
+                    // Highlights
+                    const highlightsList = data[`highlights_${lang}`];
+                    const highlightsHTML = highlightsList.map(h => `<li><i class="fa-solid fa-star"></i> ${h}</li>`).join('');
+                    document.getElementById('highlights').innerHTML = highlightsHTML;
+
+                    // Map
+                    document.getElementById('map-link').href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.title_en)}`;
+
+                    // Gallery
+                    document.getElementById('gallery').innerHTML = data.gallery.map(url => 
+                        `<img src="${url}" class="gallery-img skeleton" loading="lazy" onload="this.classList.remove('skeleton')">`
+                    ).join('');
+
+                    // Next Link
+                    const idx = DestKeys.indexOf(id);
+                    const nextId = DestKeys[(idx + 1) % DestKeys.length];
+                    const nextData = DestData[nextId];
+                    document.getElementById('next-link').href = `destination.html?id=${nextId}`;
+                    document.getElementById('next-img').src = nextData.img;
+                    document.getElementById('next-img').classList.remove('skeleton');
+                    document.getElementById('next-title').innerText = nextData[`title_${lang}`];
+                }
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => App.init());
+    </script>
+</body>
+</html>

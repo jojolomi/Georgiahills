@@ -25,27 +25,58 @@
       gtag('config', 'G-6GT03GSW49');
     </script>
 
-    <!-- FAQ Schema (SEO) -->
+    <!-- SEO: Multilingual Support -->
+    <link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/" />
+    <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/?lang=ar" />
+    <link rel="alternate" hreflang="x-default" href="https://georgiahills.netlify.app/" />
+    <link rel="canonical" href="https://georgiahills.netlify.app/">
+
+    <!-- SEO: Structured Data -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [{
-        "@type": "Question",
-        "name": "Do I need to pay in advance?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No, payment is strictly upon arrival."
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "AutoRental",
+        "name": "Georgia Hills",
+        "alternateName": "جورجيا هيلز للسياحة",
+        "image": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c",
+        "description": "Premium car rental with driver in Georgia. Best service for families and honeymooners.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Tbilisi",
+          "addressCountry": "GE"
+        },
+        "priceRange": "$$",
+        "telephone": "+995579088537",
+        "url": "https://georgiahills.netlify.app/",
+        "areaServed": {
+          "@type": "Country",
+          "name": "Georgia",
+          "alternateName": "جورجيا"
         }
-      }, {
-        "@type": "Question",
-        "name": "Do drivers speak Arabic?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes! We have professional drivers who speak Arabic, English and Russian."
-        }
-      }]
-    }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "7 Days Family Georgia Tour",
+        "description": "Complete 7-day itinerary covering Tbilisi, Kazbegi, and Bakuriani.",
+        "offers": { "@type": "Offer", "priceCurrency": "USD", "price": "600", "availability": "https://schema.org/InStock" }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "5 Days Honeymoon Package",
+        "description": "Romantic getaway to Signagi and Tbilisi luxury tour.",
+        "offers": { "@type": "Offer", "priceCurrency": "USD", "price": "450", "availability": "https://schema.org/InStock" }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "10 Days Grand Tour",
+        "description": "Full Georgia experience from East to West including Batumi.",
+        "offers": { "@type": "Offer", "priceCurrency": "USD", "price": "900", "availability": "https://schema.org/InStock" }
+      }
+    ]
     </script>
 
     <!-- Performance Hints -->
@@ -57,8 +88,9 @@
     <link rel="preconnect" href="https://flagcdn.com" crossorigin>
     <link rel="preconnect" href="https://api.exchangerate-api.com" crossorigin>
     
-    <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- Optimized CSS Loading -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"></noscript>
     
     <!-- Preload LCP Image -->
     <link rel="preload" as="image" 
@@ -67,73 +99,36 @@
           imagesizes="100vw"
           fetchpriority="high">
 
-    <!-- SEO & Metadata -->
-    <title>Georgia Hills | Private Driver & Car Rental</title>
-    <meta name="description" content="Explore Georgia comfortably with our private drivers and rental cars. Specialized tours for families. Book easily via WhatsApp.">
-    <meta name="keywords" content="Driver Georgia, Car rental Tbilisi, Family tours">
+    <title>Rent a Car in Georgia | سائق خاص في جورجيا | Georgia Hills</title>
+    <meta name="description" content="Best private driver & car rental in Georgia for families. Book your trip to Tbilisi, Batumi & Kazbegi via WhatsApp.">
+    <meta name="keywords" content="سائق خاص في جورجيا, استئجار سيارة في تبليسي, السياحة في جورجيا للعوائل, سائق عربي جورجيا, Private driver Georgia, Car rental Tbilisi">
     <meta name="author" content="Georgia Hills">
     <meta name="theme-color" content="#0F172A">
     
-    <!-- Open Graph -->
+    <!-- Open Graph & Twitter -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://georgiahills.netlify.app/">
-    <meta property="og:title" content="Georgia Hills - Premium Private Driver Service">
-    <meta property="og:description" content="Explore Georgia in comfort. Professional drivers, family-friendly vans, and transparent pricing.">
+    <meta property="og:title" content="Georgia Hills - سائق خاص في جورجيا">
+    <meta property="og:description" content="اكتشف جمال جورجيا مع خدمة سائق خاص محترف. سيارات عائلية وأسعار مميزة.">
     <meta property="og:image" content="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80">
-
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Georgia Hills - Premium Private Driver Service">
-    <meta name="twitter:description" content="Explore Georgia in comfort. Professional drivers, family-friendly vans, and transparent pricing.">
-    <meta name="twitter:image" content="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80">
-
-    <!-- Canonical -->
-    <link rel="canonical" href="https://georgiahills.netlify.app/">
-    <link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/">
-    <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/?lang=ar">
-
-    <!-- JSON-LD -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "AutoRental",
-      "name": "Georgia Hills",
-      "image": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c",
-      "description": "Premium car rental with driver in Georgia.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Tbilisi",
-        "addressCountry": "GE"
-      },
-      "priceRange": "$$",
-      "telephone": "+995579088537",
-      "url": "https://georgiahills.netlify.app/"
-    }
-    </script>
 
     <!-- PWA Manifest -->
     <link rel="manifest" href='data:application/manifest+json,{"name":"Georgia Hills","short_name":"Georgia Hills","start_url":".","display":"standalone","background_color":"#F9FAFB","theme_color":"#0F172A","icons":[{"src":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAAZ0lEQVRYhe3WMQqAMBQF0ZyjF/D+h3JMLYQWwUU3XyGkb/gZExcT890697m11q455+oBJyK3gA6YgWl/QGblS8A+YAc0wP4F5ErWd2A2sALq/wFgB9Qj4L8C8g/4K+Ab8B3wR8C34APe2xo3iJ/a8gAAAABJRU5ErkJggg==","sizes":"192x192","type":"image/png"}]}'>
-
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABmJLR0QA/wD/AP+gvaeTAAAAZ0lEQVRYhe3WMQqAMBQF0ZyjF/D+h3JMLYQWwUU3XyGkb/gZExcT890697m11q455+oBJyK3gA6YgWl/QGblS8A+YAc0wP4F5ErWd2A2sALq/wFgB9Qj4L8C8g/4K+Ab8B3wR8C34APe2xo3iJ/a8gAAAABJRU5ErkJggg==">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
-    
-    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
     <!-- MAIN CSS -->
     <style>
-        /* =========================================
-           1. VARIABLES & RESET
-           ========================================= */
         :root {
             --color-primary: #2C5530;
             --color-secondary: #8BA888;
-            --color-accent: #C59D5F;
+            --color-accent: #b08d55; 
             --color-accent-light: #E6CCAA;
             --color-surface: #F9FAFB;
             --color-dark: #0F172A;
@@ -149,11 +144,11 @@
             --color-gray-100: #f3f4f6;
             --color-gray-200: #e5e7eb;
             --color-gray-300: #d1d5db;
-            --color-gray-400: #9ca3af;
-            --color-gray-500: #6b7280;
-            --color-gray-600: #4b5563;
-            --color-gray-700: #374151;
-            --color-gray-800: #1f2937;
+            --color-gray-400: #6b7280; 
+            --color-gray-500: #4b5563;
+            --color-gray-600: #374151;
+            --color-gray-700: #1f2937;
+            --color-gray-800: #111827;
             
             --font-sans: 'Outfit', sans-serif;
             --font-arabic: 'Cairo', sans-serif;
@@ -164,7 +159,7 @@
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             
-            --container-max: 80rem; /* 7xl */
+            --container-max: 80rem; 
             --header-height: 5rem;
             
             --z-negative: 0;
@@ -199,7 +194,6 @@
         @media (max-width: 768px) { body { padding-bottom: 7rem; } }
 
         html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
-
         a { text-decoration: none; color: inherit; }
         button { cursor: pointer; border: none; background: none; font-family: inherit; }
         input, select, textarea { font-family: inherit; }
@@ -214,14 +208,10 @@
         .text-accent-light { color: var(--color-accent-light) !important; }
         .text-dark { color: var(--color-dark) !important; }
         .text-xs { font-size: 0.75rem; }
-        
         .price-display { direction: ltr; unicode-bidi: isolate; display: inline-block; }
-        
         .font-bold { font-weight: 700; }
         .font-extra-bold { font-weight: 800; }
-        .font-normal { font-weight: 400; }
         .font-serif { font-family: 'Times New Roman', Times, serif; }
-        .uppercase { text-transform: uppercase; }
         .italic { font-style: italic; }
         .hidden { display: none !important; }
         .block { display: block; }
@@ -238,14 +228,13 @@
         .gap-4 { gap: 1rem; }
         .ml-2 { margin-left: 0.5rem; }
         html[lang="ar"] .ml-2 { margin-left: 0; margin-right: 0.5rem; }
-        
         .w-full { width: 100%; }
         .h-full { height: 100%; }
         .relative { position: relative; }
         .absolute { position: absolute; }
         .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
         .object-cover { object-fit: cover; }
-        .object-contain { object-fit: contain; }
+        .container { max-width: var(--container-max); margin: 0 auto; padding: 0 1rem; width: 100%; }
 
         /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
@@ -257,46 +246,22 @@
         html[lang="ar"] body { font-family: var(--font-arabic); text-align: right; }
         html[lang="ar"] .text-left { text-align: right !important; }
         html[lang="ar"] .text-center { text-align: center !important; }
-        
-        /* Layout Containers */
-        .container {
-            max-width: var(--container-max);
-            margin: 0 auto;
-            padding: 0 1rem;
-            width: 100%;
-        }
 
-        /* Nav & Menus */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: var(--z-navbar);
-            background-color: var(--color-white-90);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--color-gray-100);
-            transition: all 0.3s;
-        }
+        /* Nav */
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; z-index: var(--z-navbar); background-color: var(--color-white-90); backdrop-filter: blur(12px); border-bottom: 1px solid var(--color-gray-100); transition: all 0.3s; }
         .navbar.shadow-md { box-shadow: var(--shadow-lg); }
         .navbar.nav-hidden { transform: translateY(-100%); }
-
         .navbar-inner { display: flex; justify-content: space-between; align-items: center; height: var(--header-height); }
         .nav-logo { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
         .nav-logo-img { width: 3.5rem; height: 3.5rem; border-radius: 50%; box-shadow: var(--shadow-xl); object-fit: cover; }
         .nav-logo span { font-weight: 700; font-size: 1.25rem; color: var(--color-dark); display: none; }
         @media (min-width: 768px) { .nav-logo span { display: block; } }
-
         .desktop-menu { display: none; gap: 1.5rem; align-items: center; }
         @media (min-width: 1024px) { .desktop-menu { display: flex; } }
-        
         .nav-link { font-size: 0.875rem; font-weight: 600; color: var(--color-gray-600); padding: 0.5rem 0; border-bottom: 2px solid transparent; transition: color 0.2s, border-color 0.2s; }
         .nav-link:hover { color: var(--color-primary); border-bottom-color: rgba(44, 85, 48, 0.3); }
-
         .action-btn { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; color: var(--color-gray-600); border: 1px solid var(--color-gray-200); border-radius: 9999px; padding: 0.375rem 1rem; transition: background 0.2s; background: white; }
         .action-btn:hover { background-color: var(--color-gray-50); color: var(--color-primary); }
-
         .btn-book-nav { padding: 0.75rem 1.5rem; background-color: var(--color-primary); color: white; border-radius: 9999px; font-size: 0.875rem; font-weight: 700; box-shadow: var(--shadow-lg); transition: all 0.2s; }
         .btn-book-nav:hover { background-color: #1a331d; transform: translateY(-2px); }
 
@@ -310,29 +275,24 @@
         .custom-option.selected { background: var(--color-success-bg); color: var(--color-success); }
         .currency-flag-sm { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
 
+        /* Mobile Menu */
         .mobile-controls { display: flex; align-items: center; gap: 0.75rem; }
         @media (min-width: 1024px) { .mobile-controls { display: none; } }
         .btn-mobile-menu { color: var(--color-dark); padding: 0.5rem; font-size: 1.5rem; }
-
         #mobile-menu { position: fixed; inset: 0; z-index: var(--z-mobile-menu); background-color: white; width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.5rem; transition: transform 0.3s; transform: translateX(100%); overflow-y: auto; padding: 2rem 0; }
         html[lang="ar"] #mobile-menu { transform: translateX(-100%); }
-        #mobile-menu.open { transform: translateX(0); }
-        
+        #mobile-menu.open, html[lang="ar"] #mobile-menu.open { transform: translateX(0); }
         .close-menu-btn { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.875rem; color: var(--color-gray-400); }
         html[lang="ar"] .close-menu-btn { right: auto; left: 1.5rem; }
-        
         .mobile-link { font-size: 1.5rem; font-weight: 700; color: var(--color-dark); }
-        .mobile-link:hover { color: var(--color-primary); }
         .mobile-btn-book { padding: 1rem 2rem; background: var(--color-primary); color: white; border-radius: 9999px; font-size: 1.25rem; font-weight: 700; box-shadow: var(--shadow-xl); }
-        
         .mobile-settings { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
-        
         .mobile-social-container { display: flex; gap: 1.5rem; margin-top: 1rem; }
         .mobile-social-btn { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--color-gray-500); }
         .mobile-social-icon { width: 3rem; height: 3rem; background: var(--color-gray-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
         .mobile-social-text { font-size: 0.75rem; }
 
-        /* Hero */
+        /* Sections */
         .hero { position: relative; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: var(--color-dark); }
         .hero-bg-container { position: absolute; inset: 0; z-index: var(--z-negative); }
         .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -354,16 +314,10 @@
         .btn-hero-secondary { background-color: var(--color-white-10); border: 1px solid var(--color-white-20); color: white; backdrop-filter: blur(12px); }
         .btn-hero-secondary:hover { background-color: var(--color-white-20); }
 
-        /* Stats */
         .stats-wrapper { position: relative; z-index: var(--z-badge); margin-top: -4rem; margin-bottom: 3rem; }
         .stats-card { background: white; border-radius: 1rem; box-shadow: var(--shadow-soft); padding: 2rem; display: grid; grid-template-columns: 1fr; gap: 2rem; }
-        @media (min-width: 768px) {
-            .stats-card { grid-template-columns: repeat(3, 1fr); gap: 0; }
-            .stats-item:not(:last-child) { border-right: 1px solid var(--color-gray-100); }
-        }
-        @media (min-width: 768px) {
-            html[lang="ar"] .stats-item:not(:last-child) { border-right: none; border-left: 1px solid var(--color-gray-100); }
-        }
+        @media (min-width: 768px) { .stats-card { grid-template-columns: repeat(3, 1fr); gap: 0; } .stats-item:not(:last-child) { border-right: 1px solid var(--color-gray-100); } }
+        html[lang="ar"] .stats-item:not(:last-child) { border-right: none; border-left: 1px solid var(--color-gray-100); }
         .stats-item { text-align: center; }
         .stats-num { font-size: 2.25rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.25rem; direction: ltr; unicode-bidi: isolate; display: block; }
         .stats-label { color: var(--color-gray-600); font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
@@ -371,7 +325,6 @@
         .section-py { padding-top: 4rem; padding-bottom: 4rem; }
         @media (min-width: 768px) { .section-py { padding-top: 6rem; padding-bottom: 6rem; } }
         
-        /* About */
         .about-grid { display: flex; flex-direction: column; gap: 3rem; }
         @media (min-width: 1024px) { .about-grid { flex-direction: row; align-items: center; gap: 4rem; } }
         .about-img-container { flex: 1; position: relative; }
@@ -391,39 +344,28 @@
         .feature-title { font-weight: 700; color: var(--color-dark); font-size: 1.125rem; margin: 0; }
         .feature-text { font-size: 0.875rem; color: var(--color-gray-600); margin: 0; }
 
-        /* Destinations Slider */
-        /* FORCE LTR FOR SLIDER LAYOUT MECHANICS TO FIX ARABIC SCROLLING */
+        /* Slider */
         .bg-dark-section { background-color: var(--color-dark); color: white; }
         .slider-container { position: relative; direction: ltr !important; }
         .slider-header-wrapper { position: relative; margin-bottom: 3rem; display: flex; flex-direction: column; align-items: center; }
         @media (min-width: 768px) { .slider-header-wrapper { flex-direction: row; justify-content: space-between; align-items: flex-end; } }
-
         .slider-nav-container { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; position: relative; z-index: var(--z-badge); direction: ltr !important; }
-        
-        /* Mobile Only Class */
         @media (min-width: 1024px) { .lg-hidden { display: none !important; } }
-
         .slider-nav-btn { width: 3.5rem; height: 3.5rem; border-radius: 50%; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); cursor: pointer; }
         .slider-nav-btn:hover { background: var(--color-accent); border-color: var(--color-accent); transform: scale(1.1); }
         .slider-nav-btn:focus { outline: 2px solid white; }
-
+        html[lang="ar"] .slider-nav-btn i { transform: rotate(0deg) !important; }
         @media (min-width: 1024px) {
             .slider-nav-container.desktop-only { position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(25%); justify-content: space-between; pointer-events: none; padding: 0 1rem; display: flex !important; margin: 0; }
             .slider-nav-btn { pointer-events: auto; background: rgba(255, 255, 255, 0.15); width: 4rem; height: 4rem; font-size: 1.5rem; }
         }
-
         .tours-slider { display: flex; gap: 1.5rem; overflow-x: auto; padding-bottom: 2rem; scrollbar-width: none; direction: ltr !important; }
         .tours-slider:focus { outline: 2px solid var(--color-accent); border-radius: 1rem; }
         .tours-slider::-webkit-scrollbar { display: none; }
-        
-        /* Ensure content inside cards flips correctly for Arabic even if slider is LTR */
         html[lang="ar"] .tour-card { direction: rtl; text-align: right; }
-        
         .tour-card { min-width: 85%; position: relative; height: 24rem; border-radius: 1rem; overflow: hidden; background: var(--color-gray-800); border: 1px solid var(--color-white-10); flex-shrink: 0; cursor: pointer; }
         @media (min-width: 640px) { .tour-card { min-width: calc(50% - 0.75rem); } }
-        /* Exactly 3 cards on desktop: (100% - 2 gaps of 1.5rem) / 3 */
         @media (min-width: 1024px) { .tour-card { min-width: calc((100% - 3rem) / 3); } }
-        
         .tour-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
         .tour-card:hover .tour-img { transform: scale(1.1); }
         .tour-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 10%, rgba(0,0,0,0.5) 50%, transparent 100%); }
@@ -456,7 +398,32 @@
         .btn-fleet-fill { background: var(--color-primary); color: white; }
         .btn-fleet-fill:hover { background: #1a331d; }
 
-        /* Reviews, FAQ, Booking, Footer (Same as original but compacted here for brevity if needed) */
+        /* Packages */
+        .packages-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }
+        @media (min-width: 768px) { .packages-grid { grid-template-columns: repeat(3, 1fr); } }
+        .pkg-card { background: white; border-radius: 1.5rem; overflow: hidden; box-shadow: var(--shadow-card); transition: all 0.3s; border: 1px solid var(--color-gray-200); position: relative; display: flex; flex-direction: column; }
+        .pkg-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-2xl); }
+        .pkg-header { padding: 1.5rem; background: var(--color-primary); color: white; position: relative; overflow: hidden; }
+        .pkg-days { font-size: 3rem; font-weight: 800; line-height: 1; opacity: 0.2; position: absolute; right: 1rem; top: 0.5rem; }
+        .pkg-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.25rem; margin-top: 0; position: relative; z-index: 10; }
+        .pkg-subtitle { font-size: 0.875rem; opacity: 0.9; position: relative; z-index: 10; }
+        .pkg-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+        .pkg-list { list-style: none; padding: 0; margin: 0 0 1.5rem 0; flex: 1; }
+        .pkg-item { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: var(--color-gray-600); }
+        .pkg-item i { color: var(--color-success); margin-top: 0.25rem; }
+        .pkg-price { font-size: 1.25rem; font-weight: 800; color: var(--color-primary); margin-bottom: 1rem; }
+        .btn-pkg { width: 100%; padding: 0.75rem; background: var(--color-gray-100); color: var(--color-dark); font-weight: 700; border-radius: 0.5rem; text-align: center; transition: all 0.2s; }
+        .btn-pkg:hover { background: var(--color-primary); color: white; }
+
+        /* Guide */
+        .guide-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem; }
+        @media (min-width: 768px) { .guide-grid { grid-template-columns: repeat(3, 1fr); } }
+        .guide-box { background: white; padding: 2rem; border-radius: 1rem; box-shadow: var(--shadow-card); border-top: 4px solid var(--color-accent); }
+        .guide-icon { width: 3rem; height: 3rem; background: var(--color-accent-light); color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; margin-bottom: 1rem; }
+        .guide-title { font-weight: 700; font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--color-dark); }
+        .guide-text { font-size: 0.9rem; color: var(--color-gray-600); line-height: 1.6; }
+
+        /* General Sections */
         .reviews-bg { background: white; }
         .reviews-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
         @media (min-width: 768px) { .reviews-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -516,13 +483,11 @@
         .footer-map-overlay { font-size: 0.875rem; font-weight: 700; color: var(--color-gray-400); z-index: var(--z-normal); display: flex; gap: 0.5rem; align-items: center; }
         .footer-bottom { border-top: 1px solid var(--color-gray-800); padding-top: 2rem; text-align: center; font-size: 0.75rem; color: var(--color-gray-400); }
 
-        /* Animation */
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        /* Animation & Misc */
         @keyframes bounce-slow { 0%, 100% { transform: translateY(-5%); animation-timing-function: cubic-bezier(0.8,0,1,1); } 50% { transform: translateY(0); animation-timing-function: cubic-bezier(0,0,0.2,1); } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .animate-bounce { animation: bounce-slow 2s infinite; }
         .animate-spin { animation: spin 1s linear infinite; }
-        .animate-float { animation: float 6s ease-in-out infinite; }
         
         .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.8s, transform 0.8s; }
         .reveal.waiting { opacity: 0; transform: translateY(30px); } 
@@ -547,6 +512,7 @@
         .fab-scroll { padding: 0.75rem; background: white; color: var(--color-primary); border-radius: 50%; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
         .fab-scroll.show { opacity: 1; pointer-events: auto; }
         .fab-whatsapp { width: 3.5rem; height: 3.5rem; background: #0F6B60; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-xl); transition: transform 0.2s; }
+        .fab-whatsapp:hover { transform: scale(1.1); }
 
         .modal-overlay { position: fixed; inset: 0; z-index: var(--z-modal); background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 1rem; }
         .modal-content { background: white; border-radius: 1.5rem; padding: 2.5rem; max-width: 24rem; width: 100%; text-align: center; position: relative; }
@@ -606,6 +572,8 @@
                 <div class="desktop-menu">
                     <a href="#home" data-i18n="nav_home" class="nav-link">Home</a>
                     <a href="#destinations" data-i18n="nav_tours" class="nav-link">Destinations</a>
+                    <a href="#packages" data-i18n="nav_packages" class="nav-link">Packages</a>
+                    <a href="#guide" data-i18n="nav_guide" class="nav-link">Guide</a>
                     <a href="#fleet" data-i18n="nav_fleet" class="nav-link">Fleet</a>
                     <a href="#reviews" data-i18n="nav_reviews" class="nav-link">Reviews</a>
                     
@@ -649,6 +617,8 @@
         <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Menu"><i class="fa-solid fa-xmark"></i></button>
         <a href="#home" data-i18n="nav_home" class="mobile-link">Home</a>
         <a href="#destinations" data-i18n="nav_tours" class="mobile-link">Destinations</a>
+        <a href="#packages" data-i18n="nav_packages" class="mobile-link">Packages</a>
+        <a href="#guide" data-i18n="nav_guide" class="mobile-link">Guide</a>
         <a href="#fleet" data-i18n="nav_fleet" class="mobile-link">Fleet</a>
         
         <!-- Mobile Settings -->
@@ -729,7 +699,7 @@
             <div class="about-grid">
                 <div class="about-img-container reveal">
                     <div class="about-blob"></div>
-                    <img src="Tbilisi_old_Town.webp" width="600" height="400" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town">
+                    <img src="Tbilisi_old_Town.webp" width="600" height="400" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town - تبليسي القديمة">
                 </div>
                 <div id="about-content" class="about-content reveal">
                     <span class="section-label" data-i18n="about_label">Why Choose Georgia Hills?</span>
@@ -752,7 +722,7 @@
 
     <!-- Destinations -->
     <section id="destinations" class="section-py bg-dark-section">
-        <div class="container slider-container">
+        <div class="container slider-container" dir="ltr">
             <!-- Header & Nav Wrapper -->
             <div class="slider-header-wrapper reveal">
                 <div style="text-align: center; width: 100%;">
@@ -763,16 +733,16 @@
             </div>
             
             <!-- Desktop Floating Navigation (Placed here for context) -->
-            <div class="slider-nav-container desktop-only hidden lg:flex">
+            <div class="slider-nav-container desktop-only hidden lg:flex" dir="ltr">
                 <button id="prevBtnDesk" class="slider-nav-btn prev-btn" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
                 <button id="nextBtnDesk" class="slider-nav-btn next-btn" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
 
             <!-- Slider Track -->
-            <div id="tours-slider" class="tours-slider" tabindex="0" aria-label="Destinations Slider">
+            <div id="tours-slider" class="tours-slider" tabindex="0" aria-label="Destinations Slider" dir="ltr">
                 <!-- Tbilisi -->
-                <div class="tour-card group">
-                    <img src="Tbilisi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Tbilisi">
+                <div class="tour-card group" onclick="window.location.href='destination.html?id=tbilisi'">
+                    <img src="Tbilisi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Tbilisi - تبليسي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title" data-i18n="dest_Tbilisi">Tbilisi</h3>
@@ -781,8 +751,8 @@
                     </div>
                 </div>
                 <!-- Kazbegi -->
-                <div class="tour-card group">
-                    <img src="Kazbegi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Kazbegi">
+                <div class="tour-card group" onclick="window.location.href='destination.html?id=kazbegi'">
+                    <img src="Kazbegi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Kazbegi - كازبيجي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title" data-i18n="dest_kazbegi">Kazbegi</h3>
@@ -791,8 +761,8 @@
                     </div>
                 </div>
                 <!-- Martvili -->
-                <div class="tour-card group">
-                    <img src="Martvili.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Martvili">
+                <div class="tour-card group" onclick="window.location.href='destination.html?id=martvili'">
+                    <img src="Martvili.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Martvili - وادي مارتفيلي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title" data-i18n="dest_martvili">Martvili</h3>
@@ -801,8 +771,8 @@
                     </div>
                 </div>
                 <!-- Signagi -->
-                <div class="tour-card group">
-                    <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Signagi">
+                <div class="tour-card group" onclick="window.location.href='destination.html?id=signagi'">
+                    <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Signagi - سغناغي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title" data-i18n="dest_kakheti">Signagi</h3>
@@ -813,15 +783,85 @@
             </div>
 
             <!-- Mobile Controls (Bottom Center) -->
-            <div class="slider-nav-container lg-hidden">
+            <div class="slider-nav-container lg-hidden" dir="ltr">
                  <button id="prevBtnMob" class="slider-nav-btn" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
                  <button id="nextBtnMob" class="slider-nav-btn" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
         </div>
     </section>
 
+    <!-- PACKAGES -->
+    <section id="packages" class="section-py">
+        <div class="container">
+            <div class="reveal text-center" style="margin-bottom:3rem;">
+                <span class="section-label" data-i18n="pkg_label">Ready-made Plans</span>
+                <h2 class="section-title" data-i18n="pkg_title">Popular Georgia Itineraries</h2>
+                <p class="section-desc" style="max-width:48rem; margin:0 auto;" data-i18n="pkg_subtitle">Save time with our curated travel packages. From city tours to mountain adventures.</p>
+            </div>
+            
+            <div class="packages-grid">
+                <!-- Package 1 -->
+                <div class="pkg-card reveal">
+                    <div class="pkg-header">
+                        <span class="pkg-days">7</span>
+                        <h3 class="pkg-title" data-i18n="pkg1_title">Family Fun</h3>
+                        <span class="pkg-subtitle" data-i18n="pkg1_sub">Tbilisi, Kazbegi, Bakuriani</span>
+                    </div>
+                    <div class="pkg-body">
+                        <ul class="pkg-list">
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg1_li1">Airport Transfer (In/Out)</span></li>
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg1_li2">Daily Private Driver</span></li>
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg1_li3">4-Star Hotel Accommodation</span></li>
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg1_li4">Free SIM Cards</span></li>
+                        </ul>
+                        <div class="pkg-price"><span data-i18n="price_start">From</span> <span class="price-display" data-base-price="600">600 USD</span></div>
+                        <button onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})" class="btn-pkg" data-i18n="btn_details">Get Details</button>
+                    </div>
+                </div>
+                
+                <!-- Package 2 -->
+                <div class="pkg-card reveal" style="transform: scale(1.05); z-index:10; border-color:var(--color-accent);">
+                    <div class="pkg-header" style="background:var(--color-accent);">
+                        <span class="pkg-days">5</span>
+                        <h3 class="pkg-title" data-i18n="pkg2_title">Honeymoon</h3>
+                        <span class="pkg-subtitle" data-i18n="pkg2_sub">Tbilisi, Signagi (City of Love)</span>
+                    </div>
+                    <div class="pkg-body">
+                        <ul class="pkg-list">
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg2_li1">Luxury Sedan with Driver</span></li>
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg2_li2">Wine Tasting Tour</span></li>
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg2_li3">Romantic Dinner Setup</span></li>
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg2_li4">Photo Session</span></li>
+                        </ul>
+                        <div class="pkg-price"><span data-i18n="price_start">From</span> <span class="price-display" data-base-price="450">450 USD</span></div>
+                        <button onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})" class="btn-pkg" style="background:var(--color-primary); color:white;" data-i18n="btn_details">Get Details</button>
+                    </div>
+                </div>
+
+                <!-- Package 3 -->
+                <div class="pkg-card reveal">
+                    <div class="pkg-header">
+                        <span class="pkg-days">10</span>
+                        <h3 class="pkg-title" data-i18n="pkg3_title">Grand Tour</h3>
+                        <span class="pkg-subtitle" data-i18n="pkg3_sub">East to West (Batumi)</span>
+                    </div>
+                    <div class="pkg-body">
+                        <ul class="pkg-list">
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg3_li1">All Georgia Highlights</span></li>
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg3_li2">Comfortable Minivan</span></li>
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg3_li3">Batumi Beach Days</span></li>
+                            <li class="pkg-item"><i class="fa-solid fa-check"></i> <span data-i18n="pkg3_li4">Flexible Schedule</span></li>
+                        </ul>
+                        <div class="pkg-price"><span data-i18n="price_start">From</span> <span class="price-display" data-base-price="900">900 USD</span></div>
+                        <button onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})" class="btn-pkg" data-i18n="btn_details">Get Details</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Fleet Section -->
-    <section id="fleet" class="section-py">
+    <section id="fleet" class="section-py bg-gray-50">
         <div class="container">
             <div class="reveal text-center" style="margin-bottom:3rem;">
                 <span class="section-label" data-i18n="fleet_label">Our Fleet</span>
@@ -835,7 +875,7 @@
                             <span data-i18n="price_start">From</span> 
                             <span class="price-display" data-base-price="150">150 GEL</span>
                         </div>
-                        <img src="Sedan.webp" width="600" height="400" loading="lazy" decoding="async" class="fleet-img" alt="Sedan Car">
+                        <img src="Sedan.webp" width="600" height="400" loading="lazy" decoding="async" class="fleet-img" alt="Sedan Car - سيارة سيدان">
                     </div>
                     <div class="fleet-body">
                         <h3 class="fleet-title" data-i18n="sedan_title">Sedan</h3>
@@ -855,7 +895,7 @@
                             <span data-i18n="price_start">From</span>
                             <span class="price-display" data-base-price="250">250 GEL</span>
                         </div>
-                        <img src="Minivan.webp" width="600" height="400" loading="lazy" decoding="async" class="fleet-img" alt="Minivan Car">
+                        <img src="Minivan.webp" width="600" height="400" loading="lazy" decoding="async" class="fleet-img" alt="Minivan Car - سيارة ميني فان">
                     </div>
                     <div class="fleet-body">
                         <h3 class="fleet-title" data-i18n="minivan_title">Minivan</h3>
@@ -866,6 +906,36 @@
                         </div>
                         <button class="btn-fleet btn-fleet-fill" data-i18n="btn_select_minivan">Book Minivan</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: TRAVEL GUIDE (Content Depth) -->
+    <section id="guide" class="section-py">
+        <div class="container">
+            <div class="reveal text-center" style="margin-bottom:3rem;">
+                <span class="section-label" data-i18n="guide_label">Travel Guide</span>
+                <h2 class="section-title" data-i18n="guide_title">Essential Info for Tourists</h2>
+            </div>
+            <div class="guide-grid">
+                <!-- Visa -->
+                <div class="guide-box reveal">
+                    <div class="guide-icon"><i class="fa-solid fa-passport"></i></div>
+                    <h3 class="guide-title" data-i18n="guide_visa_title">Visa Requirements</h3>
+                    <p class="guide-text" data-i18n="guide_visa_text">Citizens of GCC countries (Saudi Arabia, UAE, Kuwait, Oman, Qatar, Bahrain) enjoy a visa-free regime for up to 1 year. Just pack and fly!</p>
+                </div>
+                <!-- Halal Food -->
+                <div class="guide-box reveal">
+                    <div class="guide-icon"><i class="fa-solid fa-utensils"></i></div>
+                    <h3 class="guide-title" data-i18n="guide_food_title">Halal Food</h3>
+                    <p class="guide-text" data-i18n="guide_food_text">Halal food is widely available in Tbilisi, especially in the Marjanishvili area. Our drivers know the best authentic spots.</p>
+                </div>
+                <!-- Best Time -->
+                <div class="guide-box reveal">
+                    <div class="guide-icon"><i class="fa-solid fa-calendar-day"></i></div>
+                    <h3 class="guide-title" data-i18n="guide_time_title">Best Time to Visit</h3>
+                    <p class="guide-text" data-i18n="guide_time_text">Spring (April-June) and Autumn (September-October) offer pleasant weather. For snow lovers, December to February is perfect.</p>
                 </div>
             </div>
         </div>
@@ -1103,7 +1173,7 @@
             <i class="fa-solid fa-arrow-up"></i>
         </button>
         
-        <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="fab-whatsapp animate-bounce" aria-label="Contact on WhatsApp">
+        <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="fab-whatsapp" aria-label="Contact on WhatsApp">
             <i class="fa-brands fa-whatsapp" style="font-size:1.75rem;"></i>
         </a>
     </div>
@@ -1155,7 +1225,7 @@
 
     <!-- EmailJS & Flatpickr Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
     <script>
        const EMAILJS_PUBLIC_KEY = "gFHD0l5sBGRvS44V8"; 
        window.addEventListener('load', function(){
@@ -1257,6 +1327,7 @@
             translations: {
                  en: {
                     nav_home: "Home", nav_about: "About", nav_fleet: "Fleet", nav_reviews: "Reviews", nav_book: "Book Now", nav_tours: "Destinations",
+                    nav_packages: "Packages", nav_guide: "Travel Guide",
                     hero_title: "Discover Georgia <br/> <span class='text-accent-light italic font-serif'>Without Limits</span>",
                     hero_subtitle: "Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.",
                     cta_start: "Get a Quote", cta_fleet: "View Fleet",
@@ -1268,6 +1339,23 @@
                     fleet_label: "Our Fleet", fleet_title: "Choose Your Comfort",
                     sedan_title: "Sedan", sedan_desc: "Perfect for couples or solo travelers.", btn_select_sedan: "Book Sedan", price_start: "From",
                     minivan_title: "Minivan", minivan_desc: "Spacious comfort for groups & families.", btn_select_minivan: "Book Minivan", tag_popular: "POPULAR",
+                    
+                    // Packages
+                    pkg_label: "Ready-made Plans", pkg_title: "Popular Georgia Itineraries", pkg_subtitle: "Save time with our curated travel packages.",
+                    pkg1_title: "Family Fun", pkg1_sub: "Tbilisi, Kazbegi, Bakuriani",
+                    pkg1_li1: "Airport Transfer (In/Out)", pkg1_li2: "Daily Private Driver", pkg1_li3: "4-Star Hotel Accommodation", pkg1_li4: "Free SIM Cards",
+                    pkg2_title: "Honeymoon", pkg2_sub: "Tbilisi, Signagi (City of Love)",
+                    pkg2_li1: "Luxury Sedan with Driver", pkg2_li2: "Wine Tasting Tour", pkg2_li3: "Romantic Dinner Setup", pkg2_li4: "Photo Session",
+                    pkg3_title: "Grand Tour", pkg3_sub: "East to West (Batumi)",
+                    pkg3_li1: "All Georgia Highlights", pkg3_li2: "Comfortable Minivan", pkg3_li3: "Batumi Beach Days", pkg3_li4: "Flexible Schedule",
+                    btn_details: "Get Details",
+
+                    // Guide
+                    guide_label: "Travel Guide", guide_title: "Essential Info for Tourists",
+                    guide_visa_title: "Visa Requirements", guide_visa_text: "Citizens of GCC countries (Saudi Arabia, UAE, Kuwait, Oman, Qatar, Bahrain) enjoy a visa-free regime for up to 1 year.",
+                    guide_food_title: "Halal Food", guide_food_text: "Halal food is widely available in Tbilisi, especially in the Marjanishvili area. Our drivers know the best authentic spots.",
+                    guide_time_title: "Best Time to Visit", guide_time_text: "Spring (April-June) and Autumn (September-October) offer pleasant weather. For snow lovers, December to February is perfect.",
+
                     reviews_label: "Testimonials", reviews_title: "Trusted by Travelers",
                     review_1_text: "\"Our driver Giorgi was amazing! He showed us hidden spots on the way to Kazbegi that we would have never found alone. The car was spotless.\"", review_1_name: "Sarah Johnson", review_1_country: "United Kingdom",
                     review_2_text: "\"Booking was super easy via WhatsApp. The Minivan for our family of 6 was comfortable and spacious. Highly recommended.\"", review_2_name: "Ahmed Khalil", review_2_country: "UAE",
@@ -1302,6 +1390,7 @@
                 },
                 ar: {
                     nav_home: "الرئيسية", nav_about: "من نحن", nav_fleet: "السيارات", nav_reviews: "الآراء", nav_book: "احجز الآن", nav_tours: "وجهات",
+                    nav_packages: "باقات سياحية", nav_guide: "دليل المسافر",
                     hero_title: "اكتشف جورجيا <br/> <span class='text-accent-light italic font-serif'>بلا حدود</span>",
                     hero_subtitle: "سائقون محترفون وأسطول فاخر. من الاستقبال في المطار إلى الرحلات الجبلية.",
                     cta_start: "احصل على عرض", cta_fleet: "شاهد السيارات",
@@ -1313,6 +1402,23 @@
                     fleet_label: "أسطولنا", fleet_title: "اختر راحتك",
                     sedan_title: "سيدان رجال أعمال", sedan_desc: "مثالية للأزواج أو المسافرين المنفردين.", btn_select_sedan: "حجز سيدان", price_start: "يبدأ من",
                     minivan_title: "ميني فان عائلي", minivan_desc: "راحة واسعة للمجموعات والعائلات.", btn_select_minivan: "حجز ميني فان", tag_popular: "الأكثر طلباً",
+                    
+                    // Packages
+                    pkg_label: "خطط جاهزة", pkg_title: "باقات سياحية في جورجيا", pkg_subtitle: "وفر الوقت والجهد مع جداولنا السياحية المختارة بعناية.",
+                    pkg1_title: "رحلة العائلة", pkg1_sub: "تبليسي، كازبيجي، باكورياني",
+                    pkg1_li1: "استقبال وتوديع المطار", pkg1_li2: "سائق خاص يومياً", pkg1_li3: "حجوزات فنادق 4 نجوم", pkg1_li4: "شرائح اتصال مجانية",
+                    pkg2_title: "شهر العسل", pkg2_sub: "تبليسي، سغناغي (مدينة الحب)",
+                    pkg2_li1: "سيارة سيدان فاخرة", pkg2_li2: "جولة مزارع العنب", pkg2_li3: "عشاء رومانسي", pkg2_li4: "جلسة تصوير",
+                    pkg3_title: "الجولة الكبرى", pkg3_sub: "من الشرق إلى الغرب (باتومي)",
+                    pkg3_li1: "زيارة كل المعالم", pkg3_li2: "ميني فان مريح", pkg3_li3: "أيام شاطئية في باتومي", pkg3_li4: "جدول مرن",
+                    btn_details: "التفاصيل",
+
+                    // Guide
+                    guide_label: "دليل المسافر", guide_title: "معلومات تهم السائح العربي",
+                    guide_visa_title: "تأشيرة الدخول", guide_visa_text: "مواطنو دول الخليج (السعودية، الإمارات، الكويت، عمان، قطر، البحرين) يدخلون جورجيا بدون فيزا لمدة سنة كاملة.",
+                    guide_food_title: "الأكل الحلال", guide_food_text: "المطاعم الحلال متوفرة بكثرة، خاصة في منطقة مرجان شفيلي في تبليسي. سائقونا يعرفون أفضل الأماكن.",
+                    guide_time_title: "أفضل وقت للزيارة", guide_time_text: "الربيع (أبريل-يونيو) والخريف (سبتمبر-أكتوبر) لجو معتدل. ولعشاق الثلوج، الشتاء (ديسمبر-فبراير) مثالي.",
+
                     reviews_label: "تجارب ضيوفنا", 
                     reviews_title: "تجارب مسافرين حقيقية",
                     review_1_text: "\"السائق جورجي كان رائعاً! أرشدنا لأماكن ساحرة في طريق كازبيجي لم نكن لنكتشفها وحدنا. السيارة كانت في غاية النظافة.\"", review_1_name: "سارة جونسون", review_1_country: "المملكة المتحدة",
@@ -1345,7 +1451,7 @@
                     dest_martvili: "وادي مارتفيلي", desc_martvili: "مياه زمردية ورحلات بالقوارب.",
                     dest_gudauri: "غوداوری", desc_gudauri: "مناظر جبلية خلابة.",
                     dest_vardzia: "فاردزيا", desc_vardzia: "مدينة الكهوف الأثرية.",
-                    btn_visit: "اكتشف المزيد"
+                    btn_visit: "Drive Here"
                 }
             },
 
@@ -1384,7 +1490,7 @@
                 });
 
                 // Apply Directional Classes
-                const rtlElements = ['hero-content', 'about-content', 'fleet-grid', 'footer-content', 'booking-container', 'faq-list', 'destinations', 'reviews', 'currency-converter'];
+                const rtlElements = ['hero-content', 'about-content', 'fleet-grid', 'footer-content', 'booking-container', 'faq-list', 'destinations', 'reviews', 'currency-converter', 'packages-grid', 'guide-grid'];
                 rtlElements.forEach(id => {
                     const el = document.getElementById(id);
                     if (el) el.dir = this.current === 'ar' ? 'rtl' : 'ltr';
@@ -1692,10 +1798,10 @@
         const App = {
             start() {
                 UIManager.init();
-                BookingManager.init(); // Initialize first to create fpInstance
-                LangManager.init();    // Now safe to run localization
+                BookingManager.init(); 
+                LangManager.init();    
                 this.initSlider();
-                this.initAnimations(); // New Animations
+                this.initAnimations(); 
                 
                 // Remove preloader
                 setTimeout(() => {
@@ -1793,12 +1899,17 @@
                  originalCards.forEach(card => {
                      const clone = card.cloneNode(true);
                      clone.setAttribute('aria-hidden', 'true');
+                     // Ensure cloned cards also have the click handler
+                     const originalOnClick = card.getAttribute('onclick');
+                     if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
                      slider.appendChild(clone);
                  });
                  // Prepend clones to start (for backward loop)
                  originalCards.slice().reverse().forEach(card => {
                      const clone = card.cloneNode(true);
                      clone.setAttribute('aria-hidden', 'true');
+                     const originalOnClick = card.getAttribute('onclick');
+                     if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
                      slider.insertBefore(clone, slider.firstChild);
                  });
 
