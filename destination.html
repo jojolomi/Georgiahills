@@ -17,11 +17,23 @@
         });
     </script>
 
-    <!-- 2. Google Tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6GT03GSW49"></script>
+    <!-- 2. OPTIMIZATION: Deferred GTM -->
     <script>
-      gtag('js', new Date());
-      gtag('config', 'G-6GT03GSW49');
+        function loadGTM() {
+            if (window.gtmLoaded) return;
+            window.gtmLoaded = true;
+            var script = document.createElement('script');
+            script.src = "https://www.googletagmanager.com/gtag/js?id=G-6GT03GSW49";
+            script.async = true;
+            document.head.appendChild(script);
+            
+            gtag('js', new Date());
+            gtag('config', 'G-6GT03GSW49');
+        }
+        ['mousedown', 'mousemove', 'scroll', 'touchstart'].forEach(evt => 
+            window.addEventListener(evt, loadGTM, {once: true, passive: true})
+        );
+        setTimeout(loadGTM, 4000);
     </script>
 
     <!-- Dynamic SEO Placeholders -->
@@ -37,30 +49,26 @@
     <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- OPTIMIZATION: Preconnect to Unsplash since gallery images load from there -->
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-    <!-- OPTIMIZATION: Preload the critical script that renders page content -->
-    <link rel="preload" href="script.js" as="script">
 
     <!-- PWA & Icons -->
     <link rel="manifest" href='data:application/manifest+json,{"name":"Georgia Hills","short_name":"Georgia Hills","start_url":".","display":"standalone","background_color":"#F9FAFB","theme_color":"#0F172A","icons":[{"src":"favicon.ico","sizes":"192x192","type":"image/png"}]}'>
     <link rel="icon" type="image/png" href="favicon.ico">
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     
-    <!-- OPTIMIZATION: Load FontAwesome asynchronously to prevent render blocking -->
+    <!-- OPTIMIZATION: Defer FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="style.css">
 
-    <!-- FIX: Immediate Language Direction Application (Prevents Header Jump) -->
+    <!-- FIX: Immediate Language Direction Application -->
     <script>
         (function() {
             try {
-                // Check URL param first, then localStorage
                 var urlParams = new URLSearchParams(window.location.search);
                 var savedLang = urlParams.get('lang') || localStorage.getItem('userLang') || 'en';
                 document.documentElement.lang = savedLang;
@@ -68,13 +76,15 @@
             } catch(e) { console.log(e); }
         })();
     </script>
+    <!-- OPTIMIZATION: Defer Main Script -->
+    <script src="script.js" defer></script>
 </head>
 <body class="page-destination">
 
     <!-- Accessibility Skip Link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Navbar - Fixed: Added dir="ltr" to prevent RTL flipping -->
+    <!-- Navbar -->
     <nav class="navbar" id="navbar" dir="ltr">
         <div class="container navbar-inner">
             <!-- Logo -->
@@ -90,7 +100,6 @@
                 <a href="index.html#packages" class="nav-link" data-i18n="nav_packages">Packages</a>
                 <a href="index.html#fleet" class="nav-link" data-i18n="nav_fleet">Fleet</a>
                 
-                <!-- Fixed: Wrapped settings in a div to match index.html structure -->
                 <div style="display:flex; gap:0.75rem;">
                     <!-- Currency Selector (Desktop) -->
                     <div class="custom-select-wrapper" id="currency-desktop">
@@ -100,7 +109,6 @@
                             <i class="fa-solid fa-chevron-down text-xs"></i>
                         </div>
                         <div class="custom-options" id="curr-options-desktop">
-                            <!-- Options injected by JS -->
                         </div>
                     </div>
 
@@ -140,7 +148,6 @@
                 <i class="fa-solid fa-chevron-down text-xs"></i>
             </div>
             <div class="custom-options" id="curr-options-mobile">
-                <!-- Options injected by JS -->
             </div>
         </div>
 
@@ -152,7 +159,6 @@
 
     <!-- Hero -->
     <div class="dest-hero">
-        <!-- OPTIMIZATION: Used transparent pixel data URI instead of empty src="" to prevent 404/console errors -->
         <img id="hero-img" class="skeleton" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Hero">
         <div class="dest-hero-overlay"></div>
     </div>
@@ -162,8 +168,6 @@
             <!-- Left: Main Content -->
             <div class="content-card-wrapper">
                 <div class="content-card">
-                    
-                    <!-- OPTIMIZATION: Noscript fallback for JS-heavy content -->
                     <noscript>
                         <div style="padding: 2rem; text-align: center; background: #FEF2F2; color: #991B1B; border-radius: 0.5rem; margin-bottom: 2rem;">
                             <i class="fa-solid fa-triangle-exclamation"></i> 
@@ -185,7 +189,6 @@
                     <!-- Top Sights -->
                     <h3 class="section-heading" data-i18n="label_highlights">Top Sights</h3>
                     <ul id="highlights" class="highlights-list">
-                        <!-- Injected via JS -->
                         <li class="skeleton" style="width:60%;"></li>
                         <li class="skeleton" style="width:80%;"></li>
                         <li class="skeleton" style="width:50%;"></li>
@@ -201,7 +204,6 @@
                     <div style="margin-top:4rem;">
                         <span style="font-size:0.8rem; font-weight:700; color:var(--color-gray-500); text-transform:uppercase; display:block; margin-bottom:0.5rem;" data-i18n="label_next">Explore Next</span>
                         <a id="next-link" href="#" class="next-card">
-                            <!-- OPTIMIZATION: Used transparent pixel for next-img as well -->
                             <img id="next-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="skeleton" style="width:5rem; height:5rem; border-radius:0.75rem; object-fit:cover;">
                             <div>
                                 <h4 id="next-title" style="margin:0; font-size:1.25rem; font-weight:700;">Next Place</h4>
@@ -264,9 +266,7 @@
         </div>
     </footer>
 
-    <!-- Structured Data - Populated by JS -->
+    <!-- Structured Data -->
     <script type="application/ld+json" id="json-ld-data"></script>
-
-    <script src="script.js"></script>
 </body>
 </html>

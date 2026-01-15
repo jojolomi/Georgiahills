@@ -7,7 +7,7 @@
     <!-- Indexing Control -->
     <meta name="robots" content="index, follow"> 
     
-    <!-- 1. Google Consent Mode -->
+    <!-- 1. Google Consent Mode (Lightweight Inline) -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -19,11 +19,25 @@
         });
     </script>
 
-    <!-- 2. Google Tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6GT03GSW49"></script>
+    <!-- 2. OPTIMIZATION: Deferred Google Tag Manager
+         Loads only after user interaction to boost PageSpeed Score -->
     <script>
-      gtag('js', new Date());
-      gtag('config', 'G-6GT03GSW49');
+        function loadGTM() {
+            if (window.gtmLoaded) return;
+            window.gtmLoaded = true;
+            var script = document.createElement('script');
+            script.src = "https://www.googletagmanager.com/gtag/js?id=G-6GT03GSW49";
+            script.async = true;
+            document.head.appendChild(script);
+            
+            gtag('js', new Date());
+            gtag('config', 'G-6GT03GSW49');
+        }
+        // Load on interaction or after 4 seconds
+        ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(evt => 
+            window.addEventListener(evt, loadGTM, {once: true, passive: true})
+        );
+        setTimeout(loadGTM, 4000);
     </script>
 
     <!-- SEO: Multilingual Support -->
@@ -64,20 +78,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-    <link rel="preconnect" href="https://flagcdn.com" crossorigin>
-    <link rel="preconnect" href="https://api.exchangerate-api.com" crossorigin>
     
     <!-- Optimized CSS Loading -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Deferred CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"></noscript>
-    <link rel="stylesheet" href="style.css">
-
-    <!-- Inline Critical CSS for Icons -->
-
 
     <!-- Preload Hero Image -->
     <link rel="preload" as="image" 
@@ -109,11 +118,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
     
-    <!-- Load FontAwesome Deferred -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-
-    <!-- MAIN CSS -->
+    <!-- OPTIMIZATION: Defer Main Script -->
+    <script src="script.js" defer></script>
 </head>
 <body dir="ltr">
 
@@ -282,7 +288,7 @@
             <div class="about-grid">
                 <div class="about-img-container reveal">
                     <div class="about-blob"></div>
-                    <img src="Tbilisi_old_Town.webp" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town - تبليسي القديمة">
+                    <img src="Tbilisi_old_Town.webp" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town - تبليسي القديمة" style="max-width: 100%; height: auto;">
                 </div>
                 <div id="about-content" class="about-content reveal">
                     <span class="section-label">Why Choose Georgia Hills?</span>
@@ -315,7 +321,7 @@
                 </div>
             </div>
             
-            <!-- Desktop Floating Navigation (Placed here for context) -->
+            <!-- Desktop Floating Navigation -->
             <div class="slider-nav-container desktop-only hidden lg:flex" dir="ltr">
                 <button id="prevBtnDesk" class="slider-nav-btn prev-btn" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
                 <button id="nextBtnDesk" class="slider-nav-btn next-btn" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
@@ -355,7 +361,19 @@
                 </div>
                 <!-- Signagi -->
                 <div class="tour-card group" onclick="window.location.href='destination.html?id=signagi'">
-                    <img src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&q=80" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Signagi - سغناغي">
+                    <img 
+                        src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&h=475&q=70&fm=webp" 
+                        srcset="
+                            https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=300&h=375&q=70&fm=webp 300w,
+                            https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&h=475&q=70&fm=webp 600w
+                        "
+                        sizes="(max-width: 640px) 100vw, 380px"
+                        width="380" height="475" 
+                        loading="lazy" 
+                        decoding="async" 
+                        class="tour-img" 
+                        alt="Signagi - سغناغي"
+                    >
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">Signagi</h3>
@@ -365,7 +383,7 @@
                 </div>
             </div>
 
-            <!-- Mobile Controls (Bottom Center) -->
+            <!-- Mobile Controls -->
             <div class="slider-nav-container lg-hidden" dir="ltr">
                  <button id="prevBtnMob" class="slider-nav-btn" aria-label="Previous Slide"><i class="fa-solid fa-chevron-left"></i></button>
                  <button id="nextBtnMob" class="slider-nav-btn" aria-label="Next Slide"><i class="fa-solid fa-chevron-right"></i></button>
@@ -804,22 +822,23 @@
         <a href="#booking" class="glass-btn-accent">Book Now</a>
     </div>
 
-    <!-- EmailJS & Flatpickr Scripts -->
+    <!-- EmailJS Script -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
     <script>
        const EMAILJS_PUBLIC_KEY = "gFHD0l5sBGRvS44V8"; 
        window.addEventListener('load', function(){
-          try {
-              if(typeof emailjs !== 'undefined') {
-                  if(EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY.length > 5) {
-                       emailjs.init(EMAILJS_PUBLIC_KEY); 
+          // Defer checking emailjs until loaded
+          setTimeout(function() {
+              try {
+                  if(typeof emailjs !== 'undefined') {
+                      if(EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY.length > 5) {
+                           emailjs.init(EMAILJS_PUBLIC_KEY); 
+                      }
                   }
-              }
-          } catch(e) { console.log("EmailJS init warning:", e); }
+              } catch(e) { console.log("EmailJS init warning:", e); }
+          }, 1000);
        });
     </script>
-
-<script src="script.js"></script>
 </body>
 </html>
