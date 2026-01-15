@@ -73,7 +73,7 @@
                 var savedLang = urlParams.get('lang') || localStorage.getItem('userLang') || 'en';
                 document.documentElement.lang = savedLang;
                 document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
-            } catch(e) { console.log(e); }
+            } catch(e) {}
         })();
     </script>
     <!-- OPTIMIZATION: Defer Main Script -->
