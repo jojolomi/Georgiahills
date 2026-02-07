@@ -79,6 +79,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     
+    <!-- OPTIMIZATION: Preload Hero Image BEFORE CSS to boost LCP -->
+    <link rel="preload" as="image" 
+          href="image-640.webp" 
+          imagesrcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" 
+          imagesizes="100vw"
+          fetchpriority="high">
+
     <!-- Optimized CSS Loading -->
     <link rel="stylesheet" href="style.css">
     
@@ -87,13 +94,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"></noscript>
-
-    <!-- Preload Hero Image -->
-    <link rel="preload" as="image" 
-          href="image-640.webp" 
-          imagesrcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" 
-          imagesizes="100vw"
-          fetchpriority="high">
+    
+    <!-- Libraries (Loaded before main script) -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
 
     <!-- Primary Keywords in Title -->
     <title>Private Driver in Georgia | Georgia Hills</title>
@@ -123,7 +127,7 @@
 </head>
 <body dir="ltr">
 
-    <!-- Accessibilty & Network -->
+    <!-- Accessibility & Network -->
     <noscript>
         <div class="no-js-overlay">
             <h1 style="font-size:1.5rem; font-weight:bold; color:#EF4444; margin-bottom:0.5rem;">JavaScript Required</h1>
@@ -823,8 +827,6 @@
     </div>
 
     <!-- EmailJS Script -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
     <script>
        const EMAILJS_PUBLIC_KEY = "gFHD0l5sBGRvS44V8"; 
        window.addEventListener('load', function(){

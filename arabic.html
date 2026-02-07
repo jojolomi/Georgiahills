@@ -54,6 +54,11 @@
         "@type": "AutoRental",
         "name": "Georgia Hills",
         "alternateName": "جورجيا هيلز للسياحة والسفر",
+        "sameAs": [
+            "https://www.instagram.com/",
+            "https://www.facebook.com/"
+        ],
+        "openingHours": "Mo-Su 00:00-23:59",
         "image": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80",
         "description": "أفضل خدمة سائق خاص في جورجيا وتأجير سيارات في تبليسي. متخصصون في البرامج السياحية للعوائل وشهر العسل. سيارات حديثة وسائقين يتحدثون العربية.",
         "address": {
@@ -79,6 +84,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     
+    <!-- OPTIMIZATION: Preload Hero Image BEFORE CSS -->
+    <link rel="preload" as="image" 
+          href="image-640.webp" 
+          imagesrcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" 
+          imagesizes="100vw"
+          fetchpriority="high">
+
     <!-- MAIN CSS -->
     <link rel="stylesheet" href="style.css">
 
@@ -91,21 +103,15 @@
         .icon-svg { width: 1em; height: 1em; display: inline-block; fill: currentColor; vertical-align: -0.125em; }
     </style>
 
-    <!-- Preload Hero Image -->
-    <link rel="preload" as="image" 
-          href="image-640.webp" 
-          imagesrcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" 
-          imagesizes="100vw"
-          fetchpriority="high">
-
     <!-- Primary Keywords in Title -->
     <title>سائق خاص في جورجيا | السياحة في جورجيا | Georgia Hills</title>
     <meta name="description" content="أفضل خدمة سائق خاص في جورجيا للعوائل. سيارات حديثة وسائقين عرب. احجز رحلتك إلى تبليسي، باتومي، وكازبيجي عبر واتساب مباشرة.">
-    <meta name="keywords" content="سائق خاص في جورجيا, السياحة في جورجيا, استئجار سيارة في تبليسي, سائق عربي في جورجيا, عروض جورجيا للعوائل, تكلفة السياحة في جورجيا, شركات سياحية في جورجيا">
+    <meta name="keywords" content="سائق خاص في جورجيا, السياحة في جورجيا, سائق عربي في جورجيا, استئجار سيارة في تبليسي, عروض جورجيا للعوائل, السياحة في باتومي, السياحة في بورجومي, أرقام سواقين في جورجيا, تكلفة السياحة في جورجيا">
     <meta name="author" content="Georgia Hills">
     <meta name="theme-color" content="#0F172A">
     
     <!-- Open Graph & Twitter -->
+    <meta property="og:locale" content="ar_SA">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://georgiahills.netlify.app/arabic.html">
     <meta property="og:title" content="سائق خاص في جورجيا | Georgia Hills">
@@ -121,16 +127,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
     
-    <!-- Load FontAwesome Deferred -->
+    <!-- Load FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+
+    <!-- Libraries (Loaded before main script) -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
 
     <!-- Main Script Deferred -->
     <script src="script.js" defer></script>
 </head>
 <body dir="rtl">
 
-    <!-- Accessibilty & Network -->
+    <!-- Accessibility & Network -->
     <noscript>
         <div class="no-js-overlay">
             <h1 style="font-size:1.5rem; font-weight:bold; color:#EF4444; margin-bottom:0.5rem;">JavaScript Required</h1>
@@ -262,7 +272,7 @@
             <div class="hero-badge">
                 <i class="fa-solid fa-star" style="color:#facc15; font-size:0.75rem;"></i> الخيار الأول للعوائل
             </div>
-            <h1 class="hero-title">اكتشف جورجيا <br><span class="text-accent-light italic font-serif">بلا حدود</span></h1>
+            <h1 class="hero-title">اكتشف جورجيا <br><span class="text-accent-light italic font-serif">مع سائق خاص</span></h1>
             <p class="hero-subtitle">سائقون محترفون وأسطول فاخر. من الاستقبال في المطار إلى الرحلات الجبلية.</p>
             <div class="hero-buttons">
                 <a href="#booking" class="btn-hero btn-hero-primary">احصل على عرض</a>
@@ -338,7 +348,7 @@
             <!-- Slider Track -->
             <div id="tours-slider" class="tours-slider" tabindex="0" aria-label="Destinations Slider" dir="ltr">
                 <!-- Tbilisi -->
-                <div class="tour-card group" onclick="window.location.href='destination.html?id=tbilisi'">
+                <div class="tour-card group" onclick="window.location.href='destination.html?id=tbilisi&lang=ar'">
                     <img src="Tbilisi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="تبليسي - العاصمة">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
@@ -348,7 +358,7 @@
                     </div>
                 </div>
                 <!-- Kazbegi -->
-                <div class="tour-card group" onclick="window.location.href='destination.html?id=kazbegi'">
+                <div class="tour-card group" onclick="window.location.href='destination.html?id=kazbegi&lang=ar'">
                     <img src="Kazbegi.webp" width="669" height="669" loading="lazy" decoding="async" class="tour-img" alt="جبل كازبيجي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
@@ -358,7 +368,7 @@
                     </div>
                 </div>
                 <!-- Martvili -->
-                <div class="tour-card group" onclick="window.location.href='destination.html?id=martvili'">
+                <div class="tour-card group" onclick="window.location.href='destination.html?id=martvili&lang=ar'">
                     <img src="Martvili.webp" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="وادي مارتفيلي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
@@ -368,7 +378,7 @@
                     </div>
                 </div>
                 <!-- Signagi -->
-                <div class="tour-card group" onclick="window.location.href='destination.html?id=signagi'">
+                <div class="tour-card group" onclick="window.location.href='destination.html?id=signagi&lang=ar'">
                     <img 
                         src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&h=475&q=70&fm=webp" 
                         srcset="
@@ -831,8 +841,6 @@
     </div>
 
     <!-- EmailJS & Flatpickr Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
     <script>
        const EMAILJS_PUBLIC_KEY = "gFHD0l5sBGRvS44V8";
        window.addEventListener('load', function(){

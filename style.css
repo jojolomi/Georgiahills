@@ -113,6 +113,24 @@ html[lang="ar"] .text-left { text-align: right !important; }
 html[lang="ar"] .text-center { text-align: center !important; }
 html[lang="ar"] .rtl-flip { transform: scaleX(-1); }
 
+/* Arabic Icon Rotation (Breadcrumbs, Next Card, etc) */
+html[lang="ar"] .breadcrumbs .fa-chevron-right,
+html[lang="ar"] .next-card .fa-arrow-right,
+html[lang="ar"] .next-card .fa-arrow-left {
+    transform: rotate(180deg);
+}
+
+/* Arabic Form Fixes */
+html[lang="ar"] input, 
+html[lang="ar"] textarea, 
+html[lang="ar"] select {
+    text-align: right;
+}
+html[lang="ar"] #phone {
+    direction: ltr;
+    text-align: left;
+}
+
 .text-white { color: var(--color-white) !important; }
 .text-primary { color: var(--color-primary) !important; }
 .text-accent { color: var(--color-accent) !important; }
@@ -340,6 +358,12 @@ html[lang="ar"] .next-card:hover { transform: translateX(-5px); }
 
 .section-py { padding-top: 4rem; padding-bottom: 4rem; }
 @media (min-width: 768px) { .section-py { padding-top: 6rem; padding-bottom: 6rem; } }
+
+/* PERFORMANCE: Skip rendering off-screen content */
+#packages, #fleet, #guide, #reviews, #faq {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 800px; /* Approximate height to prevent scrollbar jumping */
+}
 
 /* About */
 .about-grid { display: flex; flex-direction: column; gap: 3rem; }

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gh-cache-v1';
+const CACHE_NAME = 'gh-cache-v3';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -7,7 +7,11 @@ const ASSETS_TO_CACHE = [
   '/style.css',
   '/script.js',
   '/favicon.ico',
-  '/manifest.json'
+  '/manifest.json',
+  'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+  'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css',
+  'https://cdn.jsdelivr.net/npm/flatpickr',
+  'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js'
 ];
 
 // 1. INSTALL: Browser downloads and saves the critical files
@@ -38,11 +42,14 @@ self.addEventListener('activate', (event) => {
 // Strategy: "Stale-While-Revalidate"
 // It serves the cached version immediately (fast) AND fetches a new version in the background to update the cache for next time.
 self.addEventListener('fetch', (event) => {
+  // Skip non-http requests (like chrome-extension://)
+  if (!event.request.url.startsWith('http')) return;
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {
         // Only cache valid responses (not errors)
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+        if (networkResponse && networkResponse.status === 200 && (networkResponse.type === 'basic' || networkResponse.type === 'cors')) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);

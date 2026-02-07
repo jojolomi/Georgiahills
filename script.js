@@ -58,7 +58,7 @@ const DestData = {
         highlights_en: ["Old Town & Sulphur Baths", "Narikala Fortress", "Peace Bridge", "Rustaveli Avenue"],
         highlights_ar: ["المدينة القديمة وحمامات الكبريت", "قلعة ناريكالا", "جسر السلام", "شارع روستافيلي"],
         title_en: "Tbilisi: The Heart of Georgia",
-        title_ar: "تبليسي: قلب جورجيا النابض",
+        title_ar: "السياحة في تبليسي: أهم المعالم والأماكن",
         desc_en: "Tbilisi, the capital of Georgia, is a city where old meets new in a spectacular fashion. Founded in the 5th century, its diverse history is reflected in its architecture, which is a mix of medieval, neoclassical, Beaux Arts, Art Nouveau, Stalinist and Modern structures.\n\nWander through the narrow streets of the Old Town, relax in the famous sulfur baths (Abanotubani), and enjoy the stunning panoramic views from Narikala Fortress. Whether you're looking for history, modern nightlife, or culinary adventures, Tbilisi has it all.",
         desc_ar: "تبليسي، عاصمة جورجيا، هي مدينة يلتقي فيها التاريخ بالحداثة في مشهد مذهل. تأسست في القرن الخامس، وتتميز بتاريخها المتنوع الذي ينعكس في عمارتها الفريدة.\n\nتجوّل في الأزقة الضيقة للمدينة القديمة، واسترخِ في حمامات الكبريت الشهيرة (أبانوتوباني)، واستمتع بإطلالات بانورامية خلابة من قلعة ناريكالا. سواء كنت تبحث عن التاريخ، الحياة العصرية، أو تجربة المطبخ الجورجي الأصيل، فإن تبليسي هي وجهتك المثالية."
     },
@@ -72,7 +72,7 @@ const DestData = {
         highlights_en: ["Gergeti Trinity Church", "Mount Kazbek View", "Gveleti Waterfall", "Dariali Gorge"],
         highlights_ar: ["كنيسة الثالوث جيرجيتي", "إطلالة جبل كازبيك", "شلال جفيليتي", "مضيق داريالي"],
         title_en: "Kazbegi: Peaks Above the Clouds",
-        title_ar: "كازبيجي: قمم تعانق السحاب",
+        title_ar: "رحلة كازبيجي: جبال القوقاز والطبيعة",
         desc_en: "Step into a postcard at Kazbegi (Stepantsminda). This region is home to the breathtaking Mount Kazbek and the iconic Gergeti Trinity Church, sitting high at 2,170 meters under the glacier.\n\nThe drive along the Georgian Military Highway is an adventure in itself, passing the Ananuri Fortress and the Russia-Georgia Friendship Monument. It is a perfect destination for nature lovers, hikers, and anyone seeking fresh mountain air.",
         desc_ar: "استمتع بمشهد خيالي في كازبيجي (ستيبانتسميندا). هذه المنطقة هي موطن جبل كازبيك الشاهق وكنيسة الثالوث جيرجيتي الشهيرة التي تتربع على ارتفاع 2170 متراً تحت النهر الجليدي.\n\nالطريق عبر الطريق العسكري الجورجي هو مغامرة بحد ذاته، مروراً بقلعة أنانوري ونصب الصداقة. إنها الوجهة المثالية لعشاق الطبيعة والمشي لمسافات طويلة وكل من يبحث عن هواء الجبل النقي."
     },
@@ -86,7 +86,7 @@ const DestData = {
         highlights_en: ["Boat Ride in Canyon", "Walking Trails", "Dadiani Palace", "Waterfalls"],
         highlights_ar: ["جولة بالقارب في الوادي", "مسارات المشي", "قصر دادياني", "الشلالات"],
         title_en: "Martvili Canyon: Emerald Waters",
-        title_ar: "وادي مارتفيلي: المياه الزمردية",
+        title_ar: "وادي مارتفيلي: جولة القوارب والشلالات",
         desc_en: "Discover the hidden gem of Western Georgia. Martvili Canyon offers a surreal experience with its emerald green waters, waterfalls, and white limestone cliffs.\n\nThe highlight of any trip here is a boat ride through the stunning gorges. Historically, this was a bathing place for the Dadiani noble family. Today, it stands as one of the most photogenic spots in the country.",
         desc_ar: "اكتشف الجوهرة المخفية في غرب جورجيا. يقدم وادي مارتفيلي تجربة خيالية بمياهه الخضراء الزمردية، والشلالات، والمنحدرات الصخرية البيضاء.\n\nأبرز ما في الرحلة هنا هو ركوب القارب عبر المضائق المذهلة. تاريخياً، كان هذا المكان مسبحاً لعائلة دادياني النبيلة. اليوم، يعد واحداً من أجمل المواقع للتصوير في البلاد."
     },
@@ -100,7 +100,7 @@ const DestData = {
         highlights_en: ["City Walls Walk", "Bodbe Monastery", "Wine Tasting", "Alazani Valley View"],
         highlights_ar: ["المشي على أسوار المدينة", "دير بودبي", "تذوق النبيذ", "إطلالة وادي ألازاني"],
         title_en: "Signagi: The City of Love",
-        title_ar: "سغناغي: مدينة الحب",
+        title_ar: "سغناغي: مدينة الحب ومزارع العنب",
         desc_en: "Perched on a hilltop overlooking the vast Alazani Valley and the Caucasus Mountains, Signagi is one of Georgia's most charming towns. Known as the 'City of Love', it is famous for its 24/7 wedding house and romantic atmosphere.\n\nWander through cobblestone streets, admire the 18th-century architecture, and explore the ancient city walls. As the heart of the Kakheti wine region, it is also the best place to taste traditional Georgian wine.",
         desc_ar: "تتربع سغناغي على قمة تل يطل على وادي ألازاني الشاسع وجبال القوقاز، وهي واحدة من أكثر المدن سحراً في جورجيا. تُعرف بـ 'مدينة الحب'، وتشتهر بأجوائها الرومانسية ومكتب الزواج الذي يعمل على مدار الساعة.\n\nتجول في الشوارع المرصوفة بالحصى، وتأمل العمارة من القرن الثامن عشر، واستكشف أسوار المدينة القديمة. وباعتبارها قلب منطقة كاخيتي للنبيذ، فهي أفضل مكان لتذوق النبيذ الجورجي التقليدي."
     }
@@ -491,19 +491,35 @@ const LangManager = {
     // UPDATED: Check URL param first, default to localStorage
     get current() {
         const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('lang') || localStorage.getItem('userLang') || 'en';
+        if (urlParams.has('lang')) return urlParams.get('lang');
+        
+        // Detect based on file name for static pages
+        if (window.location.pathname.indexOf('arabic.html') !== -1) return 'ar';
+        
+        return localStorage.getItem('userLang') || 'en';
     },
     
     toggle() {
-        const newLang = this.current === 'en' ? 'ar' : 'en';
-        localStorage.setItem('userLang', newLang);
-        
-        // Update URL to reflect language change for sharing
-        const url = new URL(window.location);
-        url.searchParams.set('lang', newLang);
-        window.history.pushState({}, '', url);
-        
-        location.reload(); 
+        const current = this.current;
+        const isDestPage = window.location.pathname.indexOf('destination.html') !== -1;
+
+        if (isDestPage) {
+            // For dynamic destination page, reload with new param
+            const newLang = current === 'en' ? 'ar' : 'en';
+            localStorage.setItem('userLang', newLang);
+            const url = new URL(window.location);
+            url.searchParams.set('lang', newLang);
+            window.location.href = url.toString();
+        } else {
+            // For static pages, redirect to the correct file
+            if (current === 'ar') {
+                localStorage.setItem('userLang', 'en');
+                window.location.href = 'index.html';
+            } else {
+                localStorage.setItem('userLang', 'ar');
+                window.location.href = 'arabic.html';
+            }
+        }
     },
     
     apply() {
@@ -538,7 +554,9 @@ const MainApp = {
         
         const preloader = document.getElementById('preloader');
         if(preloader) {
-            setTimeout(() => { preloader.style.display = 'none'; }, 800);
+            // OPTIMIZATION: Remove artificial 800ms delay for better LCP score
+            preloader.style.opacity = '0';
+            setTimeout(() => { preloader.style.display = 'none'; }, 500); // Wait for CSS transition only
         }
     },
     
@@ -716,6 +734,13 @@ const DestinationApp = {
         const id = params.get('id') || 'tbilisi';
         const data = DestData[id];
         const lang = LangManager.current;
+
+        // 0. Fix Navigation Links for Arabic
+        if (lang === 'ar') {
+            document.querySelectorAll('a[href^="index.html"]').forEach(link => {
+                link.href = link.href.replace('index.html', 'arabic.html');
+            });
+        }
 
         if(data) {
             const canonicalLink = document.querySelector('link[rel="canonical"]');
