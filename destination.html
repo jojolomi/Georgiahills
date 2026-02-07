@@ -127,7 +127,7 @@
                 <button onclick="LangManager.toggle()" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;">
                     <i class="fa-solid fa-globe"></i> <span class="lang-text">العربية</span>
                 </button>
-                <button onclick="document.getElementById('mobile-menu').classList.add('open')" class="btn-mobile-menu">
+                <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Open Menu">
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
@@ -136,7 +136,7 @@
 
     <!-- Mobile Menu Overlay -->
     <div id="mobile-menu">
-        <button class="close-menu-btn" onclick="document.getElementById('mobile-menu').classList.remove('open')">
+        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Menu">
             <i class="fa-solid fa-xmark"></i>
         </button>
         

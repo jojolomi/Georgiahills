@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gh-cache-v3';
+const CACHE_NAME = 'gh-cache-v7';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -45,8 +45,12 @@ self.addEventListener('fetch', (event) => {
   // Skip non-http requests (like chrome-extension://)
   if (!event.request.url.startsWith('http')) return;
 
+  // OPTIMIZATION: For destination.html, ignore query params when matching cache
+  // This ensures we serve the cached app shell regardless of the ?id=... param
+  const isDestination = event.request.url.includes('/destination.html');
+
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
+    caches.match(event.request, { ignoreSearch: isDestination }).then((cachedResponse) => {
       const fetchPromise = fetch(event.request).then((networkResponse) => {
         // Only cache valid responses (not errors)
         if (networkResponse && networkResponse.status === 200 && (networkResponse.type === 'basic' || networkResponse.type === 'cors')) {

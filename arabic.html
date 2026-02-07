@@ -96,7 +96,6 @@
 
     <!-- Deferred Styles -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"></noscript>
     
     <!-- Inline Critical CSS for Icons (prevents flash) -->
     <style>
@@ -130,10 +129,6 @@
     <!-- Load FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-
-    <!-- Libraries (Loaded before main script) -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
 
     <!-- Main Script Deferred -->
     <script src="script.js" defer></script>
@@ -840,20 +835,5 @@
         <a href="#booking" class="glass-btn-accent">احجز الآن</a>
     </div>
 
-    <!-- EmailJS & Flatpickr Scripts -->
-    <script>
-       const EMAILJS_PUBLIC_KEY = "gFHD0l5sBGRvS44V8";
-       window.addEventListener('load', function(){
-          setTimeout(function() {
-              try {
-                  if(typeof emailjs !== 'undefined') {
-                      if(EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY.length > 5) {
-                           emailjs.init(EMAILJS_PUBLIC_KEY);
-                      }
-                  }
-              } catch(e) {}
-          }, 1000);
-       });
-    </script>
 </body>
 </html>

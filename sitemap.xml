@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+   <!-- Core Pages -->
    <url>
       <loc>https://georgiahills.netlify.app/</loc>
       <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/" />
@@ -16,9 +17,47 @@
       <changefreq>weekly</changefreq>
       <priority>0.9</priority>
    </url>
+   
+   <!-- Destinations (English) -->
    <url>
-      <loc>https://georgiahills.netlify.app/destination.html</loc>
-      <lastmod>2024-10-15</lastmod>
+      <loc>https://georgiahills.netlify.app/destination.html?id=tbilisi</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/destination.html?id=kazbegi</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/destination.html?id=martvili</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/destination.html?id=signagi</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+
+   <!-- Destinations (Arabic) -->
+   <url>
+      <loc>https://georgiahills.netlify.app/destination.html?id=tbilisi&amp;lang=ar</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/destination.html?id=kazbegi&amp;lang=ar</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/destination.html?id=martvili&amp;lang=ar</loc>
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/destination.html?id=signagi&amp;lang=ar</loc>
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>

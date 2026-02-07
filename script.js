@@ -48,7 +48,6 @@ const Translations = {
 const DestData = {
     'tbilisi': {
         img: 'Tbilisi.webp',
-        mapUrl: 'https://goo.gl/maps/example',
         gallery: [
             'https://images.unsplash.com/photo-1539656206689-d4198db85834?auto=format&fit=crop&w=800&q=80',
             'https://images.unsplash.com/photo-1582236357876-0f836526154b?auto=format&fit=crop&w=800&q=80',
@@ -64,7 +63,6 @@ const DestData = {
     },
     'kazbegi': {
         img: 'Kazbegi.webp',
-        mapUrl: 'https://goo.gl/maps/example',
         gallery: [
             'https://images.unsplash.com/photo-1549466540-349079f2913e?auto=format&fit=crop&w=800&q=80',
             'https://images.unsplash.com/photo-1560965377-63a236087b32?auto=format&fit=crop&w=800&q=80'
@@ -78,7 +76,6 @@ const DestData = {
     },
     'martvili': {
         img: 'Martvili.webp',
-        mapUrl: 'https://goo.gl/maps/example',
         gallery: [
             'https://images.unsplash.com/photo-1570701123490-67c858561d2d?auto=format&fit=crop&w=800&q=80',
             'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=800&q=80'
@@ -92,7 +89,6 @@ const DestData = {
     },
     'signagi': {
         img: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80',
-        mapUrl: 'https://goo.gl/maps/example',
         gallery: [
             'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
             'https://images.unsplash.com/photo-1534065662709-b6814b73b578?auto=format&fit=crop&w=800&q=80'
@@ -138,10 +134,23 @@ const CurrencyManager = {
 
     async fetchRates() {
         try {
+            // OPTIMIZATION: Cache rates for 24 hours to reduce API calls
+            const CACHE_KEY = 'currency_rates_data';
+            const CACHE_TTL = 3600000 * 24; 
+            const cached = JSON.parse(localStorage.getItem(CACHE_KEY));
+            const now = Date.now();
+
+            if (cached && (now - cached.timestamp < CACHE_TTL)) {
+                this.rates = cached.rates;
+                this.updatePrices();
+                return;
+            }
+
             const response = await fetch(`https://api.exchangerate-api.com/v4/latest/GEL`);
             if (response.ok) {
                 const data = await response.json();
                 this.rates = data.rates;
+                localStorage.setItem(CACHE_KEY, JSON.stringify({ rates: data.rates, timestamp: now }));
                 this.updatePrices();
             }
         } catch (e) { console.warn("Using offline rates"); }
@@ -486,6 +495,23 @@ const BookingManager = {
     }
 };
 
+// --- Library Loader (Performance Optimization) ---
+const LibraryLoader = {
+    loaded: {},
+    load(url, type = 'script') {
+        if (this.loaded[url]) return Promise.resolve();
+        return new Promise((resolve, reject) => {
+            const el = type === 'css' ? document.createElement('link') : document.createElement('script');
+            if (type === 'css') { el.rel = 'stylesheet'; el.href = url; }
+            else { el.src = url; el.defer = true; }
+            
+            el.onload = () => { this.loaded[url] = true; resolve(); };
+            el.onerror = reject;
+            document.head.appendChild(el);
+        });
+    }
+};
+
 // --- Language Manager (For Destination Page) ---
 const LangManager = {
     // UPDATED: Check URL param first, default to localStorage
@@ -548,7 +574,27 @@ const LangManager = {
 const MainApp = {
     start() {
         UIManager.init();
-        BookingManager.init(); 
+        
+        // OPTIMIZATION: Lazy Load Booking Libraries (Flatpickr & EmailJS)
+        // Only load them when user scrolls near the booking section
+        const bookingSection = document.getElementById('booking');
+        if (bookingSection) {
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    Promise.all([
+                        LibraryLoader.load('https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css', 'css'),
+                        LibraryLoader.load('https://cdn.jsdelivr.net/npm/flatpickr'),
+                        LibraryLoader.load('https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js')
+                    ]).then(() => {
+                        BookingManager.init();
+                        if(typeof emailjs !== 'undefined') emailjs.init("gFHD0l5sBGRvS44V8");
+                    });
+                    observer.disconnect();
+                }
+            }, { rootMargin: '300px' }); // Start loading 300px before section is visible
+            observer.observe(bookingSection);
+        }
+        
         this.initSlider();
         this.initAnimations(); 
         
@@ -743,15 +789,31 @@ const DestinationApp = {
         }
 
         if(data) {
-            const canonicalLink = document.querySelector('link[rel="canonical"]');
-            if(canonicalLink) canonicalLink.href = window.location.href;
-
             const title = data[`title_${lang}`];
             document.title = title + " - Georgia Hills";
             
-            // 1. Dynamic Meta Description
+            // 1. Dynamic Meta Description & Open Graph
+            const desc = data[`desc_${lang}`];
             const metaDesc = document.querySelector('meta[name="description"]');
-            if(metaDesc) metaDesc.content = data[`desc_${lang}`].substring(0, 160) + "...";
+            if(metaDesc) metaDesc.content = desc.substring(0, 160) + "...";
+
+            const setMeta = (prop, val) => {
+                let el = document.querySelector(`meta[property="${prop}"]`);
+                if(!el) { el = document.createElement('meta'); el.setAttribute('property', prop); document.head.appendChild(el); }
+                el.content = val;
+            };
+            setMeta('og:title', title);
+            setMeta('og:description', desc.substring(0, 200));
+            setMeta('og:image', data.img.startsWith('http') ? data.img : `https://georgiahills.netlify.app/${data.img}`);
+
+            // 2. Clean Canonical URL (Remove tracking params)
+            const canonicalLink = document.querySelector('link[rel="canonical"]');
+            if(canonicalLink) {
+                const url = new URL(window.location.origin + window.location.pathname);
+                url.searchParams.set('id', id);
+                if(lang !== 'en') url.searchParams.set('lang', lang);
+                canonicalLink.href = url.toString();
+            }
 
             // 2. Dynamic Schema.org Injection (NEW OPTIMIZATION)
             const scriptJSON = document.getElementById('json-ld-data');
@@ -774,9 +836,11 @@ const DestinationApp = {
             // Image Error Handling
             const heroImg = document.getElementById('hero-img');
             if(heroImg) {
-                heroImg.src = data.img;
-                heroImg.onerror = function() { this.src = 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80'; }; // Fallback
+                heroImg.alt = title; // Accessibility Fix
+                // FIX: Set handlers before src to catch cached loads
                 heroImg.onload = function() { this.classList.remove('skeleton'); };
+                heroImg.onerror = function() { this.src = 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80'; }; // Fallback
+                heroImg.src = data.img;
             }
             
             const crumbTitle = document.getElementById('crumb-title');
@@ -807,6 +871,7 @@ const DestinationApp = {
             const mapLink = document.getElementById('map-link');
             if(mapLink) {
                 mapLink.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.title_en)}`;
+                mapLink.rel = "noopener noreferrer";
             }
 
             const galleryEl = document.getElementById('gallery');
@@ -826,8 +891,8 @@ const DestinationApp = {
             
             const nextImg = document.getElementById('next-img');
             if(nextImg) {
-                nextImg.src = nextData.img;
                 nextImg.onload = function() { this.classList.remove('skeleton'); };
+                nextImg.src = nextData.img;
             }
             
             const nextTitle = document.getElementById('next-title');
