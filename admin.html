@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Georgia Hills Admin Panel</title>
+        <style>
+            :root{--color-gray-400:#9CA3AF}
+            html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;background:#fff}
+            .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
+            .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
+            .navbar{position:relative;z-index:50;background:transparent}
+            .hero-img{width:100%;height:auto;display:block;object-fit:cover}
+            .hero{position:relative;overflow:hidden}
+            .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
+        </style>
+        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="style.css"></noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Libraries for Automation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
+    <!-- Firebase SDKs (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- Load Current Data -->
+    <script src="script.js" defer></script>
+    <script src="admin.js"></script>
+
+</head>
+<body class="admin-body">
+
+    <!-- Login Overlay -->
+    <div id="login-overlay" style="position:fixed; inset:0; background:#0F172A; z-index:9999; display:flex; align-items:center; justify-content:center;">
+        <div style="background:white; padding:2rem; border-radius:1rem; width:100%; max-width:400px; text-align:center;">
+            <!-- SECURITY NOTE: For production, consider moving this file to a protected folder or using Netlify Identity -->
+            <img src="favicon.ico" style="width:60px; margin-bottom:1rem;">
+            <h2 style="margin-bottom:1.5rem;">Admin Login</h2>
+            <input type="email" id="admin-email" placeholder="Email" class="form-control" style="margin-bottom:1rem;">
+            <input type="password" id="admin-pass" placeholder="Password" class="form-control" style="margin-bottom:1.5rem;">
+            <button onclick="AdminApp.login()" class="btn btn-primary" style="width:100%;">Login</button>
+            <p id="login-error" style="color:red; margin-top:1rem; font-size:0.9rem;"></p>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="admin-sidebar" style="display:none;">
+        <div class="admin-sidebar-header">
+            <i class="fa-solid fa-sliders"></i> Admin Panel
+        </div>
+        <nav class="admin-sidebar-nav">
+            <div class="admin-nav-item active" onclick="AdminApp.switchTab('content')">
+                <i class="fa-solid fa-pen-to-square"></i> Content Manager
+            </div>
+            <div class="admin-nav-item" onclick="AdminApp.switchTab('deploy')">
+                <i class="fa-solid fa-rocket"></i> Build & Deploy
+            </div>
+            <div class="admin-nav-item" onclick="window.open('index.html', '_blank')">
+                <i class="fa-solid fa-external-link-alt"></i> View Website
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Top Bar -->
+    <div class="admin-top-bar" id="admin-top-bar" style="display:none;">
+        <h2 id="page-title">Content Manager</h2>
+        <div style="display:flex; gap:1rem; align-items:center;">
+            <span style="font-size:0.875rem; color:var(--color-gray-500);">Logged in as Admin</span>
+            <div style="width:2.5rem; height:2.5rem; background:var(--color-primary); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">A</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="admin-main-content" id="admin-main-content" style="display:none;">
+        
+        <!-- TAB: Content Manager -->
+        <div id="tab-content" class="tab-pane">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h3 class="admin-card-title">Manage Destinations</h3>
+                    <button onclick="AdminApp.addNewDest()" class="btn btn-secondary"><i class="fa-solid fa-plus"></i> Add New</button>
+                </div>
+                
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Select Destination</label>
+                    <select id="destSelect" class="form-control" onchange="AdminApp.loadDestData()">
+                        <option value="">-- Select a Destination to Edit --</option>
+                    </select>
+                </div>
+
+                <div id="editor" class="hidden">
+                    <div class="admin-form-grid">
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">ID (System Key)</label>
+                            <input type="text" id="cfgId" class="form-control" readonly style="background:#f3f4f6; cursor:not-allowed;">
+                        </div>
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Hero Image URL</label>
+                            <input type="text" id="cfgImg" class="form-control">
+                        </div>
+                        
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Title (English)</label>
+                            <input type="text" id="cfgTitleEn" class="form-control">
+                        </div>
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Title (Arabic)</label>
+                            <input type="text" id="cfgTitleAr" class="form-control" dir="rtl">
+                        </div>
+
+                        <div class="admin-form-group full-width">
+                            <label class="admin-form-label">Description (English)</label>
+                            <textarea id="cfgDescEn" class="form-control"></textarea>
+                        </div>
+                        <div class="admin-form-group full-width">
+                            <label class="admin-form-label">Description (Arabic)</label>
+                            <textarea id="cfgDescAr" class="form-control" dir="rtl"></textarea>
+                        </div>
+
+                        <div class="admin-form-group full-width">
+                            <label class="admin-form-label">Gallery Images (One URL per line)</label>
+                            <textarea id="cfgGallery" class="form-control" rows="4"></textarea>
+                        </div>
+
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Highlights (English - One per line)</label>
+                            <textarea id="cfgHighEn" class="form-control" rows="5"></textarea>
+                        </div>
+                        <div class="admin-form-group">
+                            <label class="admin-form-label">Highlights (Arabic - One per line)</label>
+                            <textarea id="cfgHighAr" class="form-control" rows="5" dir="rtl"></textarea>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; display: flex; justify-content: space-between; border-top: 1px solid var(--admin-border); padding-top: 1.5rem;">
+                        <button onclick="AdminApp.deleteDest()" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+                        <button onclick="AdminApp.saveToDatabase()" class="btn btn-primary"><i class="fa-solid fa-cloud-upload"></i> Save to Database</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: Build & Deploy -->
+        <div id="tab-deploy" class="tab-pane hidden">
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h3 class="admin-card-title">Automated Build Tools</h3>
+                </div>
+                <p style="color:var(--color-gray-500); margin-bottom:2rem;">Use these tools to generate the production files based on your changes in the Content Manager.</p>
+
+                <div style="display:grid; grid-template-columns: 1fr; gap:1.5rem;">
+                    
+                    <!-- Action 1 -->
+                    <div style="border:1px solid var(--admin-border); padding:1.5rem; border-radius:0.75rem; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h4 style="margin:0 0 0.5rem 0; font-size:1.1rem;">1. Update Configuration</h4>
+                            <p style="margin:0; font-size:0.875rem; color:var(--color-gray-500);">Generates the updated <code>script.js</code> file with your new data.</p>
+                        </div>
+                        <button onclick="AdminApp.downloadScript()" class="btn btn-secondary"><i class="fa-solid fa-download"></i> Download script.js</button>
+                    </div>
+
+                    <!-- Action 2 -->
+                    <div style="border:1px solid var(--admin-border); padding:1.5rem; border-radius:0.75rem; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <h4 style="margin:0 0 0.5rem 0; font-size:1.1rem;">2. Generate Static Pages</h4>
+                            <p style="margin:0; font-size:0.875rem; color:var(--color-gray-500);">Creates HTML files for all destinations (EN & AR) and zips them.</p>
+                        </div>
+                        <button onclick="AdminApp.downloadAllPages()" class="btn btn-success"><i class="fa-solid fa-file-zipper"></i> Download All Pages (.zip)</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="network-toast" class="toast">
+        <i class="fa-solid fa-check-circle text-success"></i> <span>Operation successful</span>
+    </div>
+
+</body>
+</html>
+

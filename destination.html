@@ -52,8 +52,10 @@
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
 
     <!-- PWA & Icons -->
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Georgia Hills","short_name":"Georgia Hills","start_url":".","display":"standalone","background_color":"#F9FAFB","theme_color":"#0F172A","icons":[{"src":"favicon.ico","sizes":"192x192","type":"image/png"}]}'>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0F172A">
     <link rel="icon" type="image/png" href="favicon.ico">
+    <link rel="apple-touch-icon" href="favicon.ico">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -63,7 +65,22 @@
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+        <style>
+            :root{--color-gray-400:#9CA3AF}
+            html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;background:#fff}
+            .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
+            .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
+            .navbar{position:relative;z-index:50;background:transparent}
+            .hero-img{width:100%;height:auto;display:block;object-fit:cover}
+            .hero{position:relative;overflow:hidden}
+            .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
+        </style>
+        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="style.css"></noscript>
+
+    <!-- Firebase SDKs (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <!-- FIX: Immediate Language Direction Application -->
     <script>
@@ -98,7 +115,9 @@
                 <a href="index.html" class="nav-link" data-i18n="nav_home">Home</a>
                 <a href="index.html#destinations" class="nav-link" data-i18n="nav_tours">Destinations</a>
                 <a href="index.html#packages" class="nav-link" data-i18n="nav_packages">Packages</a>
+                <a href="index.html#guide" class="nav-link" data-i18n="nav_guide">Guide</a>
                 <a href="index.html#fleet" class="nav-link" data-i18n="nav_fleet">Fleet</a>
+                <a href="index.html#reviews" class="nav-link" data-i18n="nav_reviews">Reviews</a>
                 
                 <div style="display:flex; gap:0.75rem;">
                     <!-- Currency Selector (Desktop) -->
@@ -127,7 +146,7 @@
                 <button onclick="LangManager.toggle()" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;">
                     <i class="fa-solid fa-globe"></i> <span class="lang-text">العربية</span>
                 </button>
-                <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Open Menu">
+                <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu">
                     <i class="fa-solid fa-bars"></i>
                 </button>
             </div>
@@ -136,7 +155,7 @@
 
     <!-- Mobile Menu Overlay -->
     <div id="mobile-menu">
-        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Menu">
+        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu">
             <i class="fa-solid fa-xmark"></i>
         </button>
         
@@ -154,6 +173,8 @@
         <a href="index.html" class="mobile-link" data-i18n="nav_home">Home</a>
         <a href="index.html#destinations" class="mobile-link" data-i18n="nav_tours">Destinations</a>
         <a href="index.html#packages" class="mobile-link" data-i18n="nav_packages">Packages</a>
+        <a href="index.html#guide" class="mobile-link" data-i18n="nav_guide">Guide</a>
+        <a href="index.html#fleet" class="mobile-link" data-i18n="nav_fleet">Fleet</a>
         <a href="index.html#booking" class="btn-book-nav" style="font-size:1.25rem; padding:1rem 2rem; color:white; text-decoration:none;" data-i18n="nav_book">Book Now</a>
     </div>
 
@@ -163,7 +184,7 @@
         <div class="dest-hero-overlay"></div>
     </div>
 
-    <div class="container" id="main-content">
+    <main class="container" id="main-content">
         <div class="page-grid">
             <!-- Left: Main Content -->
             <div class="content-card-wrapper">
@@ -226,7 +247,7 @@
                     </a>
                     
                     <!-- Map Link -->
-                    <a id="map-link" href="#" target="_blank" class="btn-map">
+                    <a id="map-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-map">
                         <i class="fa-solid fa-map-location-dot"></i> <span data-i18n="label_map">View on Google Maps</span>
                     </a>
                     
@@ -248,21 +269,57 @@
         <a href="index.html#booking" class="btn-book-nav" style="padding:0.75rem 1.5rem; color:white; text-decoration:none;">
             <span id="mob-btn-text" data-i18n="nav_book">Book Now</span>
         </a>
-    </div>
+    </main>
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container footer-content">
-            <div>
-                <span class="footer-logo">Georgia Hills</span>
-                <p style="opacity:0.7; max-width:30rem; margin:0 auto;" data-i18n="footer_desc">Premium transport solutions in Georgia. Safety, comfort, and local expertise.</p>
+        <div class="container">
+            <div id="footer-content" class="footer-grid">
+                <!-- Brand -->
+                <div>
+                    <div class="footer-brand">
+                        <div class="footer-brand-icon"><i class="fa-solid fa-mountain"></i></div>
+                        <span class="footer-brand-text">Georgia Hills</span>
+                    </div>
+                    <p style="color:var(--color-gray-300); font-size:0.875rem; line-height:1.6; margin-bottom:1.5rem;" data-i18n="footer_desc">Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.</p>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <button onclick="App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                    <div style="margin-top:1.5rem; display:flex; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
+                        <a href="legal.html" style="color:inherit;">Privacy Policy</a>
+                    </div>
+                </div>
+                <!-- Links -->
+                <div>
+                    <h3 data-i18n="footer_links">Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+                        <li><a href="index.html#fleet" data-i18n="nav_fleet">Fleet</a></li>
+                        <li><a href="index.html#reviews" data-i18n="nav_reviews">Reviews</a></li>
+                        <li><a href="index.html#booking" data-i18n="nav_book">Book Now</a></li>
+                    </ul>
+                </div>
+                <!-- Contact -->
+                <div>
+                    <h3 data-i18n="footer_contact">Contact Us</h3>
+                    <ul style="color:var(--color-gray-400);">
+                        <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
+                        <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
+                        <li class="footer-contact-item"><i class="fa-solid fa-envelope text-accent"></i> info@georgiahills.com</li>
+                    </ul>
+                </div>
+                <!-- Map -->
+                <div>
+                    <div class="footer-map-container">
+                        <span class="footer-map-overlay"><i class="fa-solid fa-map-location-dot"></i> <span data-i18n="label_map">Load Map</span></span>
+                    </div>
+                </div>
             </div>
-            <div class="footer-links">
-                <a href="index.html" data-i18n="nav_home">Home</a>
-                <a href="index.html#fleet" data-i18n="nav_fleet">Fleet</a>
-                <a href="index.html#reviews" data-i18n="nav_reviews">Reviews</a>
+            <div class="footer-bottom">
+                &copy; <span id="year">2024</span> Georgia Hills Transport. All rights reserved.
             </div>
-            <div style="font-size:0.8rem; opacity:0.5; margin-top:2rem;">&copy; 2024 Georgia Hills</div>
         </div>
     </footer>
 
@@ -270,3 +327,4 @@
     <script type="application/ld+json" id="json-ld-data"></script>
 </body>
 </html>
+

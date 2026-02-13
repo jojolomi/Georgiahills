@@ -1,6 +1,5 @@
 /**
  * Georgia Hills - Unified Application Logic
- * Consolidates logic from index.html, arabic.html, and destination.html
  */
 
 // ==========================================
@@ -18,6 +17,31 @@ if ('serviceWorker' in navigator) {
 // 2. CONFIGURATION & DATA
 // ==========================================
 
+// --- FIREBASE CONFIGURATION ---
+// IMPORTANT: Replace these placeholders with your actual Firebase Config from the Console
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+let db, auth;
+if (typeof firebase !== 'undefined') {
+    try {
+        if (firebaseConfig.apiKey === "YOUR_API_KEY") throw new Error("Firebase Config Missing");
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        if(firebase.auth) auth = firebase.auth();
+    } catch (e) {
+        console.log("ℹ️ Running in Static Mode (Firebase keys not set).");
+        db = null;
+        auth = null;
+    }
+}
+
 const AppConfig = {
     vehicleRates: { 'Sedan': 150, 'Minivan': 250 },
     currencies: [
@@ -30,21 +54,26 @@ const AppConfig = {
 
 const Translations = {
     en: {
-        nav_home: "Home", nav_tours: "Destinations", nav_packages: "Packages", nav_fleet: "Fleet", nav_reviews: "Reviews", nav_book: "Book Now",
+        nav_home: "Home", nav_tours: "Destinations", nav_packages: "Packages", nav_guide: "Guide", nav_fleet: "Fleet", nav_reviews: "Reviews", nav_book: "Book Now",
         label_gallery: "Photo Gallery", label_highlights: "Top Sights", label_next: "Explore Next", btn_view: "View Details", label_map: "View on Google Maps",
         cta_title: "Plan Your Trip", cta_subtitle: "Personal Driver & Car",
         trust_1: "Free Cancellation", trust_2: "Pay on Arrival", trust_3: "English/Arabic Driver",
-        footer_desc: "Premium transport solutions in Georgia. Safety, comfort, and local expertise."
+        footer_desc: "Premium transport solutions in Georgia. Safety, comfort, and local expertise.",
+        footer_links: "Quick Links", footer_contact: "Contact Us", footer_privacy: "Privacy Policy"
     },
     ar: {
-        nav_home: "الرئيسية", nav_tours: "وجهات", nav_packages: "باقات", nav_fleet: "السيارات", nav_reviews: "الآراء", nav_book: "احجز الآن",
+        nav_home: "الرئيسية", nav_tours: "وجهات", nav_packages: "باقات", nav_guide: "دليل السفر", nav_fleet: "السيارات", nav_reviews: "الآراء", nav_book: "احجز الآن",
         label_gallery: "معرض الصور", label_highlights: "أبرز المعالم", label_next: "وجهتك القادمة", btn_view: "شاهد التفاصيل", label_map: "الموقع على الخريطة",
         cta_title: "خطط لرحلتك", cta_subtitle: "سيارة مع سائق خاص",
         trust_1: "إلغاء مجاني", trust_2: "الدفع عند الوصول", trust_3: "سائقين يتحدثون العربية",
-        footer_desc: "حلول نقل فاخرة في جورجيا. أمان وراحة وخبرة محلية."
+        footer_desc: "حلول نقل فاخرة في جورجيا. أمان وراحة وخبرة محلية.",
+        footer_links: "روابط سريعة", footer_contact: "اتصل بنا", footer_privacy: "سياسة الخصوصية"
     }
 };
 
+// ==========================================
+// START CONFIGURATION (EDIT VIA ADMIN.HTML)
+// ==========================================
 const DestData = {
     'tbilisi': {
         img: 'Tbilisi.webp',
@@ -88,7 +117,7 @@ const DestData = {
         desc_ar: "اكتشف الجوهرة المخفية في غرب جورجيا. يقدم وادي مارتفيلي تجربة خيالية بمياهه الخضراء الزمردية، والشلالات، والمنحدرات الصخرية البيضاء.\n\nأبرز ما في الرحلة هنا هو ركوب القارب عبر المضائق المذهلة. تاريخياً، كان هذا المكان مسبحاً لعائلة دادياني النبيلة. اليوم، يعد واحداً من أجمل المواقع للتصوير في البلاد."
     },
     'signagi': {
-        img: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=800&q=80',
+        img: 'Signagi.webp',
         gallery: [
             'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
             'https://images.unsplash.com/photo-1534065662709-b6814b73b578?auto=format&fit=crop&w=800&q=80'
@@ -99,8 +128,24 @@ const DestData = {
         title_ar: "سغناغي: مدينة الحب ومزارع العنب",
         desc_en: "Perched on a hilltop overlooking the vast Alazani Valley and the Caucasus Mountains, Signagi is one of Georgia's most charming towns. Known as the 'City of Love', it is famous for its 24/7 wedding house and romantic atmosphere.\n\nWander through cobblestone streets, admire the 18th-century architecture, and explore the ancient city walls. As the heart of the Kakheti wine region, it is also the best place to taste traditional Georgian wine.",
         desc_ar: "تتربع سغناغي على قمة تل يطل على وادي ألازاني الشاسع وجبال القوقاز، وهي واحدة من أكثر المدن سحراً في جورجيا. تُعرف بـ 'مدينة الحب'، وتشتهر بأجوائها الرومانسية ومكتب الزواج الذي يعمل على مدار الساعة.\n\nتجول في الشوارع المرصوفة بالحصى، وتأمل العمارة من القرن الثامن عشر، واستكشف أسوار المدينة القديمة. وباعتبارها قلب منطقة كاخيتي للنبيذ، فهي أفضل مكان لتذوق النبيذ الجورجي التقليدي."
+    },
+    'batumi': {
+        img: 'Batumi.webp',
+        gallery: [
+            'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1539656206689-d4198db85834?auto=format&fit=crop&w=800&q=80'
+        ],
+        highlights_en: ["Ali & Nino Statue", "Batumi Boulevard", "Botanical Garden", "Alphabetic Tower"],
+        highlights_ar: ["تمثال علي ونينو", "بوليفارد باتومي", "الحديقة النباتية", "برج الحروف"],
+        title_en: "Batumi: Pearl of the Black Sea",
+        title_ar: "باتومي: لؤلؤة البحر الأسود",
+        desc_en: "Batumi is a vibrant seaside city on the Black Sea coast and capital of Adjara. It's known for its modern architecture, botanical garden, and pebbly beaches.",
+        desc_ar: "باتومي هي مدينة ساحلية نابضة بالحياة على ساحل البحر الأسود وعاصمة أدجارا. تشتهر بعمارتها الحديثة وحديقتها النباتية وشواطئها الحصوية."
     }
 };
+// ==========================================
+// END CONFIGURATION
+// ==========================================
 
 const DestKeys = Object.keys(DestData);
 
@@ -134,7 +179,6 @@ const CurrencyManager = {
 
     async fetchRates() {
         try {
-            // OPTIMIZATION: Cache rates for 24 hours to reduce API calls
             const CACHE_KEY = 'currency_rates_data';
             const CACHE_TTL = 3600000 * 24; 
             const cached = JSON.parse(localStorage.getItem(CACHE_KEY));
@@ -174,14 +218,12 @@ const CurrencyManager = {
     },
 
     updatePrices() {
-        // Update Badge Prices
         document.querySelectorAll('.price-display').forEach(el => {
             const base = parseFloat(el.dataset.basePrice);
             if (base) {
                 el.innerText = `${this.convert(base)} ${this.current}`;
             }
         });
-        // Update Booking Total if the function exists
         if(typeof BookingManager !== 'undefined' && BookingManager.updateEstimate) {
             BookingManager.updateEstimate();
         }
@@ -195,6 +237,8 @@ const UIManager = {
         this.setupScrollListener();
         CurrencyManager.init();
         this.initDropdowns();
+        this.updateCopyright();
+        this.updateActiveNavLink();
     },
 
     initDropdowns() {
@@ -254,7 +298,7 @@ const UIManager = {
             
             if (nav) {
                 nav.classList.toggle('shadow-md', currentScroll > 20);
-                nav.classList.toggle('scrolled', currentScroll > 20); // For destination page style
+                nav.classList.toggle('scrolled', currentScroll > 20);
             }
             if (backBtn) backBtn.classList.toggle('show', currentScroll > 500);
 
@@ -269,12 +313,32 @@ const UIManager = {
             }
             lastScroll = currentScroll;
             
-            // Parallax for destination page
             const hero = document.getElementById('hero-img');
             if(hero && document.querySelector('.dest-hero')) {
                 hero.style.transform = `translateY(${window.scrollY * 0.4}px)`;
             }
+            
+            this.updateActiveNavLink();
         }, { passive: true });
+    },
+
+    updateActiveNavLink() {
+        if (!document.querySelector('section[id]')) return;
+
+        const sections = document.querySelectorAll('section[id]');
+        const scrollPos = window.scrollY + 150;
+
+        sections.forEach(section => {
+            const id = section.getAttribute('id');
+            const top = section.offsetTop;
+            const height = section.offsetHeight;
+            const link = document.querySelector(`.nav-link[href="#${id}"]`);
+
+            if (scrollPos >= top && scrollPos < top + height) {
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                if (link) link.classList.add('active');
+            }
+        });
     },
 
     openModal(id) {
@@ -294,6 +358,11 @@ const UIManager = {
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
+    },
+
+    updateCopyright() {
+        const yearEl = document.getElementById('year');
+        if (yearEl) yearEl.innerText = new Date().getFullYear();
     }
 };
 
@@ -303,11 +372,9 @@ const BookingManager = {
     fpInstance: null,
 
     init() {
-        // Only init if form exists
         const form = document.getElementById('bookingForm');
         if(!form) return;
 
-        // Initialize Flatpickr if library loaded
         if (typeof flatpickr !== 'undefined') {
             this.fpInstance = flatpickr("#dateRange", {
                 mode: "range",
@@ -369,7 +436,6 @@ const BookingManager = {
         const durationEl = document.getElementById('trip-duration');
         const helperEl = document.getElementById('dates-helper');
         
-        // Detect language for labels
         const isArabic = document.documentElement.lang === 'ar';
         const dayLabel = isArabic ? "أيام" : "Days";
         const nightLabel = isArabic ? "ليالي" : "Nights";
@@ -430,9 +496,8 @@ const BookingManager = {
             notes: document.getElementById('notes').value
         };
 
-        // Determine language for WhatsApp message
         const isArabic = document.documentElement.lang === 'ar';
-        const header = isArabic ? "New Booking Request (Arabic)" : "New Booking Request";
+        const header = isArabic ? "السلام عليكم، أريد الاستفسار عن" : "New Booking Request";
 
         const text = `${header}:\n👤 ${data.name}\n📱 ${data.phone}\n🚗 ${data.vehicle} (${data.passengers} pax)\n📅 ${data.dates} (${data.duration})\n💰 Estimate: ${data.price}\n📝 ${data.notes}`;
         const waUrl = `https://wa.me/995579088537?text=${encodeURIComponent(text)}`;
@@ -516,13 +581,23 @@ const LibraryLoader = {
 const LangManager = {
     // UPDATED: Check URL param first, default to localStorage
     get current() {
+        const path = window.location.pathname;
+        
+        // 1. Static Pages: File name is the source of truth
+        if (path.endsWith('arabic.html') || /-ar\.html$/.test(path)) return 'ar';
+        if (path.includes('admin.html')) return 'en'; // Admin is always English
+        if (path.includes('index.html') || path === '/' || path.endsWith('/')) return 'en';
+        
+        // 2. Dynamic Pages (destination.html): Check URL param, then storage
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('lang')) return urlParams.get('lang');
-        
-        // Detect based on file name for static pages
-        if (window.location.pathname.indexOf('arabic.html') !== -1) return 'ar';
-        
-        return localStorage.getItem('userLang') || 'en';
+        return urlParams.get('lang') || localStorage.getItem('userLang') || 'en';
+    },
+    
+    sync() {
+        const current = this.current;
+        if (current) {
+            localStorage.setItem('userLang', current);
+        }
     },
     
     toggle() {
@@ -538,12 +613,19 @@ const LangManager = {
             window.location.href = url.toString();
         } else {
             // For static pages, redirect to the correct file
+            const path = window.location.pathname;
+            const filename = path.substring(path.lastIndexOf('/') + 1);
+
             if (current === 'ar') {
                 localStorage.setItem('userLang', 'en');
-                window.location.href = 'index.html';
+                if (filename === 'arabic.html') window.location.href = 'index.html';
+                else if (filename.endsWith('-ar.html')) window.location.href = filename.replace('-ar.html', '.html');
+                else window.location.href = 'index.html';
             } else {
                 localStorage.setItem('userLang', 'ar');
-                window.location.href = 'arabic.html';
+                if (filename === 'index.html' || filename === '') window.location.href = 'arabic.html';
+                else if (filename.endsWith('.html') && !filename.endsWith('-ar.html')) window.location.href = filename.replace('.html', '-ar.html');
+                else if (filename.endsWith('-ar.html')) window.location.href = filename; // Already on AR
             }
         }
     },
@@ -581,12 +663,24 @@ const MainApp = {
         if (bookingSection) {
             const observer = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting) {
+                    // UX IMPROVEMENT: Show loading state on date input
+                    const dateInput = document.getElementById('dateRange');
+                    if(dateInput) {
+                        dateInput.setAttribute('placeholder', 'Loading calendar...');
+                        dateInput.disabled = true;
+                    }
+
                     Promise.all([
                         LibraryLoader.load('https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css', 'css'),
                         LibraryLoader.load('https://cdn.jsdelivr.net/npm/flatpickr'),
                         LibraryLoader.load('https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js')
                     ]).then(() => {
                         BookingManager.init();
+                        // Restore date input
+                        if(dateInput) {
+                            dateInput.setAttribute('placeholder', 'Select Pick-up & Drop-off Dates');
+                            dateInput.disabled = false;
+                        }
                         if(typeof emailjs !== 'undefined') emailjs.init("gFHD0l5sBGRvS44V8");
                     });
                     observer.disconnect();
@@ -604,6 +698,16 @@ const MainApp = {
             preloader.style.opacity = '0';
             setTimeout(() => { preloader.style.display = 'none'; }, 500); // Wait for CSS transition only
         }
+
+        // PROFESSIONALISM FIX: Handle empty links
+        document.querySelectorAll('a[href="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isAr = document.documentElement.lang === 'ar';
+                const msg = isAr ? 'هذه الميزة قادمة قريباً!' : 'This feature is coming soon!';
+                UIManager.showToast(msg);
+            });
+        });
     },
     
     initAnimations() {
@@ -772,13 +876,25 @@ const MainApp = {
 
 // --- Destination Page Controller (destination.html) ---
 const DestinationApp = {
-    init() {
+    async init() {
         LangManager.apply();
         UIManager.init();
 
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id') || 'tbilisi';
-        const data = DestData[id];
+        
+        let data = DestData[id]; // Fallback to local data
+
+        // FETCH FROM FIREBASE
+        if (db) {
+            try {
+                const docSnap = await db.collection('destinations').doc(id).get();
+                if (docSnap.exists) {
+                    data = docSnap.data();
+                }
+            } catch(e) { console.log("Using offline data"); }
+        }
+
         const lang = LangManager.current;
 
         // 0. Fix Navigation Links for Arabic
@@ -915,15 +1031,30 @@ window.LangManager = LangManager;
 window.App = MainApp; 
 
 window.addEventListener('DOMContentLoaded', () => {
+    // Sync language state with current page
+    LangManager.sync();
+
+    // Ensure Cookie Banner runs on all pages (except Admin)
+    if (!window.location.pathname.includes('admin.html')) {
+        MainApp.checkCookies();
+    }
+    
     // Detect which page we are on and run the appropriate logic
     
     // Condition 1: Main Page (has 'tours-slider' or 'hero')
     if (document.getElementById('tours-slider') || document.querySelector('.hero')) {
         MainApp.start();
-        MainApp.checkCookies();
     } 
-    // Condition 2: Destination Page (has 'page-title' or 'dest-hero')
-    else if (document.getElementById('page-title') || document.querySelector('.dest-hero')) {
+    // Condition 2: Dynamic Destination Page (ONLY destination.html)
+    else if (window.location.pathname.includes('destination.html')) {
         DestinationApp.init();
+    }
+    // Condition 3: Static Pages (tbilisi.html, honeymoon.html, etc.)
+    else {
+        UIManager.init();
+        // Ensure animations run if present
+        if (document.querySelector('.reveal')) {
+            MainApp.initAnimations();
+        }
     }
 });

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO: Primary Meta Tags -->
+    <title>Georgia Travel Blog | Tips, Itineraries & Guides</title>
+    <meta name="description" content="Read our latest travel guides for Georgia. Discover 7-day itineraries, halal food spots in Tbilisi, and safety tips for solo travelers.">
+    <meta name="keywords" content="georgia travel blog, tbilisi travel guide, georgia itinerary 7 days, halal food georgia, is georgia safe, georgia hills blog">
+    <meta name="author" content="Georgia Hills">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="blog">
+    <meta property="og:url" content="https://georgiahills.netlify.app/blog.html">
+    <meta property="og:title" content="Georgia Travel Blog | Expert Guides">
+    <meta property="og:description" content="Expert advice for your trip to Georgia. Itineraries, food guides, and safety tips.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1582236357876-0f836526154b?auto=format&fit=crop&w=1200&q=80">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://georgiahills.netlify.app/blog.html">
+
+    <!-- Styles & Scripts -->
+        <style>
+            :root{--color-gray-400:#9CA3AF}
+            html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;background:#fff}
+            .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
+            .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
+            .navbar{position:relative;z-index:50;background:transparent}
+            .hero-img{width:100%;height:auto;display:block;object-fit:cover}
+            .hero{position:relative;overflow:hidden}
+            .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
+        </style>
+        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="style.css"></noscript>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
+    <script src="destination-script.js" defer></script>
+
+    <!-- SEO: Blog Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      "name": "Georgia Hills Travel Blog",
+      "url": "https://georgiahills.netlify.app/blog.html",
+      "description": "Travel tips and guides for visiting Georgia.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Georgia Hills",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://georgiahills.netlify.app/favicon.ico"
+        }
+      }
+    }
+    </script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar">
+        <div class="container">
+            <div class="navbar-inner">
+                <a href="index.html" class="nav-logo">
+                    <img src="favicon.ico" width="56" height="56" alt="Logo" class="nav-logo-img">
+                    <span>Georgia Hills</span>
+                </a>
+                <div class="desktop-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                    <a href="index.html#booking" class="btn-book-nav">Book Now</a>
+                </div>
+                <div class="mobile-controls">
+                    <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu">
+        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu"><i class="fa-solid fa-xmark"></i></button>
+        <a href="index.html" class="mobile-link">Home</a>
+        <a href="contact.html" class="mobile-link">Contact</a>
+        <a href="index.html#booking" class="mobile-btn-book">Book Now</a>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero" style="height: 40vh; min-height: 300px;">
+        <div class="hero-bg-container">
+            <img src="image-640.webp" class="hero-img" alt="Georgia Travel Blog" style="opacity: 0.6;" loading="lazy" decoding="async">
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content reveal">
+            <h1 class="hero-title" style="font-size: 3rem;">Travel Journal</h1>
+            <p class="hero-subtitle">Inspiration for your next Georgian adventure.</p>
+        </div>
+    </section>
+
+    <!-- Blog Grid -->
+    <section class="section-py bg-gray-50">
+        <div class="container">
+            <div class="blog-grid">
+                <!-- Article 1 -->
+                <article class="blog-card reveal">
+                    <div class="blog-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1582236357876-0f836526154b?auto=format&fit=crop&w=600&q=80" width="600" height="400" class="blog-img" alt="Georgian Food" decoding="async">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">Food & Drink</div>
+                        <h2 class="blog-title">Top 5 Must-Try Georgian Dishes</h2>
+                        <p class="blog-excerpt">From Khinkali to Khachapuri, discover the flavors that make Georgia a culinary paradise. Learn where to find the best Halal options in Tbilisi.</p>
+                        <a href="index.html#guide" class="blog-link">Read Guide <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <!-- Article 2 -->
+                <article class="blog-card reveal">
+                    <div class="blog-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=600&q=80" width="600" height="400" class="blog-img" alt="Kazbegi Mountains" decoding="async">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">Travel Guide</div>
+                        <h2 class="blog-title">7 Days in Georgia: The Perfect Itinerary</h2>
+                        <p class="blog-excerpt">A complete guide to seeing Tbilisi, Kazbegi, and Batumi in one week. Perfect for families and couples.</p>
+                        <a href="index.html#packages" class="blog-link">View Itinerary <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+                <!-- Article 3 -->
+                <article class="blog-card reveal">
+                    <div class="blog-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1539656206689-d4198db85834?auto=format&fit=crop&w=600&q=80" width="600" height="400" class="blog-img" alt="Safety in Georgia" decoding="async">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">Tips</div>
+                        <h2 class="blog-title">Is Georgia Safe for Solo Travelers?</h2>
+                        <p class="blog-excerpt">Everything you need to know about safety, transport, and local customs. Why hiring a private driver is the safest option.</p>
+                        <a href="index.html#about" class="blog-link">Safety Tips <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Brand -->
+                <div>
+                    <div class="footer-brand">
+                        <div class="footer-brand-icon"><i class="fa-solid fa-mountain"></i></div>
+                        <span class="footer-brand-text">Georgia Hills</span>
+                    </div>
+                    <p style="color:var(--color-gray-300); font-size:0.875rem; line-height:1.6; margin-bottom:1.5rem;">Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.</p>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <button onclick="App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                    <div style="margin-top:1.5rem; display:flex; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
+                        <a href="legal.html" style="color:inherit;">Privacy Policy</a>
+                    </div>
+                </div>
+                <!-- Links -->
+                <div>
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#fleet">Our Fleet</a></li>
+                        <li><a href="index.html#reviews">Reviews</a></li>
+                        <li><a href="index.html#booking">Book Now</a></li>
+                    </ul>
+                </div>
+                <!-- Contact -->
+                <div>
+                    <h3>Contact Us</h3>
+                    <ul style="color:var(--color-gray-400);">
+                        <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
+                        <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
+                        <li class="footer-contact-item"><i class="fa-solid fa-envelope text-accent"></i> info@georgiahills.com</li>
+                    </ul>
+                </div>
+                <!-- Map -->
+                <div>
+                    <div class="footer-map-container">
+                        <span class="footer-map-overlay"><i class="fa-solid fa-map-location-dot"></i> <span>Load Map</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; <span id="year">2024</span> Georgia Hills Transport. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

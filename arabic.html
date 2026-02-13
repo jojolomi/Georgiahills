@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <!-- Indexing Control -->
-    <meta name="robots" content="index, follow"> 
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     
     <!-- 1. Google Consent Mode -->
     <script>
@@ -43,40 +43,61 @@
     <!-- SEO: Multilingual Support -->
     <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/arabic.html" />
     <link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/" />
+    <!-- Targeted Arabic Locales for GCC Dominance -->
+    <link rel="alternate" hreflang="ar-SA" href="https://georgiahills.netlify.app/arabic.html" />
+    <link rel="alternate" hreflang="ar-AE" href="https://georgiahills.netlify.app/arabic.html" />
+    <link rel="alternate" hreflang="ar-KW" href="https://georgiahills.netlify.app/arabic.html" />
+    <link rel="alternate" hreflang="ar-QA" href="https://georgiahills.netlify.app/arabic.html" />
+    <link rel="alternate" hreflang="ar-OM" href="https://georgiahills.netlify.app/arabic.html" />
+    <link rel="alternate" hreflang="ar-BH" href="https://georgiahills.netlify.app/arabic.html" />
     <link rel="alternate" hreflang="x-default" href="https://georgiahills.netlify.app/" />
     <link rel="canonical" href="https://georgiahills.netlify.app/arabic.html">
 
     <!-- SEO: Structured Data -->
     <script type="application/ld+json">
-    [
-      {
-        "@context": "https://schema.org",
-        "@type": "AutoRental",
-        "name": "Georgia Hills",
-        "alternateName": "جورجيا هيلز للسياحة والسفر",
-        "sameAs": [
-            "https://www.instagram.com/",
-            "https://www.facebook.com/"
-        ],
-        "openingHours": "Mo-Su 00:00-23:59",
-        "image": "https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80",
-        "description": "أفضل خدمة سائق خاص في جورجيا وتأجير سيارات في تبليسي. متخصصون في البرامج السياحية للعوائل وشهر العسل. سيارات حديثة وسائقين يتحدثون العربية.",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Tbilisi",
-          "addressCountry": "GE"
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "TravelAgency",
+          "@id": "https://georgiahills.netlify.app/arabic.html#organization",
+          "name": "Georgia Hills",
+          "url": "https://georgiahills.netlify.app/arabic.html",
+          "logo": "https://georgiahills.netlify.app/favicon.ico",
+          "image": "https://georgiahills.netlify.app/images/hero.webp",
+          "description": "أفضل خدمة سائق خاص في جورجيا للعوائل. سيارات حديثة وسائقين يتحدثون العربية.",
+          "telephone": "+995579088537",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Tbilisi",
+            "addressCountry": "GE"
+          },
+          "priceRange": "$$",
+          "areaServed": ["SA", "AE", "KW", "QA", "OM", "BH"]
         },
-        "priceRange": "$$",
-        "telephone": "+995579088537",
-        "url": "https://georgiahills.netlify.app/arabic.html",
-        "areaServed": {
-          "@type": "Country",
-          "name": "Georgia",
-          "alternateName": "جورجيا"
-        },
-        "knowsLanguage": ["ar", "en"]
-      }
-    ]
+        {
+          "@type": "Service",
+          "name": "سائق عربي في جورجيا",
+          "provider": { "@id": "https://georgiahills.netlify.app/arabic.html#organization" },
+          "description": "خدمة تأجير سيارات مع سائق يتحدث العربية والإنجليزية. شامل الوقود والتأمين.",
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "خدمات النقل",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "سائق خاص يومي (سيدان/فان)"
+                },
+                "price": "150",
+                "priceCurrency": "GEL"
+              }
+            ]
+          }
+        }
+      ]
+    }
     </script>
 
     <!-- Performance Hints -->
@@ -87,16 +108,24 @@
     <!-- OPTIMIZATION: Preload Hero Image BEFORE CSS -->
     <link rel="preload" as="image" 
           href="image-640.webp" 
-          imagesrcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" 
+          imagesrcset="image-320.webp 320w, image-640.webp 640w" 
           imagesizes="100vw"
           fetchpriority="high">
 
     <!-- MAIN CSS -->
-    <link rel="stylesheet" href="style.css">
+        <style>
+            :root{--color-gray-400:#9CA3AF}
+            html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;background:#fff}
+            .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
+            .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
+            .navbar{position:relative;z-index:50;background:transparent}
+            .hero-img{width:100%;height:auto;display:block;object-fit:cover}
+            .hero{position:relative;overflow:hidden}
+            .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
+        </style>
+        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="style.css"></noscript>
 
-    <!-- Deferred Styles -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" media="print" onload="this.media='all'">
-    
     <!-- Inline Critical CSS for Icons (prevents flash) -->
     <style>
         .icon-svg { width: 1em; height: 1em; display: inline-block; fill: currentColor; vertical-align: -0.125em; }
@@ -119,8 +148,10 @@
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- PWA Manifest & Icons -->
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Georgia Hills","short_name":"Georgia Hills","start_url":".","display":"standalone","background_color":"#F9FAFB","theme_color":"#0F172A","icons":[{"src":"favicon.ico","sizes":"192x192","type":"image/png"}]}'>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0F172A">
     <link rel="icon" type="image/png" href="favicon.ico">
+    <link rel="apple-touch-icon" href="favicon.ico">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -174,9 +205,9 @@
                     <a href="#home" class="nav-link">الرئيسية</a>
                     <a href="#destinations" class="nav-link">وجهات</a>
                     <a href="#packages" class="nav-link">باقات سياحية</a>
+                    <a href="#reviews" class="nav-link">الآراء</a>
                     <a href="#guide" class="nav-link">دليل المسافر</a>
                     <a href="#fleet" class="nav-link">السيارات</a>
-                    <a href="#reviews" class="nav-link">الآراء</a>
                     
                     <!-- Desktop Settings -->
                     <div style="display:flex; gap:0.75rem;">
@@ -219,6 +250,7 @@
         <a href="#home" class="mobile-link">الرئيسية</a>
         <a href="#destinations" class="mobile-link">وجهات</a>
         <a href="#packages" class="mobile-link">باقات سياحية</a>
+        <a href="#reviews" class="mobile-link">الآراء</a>
         <a href="#guide" class="mobile-link">دليل المسافر</a>
         <a href="#fleet" class="mobile-link">السيارات</a>
         
@@ -254,7 +286,7 @@
     <!-- Hero -->
     <section id="home" class="hero">
         <div class="hero-bg-container">
-             <img id="hero-img" src="image-640.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="جبال جورجيا الخلابة" fetchpriority="high">
+             <img id="hero-img" src="image-640.webp" srcset="image-320.webp 320w, image-640.webp 640w" sizes="100vw" width="1200" height="700" class="hero-img" alt="جبال جورجيا الخلابة" fetchpriority="high" decoding="async" loading="eager">
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content reveal">
@@ -343,7 +375,7 @@
             <!-- Slider Track -->
             <div id="tours-slider" class="tours-slider" tabindex="0" aria-label="Destinations Slider" dir="ltr">
                 <!-- Tbilisi -->
-                <div class="tour-card group" onclick="window.location.href='destination.html?id=tbilisi&lang=ar'">
+                <div class="tour-card group" onclick="window.location.href='tbilisi-ar.html'">
                     <img src="Tbilisi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="تبليسي - العاصمة">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
@@ -353,7 +385,7 @@
                     </div>
                 </div>
                 <!-- Kazbegi -->
-                <div class="tour-card group" onclick="window.location.href='destination.html?id=kazbegi&lang=ar'">
+                <div class="tour-card group" onclick="window.location.href='kazbegi-ar.html'">
                     <img src="Kazbegi.webp" width="669" height="669" loading="lazy" decoding="async" class="tour-img" alt="جبل كازبيجي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
@@ -363,7 +395,7 @@
                     </div>
                 </div>
                 <!-- Martvili -->
-                <div class="tour-card group" onclick="window.location.href='destination.html?id=martvili&lang=ar'">
+                <div class="tour-card group" onclick="window.location.href='martvili-ar.html'">
                     <img src="Martvili.webp" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="وادي مارتفيلي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
@@ -373,20 +405,8 @@
                     </div>
                 </div>
                 <!-- Signagi -->
-                <div class="tour-card group" onclick="window.location.href='destination.html?id=signagi&lang=ar'">
-                    <img 
-                        src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&h=475&q=70&fm=webp" 
-                        srcset="
-                            https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=300&h=375&q=70&fm=webp 300w,
-                            https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=600&h=475&q=70&fm=webp 600w
-                        "
-                        sizes="(max-width: 640px) 100vw, 380px"
-                        width="380" height="475" 
-                        loading="lazy" 
-                        decoding="async" 
-                        class="tour-img" 
-                        alt="سغناغي - مدينة الحب"
-                    >
+                <div class="tour-card group" onclick="window.location.href='signagi-ar.html'">
+                    <img src="Signagi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="سغناغي - مدينة الحب">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">سغناغي</h3>
@@ -448,7 +468,7 @@
                             <li class="pkg-item"><i class="fa-solid fa-check"></i> جلسة تصوير</li>
                         </ul>
                         <div class="pkg-price">يبدأ من <span class="price-display" data-base-price="450">450 USD</span></div>
-                        <button onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})" class="btn-pkg" style="background:var(--color-primary); color:white;">التفاصيل</button>
+                        <button onclick="window.location.href='honeymoon-ar.html'" class="btn-pkg" style="background:var(--color-primary); color:white;">التفاصيل</button>
                     </div>
                 </div>
 
@@ -523,6 +543,102 @@
         </div>
     </section>
 
+    <!-- Reviews Section (Moved Up) -->
+    <section id="reviews" class="section-py reviews-bg">
+        <div class="container">
+             <div class="reveal text-center" style="margin-bottom:3rem;">
+                <span class="section-label">تجارب ضيوفنا</span>
+                <h2 class="section-title">تجارب مسافرين حقيقية</h2>
+            </div>
+            <div class="reviews-grid">
+                <!-- Review 1 -->
+                <div class="review-card reveal">
+                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text">"السائق جورجي كان رائعاً! أرشدنا لأماكن ساحرة في طريق كازبيجي لم نكن لنكتشفها وحدنا. السيارة كانت في غاية النظافة."</p>
+                    <div class="review-author">
+                         <div class="review-avatar">M</div>
+                         <div>
+                             <div class="review-name">محمد الفارس</div>
+                             <div class="review-country">الرياض، السعودية 🇸🇦</div>
+                         </div>
+                    </div>
+                </div>
+                <!-- Review 2 -->
+                <div class="review-card reveal">
+                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text">"تجربة الحجز عبر الواتساب كانت سلسة للغاية. سيارة الميني فان كانت واسعة ومريحة جداً لعائلتنا (6 أشخاص). أنصح بالتعامل معهم بشدة."</p>
+                     <div class="review-author">
+                         <div class="review-avatar">A</div>
+                         <div>
+                             <div class="review-name">أحمد القاسمي</div>
+                             <div class="review-country">دبي، الإمارات 🇦🇪</div>
+                         </div>
+                    </div>
+                </div>
+                <!-- Review 3 -->
+                <div class="review-card reveal">
+                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="review-text">"من أفضل خدمات النقل في تبليسي. السائق خلوق جداً وملتزم بالمواعيد. والسعر كان مطابقاً للاتفاق دون أي زيادات."</p>
+                     <div class="review-author">
+                         <div class="review-avatar">E</div>
+                         <div>
+                             <div class="review-name">يوسف كمال</div>
+                             <div class="review-country">الكويت 🇰🇼</div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: Popular Routes (Arabic) -->
+    <section id="routes" class="section-py">
+        <div class="container">
+            <div class="reveal text-center" style="margin-bottom:3rem;">
+                <span class="section-label">أسعار شفافة</span>
+                <h2 class="section-title">أشهر المسارات</h2>
+                <p class="section-desc">سعر ثابت للسيارة (سيدان). شامل الوقود والضرائب.</p>
+            </div>
+            <div class="routes-container reveal" style="max-width: 48rem; margin: 0 auto;">
+                <!-- Route 1 -->
+                <div class="route-row">
+                    <div>
+                        <div class="route-name"><i class="fa-solid fa-plane route-icon"></i> مطار تبليسي ⇄ وسط المدينة</div>
+                        <div class="route-dist">20 كم • 30 دقيقة</div>
+                    </div>
+                    <div class="route-price">40 GEL</div>
+                </div>
+                <!-- Route 2 -->
+                <div class="route-row">
+                    <div>
+                        <div class="route-name"><i class="fa-solid fa-car route-icon"></i> تبليسي ⇄ كازبيجي (اتجاه واحد)</div>
+                        <div class="route-dist">155 كم • 3 ساعات</div>
+                    </div>
+                    <div class="route-price">250 GEL</div>
+                </div>
+                <!-- Route 3 -->
+                <div class="route-row">
+                    <div>
+                        <div class="route-name"><i class="fa-solid fa-umbrella-beach route-icon"></i> تبليسي ⇄ باتومي</div>
+                        <div class="route-dist">370 كم • 5.5 ساعات</div>
+                    </div>
+                    <div class="route-price">450 GEL</div>
+                </div>
+                <!-- Route 4 -->
+                <div class="route-row">
+                    <div>
+                        <div class="route-name"><i class="fa-solid fa-tree route-icon"></i> تبليسي ⇄ بورجومي</div>
+                        <div class="route-dist">160 كم • 2.5 ساعات</div>
+                    </div>
+                    <div class="route-price">200 GEL</div>
+                </div>
+            </div>
+            <div class="text-center" style="margin-top:2rem;">
+                <a href="#booking" class="action-btn" style="display:inline-flex;">تحقق من مسارات أخرى</a>
+            </div>
+        </div>
+    </section>
+
     <!-- Guide Section -->
     <section id="guide" class="section-py">
         <div class="container">
@@ -548,54 +664,6 @@
                     <div class="guide-icon"><i class="fa-solid fa-calendar-day"></i></div>
                     <h3 class="guide-title">أفضل وقت للزيارة</h3>
                     <p class="guide-text">الربيع (أبريل-يونيو) والخريف (سبتمبر-أكتوبر) لجو معتدل. ولعشاق الثلوج، الشتاء (ديسمبر-فبراير) مثالي.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Reviews Section -->
-    <section id="reviews" class="section-py reviews-bg">
-        <div class="container">
-             <div class="reveal text-center" style="margin-bottom:3rem;">
-                <span class="section-label">تجارب ضيوفنا</span>
-                <h2 class="section-title">تجارب مسافرين حقيقية</h2>
-            </div>
-            <div class="reviews-grid">
-                <!-- Review 1 -->
-                <div class="review-card reveal">
-                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="review-text">"السائق جورجي كان رائعاً! أرشدنا لأماكن ساحرة في طريق كازبيجي لم نكن لنكتشفها وحدنا. السيارة كانت في غاية النظافة."</p>
-                    <div class="review-author">
-                         <div class="review-avatar">M</div>
-                         <div>
-                             <div class="review-name">سارة جونسون</div>
-                             <div class="review-country">المملكة المتحدة</div>
-                         </div>
-                    </div>
-                </div>
-                <!-- Review 2 -->
-                <div class="review-card reveal">
-                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="review-text">"تجربة الحجز عبر الواتساب كانت سلسة للغاية. سيارة الميني فان كانت واسعة ومريحة جداً لعائلتنا (6 أشخاص). أنصح بالتعامل معهم بشدة."</p>
-                     <div class="review-author">
-                         <div class="review-avatar">A</div>
-                         <div>
-                             <div class="review-name">أحمد خليل</div>
-                             <div class="review-country">الإمارات</div>
-                         </div>
-                    </div>
-                </div>
-                <!-- Review 3 -->
-                <div class="review-card reveal">
-                    <div class="stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
-                    <p class="review-text">"من أفضل خدمات النقل في تبليسي. السائق خلوق جداً وملتزم بالمواعيد. والسعر كان مطابقاً للاتفاق دون أي زيادات."</p>
-                     <div class="review-author">
-                         <div class="review-avatar">E</div>
-                         <div>
-                             <div class="review-name">إيلينا م.</div>
-                             <div class="review-country">ألمانيا</div>
-                         </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -631,6 +699,54 @@
                     </div>
                     <p class="faq-answer hidden">نعم، الوقود مشمول بالكامل في جميع الرحلات التي تشمل سائقاً.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- NEW SECTION: Travel Blog (Arabic) -->
+    <section id="blog" class="section-py bg-gray-50">
+        <div class="container">
+            <div class="reveal text-center" style="margin-bottom:3rem;">
+                <span class="section-label">مدونة السفر</span>
+                <h2 class="section-title">جديد السياحة في جورجيا</h2>
+            </div>
+            <div class="blog-grid">
+                <!-- Article 1 -->
+                <article class="blog-card reveal">
+                    <div class="blog-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1582236357876-0f836526154b?auto=format&fit=crop&w=600&q=80" width="600" height="400" class="blog-img" alt="الأكل الجورجي" loading="lazy">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">طعام وشراب</div>
+                        <h3 class="blog-title">أشهر 5 أطباق جورجية يجب تجربتها</h3>
+                        <p class="blog-excerpt">من الخينكالي إلى الخاتشابوري، اكتشف النكهات التي تجعل جورجيا جنة لعشاق الطعام.</p>
+                        <a href="#" class="blog-link">اقرأ المزيد <i class="fa-solid fa-arrow-left"></i></a>
+                    </div>
+                </article>
+                <!-- Article 2 -->
+                <article class="blog-card reveal">
+                    <div class="blog-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=600&q=80" width="600" height="400" class="blog-img" alt="جبال كازبيجي" loading="lazy">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">دليل سياحي</div>
+                        <h3 class="blog-title">جدول سياحي لمدة 7 أيام في جورجيا</h3>
+                        <p class="blog-excerpt">دليل شامل لزيارة تبليسي، كازبيجي، وباتومي في أسبوع واحد.</p>
+                        <a href="#" class="blog-link">اقرأ المزيد <i class="fa-solid fa-arrow-left"></i></a>
+                    </div>
+                </article>
+                <!-- Article 3 -->
+                <article class="blog-card reveal">
+                    <div class="blog-img-wrap">
+                        <img src="https://images.unsplash.com/photo-1539656206689-d4198db85834?auto=format&fit=crop&w=600&q=80" width="600" height="400" class="blog-img" alt="الأمان في تبليسي" loading="lazy">
+                    </div>
+                    <div class="blog-content">
+                        <div class="blog-meta">نصائح</div>
+                        <h3 class="blog-title">هل جورجيا آمنة للعوائل؟</h3>
+                        <p class="blog-excerpt">كل ما تحتاج معرفته عن الأمان، المواصلات، والعادات المحلية في جورجيا.</p>
+                        <a href="#" class="blog-link">اقرأ المزيد <i class="fa-solid fa-arrow-left"></i></a>
+                    </div>
+                </article>
             </div>
         </div>
     </section>
@@ -774,7 +890,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; <span id="year">2023</span> جورجيا هيلز للنقل السياحي. جميع الحقوق محفوظة.
+                &copy; <span id="year">2024</span> Georgia Hills. جميع الحقوق محفوظة.
             </div>
         </div>
     </footer>

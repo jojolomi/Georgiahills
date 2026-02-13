@@ -3,61 +3,142 @@
    <!-- Core Pages -->
    <url>
       <loc>https://georgiahills.netlify.app/</loc>
-      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/" />
       <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/arabic.html" />
+      <xhtml:link rel="alternate" hreflang="ar-SA" href="https://georgiahills.netlify.app/arabic.html" />
+      <xhtml:link rel="alternate" hreflang="ar-AE" href="https://georgiahills.netlify.app/arabic.html" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://georgiahills.netlify.app/" />
       <lastmod>2024-10-15</lastmod>
       <changefreq>weekly</changefreq>
       <priority>1.0</priority>
    </url>
    <url>
       <loc>https://georgiahills.netlify.app/arabic.html</loc>
-      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/" />
       <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/arabic.html" />
+      <xhtml:link rel="alternate" hreflang="ar-SA" href="https://georgiahills.netlify.app/arabic.html" />
+      <xhtml:link rel="alternate" hreflang="ar-AE" href="https://georgiahills.netlify.app/arabic.html" />
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/" />
+      <xhtml:link rel="alternate" hreflang="x-default" href="https://georgiahills.netlify.app/" />
       <lastmod>2024-10-15</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.9</priority>
    </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/contact.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/contact.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/contact-ar.html" />
+      <lastmod>2024-10-15</lastmod>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/contact-ar.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/contact.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/contact-ar.html" />
+      <lastmod>2024-10-15</lastmod>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/blog.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/blog.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/blog-ar.html" />
+      <lastmod>2024-10-15</lastmod>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/blog-ar.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/blog.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/blog-ar.html" />
+      <lastmod>2024-10-15</lastmod>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/honeymoon-ar.html</loc>
+      <lastmod>2024-10-15</lastmod>
+      <priority>0.9</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/legal.html</loc>
+      <lastmod>2026-02-13</lastmod>
+      <changefreq>yearly</changefreq>
+      <priority>0.5</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/destination.html</loc>
+      <lastmod>2026-02-13</lastmod>
+      <changefreq>monthly</changefreq>
+      <priority>0.6</priority>
+   </url>
    
    <!-- Destinations (English) -->
    <url>
-      <loc>https://georgiahills.netlify.app/destination.html?id=tbilisi</loc>
+      <loc>https://georgiahills.netlify.app/tbilisi.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/tbilisi.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/tbilisi-ar.html" />
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
-      <loc>https://georgiahills.netlify.app/destination.html?id=kazbegi</loc>
+      <loc>https://georgiahills.netlify.app/kazbegi.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/kazbegi.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/kazbegi-ar.html" />
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
-      <loc>https://georgiahills.netlify.app/destination.html?id=martvili</loc>
+      <loc>https://georgiahills.netlify.app/martvili.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/martvili.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/martvili-ar.html" />
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
-      <loc>https://georgiahills.netlify.app/destination.html?id=signagi</loc>
+      <loc>https://georgiahills.netlify.app/signagi.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/signagi.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/signagi-ar.html" />
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/batumi.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/batumi.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/batumi-ar.html" />
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
 
    <!-- Destinations (Arabic) -->
    <url>
-      <loc>https://georgiahills.netlify.app/destination.html?id=tbilisi&amp;lang=ar</loc>
+      <loc>https://georgiahills.netlify.app/tbilisi-ar.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/tbilisi.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/tbilisi-ar.html" />
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
-      <loc>https://georgiahills.netlify.app/destination.html?id=kazbegi&amp;lang=ar</loc>
+      <loc>https://georgiahills.netlify.app/kazbegi-ar.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/kazbegi.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/kazbegi-ar.html" />
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
-      <loc>https://georgiahills.netlify.app/destination.html?id=martvili&amp;lang=ar</loc>
+      <loc>https://georgiahills.netlify.app/martvili-ar.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/martvili.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/martvili-ar.html" />
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>
    <url>
-      <loc>https://georgiahills.netlify.app/destination.html?id=signagi&amp;lang=ar</loc>
+      <loc>https://georgiahills.netlify.app/signagi-ar.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/signagi.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/signagi-ar.html" />
+      <changefreq>monthly</changefreq>
+      <priority>0.8</priority>
+   </url>
+   <url>
+      <loc>https://georgiahills.netlify.app/batumi-ar.html</loc>
+      <xhtml:link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/batumi.html" />
+      <xhtml:link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/batumi-ar.html" />
       <changefreq>monthly</changefreq>
       <priority>0.8</priority>
    </url>

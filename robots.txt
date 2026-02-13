@@ -1,5 +1,15 @@
 User-agent: *
 Allow: /
 
+# AI & LLM Crawlers - Explicitly Allowed
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 # FIXED: Direct link to the sitemap (assuming your netlify domain is the primary one based on index.html)
 Sitemap: https://georgiahills.netlify.app/sitemap.xml

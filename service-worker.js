@@ -1,11 +1,26 @@
-const CACHE_NAME = 'gh-cache-v7';
+const CACHE_NAME = 'gh-cache-v14';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/arabic.html',
   '/destination.html',
+  '/contact.html',
+  '/contact-ar.html',
+  '/blog.html',
+  '/blog-ar.html',
+  '/honeymoon-ar.html',
+  '/tbilisi.html',
+  '/tbilisi-ar.html',
+  '/kazbegi.html',
+  '/kazbegi-ar.html',
+  '/martvili.html',
+  '/martvili-ar.html',
+  '/signagi.html',
+  '/signagi-ar.html',
   '/style.css',
   '/script.js',
+  '/404.html',
+  '/legal.html',
   '/favicon.ico',
   '/manifest.json',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
@@ -16,11 +31,19 @@ const ASSETS_TO_CACHE = [
 
 // 1. INSTALL: Browser downloads and saves the critical files
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE);
-    })
-  );
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE_NAME);
+
+    await Promise.all(
+      ASSETS_TO_CACHE.map(async (asset) => {
+        try {
+          await cache.add(asset);
+        } catch (_) {}
+      })
+    );
+
+    await self.skipWaiting();
+  })());
 });
 
 // 2. ACTIVATE: Clean up old caches (if you update your website)
@@ -62,6 +85,10 @@ self.addEventListener('fetch', (event) => {
         return networkResponse;
       }).catch(() => {
         // If network fails, we just rely on what we returned from cache
+        // If both fail and it's a navigation request, return the cached home page
+        if (event.request.mode === 'navigate') {
+          return caches.match('/index.html');
+        }
       });
 
       // Return cached response if found, otherwise wait for network
