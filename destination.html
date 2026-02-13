@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="noindex, follow">
     
     <!-- 1. Google Consent Mode -->
     <script>
@@ -42,7 +42,7 @@
     <meta property="og:title" content="Georgia Hills Destinations">
     <meta property="og:description" content="Discover amazing places in Georgia.">
     <!-- OPTIMIZATION: Added fallback image for social sharing -->
-    <meta property="og:image" content="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80">
+    <meta property="og:image" content="https://georgiahills.netlify.app/image-1600.webp">
     <meta property="og:type" content="website">
     <link rel="canonical" href="https://georgiahills.netlify.app/destination.html">
 
@@ -75,8 +75,7 @@
             .hero{position:relative;overflow:hidden}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="style.css"></noscript>
+        <link rel="stylesheet" href="style.css">
 
     <!-- Firebase SDKs (Compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -136,7 +135,7 @@
                     </button>
                 </div>
 
-                <a href="index.html#booking" class="btn-book-nav" style="color:white; text-decoration:none;">
+                <a href="booking.html" class="btn-book-nav" style="color:white; text-decoration:none;">
                     <span data-i18n="nav_book">Book Now</span>
                 </a>
             </div>
@@ -154,7 +153,7 @@
     </nav>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu">
+    <div id="mobile-menu" aria-hidden="true">
         <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu">
             <i class="fa-solid fa-xmark"></i>
         </button>
@@ -175,7 +174,7 @@
         <a href="index.html#packages" class="mobile-link" data-i18n="nav_packages">Packages</a>
         <a href="index.html#guide" class="mobile-link" data-i18n="nav_guide">Guide</a>
         <a href="index.html#fleet" class="mobile-link" data-i18n="nav_fleet">Fleet</a>
-        <a href="index.html#booking" class="btn-book-nav" style="font-size:1.25rem; padding:1rem 2rem; color:white; text-decoration:none;" data-i18n="nav_book">Book Now</a>
+        <a href="booking.html" class="btn-book-nav" style="font-size:1.25rem; padding:1rem 2rem; color:white; text-decoration:none;" data-i18n="nav_book">Book Now</a>
     </div>
 
     <!-- Hero -->
@@ -242,7 +241,7 @@
                 <div class="booking-box">
                     <h3 class="booking-title" data-i18n="cta_title">Plan Your Trip</h3>
                     <p class="booking-subtitle" data-i18n="cta_subtitle">Personal Driver & Car</p>
-                    <a href="index.html#booking" class="btn-book-nav" style="width:100%; display:flex; justify-content:center; color:white; text-decoration:none;">
+                    <a href="booking.html" class="btn-book-nav" style="width:100%; display:flex; justify-content:center; color:white; text-decoration:none;">
                         <span data-i18n="nav_book">Book Now</span>
                     </a>
                     
@@ -266,7 +265,7 @@
         <div style="font-weight:700; font-size:0.9rem;">
             <span id="mob-cta-label" data-i18n="cta_title">Plan Your Trip</span>
         </div>
-        <a href="index.html#booking" class="btn-book-nav" style="padding:0.75rem 1.5rem; color:white; text-decoration:none;">
+        <a href="booking.html" class="btn-book-nav" style="padding:0.75rem 1.5rem; color:white; text-decoration:none;">
             <span id="mob-btn-text" data-i18n="nav_book">Book Now</span>
         </a>
     </main>
@@ -298,7 +297,7 @@
                         <li><a href="index.html" data-i18n="nav_home">Home</a></li>
                         <li><a href="index.html#fleet" data-i18n="nav_fleet">Fleet</a></li>
                         <li><a href="index.html#reviews" data-i18n="nav_reviews">Reviews</a></li>
-                        <li><a href="index.html#booking" data-i18n="nav_book">Book Now</a></li>
+                        <li><a href="booking.html" data-i18n="nav_book">Book Now</a></li>
                     </ul>
                 </div>
                 <!-- Contact -->
@@ -318,7 +317,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; <span id="year">2024</span> Georgia Hills Transport. All rights reserved.
+                &copy; <span id="year">2026</span> Georgia Hills. All rights reserved.
             </div>
         </div>
     </footer>

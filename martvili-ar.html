@@ -25,8 +25,7 @@
             .hero{position:relative;overflow:hidden}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="style.css"></noscript>
+        <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -40,6 +39,7 @@
     </script>
 </head>
 <body class="page-destination">
+    <a href="#main-content" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
     <nav class="navbar" id="navbar" dir="ltr">
         <div class="container navbar-inner">
             <a href="arabic.html" class="nav-logo"><img src="favicon.ico" alt="GH"><span>Georgia Hills</span></a>
@@ -53,22 +53,22 @@
                 <div style="display:flex; gap:0.75rem;">
                     <a href="martvili.html" class="action-btn"><i class="fa-solid fa-globe"></i> <span class="lang-text">English</span></a>
                 </div>
-                <a href="arabic.html#booking" class="btn-book-nav" style="color:white; text-decoration:none;">احجز الآن</a>
+                <a href="booking-ar.html" class="btn-book-nav" style="color:white; text-decoration:none;">احجز الآن</a>
             </div>
             <div class="mobile-controls">
                 <a href="martvili.html" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;"><i class="fa-solid fa-globe"></i> <span class="lang-text">English</span></a>
-                <button id="mobile-menu-btn" class="btn-mobile-menu"><i class="fa-solid fa-bars"></i></button>
+                <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
             </div>
         </div>
     </nav>
-    <div id="mobile-menu">
+    <div id="mobile-menu" aria-hidden="true">
         <button id="close-menu-btn" class="close-menu-btn"><i class="fa-solid fa-xmark"></i></button>
         <a href="arabic.html" class="mobile-link">الرئيسية</a>
         <a href="arabic.html#destinations" class="mobile-link">وجهات</a>
         <a href="arabic.html#packages" class="mobile-link">باقات</a>
         <a href="arabic.html#guide" class="mobile-link">دليل السفر</a>
         <a href="arabic.html#fleet" class="mobile-link">السيارات</a>
-        <a href="arabic.html#booking" class="mobile-btn-book">احجز الآن</a>
+        <a href="booking-ar.html" class="mobile-btn-book">احجز الآن</a>
     </div>
     <div class="dest-hero"><img src="Martvili.webp" alt="وادي مارتفيلي: جولة القوارب والشلالات" fetchpriority="high" width="1600" height="800" decoding="async" loading="eager" style="opacity:1; animation:none;"><div class="dest-hero-overlay"></div></div>
     <main class="container" id="main-content">
@@ -86,7 +86,7 @@
             <div class="sidebar-col">
                 <div class="booking-box">
                     <h3 class="booking-title">خطط لرحلتك</h3><p class="booking-subtitle">سيارة مع سائق خاص</p>
-                    <a href="arabic.html#booking" class="btn-book-nav" style="width:100%; display:flex; justify-content:center; color:white; text-decoration:none;">احجز الآن</a>
+                    <a href="booking-ar.html" class="btn-book-nav" style="width:100%; display:flex; justify-content:center; color:white; text-decoration:none;">احجز الآن</a>
                     <a href="https://www.google.com/maps/search/?api=1&query=Martvili%20Canyon%3A%20Emerald%20Waters" target="_blank" class="btn-map" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> الموقع على الخريطة</a>
                     <div class="trust-list"><div class="trust-item"><i class="fa-solid fa-check icon-check"></i> إلغاء مجاني</div><div class="trust-item"><i class="fa-solid fa-check icon-check"></i> الدفع عند الوصول</div><div class="trust-item"><i class="fa-solid fa-check icon-check"></i> سائقين يتحدثون العربية</div></div>
                 </div>
@@ -117,7 +117,7 @@
                         <li><a href="arabic.html">الرئيسية</a></li>
                         <li><a href="arabic.html#fleet">السيارات</a></li>
                         <li><a href="arabic.html#reviews">الآراء</a></li>
-                        <li><a href="arabic.html#booking">احجز الآن</a></li>
+                        <li><a href="booking-ar.html">احجز الآن</a></li>
                     </ul>
                 </div>
                 <div>
@@ -135,7 +135,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; <span id="year">2024</span> Georgia Hills. جميع الحقوق محفوظة.
+                &copy; <span id="year">2026</span> Georgia Hills. جميع الحقوق محفوظة.
             </div>
         </div>
     </footer>

@@ -64,7 +64,7 @@
           "name": "Georgia Hills",
           "url": "https://georgiahills.netlify.app/",
           "logo": "https://georgiahills.netlify.app/favicon.ico",
-          "image": "https://georgiahills.netlify.app/image-1600.webp",
+          "image": "https://georgiahills.netlify.app/images/hero.webp",
           "description": "The #1 rated private driver and car rental service in Georgia. Specializing in luxury family tours for GCC tourists in Tbilisi, Batumi, and Kazbegi.",
           "telephone": "+995579088537",
           "email": "info@georgiahills.com",
@@ -136,19 +136,8 @@
     <!-- Updated srcset for larger screens -->
     <link rel="preload" as="image" href="image-1600.webp" imagesrcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" imagesizes="100vw" fetchpriority="high">
 
-        <!-- Critical CSS (inlined) + async load of full stylesheet to reduce render-blocking -->
-        <style>
-            :root{--color-gray-400:#9CA3AF}
-            html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;background:#fff}
-            .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
-            .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
-            .navbar{position:relative;z-index:50;background:transparent}
-            .hero-img{width:100%;height:auto;display:block;object-fit:cover}
-            .hero{position:relative;overflow:hidden}
-            .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
-        </style>
-        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="style.css"></noscript>
+    <!-- Optimized CSS Loading -->
+    <link rel="stylesheet" href="style.css">
     
     <!-- Deferred CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
@@ -157,6 +146,7 @@
     <!-- Primary Keywords in Title -->
     <title>Private Driver in Georgia | Georgia Hills</title>
     <meta name="description" content="Best private driver service in Georgia for families. Modern cars and English speaking drivers. Book your trip to Tbilisi, Batumi, and Kazbegi via WhatsApp.">
+    <meta name="keywords" content="private driver georgia, car rental tbilisi, georgia tourism, family tours georgia">
     <meta name="author" content="Georgia Hills">
     <meta name="theme-color" content="#0F172A">
     
@@ -188,7 +178,7 @@
     <!-- Accessibility & Network -->
     <noscript>
         <div class="no-js-overlay">
-            <h1 style="font-size:1.5rem; font-weight:bold; color:#EF4444; margin-bottom:0.5rem;">JavaScript Required</h1>
+            <h2 style="font-size:1.5rem; font-weight:bold; color:#EF4444; margin-bottom:0.5rem;">JavaScript Required</h2>
             <p style="color:#4B5563;">Please enable JavaScript to use Georgia Hills car rental services.</p>
             <style>#preloader { display: none; }</style>
         </div>
@@ -196,8 +186,8 @@
 
     <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>You are offline</span></div>
 
-    <!-- Preloader (disabled to avoid blocking LCP) -->
-    <div id="preloader" style="display:none;">
+    <!-- Preloader -->
+    <div id="preloader">
         <div class="text-center">
             <div class="preloader-circle animate-bounce">
                 <img src="favicon.ico" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
@@ -222,12 +212,12 @@
                 <!-- Desktop Menu -->
                 <div class="desktop-menu">
                     <a href="#home" class="nav-link">Home</a>
-                    <a href="#about" class="nav-link">About</a>
+                    <a href="about.html" class="nav-link">About</a>
                     <a href="#destinations" class="nav-link">Destinations</a>
-                    <a href="#packages" class="nav-link">Packages</a>
+                    <a href="services.html" class="nav-link">Services</a>
                     <a href="#fleet" class="nav-link">Fleet</a>
                     <a href="#reviews" class="nav-link">Reviews</a>
-                    <a href="#guide" class="nav-link">Guide</a>
+                    <a href="guide.html" class="nav-link">Guide</a>
                     
                     <!-- Desktop Settings -->
                     <div style="display:flex; gap:0.75rem;">
@@ -244,18 +234,18 @@
                         </div>
 
                         <!-- Language Btn -->
-                        <a href="arabic.html" class="action-btn" aria-label="Switch to Arabic">
+                        <a href="arabic.html#home" class="action-btn" aria-label="Switch to Arabic">
                             <i class="fa-solid fa-globe"></i><span class="lang-text">العربية</span>
                         </a>
                     </div>
 
-                    <a href="#booking" class="btn-book-nav">Book Now</a>
+                    <a href="booking.html" class="btn-book-nav">Book Now</a>
                 </div>
 
                 <!-- Mobile Toggle -->
                 <div class="mobile-controls">
                     <!-- Mobile Language Switcher -->
-                    <a href="arabic.html" class="action-btn" aria-label="Switch to Arabic Mobile" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
+                    <a href="arabic.html#home" class="action-btn" aria-label="Switch to Arabic Mobile" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
                         <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">العربية</span>
                     </a>
                     <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
@@ -268,12 +258,12 @@
     <div id="mobile-menu" aria-hidden="true">
         <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu"><i class="fa-solid fa-xmark"></i></button>
         <a href="#home" class="mobile-link">Home</a>
-        <a href="#about" class="mobile-link">About</a>
+        <a href="about.html" class="mobile-link">About</a>
         <a href="#destinations" class="mobile-link">Destinations</a>
-        <a href="#packages" class="mobile-link">Packages</a>
+        <a href="services.html" class="mobile-link">Services</a>
         <a href="#fleet" class="mobile-link">Fleet</a>
         <a href="#reviews" class="mobile-link">Reviews</a>
-        <a href="#guide" class="mobile-link">Guide</a>
+        <a href="guide.html" class="mobile-link">Guide</a>
         
         <!-- Mobile Settings -->
         <div class="mobile-settings">
@@ -290,7 +280,7 @@
             </div>
         </div>
 
-        <a href="#booking" class="mobile-btn-book">Book Now</a>
+        <a href="booking.html" class="mobile-btn-book">Book Now</a>
         
         <div class="mobile-social-container">
              <button onclick="App.share()" class="mobile-social-btn" aria-label="Share App">
@@ -308,7 +298,7 @@
     <section id="home" class="hero" aria-label="Welcome to Georgia Hills">
         <div class="hero-bg-container">
              <!-- Replaced Unsplash with local placeholder -->
-             <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="Scenic Georgia Mountains" fetchpriority="high" decoding="async" loading="eager">
+             <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="Scenic Georgia Mountains" fetchpriority="high">
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content reveal">
@@ -324,7 +314,7 @@
             <h1 class="hero-title">Discover Georgia <br><span class="text-accent-light italic font-serif">Without Limits</span></h1>
             <p class="hero-subtitle">Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.</p>
             <div class="hero-buttons">
-                <a href="#booking" class="btn-hero btn-hero-primary">Get a Quote</a>
+                <a href="booking.html" class="btn-hero btn-hero-primary">Get a Quote</a>
                 <a href="#fleet" class="btn-hero btn-hero-secondary">View Fleet</a>
             </div>
         </div>
@@ -350,7 +340,7 @@
 
     <!-- About -->
     <section id="about" class="section-py">
-        <main id="main-content" class="container">
+        <div id="main-content" class="container">
             <div class="about-grid">
                 <div class="about-img-container reveal">
                     <div class="about-blob"></div>
@@ -445,73 +435,20 @@
         </div>
     </section>
 
-    <!-- PACKAGES -->
+    <!-- SERVICES PREVIEW -->
     <section id="packages" class="section-py">
         <div class="container">
             <div class="reveal text-center" style="margin-bottom:3rem;">
-                <span class="section-label">Ready-made Plans</span>
-                <h2 class="section-title">Popular Georgia Itineraries</h2>
-                <p class="section-desc" style="max-width:48rem; margin:0 auto;">Save time with our curated travel packages. From city tours to mountain adventures.</p>
+                <span class="section-label">Services Hub</span>
+                <h2 class="section-title">Packages, Fleet & Pricing</h2>
+                <p class="section-desc" style="max-width:48rem; margin:0 auto;">Explore complete plans and route pricing on our dedicated services page.</p>
             </div>
-            
-            <div class="packages-grid">
-                <!-- Package 1 -->
-                <div class="pkg-card reveal">
-                    <div class="pkg-header">
-                        <span class="pkg-days">7</span>
-                        <h3 class="pkg-title">Family Fun</h3>
-                        <span class="pkg-subtitle">Tbilisi, Kazbegi, Bakuriani</span>
-                    </div>
-                    <div class="pkg-body">
-                        <ul class="pkg-list">
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> Airport Transfer (In/Out)</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> Daily Private Driver</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> 4-Star Hotel Accommodation</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> Free SIM Cards</li>
-                        </ul>
-                        <div class="pkg-price">From <span class="price-display" data-base-price="600">600 USD</span></div>
-                        <button onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})" class="btn-pkg">Get Details</button>
-                    </div>
-                </div>
-                
-                <!-- Package 2 -->
-                <div class="pkg-card reveal" style="transform: scale(1.05); z-index:10; border-color:var(--color-accent);">
-                    <div class="pkg-header" style="background:var(--color-accent);">
-                        <span class="pkg-days">5</span>
-                        <h3 class="pkg-title">Honeymoon</h3>
-                        <span class="pkg-subtitle">Tbilisi, Signagi (City of Love)</span>
-                    </div>
-                    <div class="pkg-body">
-                        <ul class="pkg-list">
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> Luxury Sedan with Driver</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> Wine Tasting Tour</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> Romantic Dinner Setup</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> Photo Session</li>
-                        </ul>
-                        <div class="pkg-price">From <span class="price-display" data-base-price="450">450 USD</span></div>
-                        <button onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})" class="btn-pkg" style="background:var(--color-primary); color:white;">Get Details</button>
-                    </div>
-                </div>
-
-                <!-- Package 3 -->
-                <div class="pkg-card reveal">
-                    <div class="pkg-header">
-                        <span class="pkg-days">10</span>
-                        <h3 class="pkg-title">Grand Tour</h3>
-                        <span class="pkg-subtitle">East to West (Batumi)</span>
-                    </div>
-                    <div class="pkg-body">
-                        <ul class="pkg-list">
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> All Georgia Highlights</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> Comfortable Minivan</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> Batumi Beach Days</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> Flexible Schedule</li>
-                        </ul>
-                        <div class="pkg-price">From <span class="price-display" data-base-price="900">900 USD</span></div>
-                        <button onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})" class="btn-pkg">Get Details</button>
-                    </div>
-                </div>
+            <div class="guide-grid">
+                <div class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-map"></i></div><h3 class="guide-title">Packages</h3><p class="guide-text">Family, honeymoon and multi-city plans.</p></div>
+                <div class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-car-side"></i></div><h3 class="guide-title">Fleet</h3><p class="guide-text">Sedan and Minivan with transparent daily rates.</p></div>
+                <div class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-road"></i></div><h3 class="guide-title">Routes</h3><p class="guide-text">Popular transfer routes with fixed pricing.</p></div>
             </div>
+            <div class="text-center" style="margin-top:2rem;"><a href="services.html" class="btn-book-nav">Open Services Page</a></div>
         </div>
     </section>
 
@@ -618,7 +555,7 @@
             <div class="reveal text-center" style="margin-bottom:3rem;">
                 <span class="section-label">Transparent Pricing</span>
                 <h2 class="section-title">Popular Transfers</h2>
-                <p class="section-desc">Fixed prices per vehicle (Sedan). No hidden fees.</p>
+                <p class="section-desc">Preview prices below. View full routes and policies on the services page.</p>
             </div>
             <div class="routes-container reveal" style="max-width: 48rem; margin: 0 auto;">
                 <!-- Route 1 -->
@@ -655,7 +592,7 @@
                 </div>
             </div>
             <div class="text-center" style="margin-top:2rem;">
-                <a href="#booking" class="action-btn" style="display:inline-flex;">Check Other Routes</a>
+                <a href="services.html" class="action-btn" style="display:inline-flex;">View Full Route List</a>
             </div>
         </div>
     </section>
@@ -664,70 +601,41 @@
     <section id="guide" class="section-py">
         <div class="container">
             <div class="reveal text-center" style="margin-bottom:3rem;">
-                <span class="section-label">Travel Guide</span>
-                <h2 class="section-title">Essential Info for Tourists</h2>
+                <span class="section-label">Travel Resources</span>
+                <h2 class="section-title">Guide, FAQ & Planning</h2>
             </div>
             <div class="guide-grid">
-                <!-- Visa -->
                 <div class="guide-box reveal">
                     <div class="guide-icon"><i class="fa-solid fa-passport"></i></div>
-                    <h3 class="guide-title">Visa Requirements</h3>
-                    <p class="guide-text">Citizens of GCC countries (Saudi Arabia, UAE, Kuwait, Oman, Qatar, Bahrain) enjoy a visa-free regime for up to 1 year. Just pack and fly!</p>
+                    <h3 class="guide-title">Travel Guide</h3>
+                    <p class="guide-text">Visa, best seasons, local tips and practical planning notes.</p>
                 </div>
-                <!-- Halal Food -->
                 <div class="guide-box reveal">
-                    <div class="guide-icon"><i class="fa-solid fa-utensils"></i></div>
-                    <h3 class="guide-title">Halal Food</h3>
-                    <p class="guide-text">Halal food is widely available in Tbilisi, especially in the Marjanishvili area. Our drivers know the best authentic spots.</p>
+                    <div class="guide-icon"><i class="fa-solid fa-circle-question"></i></div>
+                    <h3 class="guide-title">FAQ</h3>
+                    <p class="guide-text">Payment terms, Arabic-speaking driver availability and more.</p>
                 </div>
-                <!-- Best Time -->
                 <div class="guide-box reveal">
-                    <div class="guide-icon"><i class="fa-solid fa-calendar-day"></i></div>
-                    <h3 class="guide-title">Best Time to Visit</h3>
-                    <p class="guide-text">Spring (April-June) and Autumn (September-October) offer pleasant weather. For snow lovers, December to February is perfect.</p>
+                    <div class="guide-icon"><i class="fa-solid fa-newspaper"></i></div>
+                    <h3 class="guide-title">Blog Insights</h3>
+                    <p class="guide-text">Itineraries, destination stories and seasonal recommendations.</p>
                 </div>
+            </div>
+            <div class="text-center" style="margin-top:2rem; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+                <a href="guide.html" class="action-btn">Open Guide</a>
+                <a href="blog.html" class="action-btn">Open Blog</a>
             </div>
         </div>
     </section>
 
-    <!-- FAQ Section -->
+    <!-- FAQ Preview -->
     <section id="faq" class="section-py" itemscope itemtype="https://schema.org/FAQPage">
         <div class="container faq-container">
-            <div class="text-center reveal" style="margin-bottom:3rem;">
+            <div class="text-center reveal" style="margin-bottom:2rem;">
                 <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-desc">We keep a full and updated FAQ on our dedicated guide page.</p>
             </div>
-            <div id="faq-list" class="faq-list reveal">
-                <!-- Accessible Details/Summary -->
-                <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <summary class="faq-header">
-                        <h3 class="faq-question" itemprop="name">Do I need to pay in advance?</h3>
-                        <i class="fa-solid fa-chevron-down" style="color:var(--color-gray-400);"></i>
-                    </summary>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="faq-answer" itemprop="text">No, payment is strictly upon arrival. You can pay the driver in cash (GEL, USD, EUR) when you meet.</p>
-                    </div>
-                </details>
-                
-                <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <summary class="faq-header">
-                        <h3 class="faq-question" itemprop="name">Do drivers speak Arabic?</h3>
-                        <i class="fa-solid fa-chevron-down" style="color:var(--color-gray-400);"></i>
-                    </summary>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="faq-answer" itemprop="text">Yes! We have professional drivers who speak Arabic. Please mention this in your booking notes.</p>
-                    </div>
-                </details>
-
-                <details class="faq-item" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                    <summary class="faq-header">
-                        <h3 class="faq-question" itemprop="name">Is fuel included in the price?</h3>
-                        <i class="fa-solid fa-chevron-down" style="color:var(--color-gray-400);"></i>
-                    </summary>
-                    <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                        <p class="faq-answer" itemprop="text">Yes, for all tours with a driver, fuel is completely included in your quote. For self-drive rentals, you receive the car full and return it full.</p>
-                    </div>
-                </details>
-            </div>
+            <div class="text-center"><a href="guide.html" class="btn-book-nav">Open Full FAQ</a></div>
         </div>
     </section>
 
@@ -789,6 +697,7 @@
 
             <div id="booking-container" class="booking-card reveal">
                 <form id="bookingForm" onsubmit="BookingManager.handleSubmit(event)" novalidate>
+                    <input type="text" id="companyWebsite" name="companyWebsite" autocomplete="off" tabindex="-1" aria-hidden="true" class="hidden">
                     <div class="form-grid">
                         <!-- Name -->
                         <div>
@@ -857,6 +766,14 @@
                             <label for="notes" class="form-label">Notes</label>
                             <textarea id="notes" rows="3" class="form-textarea"></textarea>
                         </div>
+
+                        <div class="col-span-full">
+                            <label style="display:flex; align-items:flex-start; gap:0.5rem;">
+                                <input type="checkbox" id="bookingConsent" style="margin-top:0.2rem;">
+                                <span style="font-size:0.85rem; color:var(--color-gray-600);">I agree to be contacted about this booking request.</span>
+                            </label>
+                            <span class="error-text hidden" id="consentError">Please confirm consent</span>
+                        </div>
                     </div>
 
                     <!-- Live Price Estimate -->
@@ -911,7 +828,7 @@
                         <li><a href="#home">Home</a></li>
                         <li><a href="#fleet">Our Fleet</a></li>
                         <li><a href="#reviews">Reviews</a></li>
-                        <li><a href="#booking">Book Now</a></li>
+                        <li><a href="booking.html">Book Now</a></li>
                     </ul>
                 </div>
                 <!-- Contact -->
@@ -932,7 +849,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; <span id="year">2024</span> Georgia Hills Transport. All rights reserved.
+                &copy; <span id="year">2026</span> Georgia Hills. All rights reserved.
             </div>
         </div>
     </footer>
@@ -990,7 +907,7 @@
     <!-- Mobile Sticky Bar -->
     <div class="sticky-bar">
         <a href="https://wa.me/995579088537" class="glass-btn-primary" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" style="font-size:1.25rem;"></i> WhatsApp</a>
-        <a href="#booking" class="glass-btn-accent">Book Now</a>
+        <a href="booking.html" class="glass-btn-accent">Book Now</a>
     </div>
 
 </body>

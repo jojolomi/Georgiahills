@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <!-- SEO: Primary Meta Tags -->
     <title>اتصل بنا | جورجيا هيلز للسياحة</title>
@@ -13,9 +13,10 @@
     <meta property="og:url" content="https://georgiahills.netlify.app/contact-ar.html">
     <meta property="og:title" content="اتصل بجورجيا هيلز | سائق خاص في جورجيا">
     <meta property="og:description" content="تواصل معنا لترتيب رحلتك في جورجيا مع سائق خاص وخدمة مريحة للعائلات.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80">
+    <meta property="og:image" content="https://georgiahills.netlify.app/image-1600.webp">
     <link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/contact.html" />
     <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/contact-ar.html" />
+    <link rel="alternate" hreflang="x-default" href="https://georgiahills.netlify.app/contact.html" />
     <link rel="canonical" href="https://georgiahills.netlify.app/contact-ar.html">
     
     <!-- Styles & Scripts -->
@@ -29,8 +30,7 @@
             .hero{position:relative;overflow:hidden}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="style.css"></noscript>
+        <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -41,6 +41,7 @@
     <script src="script.js" defer></script>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
     <!-- Navbar -->
     <nav id="navbar" class="navbar" dir="ltr">
         <div class="container">
@@ -51,6 +52,8 @@
                 </a>
                 <div class="desktop-menu">
                     <a href="arabic.html" class="nav-link">الرئيسية</a>
+                    <a href="services-ar.html" class="nav-link">الخدمات</a>
+                    <a href="guide-ar.html" class="nav-link">الدليل</a>
                     <a href="blog-ar.html" class="nav-link">المدونة</a>
                     
                     <!-- Desktop Settings -->
@@ -68,7 +71,7 @@
                         </a>
                     </div>
 
-                    <a href="arabic.html#booking" class="btn-book-nav">احجز الآن</a>
+                    <a href="booking-ar.html" class="btn-book-nav">احجز الآن</a>
                 </div>
                 <div class="mobile-controls">
                     <a href="contact.html" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;">
@@ -81,9 +84,11 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu">
+    <div id="mobile-menu" aria-hidden="true">
         <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu"><i class="fa-solid fa-xmark"></i></button>
         <a href="arabic.html" class="mobile-link">الرئيسية</a>
+        <a href="services-ar.html" class="mobile-link">الخدمات</a>
+        <a href="guide-ar.html" class="mobile-link">الدليل</a>
         <a href="blog-ar.html" class="mobile-link">المدونة</a>
         
         <!-- Mobile Currency -->
@@ -96,11 +101,11 @@
             <div class="custom-options" id="curr-options-mobile"></div>
         </div>
 
-        <a href="arabic.html#booking" class="mobile-btn-book">احجز الآن</a>
+        <a href="booking-ar.html" class="mobile-btn-book">احجز الآن</a>
     </div>
 
     <!-- Hero (Small) -->
-    <section class="hero" style="height: 40vh; min-height: 300px;">
+    <section class="hero" id="main-content" style="height: 40vh; min-height: 300px;">
         <div class="hero-bg-container">
             <img src="image-640.webp" class="hero-img" alt="اتصل بنا" style="opacity: 0.6;" loading="lazy" decoding="async">
             <div class="hero-overlay"></div>
@@ -183,7 +188,7 @@
                         <li><a href="arabic.html">الرئيسية</a></li>
                         <li><a href="arabic.html#fleet">السيارات</a></li>
                         <li><a href="arabic.html#reviews">الآراء</a></li>
-                        <li><a href="arabic.html#booking">احجز الآن</a></li>
+                        <li><a href="booking-ar.html">احجز الآن</a></li>
                     </ul>
                 </div>
                 <div>
@@ -202,7 +207,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; <span id="year">2024</span> Georgia Hills. جميع الحقوق محفوظة.
+                &copy; <span id="year">2026</span> Georgia Hills. جميع الحقوق محفوظة.
             </div>
         </div>
     </footer>

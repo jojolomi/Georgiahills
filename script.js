@@ -71,6 +71,16 @@ const Translations = {
     }
 };
 
+const AnalyticsTracker = {
+    event(name, payload = {}) {
+        try {
+            if (typeof gtag === 'function') {
+                gtag('event', name, payload);
+            }
+        } catch (e) {}
+    }
+};
+
 // ==========================================
 // START CONFIGURATION (EDIT VIA ADMIN.HTML)
 // ==========================================
@@ -233,12 +243,176 @@ const CurrencyManager = {
 // --- UI Manager ---
 const UIManager = {
     init() {
+        this.applyPageVisualContext();
+        this.normalizeNavigation();
+        this.normalizeMicrocopy();
+        this.injectUniversalProfessionalSection();
         this.setupMobileMenu();
         this.setupScrollListener();
         CurrencyManager.init();
         this.initDropdowns();
         this.updateCopyright();
         this.updateActiveNavLink();
+    },
+
+    applyPageVisualContext() {
+        const path = (window.location.pathname || '').toLowerCase();
+        const isHome = path.endsWith('/') || path.endsWith('/index.html') || path.endsWith('/arabic.html') || path === '/index.html' || path === '/arabic.html';
+        if (!isHome) document.body.classList.add('secondary-page');
+        if (path.includes('blog')) document.body.classList.add('page-blog');
+        if (path.includes('guide')) document.body.classList.add('page-guide');
+        if (path.includes('article-')) document.body.classList.add('page-article');
+        if (path.includes('booking')) document.body.classList.add('page-booking');
+        if (path.includes('about')) document.body.classList.add('page-about');
+        if (path.includes('services')) document.body.classList.add('page-services');
+        if (path.includes('contact')) document.body.classList.add('page-contact');
+        if (path.includes('legal')) document.body.classList.add('page-legal');
+    },
+
+    getLangConfig() {
+        const isArabic = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
+        return {
+            isArabic,
+            home: isArabic ? 'arabic.html' : 'index.html',
+            services: isArabic ? 'services-ar.html' : 'services.html',
+            guide: isArabic ? 'guide-ar.html' : 'guide.html',
+            about: isArabic ? 'about-ar.html' : 'about.html',
+            blog: isArabic ? 'blog-ar.html' : 'blog.html',
+            contact: isArabic ? 'contact-ar.html' : 'contact.html',
+            booking: isArabic ? 'booking-ar.html' : 'booking.html',
+            langSwitch: isArabic ? 'index.html' : 'arabic.html',
+            langText: isArabic ? 'English' : 'العربية',
+            homeText: isArabic ? 'الرئيسية' : 'Home',
+            servicesText: isArabic ? 'الخدمات' : 'Services',
+            guideText: isArabic ? 'الدليل' : 'Guide',
+            aboutText: isArabic ? 'من نحن' : 'About',
+            blogText: isArabic ? 'المدونة' : 'Blog',
+            contactText: isArabic ? 'اتصل بنا' : 'Contact',
+            bookText: isArabic ? 'احجز الآن' : 'Book Now'
+        };
+    },
+
+    normalizeNavigation() {
+        const nav = document.getElementById('navbar');
+        if (!nav) return;
+
+        const cfg = this.getLangConfig();
+        const navInner = nav.querySelector('.navbar-inner');
+        const desktopMenu = nav.querySelector('.desktop-menu');
+        const mobileControls = nav.querySelector('.mobile-controls');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const logoLink = nav.querySelector('.nav-logo');
+
+        if (logoLink) logoLink.setAttribute('href', cfg.home);
+
+        if (desktopMenu) {
+            desktopMenu.innerHTML = `
+                <a href="${cfg.home}" class="nav-link">${cfg.homeText}</a>
+                <a href="${cfg.services}" class="nav-link">${cfg.servicesText}</a>
+                <a href="${cfg.guide}" class="nav-link">${cfg.guideText}</a>
+                <a href="${cfg.about}" class="nav-link">${cfg.aboutText}</a>
+                <a href="${cfg.blog}" class="nav-link">${cfg.blogText}</a>
+                <a href="${cfg.contact}" class="nav-link">${cfg.contactText}</a>
+                <a href="${cfg.langSwitch}" class="action-btn"><i class="fa-solid fa-globe"></i> ${cfg.langText}</a>
+                <a href="${cfg.booking}" class="btn-book-nav">${cfg.bookText}</a>`;
+        }
+
+        if (mobileControls) {
+            mobileControls.innerHTML = `
+                <a href="${cfg.langSwitch}" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;"><i class="fa-solid fa-globe"></i> ${cfg.langText}</a>
+                <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>`;
+        } else if (navInner) {
+            const controls = document.createElement('div');
+            controls.className = 'mobile-controls';
+            controls.innerHTML = `
+                <a href="${cfg.langSwitch}" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;"><i class="fa-solid fa-globe"></i> ${cfg.langText}</a>
+                <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>`;
+            navInner.appendChild(controls);
+        }
+
+        if (mobileMenu) {
+            mobileMenu.innerHTML = `
+                <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu"><i class="fa-solid fa-xmark"></i></button>
+                <a href="${cfg.home}" class="mobile-link">${cfg.homeText}</a>
+                <a href="${cfg.services}" class="mobile-link">${cfg.servicesText}</a>
+                <a href="${cfg.guide}" class="mobile-link">${cfg.guideText}</a>
+                <a href="${cfg.about}" class="mobile-link">${cfg.aboutText}</a>
+                <a href="${cfg.blog}" class="mobile-link">${cfg.blogText}</a>
+                <a href="${cfg.contact}" class="mobile-link">${cfg.contactText}</a>
+                <a href="${cfg.booking}" class="mobile-btn-book">${cfg.bookText}</a>`;
+        }
+    },
+
+    normalizeMicrocopy() {
+        const cfg = this.getLangConfig();
+
+        document.querySelectorAll('a.btn-book-nav[href*="booking"], a.mobile-btn-book[href*="booking"]').forEach((link) => {
+            link.textContent = cfg.bookText;
+        });
+
+        document.querySelectorAll('a[href="services.html"].action-btn, a[href="services-ar.html"].action-btn').forEach((link) => {
+            link.textContent = cfg.servicesText;
+        });
+
+        document.querySelectorAll('a[href="guide.html"].action-btn, a[href="guide-ar.html"].action-btn').forEach((link) => {
+            link.textContent = cfg.guideText;
+        });
+
+        document.querySelectorAll('a[href="contact.html"].btn-book-nav, a[href="contact-ar.html"].btn-book-nav, a[href="contact.html"].action-btn, a[href="contact-ar.html"].action-btn').forEach((link) => {
+            link.textContent = cfg.isArabic ? 'تواصل مع الفريق' : 'Contact Team';
+        });
+
+        document.querySelectorAll('a.blog-link').forEach((link) => {
+            const iconClass = cfg.isArabic ? 'fa-arrow-left' : 'fa-arrow-right';
+            link.innerHTML = `${cfg.isArabic ? 'اقرأ المقال' : 'Read Article'} <i class="fa-solid ${iconClass}"></i>`;
+        });
+
+        document.querySelectorAll('a[href="legal.html"]').forEach((link) => {
+            link.textContent = cfg.isArabic ? 'سياسة الخصوصية' : 'Privacy Policy';
+        });
+    },
+
+    injectUniversalProfessionalSection() {
+        const path = (window.location.pathname || '').toLowerCase();
+        if (path.includes('index.html') || path.includes('arabic.html') || path.endsWith('/') || path.includes('admin.html') || path.includes('404.html')) return;
+        if (document.querySelector('.pro-growth-section, .process-grid, .compare-grid, .testimonials-grid')) return;
+
+        const main = document.getElementById('main-content');
+        if (!main) return;
+
+        const cfg = this.getLangConfig();
+        const section = document.createElement('section');
+        section.className = 'content-card pro-growth-section';
+        section.style.cssText = 'padding:2rem; margin-top:2rem;';
+        section.innerHTML = cfg.isArabic
+            ? `
+                <h2 class="section-heading">الحجز بطريقة احترافية</h2>
+                <div class="process-grid" style="margin-bottom:1.5rem;">
+                    <article class="process-card"><span class="process-step">1</span><h3 class="process-title">أرسل تفاصيل الرحلة</h3><p class="process-text">المسار والتواريخ وعدد المسافرين.</p></article>
+                    <article class="process-card"><span class="process-step">2</span><h3 class="process-title">استلم عرض واضح</h3><p class="process-text">سعر وخطة خدمة بدون رسوم مخفية.</p></article>
+                    <article class="process-card"><span class="process-step">3</span><h3 class="process-title">تأكيد سريع</h3><p class="process-text">تأكيد واتساب وتجهيز الجدول قبل الوصول.</p></article>
+                </div>
+                <div class="proof-grid">
+                    <div class="proof-card"><p class="proof-number">24/7</p><p class="proof-label">دعم</p></div>
+                    <div class="proof-card"><p class="proof-number">10 د</p><p class="proof-label">متوسط الرد</p></div>
+                    <div class="proof-card"><p class="proof-number">4.9/5</p><p class="proof-label">تقييم العملاء</p></div>
+                    <div class="proof-card"><p class="proof-number">100%</p><p class="proof-label">رحلات خاصة</p></div>
+                </div>`
+            : `
+                <h2 class="section-heading">Professional Booking Flow</h2>
+                <div class="process-grid" style="margin-bottom:1.5rem;">
+                    <article class="process-card"><span class="process-step">1</span><h3 class="process-title">Share trip details</h3><p class="process-text">Route, dates, and passenger count.</p></article>
+                    <article class="process-card"><span class="process-step">2</span><h3 class="process-title">Get clear quote</h3><p class="process-text">Transparent price and service scope.</p></article>
+                    <article class="process-card"><span class="process-step">3</span><h3 class="process-title">Confirm quickly</h3><p class="process-text">WhatsApp confirmation with ready schedule.</p></article>
+                </div>
+                <div class="proof-grid">
+                    <div class="proof-card"><p class="proof-number">24/7</p><p class="proof-label">Support</p></div>
+                    <div class="proof-card"><p class="proof-number">10m</p><p class="proof-label">Typical Reply</p></div>
+                    <div class="proof-card"><p class="proof-number">4.9/5</p><p class="proof-label">Guest Rating</p></div>
+                    <div class="proof-card"><p class="proof-number">100%</p><p class="proof-label">Private Trips</p></div>
+                </div>`;
+
+        main.appendChild(section);
     },
 
     initDropdowns() {
@@ -276,16 +450,26 @@ const UIManager = {
         const menu = document.getElementById('mobile-menu');
         const links = document.querySelectorAll('.mobile-link, .mobile-btn-book');
 
+        if (menu) menu.setAttribute('aria-hidden', 'true');
+        if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+
         const toggle = () => {
             if(!menu) return;
             const isOpen = menu.classList.toggle('open');
             if(menuBtn) menuBtn.setAttribute('aria-expanded', isOpen);
+            menu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
             document.body.classList.toggle('overflow-hidden', isOpen);
         };
 
         if(menuBtn) menuBtn.addEventListener('click', toggle);
         if(closeBtn) closeBtn.addEventListener('click', toggle);
         links.forEach(l => l.addEventListener('click', toggle));
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && menu && menu.classList.contains('open')) {
+                toggle();
+            }
+        });
     },
 
     setupScrollListener() {
@@ -370,12 +554,15 @@ const UIManager = {
 // --- Booking Manager ---
 const BookingManager = {
     fpInstance: null,
+    initialized: false,
 
     init() {
         const form = document.getElementById('bookingForm');
         if(!form) return;
 
-        if (typeof flatpickr !== 'undefined') {
+        const dateInput = document.getElementById('dateRange');
+
+        if (!this.fpInstance && typeof flatpickr !== 'undefined') {
             this.fpInstance = flatpickr("#dateRange", {
                 mode: "range",
                 minDate: "today",
@@ -387,10 +574,19 @@ const BookingManager = {
                     }
                 }
             });
+        } else if (!this.fpInstance && dateInput) {
+            dateInput.disabled = false;
+            if (!dateInput.getAttribute('placeholder')) {
+                const isArabic = document.documentElement.lang === 'ar';
+                dateInput.setAttribute('placeholder', isArabic ? 'اختر تواريخ الاستلام والتسليم' : 'Select Pick-up & Drop-off Dates');
+            }
         }
 
-        this.loadDraft();
-        form.addEventListener('input', () => this.saveDraft());
+        if (!this.initialized) {
+            this.loadDraft();
+            form.addEventListener('input', () => this.saveDraft());
+            this.initialized = true;
+        }
     },
 
     saveDraft() {
@@ -468,16 +664,22 @@ const BookingManager = {
     handleSubmit(e) {
         e.preventDefault();
         if (!this.validate()) return;
+
+        const honeypot = document.getElementById('companyWebsite');
+        if (honeypot && honeypot.value.trim()) {
+            return;
+        }
         
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
         document.getElementById('btnSpinner').classList.remove('hidden');
         document.getElementById('btnText').classList.add('opacity-0');
 
-        const dates = this.fpInstance.selectedDates;
-        const dString = dates.length === 2 
-            ? `${this.fpInstance.formatDate(dates[0], "Y-m-d")} to ${this.fpInstance.formatDate(dates[1], "Y-m-d")}` 
-            : "No dates selected";
+        const dateInput = document.getElementById('dateRange');
+        const dates = this.fpInstance ? this.fpInstance.selectedDates : [];
+        const dString = this.fpInstance && dates.length === 2
+            ? `${this.fpInstance.formatDate(dates[0], "Y-m-d")} to ${this.fpInstance.formatDate(dates[1], "Y-m-d")}`
+            : (dateInput?.value?.trim() || "No dates selected");
         
         const priceText = document.getElementById('total-price-display').innerText;
         const durationText = document.getElementById('trip-duration').innerText;
@@ -502,6 +704,7 @@ const BookingManager = {
         const text = `${header}:\n👤 ${data.name}\n📱 ${data.phone}\n🚗 ${data.vehicle} (${data.passengers} pax)\n📅 ${data.dates} (${data.duration})\n💰 Estimate: ${data.price}\n📝 ${data.notes}`;
         const waUrl = `https://wa.me/995579088537?text=${encodeURIComponent(text)}`;
         document.getElementById('whatsappLink').href = waUrl;
+        AnalyticsTracker.event('booking_submit', { page_path: window.location.pathname, vehicle: data.vehicle });
 
         if(typeof emailjs !== 'undefined') {
             emailjs.send('service_booking', 'template_40h23xf', { ...data, message: text })
@@ -538,12 +741,34 @@ const BookingManager = {
                 const err = document.getElementById('dateError');
                 if(err) err.classList.add('hidden');
             }
+        } else if (dateInput) {
+            dateInput.classList.remove('input-error');
+            if (!dateInput.value.trim()) {
+                dateInput.classList.add('input-error');
+                const err = document.getElementById('dateError');
+                if(err) err.classList.remove('hidden');
+                valid = false;
+            } else {
+                const err = document.getElementById('dateError');
+                if(err) err.classList.add('hidden');
+            }
         }
         
         const phone = document.getElementById('phone');
         if (phone && !/^\+?[\d\s-]{5,}$/.test(phone.value)) {
             phone.classList.add('input-error');
             valid = false;
+        }
+
+        const consent = document.getElementById('bookingConsent');
+        const consentError = document.getElementById('consentError');
+        if (consent) {
+            if (!consent.checked) {
+                valid = false;
+                if (consentError) consentError.classList.remove('hidden');
+            } else if (consentError) {
+                consentError.classList.add('hidden');
+            }
         }
 
         if(!valid && navigator.vibrate) navigator.vibrate([50, 50, 50]);
@@ -656,6 +881,9 @@ const LangManager = {
 const MainApp = {
     start() {
         UIManager.init();
+        BookingManager.init();
+        this.normalizeBookingLinks();
+        this.initTracking();
         
         // OPTIMIZATION: Lazy Load Booking Libraries (Flatpickr & EmailJS)
         // Only load them when user scrolls near the booking section
@@ -676,12 +904,15 @@ const MainApp = {
                         LibraryLoader.load('https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js')
                     ]).then(() => {
                         BookingManager.init();
-                        // Restore date input
+                        if(typeof emailjs !== 'undefined') emailjs.init("gFHD0l5sBGRvS44V8");
+                    }).catch(() => {
+                        BookingManager.init();
+                    }).finally(() => {
                         if(dateInput) {
-                            dateInput.setAttribute('placeholder', 'Select Pick-up & Drop-off Dates');
+                            const isArabic = document.documentElement.lang === 'ar';
+                            dateInput.setAttribute('placeholder', isArabic ? 'اختر تواريخ الاستلام والتسليم' : 'Select Pick-up & Drop-off Dates');
                             dateInput.disabled = false;
                         }
-                        if(typeof emailjs !== 'undefined') emailjs.init("gFHD0l5sBGRvS44V8");
                     });
                     observer.disconnect();
                 }
@@ -711,6 +942,13 @@ const MainApp = {
     },
     
     initAnimations() {
+        const isArabicPage = document.documentElement.lang === 'ar';
+        const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (isArabicPage || reduceMotion) {
+            document.querySelectorAll('.reveal').forEach(el => el.classList.remove('waiting'));
+            return;
+        }
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -721,6 +959,10 @@ const MainApp = {
         }, { threshold: 0.1 });
         
         document.querySelectorAll('.reveal').forEach(el => {
+            if (el.closest('.hero')) {
+                el.classList.remove('waiting');
+                return;
+            }
             el.classList.add('waiting');
             observer.observe(el);
         });
@@ -871,6 +1113,36 @@ const MainApp = {
             const bookingSec = document.getElementById('booking');
             if(bookingSec) bookingSec.scrollIntoView({ behavior: 'smooth' });
         }
+    },
+
+    normalizeBookingLinks() {
+        const isArabic = document.documentElement.lang === 'ar';
+        const bookingTarget = isArabic ? 'booking-ar.html' : 'booking.html';
+        const isHome = window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('arabic.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/');
+        if (isHome) return;
+
+        document.querySelectorAll('a[href="#booking"], a[href="index.html#booking"], a[href="arabic.html#booking"]').forEach((link) => {
+            link.setAttribute('href', bookingTarget);
+        });
+    },
+
+    initTracking() {
+        document.querySelectorAll('a.btn-book-nav, a.mobile-btn-book, .btn-submit').forEach((el) => {
+            el.addEventListener('click', () => {
+                AnalyticsTracker.event('cta_click', {
+                    page_path: window.location.pathname,
+                    cta_text: (el.textContent || '').trim().slice(0, 60)
+                });
+            });
+        });
+
+        ['name', 'phone', 'passengers', 'dateRange'].forEach((id) => {
+            const input = document.getElementById(id);
+            if (!input) return;
+            input.addEventListener('blur', () => {
+                AnalyticsTracker.event('booking_field_blur', { page_path: window.location.pathname, field: id });
+            });
+        });
     }
 };
 

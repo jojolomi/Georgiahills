@@ -2,8 +2,9 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="robots" content="noindex, follow">
+    <meta name="description" content="The page you requested could not be found. Return to Georgia Hills home or continue with booking.">
     <title>Page Not Found | Georgia Hills</title>
         <style>
             :root{--color-gray-400:#9CA3AF}
@@ -15,15 +16,15 @@
             .hero{position:relative;overflow:hidden}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="style.css"></noscript>
+        <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.ico">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Navbar (Simplified) -->
-    <nav class="navbar">
+    <nav id="navbar" class="navbar">
         <div class="container">
             <div class="navbar-inner">
                 <a href="index.html" class="nav-logo">
@@ -31,14 +32,28 @@
                     <span>Georgia Hills</span>
                 </a>
                 <div class="desktop-menu">
+                    <a href="legal.html" class="nav-link">Legal</a>
                     <a href="index.html" class="btn-book-nav">Back Home</a>
+                </div>
+                <div class="mobile-controls">
+                    <a href="index.html" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;">
+                        <i class="fa-solid fa-house"></i> <span class="lang-text">Home</span>
+                    </a>
+                    <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
                 </div>
             </div>
         </div>
     </nav>
 
+    <div id="mobile-menu" aria-hidden="true">
+        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu"><i class="fa-solid fa-xmark"></i></button>
+        <a href="index.html" class="mobile-link">Home</a>
+        <a href="legal.html" class="mobile-link">Legal</a>
+        <a href="booking.html" class="mobile-btn-book">Book Now</a>
+    </div>
+
     <!-- 404 Content -->
-    <section class="hero" style="height: 100vh; background: var(--color-surface);">
+    <main class="hero" id="main-content" style="height: 100vh; background: var(--color-surface);">
         <div class="container text-center reveal">
             <div style="font-size: 8rem; font-weight: 800; color: var(--color-primary); line-height: 1;">404</div>
             <h1 class="title-large" style="margin-bottom: 1rem;">Page Not Found</h1>
@@ -49,19 +64,17 @@
                 <a href="index.html" class="btn-hero btn-hero-primary">
                     <i class="fa-solid fa-house"></i> Go Home
                 </a>
-                <a href="index.html#booking" class="btn-hero btn-hero-secondary" style="background:white; color:var(--color-dark); border-color:var(--color-gray-200);">
+                    <a href="booking.html" class="btn-hero btn-hero-secondary" style="background:white; color:var(--color-dark); border-color:var(--color-gray-200);">
                     <i class="fa-brands fa-whatsapp"></i> Contact Us
                 </a>
             </div>
         </div>
-    </section>
+    </main>
 
     <!-- Footer -->
     <footer class="footer" style="padding-top: 2rem; margin-top: 0;">
         <div class="container">
-            <div class="footer-bottom" style="border: none;">
-                &copy; <span id="year">2024</span> Georgia Hills. All rights reserved.
-            </div>
+            <div class="footer-bottom" style="border: none;">&copy; <span id="year">2026</span> Georgia Hills. All rights reserved.</div>
         </div>
     </footer>
 

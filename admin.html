@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Administrative control panel for managing Georgia Hills website content and deployment.">
     <title>Georgia Hills Admin Panel</title>
         <style>
             :root{--color-gray-400:#9CA3AF}
@@ -14,8 +16,7 @@
             .hero{position:relative;overflow:hidden}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="style.css"></noscript>
+        <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
     
@@ -34,6 +35,37 @@
 
 </head>
 <body class="admin-body">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <h1 class="hidden">Georgia Hills Admin Panel</h1>
+
+    <nav id="navbar" class="navbar" dir="ltr">
+        <div class="container">
+            <div class="navbar-inner">
+                <a href="index.html" class="nav-logo">
+                    <img src="favicon.ico" width="56" height="56" alt="Logo" class="nav-logo-img">
+                    <span>Georgia Hills</span>
+                </a>
+                <div class="desktop-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="legal.html" class="nav-link">Legal</a>
+                    <a href="admin.html" class="btn-book-nav">Admin</a>
+                </div>
+                <div class="mobile-controls">
+                    <a href="index.html" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;">
+                        <i class="fa-solid fa-house"></i> <span class="lang-text">Home</span>
+                    </a>
+                    <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" aria-hidden="true">
+        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu"><i class="fa-solid fa-xmark"></i></button>
+        <a href="index.html" class="mobile-link">Home</a>
+        <a href="legal.html" class="mobile-link">Legal</a>
+        <a href="admin.html" class="mobile-btn-book">Admin</a>
+    </div>
 
     <!-- Login Overlay -->
     <div id="login-overlay" style="position:fixed; inset:0; background:#0F172A; z-index:9999; display:flex; align-items:center; justify-content:center;">
@@ -76,7 +108,7 @@
     </div>
 
     <!-- Main Content -->
-    <main class="admin-main-content" id="admin-main-content" style="display:none;">
+    <main class="admin-main-content" id="main-content" style="display:none;">
         
         <!-- TAB: Content Manager -->
         <div id="tab-content" class="tab-pane">
@@ -183,6 +215,12 @@
     <div id="network-toast" class="toast">
         <i class="fa-solid fa-check-circle text-success"></i> <span>Operation successful</span>
     </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">&copy; <span id="year">2026</span> Georgia Hills. All rights reserved.</div>
+        </div>
+    </footer>
 
 </body>
 </html>

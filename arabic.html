@@ -106,9 +106,9 @@
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     
     <!-- OPTIMIZATION: Preload Hero Image BEFORE CSS -->
-    <link rel="preload" as="image" 
-          href="image-640.webp" 
-          imagesrcset="image-320.webp 320w, image-640.webp 640w" 
+        <link rel="preload" as="image" 
+            href="image-1600.webp" 
+            imagesrcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" 
           imagesizes="100vw"
           fetchpriority="high">
 
@@ -119,12 +119,14 @@
             .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
             .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
             .navbar{position:relative;z-index:50;background:transparent}
-            .hero-img{width:100%;height:auto;display:block;object-fit:cover}
-            .hero{position:relative;overflow:hidden}
+            .hero{position:relative;height:90vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#0F172A}
+            .hero-bg-container{position:absolute;inset:0;z-index:0}
+            .hero-img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
+            .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,.7), rgba(0,0,0,.4), transparent)}
+            .hero-content{position:relative;z-index:10;text-align:center;color:#fff;padding:0 1rem;max-width:64rem;margin-top:2.5rem}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="style.css"></noscript>
+        <link rel="stylesheet" href="style.css">
 
     <!-- Inline Critical CSS for Icons (prevents flash) -->
     <style>
@@ -144,7 +146,7 @@
     <meta property="og:url" content="https://georgiahills.netlify.app/arabic.html">
     <meta property="og:title" content="سائق خاص في جورجيا | Georgia Hills">
     <meta property="og:description" content="اكتشف جمال جورجيا مع سائق خاص محترف. خدمة VIP للعوائل والمسافرين العرب.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80">
+    <meta property="og:image" content="https://georgiahills.netlify.app/image-1600.webp">
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- PWA Manifest & Icons -->
@@ -163,13 +165,39 @@
 
     <!-- Main Script Deferred -->
     <script src="script.js" defer></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            const hero = document.getElementById('home');
+            const heroImg = document.getElementById('hero-img');
+
+            if (hero) {
+                hero.style.display = 'flex';
+                hero.style.visibility = 'visible';
+                hero.style.opacity = '1';
+                hero.style.minHeight = '90vh';
+            }
+
+            if (heroImg) {
+                heroImg.style.display = 'block';
+                heroImg.style.visibility = 'visible';
+                heroImg.style.opacity = '1';
+                if (!heroImg.getAttribute('src')) {
+                    heroImg.setAttribute('src', 'image-1024.webp');
+                }
+            }
+
+            if (!window.location.hash) {
+                window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+            }
+        });
+    </script>
 </head>
 <body dir="rtl">
 
     <!-- Accessibility & Network -->
     <noscript>
         <div class="no-js-overlay">
-            <h1 style="font-size:1.5rem; font-weight:bold; color:#EF4444; margin-bottom:0.5rem;">JavaScript Required</h1>
+            <h2 style="font-size:1.5rem; font-weight:bold; color:#EF4444; margin-bottom:0.5rem;">JavaScript Required</h2>
             <p style="color:#4B5563;">Please enable JavaScript to use Georgia Hills car rental services.</p>
             <style>#preloader { display: none; }</style>
         </div>
@@ -177,8 +205,8 @@
 
     <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>أنت غير متصل</span></div>
 
-    <!-- Preloader -->
-    <div id="preloader">
+    <!-- Preloader (disabled to avoid blocking hero/LCP) -->
+    <div id="preloader" style="display:none;">
         <div class="text-center">
             <div class="preloader-circle animate-bounce">
                 <img src="favicon.ico" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
@@ -203,10 +231,11 @@
                 <!-- Desktop Menu -->
                 <div class="desktop-menu">
                     <a href="#home" class="nav-link">الرئيسية</a>
+                    <a href="about-ar.html" class="nav-link">من نحن</a>
                     <a href="#destinations" class="nav-link">وجهات</a>
-                    <a href="#packages" class="nav-link">باقات سياحية</a>
+                    <a href="services-ar.html" class="nav-link">الخدمات</a>
                     <a href="#reviews" class="nav-link">الآراء</a>
-                    <a href="#guide" class="nav-link">دليل المسافر</a>
+                    <a href="guide-ar.html" class="nav-link">الدليل</a>
                     <a href="#fleet" class="nav-link">السيارات</a>
                     
                     <!-- Desktop Settings -->
@@ -229,7 +258,7 @@
                         </a>
                     </div>
 
-                    <a href="#booking" class="btn-book-nav">احجز الآن</a>
+                    <a href="booking-ar.html" class="btn-book-nav">احجز الآن</a>
                 </div>
 
                 <!-- Mobile Toggle -->
@@ -248,10 +277,11 @@
     <div id="mobile-menu" aria-hidden="true">
         <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Menu"><i class="fa-solid fa-xmark"></i></button>
         <a href="#home" class="mobile-link">الرئيسية</a>
+        <a href="about-ar.html" class="mobile-link">من نحن</a>
         <a href="#destinations" class="mobile-link">وجهات</a>
-        <a href="#packages" class="mobile-link">باقات سياحية</a>
+        <a href="services-ar.html" class="mobile-link">الخدمات</a>
         <a href="#reviews" class="mobile-link">الآراء</a>
-        <a href="#guide" class="mobile-link">دليل المسافر</a>
+        <a href="guide-ar.html" class="mobile-link">الدليل</a>
         <a href="#fleet" class="mobile-link">السيارات</a>
         
         <!-- Mobile Settings -->
@@ -269,7 +299,7 @@
             </div>
         </div>
 
-        <a href="#booking" class="mobile-btn-book">احجز الآن</a>
+        <a href="booking-ar.html" class="mobile-btn-book">احجز الآن</a>
         
         <div class="mobile-social-container">
              <button onclick="App.share()" class="mobile-social-btn" aria-label="Share App">
@@ -283,13 +313,16 @@
         </div>
     </div>
 
+    <!-- Accessibility Skip Link -->
+    <a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
+
     <!-- Hero -->
-    <section id="home" class="hero">
+    <section id="home" class="hero" aria-label="مرحباً بكم في جورجيا هيلز">
         <div class="hero-bg-container">
-             <img id="hero-img" src="image-640.webp" srcset="image-320.webp 320w, image-640.webp 640w" sizes="100vw" width="1200" height="700" class="hero-img" alt="جبال جورجيا الخلابة" fetchpriority="high" decoding="async" loading="eager">
+             <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="جبال جورجيا الخلابة" fetchpriority="high" decoding="async" loading="eager">
             <div class="hero-overlay"></div>
         </div>
-        <div class="hero-content reveal">
+        <div class="hero-content">
             <div class="hero-logo-container">
                 <div class="hero-logo-circle">
                     <img src="favicon.ico" width="96" height="96" style="width:100%; height:100%; object-fit:cover;" alt="شعار جورجيا هيلز">
@@ -302,7 +335,7 @@
             <h1 class="hero-title">اكتشف جورجيا <br><span class="text-accent-light italic font-serif">مع سائق خاص</span></h1>
             <p class="hero-subtitle">سائقون محترفون وأسطول فاخر. من الاستقبال في المطار إلى الرحلات الجبلية.</p>
             <div class="hero-buttons">
-                <a href="#booking" class="btn-hero btn-hero-primary">احصل على عرض</a>
+                <a href="booking-ar.html" class="btn-hero btn-hero-primary">احصل على عرض</a>
                 <a href="#fleet" class="btn-hero btn-hero-secondary">شاهد السيارات</a>
             </div>
         </div>
@@ -328,7 +361,7 @@
 
     <!-- About -->
     <section id="about" class="section-py">
-        <div class="container">
+        <div class="container" id="main-content">
             <div class="about-grid">
                 <div class="about-img-container reveal">
                     <div class="about-blob"></div>
@@ -424,73 +457,20 @@
         </div>
     </section>
 
-    <!-- PACKAGES -->
+    <!-- SERVICES PREVIEW -->
     <section id="packages" class="section-py">
         <div class="container">
             <div class="reveal text-center" style="margin-bottom:3rem;">
-                <span class="section-label">خطط جاهزة</span>
-                <h2 class="section-title">باقات سياحية في جورجيا</h2>
-                <p class="section-desc" style="max-width:48rem; margin:0 auto;">وفر الوقت والجهد مع جداولنا السياحية المختارة بعناية.</p>
+                <span class="section-label">مركز الخدمات</span>
+                <h2 class="section-title">الباقات والسيارات والأسعار</h2>
+                <p class="section-desc" style="max-width:48rem; margin:0 auto;">استعرض التفاصيل الكاملة في صفحة الخدمات المخصصة.</p>
             </div>
-            
-            <div class="packages-grid">
-                <!-- Package 1 -->
-                <div class="pkg-card reveal">
-                    <div class="pkg-header">
-                        <span class="pkg-days">7</span>
-                        <h3 class="pkg-title">رحلة العائلة</h3>
-                        <span class="pkg-subtitle">تبليسي، كازبيجي، باكورياني</span>
-                    </div>
-                    <div class="pkg-body">
-                        <ul class="pkg-list">
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> استقبال وتوديع المطار</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> سائق خاص يومياً</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> حجوزات فنادق 4 نجوم</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> شرائح اتصال مجانية</li>
-                        </ul>
-                        <div class="pkg-price">يبدأ من <span class="price-display" data-base-price="600">600 USD</span></div>
-                        <button onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})" class="btn-pkg">التفاصيل</button>
-                    </div>
-                </div>
-                
-                <!-- Package 2 -->
-                <div class="pkg-card reveal" style="transform: scale(1.05); z-index:10; border-color:var(--color-accent);">
-                    <div class="pkg-header" style="background:var(--color-accent);">
-                        <span class="pkg-days">5</span>
-                        <h3 class="pkg-title">شهر العسل</h3>
-                        <span class="pkg-subtitle">تبليسي، سغناغي (مدينة الحب)</span>
-                    </div>
-                    <div class="pkg-body">
-                        <ul class="pkg-list">
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> سيارة سيدان فاخرة</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> جولة مزارع العنب</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> عشاء رومانسي</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> جلسة تصوير</li>
-                        </ul>
-                        <div class="pkg-price">يبدأ من <span class="price-display" data-base-price="450">450 USD</span></div>
-                        <button onclick="window.location.href='honeymoon-ar.html'" class="btn-pkg" style="background:var(--color-primary); color:white;">التفاصيل</button>
-                    </div>
-                </div>
-
-                <!-- Package 3 -->
-                <div class="pkg-card reveal">
-                    <div class="pkg-header">
-                        <span class="pkg-days">10</span>
-                        <h3 class="pkg-title">الجولة الكبرى</h3>
-                        <span class="pkg-subtitle">من الشرق إلى الغرب (باتومي)</span>
-                    </div>
-                    <div class="pkg-body">
-                        <ul class="pkg-list">
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> زيارة كل المعالم</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> ميني فان مريح</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> أيام شاطئية في باتومي</li>
-                            <li class="pkg-item"><i class="fa-solid fa-check"></i> جدول مرن</li>
-                        </ul>
-                        <div class="pkg-price">يبدأ من <span class="price-display" data-base-price="900">900 USD</span></div>
-                        <button onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})" class="btn-pkg">التفاصيل</button>
-                    </div>
-                </div>
+            <div class="guide-grid">
+                <div class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-map"></i></div><h3 class="guide-title">الباقات</h3><p class="guide-text">خطط عائلية وشهر عسل وجولات متعددة المدن.</p></div>
+                <div class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-car-side"></i></div><h3 class="guide-title">السيارات</h3><p class="guide-text">سيدان وميني فان مع أسعار يومية واضحة.</p></div>
+                <div class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-road"></i></div><h3 class="guide-title">المسارات</h3><p class="guide-text">أسعار أشهر خطوط التنقل داخل جورجيا.</p></div>
             </div>
+            <div class="text-center" style="margin-top:2rem;"><a href="services-ar.html" class="btn-book-nav">افتح صفحة الخدمات</a></div>
         </div>
     </section>
 
@@ -597,7 +577,7 @@
             <div class="reveal text-center" style="margin-bottom:3rem;">
                 <span class="section-label">أسعار شفافة</span>
                 <h2 class="section-title">أشهر المسارات</h2>
-                <p class="section-desc">سعر ثابت للسيارة (سيدان). شامل الوقود والضرائب.</p>
+                <p class="section-desc">هذه معاينة سريعة. قائمة المسارات الكاملة متوفرة في صفحة الخدمات.</p>
             </div>
             <div class="routes-container reveal" style="max-width: 48rem; margin: 0 auto;">
                 <!-- Route 1 -->
@@ -634,7 +614,7 @@
                 </div>
             </div>
             <div class="text-center" style="margin-top:2rem;">
-                <a href="#booking" class="action-btn" style="display:inline-flex;">تحقق من مسارات أخرى</a>
+                <a href="services-ar.html" class="action-btn" style="display:inline-flex;">عرض جميع المسارات</a>
             </div>
         </div>
     </section>
@@ -643,63 +623,41 @@
     <section id="guide" class="section-py">
         <div class="container">
             <div class="reveal text-center" style="margin-bottom:3rem;">
-                <span class="section-label">دليل المسافر</span>
-                <h2 class="section-title">معلومات تهم السائح العربي</h2>
+                <span class="section-label">مركز المحتوى</span>
+                <h2 class="section-title">الدليل والأسئلة والمدونة</h2>
             </div>
             <div class="guide-grid">
-                <!-- Visa -->
                 <div class="guide-box reveal">
                     <div class="guide-icon"><i class="fa-solid fa-passport"></i></div>
-                    <h3 class="guide-title">تأشيرة الدخول</h3>
-                    <p class="guide-text">مواطنو دول الخليج (السعودية، الإمارات، الكويت، عمان، قطر، البحرين) يدخلون جورجيا بدون فيزا لمدة سنة كاملة.</p>
+                    <h3 class="guide-title">الدليل</h3>
+                    <p class="guide-text">معلومات الفيزا والمواسم والتجهيزات قبل السفر.</p>
                 </div>
-                <!-- Halal Food -->
                 <div class="guide-box reveal">
-                    <div class="guide-icon"><i class="fa-solid fa-utensils"></i></div>
-                    <h3 class="guide-title">الأكل الحلال</h3>
-                    <p class="guide-text">المطاعم الحلال متوفرة بكثرة، خاصة في منطقة مرجان شفيلي في تبليسي. سائقونا يعرفون أفضل الأماكن.</p>
+                    <div class="guide-icon"><i class="fa-solid fa-circle-question"></i></div>
+                    <h3 class="guide-title">الأسئلة الشائعة</h3>
+                    <p class="guide-text">إجابات عن الدفع والسائقين العرب وتفاصيل الحجز.</p>
                 </div>
-                <!-- Best Time -->
                 <div class="guide-box reveal">
-                    <div class="guide-icon"><i class="fa-solid fa-calendar-day"></i></div>
-                    <h3 class="guide-title">أفضل وقت للزيارة</h3>
-                    <p class="guide-text">الربيع (أبريل-يونيو) والخريف (سبتمبر-أكتوبر) لجو معتدل. ولعشاق الثلوج، الشتاء (ديسمبر-فبراير) مثالي.</p>
+                    <div class="guide-icon"><i class="fa-solid fa-newspaper"></i></div>
+                    <h3 class="guide-title">المدونة</h3>
+                    <p class="guide-text">أفكار برامج سياحية وتجارب وأحدث النصائح.</p>
                 </div>
+            </div>
+            <div class="text-center" style="margin-top:2rem; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+                <a href="guide-ar.html" class="action-btn">افتح الدليل</a>
+                <a href="blog-ar.html" class="action-btn">افتح المدونة</a>
             </div>
         </div>
     </section>
 
-    <!-- FAQ Section -->
+    <!-- FAQ Preview -->
     <section id="faq" class="section-py">
         <div class="container faq-container">
-            <div class="text-center reveal" style="margin-bottom:3rem;">
-                <h2 class="section-title">أسئلة شائعة</h2>
+            <div class="text-center reveal" style="margin-bottom:2rem;">
+                <h2 class="section-title">الأسئلة الشائعة</h2>
+                <p class="section-desc">جميع الأسئلة والإجابات المحدثة موجودة في صفحة الدليل.</p>
             </div>
-            <div id="faq-list" class="faq-list reveal">
-                <div class="faq-item" onclick="this.querySelector('p').classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')">
-                    <div class="faq-header">
-                        <h3 class="faq-question">هل يجب علي الدفع مسبقاً؟</h3>
-                        <i class="fa-solid fa-chevron-down" style="color:var(--color-gray-400);"></i>
-                    </div>
-                    <p class="faq-answer hidden">لا، الدفع يتم بالكامل عند الوصول. يمكنك الدفع نقداً للسائق (لاري، دولار، يورو) عند بدء الرحلة.</p>
-                </div>
-                
-                <div class="faq-item" onclick="this.querySelector('p').classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')">
-                    <div class="faq-header">
-                        <h3 class="faq-question">هل يتحدث السائقون العربية؟</h3>
-                        <i class="fa-solid fa-chevron-down" style="color:var(--color-gray-400);"></i>
-                    </div>
-                    <p class="faq-answer hidden">نعم! لدينا سائقون محترفون يتحدثون العربية. يرجى طلب ذلك في الملاحظات.</p>
-                </div>
-
-                <div class="faq-item" onclick="this.querySelector('p').classList.toggle('hidden'); this.querySelector('i').classList.toggle('rotate-180')">
-                    <div class="faq-header">
-                        <h3 class="faq-question">هل الوقود مشمول؟</h3>
-                        <i class="fa-solid fa-chevron-down" style="color:var(--color-gray-400);"></i>
-                    </div>
-                    <p class="faq-answer hidden">نعم، الوقود مشمول بالكامل في جميع الرحلات التي تشمل سائقاً.</p>
-                </div>
-            </div>
+            <div class="text-center"><a href="guide-ar.html" class="btn-book-nav">افتح صفحة الأسئلة</a></div>
         </div>
     </section>
 
@@ -761,6 +719,7 @@
 
             <div id="booking-container" class="booking-card reveal">
                 <form id="bookingForm" onsubmit="BookingManager.handleSubmit(event)" novalidate>
+                    <input type="text" id="companyWebsite" name="companyWebsite" autocomplete="off" tabindex="-1" aria-hidden="true" class="hidden">
                     <div class="form-grid">
                         <!-- Name -->
                         <div>
@@ -821,6 +780,14 @@
                             <label for="notes" class="form-label">تفاصيل الرحلة / أسئلة</label>
                             <textarea id="notes" rows="3" class="form-textarea"></textarea>
                         </div>
+
+                        <div class="col-span-full">
+                            <label style="display:flex; align-items:flex-start; gap:0.5rem;">
+                                <input type="checkbox" id="bookingConsent" style="margin-top:0.2rem;">
+                                <span style="font-size:0.85rem; color:var(--color-gray-600);">أوافق على التواصل معي بخصوص طلب الحجز.</span>
+                            </label>
+                            <span class="error-text hidden" id="consentError">يرجى تأكيد الموافقة</span>
+                        </div>
                     </div>
 
                     <!-- Live Price Estimate -->
@@ -870,7 +837,7 @@
                         <li><a href="#home">الرئيسية</a></li>
                         <li><a href="#fleet">السيارات</a></li>
                         <li><a href="#reviews">الآراء</a></li>
-                        <li><a href="#booking">احجز الآن</a></li>
+                        <li><a href="booking-ar.html">احجز الآن</a></li>
                     </ul>
                 </div>
                 <!-- Contact -->
@@ -890,7 +857,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; <span id="year">2024</span> Georgia Hills. جميع الحقوق محفوظة.
+                &copy; <span id="year">2026</span> Georgia Hills. جميع الحقوق محفوظة.
             </div>
         </div>
     </footer>
@@ -948,7 +915,7 @@
     <!-- Mobile Sticky Bar -->
     <div class="sticky-bar">
         <a href="https://wa.me/995579088537" class="glass-btn-primary" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp" style="font-size:1.25rem;"></i> واتساب</a>
-        <a href="#booking" class="glass-btn-accent">احجز الآن</a>
+        <a href="booking-ar.html" class="glass-btn-accent">احجز الآن</a>
     </div>
 
 </body>

@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <!-- SEO: Primary Meta Tags -->
     <title>Contact Georgia Hills | Private Driver & Car Rental in Tbilisi</title>
@@ -15,10 +15,13 @@
     <meta property="og:url" content="https://georgiahills.netlify.app/contact.html">
     <meta property="og:title" content="Contact Georgia Hills | Private Driver Services">
     <meta property="og:description" content="Plan your trip with a local expert. Contact us for custom itineraries and private transfers in Georgia.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80">
+    <meta property="og:image" content="https://georgiahills.netlify.app/image-1600.webp">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://georgiahills.netlify.app/contact.html">
+    <link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/contact.html" />
+    <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/contact-ar.html" />
+    <link rel="alternate" hreflang="x-default" href="https://georgiahills.netlify.app/contact.html" />
 
     <!-- Styles & Scripts -->
         <style>
@@ -31,8 +34,7 @@
             .hero{position:relative;overflow:hidden}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="style.css"></noscript>
+        <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -70,6 +72,7 @@
     </script>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Navbar -->
     <nav id="navbar" class="navbar" dir="ltr">
         <div class="container">
@@ -80,6 +83,8 @@
                 </a>
                 <div class="desktop-menu">
                     <a href="index.html" class="nav-link">Home</a>
+                    <a href="services.html" class="nav-link">Services</a>
+                    <a href="guide.html" class="nav-link">Guide</a>
                     <a href="blog.html" class="nav-link">Blog</a>
                     
                     <!-- Desktop Settings -->
@@ -97,7 +102,7 @@
                         </a>
                     </div>
 
-                    <a href="index.html#booking" class="btn-book-nav">Book Now</a>
+                    <a href="booking.html" class="btn-book-nav">Book Now</a>
                 </div>
                 <div class="mobile-controls">
                     <a href="contact-ar.html" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;">
@@ -110,9 +115,11 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu">
+    <div id="mobile-menu" aria-hidden="true">
         <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu"><i class="fa-solid fa-xmark"></i></button>
         <a href="index.html" class="mobile-link">Home</a>
+        <a href="services.html" class="mobile-link">Services</a>
+        <a href="guide.html" class="mobile-link">Guide</a>
         <a href="blog.html" class="mobile-link">Blog</a>
         
         <!-- Mobile Currency -->
@@ -125,11 +132,11 @@
             <div class="custom-options" id="curr-options-mobile"></div>
         </div>
 
-        <a href="index.html#booking" class="mobile-btn-book">Book Now</a>
+        <a href="booking.html" class="mobile-btn-book">Book Now</a>
     </div>
 
     <!-- Hero (Small) -->
-    <section class="hero" style="height: 40vh; min-height: 300px;">
+    <section class="hero" id="main-content" style="height: 40vh; min-height: 300px;">
         <div class="hero-bg-container">
             <img src="image-640.webp" class="hero-img" alt="Contact Georgia Hills Support" style="opacity: 0.6;" loading="lazy" decoding="async">
             <div class="hero-overlay"></div>
@@ -212,7 +219,7 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="index.html#fleet">Our Fleet</a></li>
                         <li><a href="index.html#reviews">Reviews</a></li>
-                        <li><a href="index.html#booking">Book Now</a></li>
+                        <li><a href="booking.html">Book Now</a></li>
                     </ul>
                 </div>
                 <div>
@@ -231,7 +238,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; <span id="year">2024</span> Georgia Hills Transport. All rights reserved.
+                &copy; <span id="year">2026</span> Georgia Hills. All rights reserved.
             </div>
         </div>
     </footer>

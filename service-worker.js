@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gh-cache-v14';
+const CACHE_NAME = 'gh-cache-v22';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -8,6 +8,20 @@ const ASSETS_TO_CACHE = [
   '/contact-ar.html',
   '/blog.html',
   '/blog-ar.html',
+  '/booking.html',
+  '/booking-ar.html',
+  '/article-georgian-food.html',
+  '/article-georgian-food-ar.html',
+  '/article-7-days-georgia.html',
+  '/article-7-days-georgia-ar.html',
+  '/article-is-georgia-safe.html',
+  '/article-is-georgia-safe-ar.html',
+  '/services.html',
+  '/services-ar.html',
+  '/guide.html',
+  '/guide-ar.html',
+  '/about.html',
+  '/about-ar.html',
   '/honeymoon-ar.html',
   '/tbilisi.html',
   '/tbilisi-ar.html',
@@ -31,19 +45,11 @@ const ASSETS_TO_CACHE = [
 
 // 1. INSTALL: Browser downloads and saves the critical files
 self.addEventListener('install', (event) => {
-  event.waitUntil((async () => {
-    const cache = await caches.open(CACHE_NAME);
-
-    await Promise.all(
-      ASSETS_TO_CACHE.map(async (asset) => {
-        try {
-          await cache.add(asset);
-        } catch (_) {}
-      })
-    );
-
-    await self.skipWaiting();
-  })());
+  event.waitUntil(
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(ASSETS_TO_CACHE);
+    })
+  );
 });
 
 // 2. ACTIVATE: Clean up old caches (if you update your website)
@@ -67,6 +73,25 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   // Skip non-http requests (like chrome-extension://)
   if (!event.request.url.startsWith('http')) return;
+
+  // Network-first for page navigations to avoid stale HTML after deployments
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+          }
+          return networkResponse;
+        })
+        .catch(async () => {
+          const cachedPage = await caches.match(event.request);
+          return cachedPage || caches.match('/index.html');
+        })
+    );
+    return;
+  }
 
   // OPTIMIZATION: For destination.html, ignore query params when matching cache
   // This ensures we serve the cached app shell regardless of the ?id=... param

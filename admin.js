@@ -84,13 +84,13 @@
     },
 
     unlockUI() {
-      const ids = ['admin-sidebar', 'admin-top-bar', 'admin-main-content'];
+      const ids = ['admin-sidebar', 'admin-top-bar', 'main-content'];
       ids.forEach((id) => {
         const el = document.getElementById(id);
         if (el) el.style.display = id === 'admin-sidebar' ? 'block' : 'flex';
       });
 
-      const main = document.getElementById('admin-main-content');
+      const main = document.getElementById('main-content');
       if (main) main.style.display = 'block';
 
       const overlay = document.getElementById('login-overlay');

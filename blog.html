@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     
     <!-- SEO: Primary Meta Tags -->
     <title>Georgia Travel Blog | Tips, Itineraries & Guides</title>
@@ -15,10 +15,13 @@
     <meta property="og:url" content="https://georgiahills.netlify.app/blog.html">
     <meta property="og:title" content="Georgia Travel Blog | Expert Guides">
     <meta property="og:description" content="Expert advice for your trip to Georgia. Itineraries, food guides, and safety tips.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1582236357876-0f836526154b?auto=format&fit=crop&w=1200&q=80">
+    <meta property="og:image" content="https://georgiahills.netlify.app/image-1600.webp">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://georgiahills.netlify.app/blog.html">
+    <link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/blog.html" />
+    <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/blog-ar.html" />
+    <link rel="alternate" hreflang="x-default" href="https://georgiahills.netlify.app/blog.html" />
 
     <!-- Styles & Scripts -->
         <style>
@@ -31,8 +34,7 @@
             .hero{position:relative;overflow:hidden}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="preload" href="style.css" as="style" onload="this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="style.css"></noscript>
+        <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -62,6 +64,7 @@
     </script>
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Navbar -->
     <nav id="navbar" class="navbar">
         <div class="container">
@@ -72,8 +75,10 @@
                 </a>
                 <div class="desktop-menu">
                     <a href="index.html" class="nav-link">Home</a>
+                    <a href="services.html" class="nav-link">Services</a>
+                    <a href="guide.html" class="nav-link">Guide</a>
                     <a href="contact.html" class="nav-link">Contact</a>
-                    <a href="index.html#booking" class="btn-book-nav">Book Now</a>
+                    <a href="booking.html" class="btn-book-nav">Book Now</a>
                 </div>
                 <div class="mobile-controls">
                     <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
@@ -83,15 +88,17 @@
     </nav>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu">
+    <div id="mobile-menu" aria-hidden="true">
         <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu"><i class="fa-solid fa-xmark"></i></button>
         <a href="index.html" class="mobile-link">Home</a>
+        <a href="services.html" class="mobile-link">Services</a>
+        <a href="guide.html" class="mobile-link">Guide</a>
         <a href="contact.html" class="mobile-link">Contact</a>
-        <a href="index.html#booking" class="mobile-btn-book">Book Now</a>
+        <a href="booking.html" class="mobile-btn-book">Book Now</a>
     </div>
 
     <!-- Hero -->
-    <section class="hero" style="height: 40vh; min-height: 300px;">
+    <section class="hero" id="main-content" style="height: 40vh; min-height: 300px;">
         <div class="hero-bg-container">
             <img src="image-640.webp" class="hero-img" alt="Georgia Travel Blog" style="opacity: 0.6;" loading="lazy" decoding="async">
             <div class="hero-overlay"></div>
@@ -115,7 +122,7 @@
                         <div class="blog-meta">Food & Drink</div>
                         <h2 class="blog-title">Top 5 Must-Try Georgian Dishes</h2>
                         <p class="blog-excerpt">From Khinkali to Khachapuri, discover the flavors that make Georgia a culinary paradise. Learn where to find the best Halal options in Tbilisi.</p>
-                        <a href="index.html#guide" class="blog-link">Read Guide <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="article-georgian-food.html" class="blog-link">Read Article <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </article>
                 <!-- Article 2 -->
@@ -127,7 +134,7 @@
                         <div class="blog-meta">Travel Guide</div>
                         <h2 class="blog-title">7 Days in Georgia: The Perfect Itinerary</h2>
                         <p class="blog-excerpt">A complete guide to seeing Tbilisi, Kazbegi, and Batumi in one week. Perfect for families and couples.</p>
-                        <a href="index.html#packages" class="blog-link">View Itinerary <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="article-7-days-georgia.html" class="blog-link">Read Article <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </article>
                 <!-- Article 3 -->
@@ -139,7 +146,7 @@
                         <div class="blog-meta">Tips</div>
                         <h2 class="blog-title">Is Georgia Safe for Solo Travelers?</h2>
                         <p class="blog-excerpt">Everything you need to know about safety, transport, and local customs. Why hiring a private driver is the safest option.</p>
-                        <a href="index.html#about" class="blog-link">Safety Tips <i class="fa-solid fa-arrow-right"></i></a>
+                        <a href="article-is-georgia-safe.html" class="blog-link">Read Article <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
                 </article>
             </div>
@@ -173,7 +180,7 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="index.html#fleet">Our Fleet</a></li>
                         <li><a href="index.html#reviews">Reviews</a></li>
-                        <li><a href="index.html#booking">Book Now</a></li>
+                        <li><a href="booking.html">Book Now</a></li>
                     </ul>
                 </div>
                 <!-- Contact -->
@@ -193,7 +200,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                &copy; <span id="year">2024</span> Georgia Hills Transport. All rights reserved.
+                &copy; <span id="year">2026</span> Georgia Hills. All rights reserved.
             </div>
         </div>
     </footer>
