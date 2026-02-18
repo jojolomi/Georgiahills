@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="scroll-smooth">
+<html lang="ar" dir="ltr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -41,17 +41,17 @@
     </script>
 
     <!-- SEO: Multilingual Support -->
-    <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/" />
+    <link rel="alternate" hreflang="ar" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="en" href="https://georgiahills.com/" />
     <!-- Targeted Arabic Locales for GCC Dominance -->
-    <link rel="alternate" hreflang="ar-SA" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="ar-AE" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="ar-KW" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="ar-QA" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="ar-OM" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="ar-BH" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="x-default" href="https://georgiahills.netlify.app/" />
-    <link rel="canonical" href="https://georgiahills.netlify.app/arabic.html">
+    <link rel="alternate" hreflang="ar-SA" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="ar-AE" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="ar-KW" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="ar-QA" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="ar-OM" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="ar-BH" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="x-default" href="https://georgiahills.com/" />
+    <link rel="canonical" href="https://georgiahills.com/arabic.html">
 
     <!-- SEO: Structured Data -->
     <script type="application/ld+json">
@@ -60,11 +60,11 @@
       "@graph": [
         {
           "@type": "TravelAgency",
-          "@id": "https://georgiahills.netlify.app/arabic.html#organization",
+          "@id": "https://georgiahills.com/arabic.html#organization",
           "name": "Georgia Hills",
-          "url": "https://georgiahills.netlify.app/arabic.html",
-          "logo": "https://georgiahills.netlify.app/favicon.ico",
-          "image": "https://georgiahills.netlify.app/images/hero.webp",
+          "url": "https://georgiahills.com/arabic.html",
+          "logo": "https://georgiahills.com/favicon.ico",
+          "image": "https://georgiahills.com/image-1600.webp",
           "description": "أفضل خدمة سائق خاص في جورجيا للعوائل. سيارات حديثة وسائقين يتحدثون العربية.",
           "telephone": "+995579088537",
           "address": {
@@ -78,7 +78,7 @@
         {
           "@type": "Service",
           "name": "سائق عربي في جورجيا",
-          "provider": { "@id": "https://georgiahills.netlify.app/arabic.html#organization" },
+          "provider": { "@id": "https://georgiahills.com/arabic.html#organization" },
           "description": "خدمة تأجير سيارات مع سائق يتحدث العربية والإنجليزية. شامل الوقود والتأمين.",
           "hasOfferCatalog": {
             "@type": "OfferCatalog",
@@ -143,10 +143,10 @@
     <!-- Open Graph & Twitter -->
     <meta property="og:locale" content="ar_SA">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://georgiahills.netlify.app/arabic.html">
+    <meta property="og:url" content="https://georgiahills.com/arabic.html">
     <meta property="og:title" content="سائق خاص في جورجيا | Georgia Hills">
     <meta property="og:description" content="اكتشف جمال جورجيا مع سائق خاص محترف. خدمة VIP للعوائل والمسافرين العرب.">
-    <meta property="og:image" content="https://georgiahills.netlify.app/image-1600.webp">
+    <meta property="og:image" content="https://georgiahills.com/image-1600.webp">
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- PWA Manifest & Icons -->
@@ -164,6 +164,7 @@
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
     <!-- Main Script Deferred -->
+    <script src="shared-navbar.js" defer></script>
     <script src="script.js" defer></script>
     <script>
         window.addEventListener('DOMContentLoaded', function () {
@@ -192,7 +193,7 @@
         });
     </script>
 </head>
-<body dir="rtl">
+<body dir="ltr">
 
     <!-- Accessibility & Network -->
     <noscript>
@@ -217,101 +218,8 @@
     </div>
 
     <!-- Navbar -->
-    <nav id="navbar" class="navbar" dir="ltr">
-        <div class="container">
-            <div class="navbar-inner">
-                <!-- Logo -->
-                <div class="nav-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-                    <div>
-                        <img src="favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img">
-                    </div>
-                    <span>Georgia Hills</span>
-                </div>
+    <nav id="navbar" class="navbar"></nav>
 
-                <!-- Desktop Menu -->
-                <div class="desktop-menu">
-                    <a href="#home" class="nav-link">الرئيسية</a>
-                    <a href="about-ar.html" class="nav-link">من نحن</a>
-                    <a href="#destinations" class="nav-link">وجهات</a>
-                    <a href="services-ar.html" class="nav-link">الخدمات</a>
-                    <a href="#reviews" class="nav-link">الآراء</a>
-                    <a href="guide-ar.html" class="nav-link">الدليل</a>
-                    <a href="#fleet" class="nav-link">السيارات</a>
-                    
-                    <!-- Desktop Settings -->
-                    <div style="display:flex; gap:0.75rem;">
-                        <!-- Currency Dropdown (Desktop) -->
-                        <div class="custom-select-wrapper" id="currency-desktop">
-                            <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('desktop')" aria-haspopup="true">
-                                <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-desktop">
-                                <span id="curr-code-desktop">GEL</span>
-                                <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
-                            </button>
-                            <div class="custom-options" id="curr-options-desktop">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
-
-                        <!-- Language Btn -->
-                        <a href="index.html" class="action-btn" aria-label="Toggle Language">
-                            <i class="fa-solid fa-globe"></i><span class="lang-text">English</span>
-                        </a>
-                    </div>
-
-                    <a href="booking-ar.html" class="btn-book-nav">احجز الآن</a>
-                </div>
-
-                <!-- Mobile Toggle -->
-                <div class="mobile-controls">
-                    <!-- Mobile Language Switcher -->
-                    <a href="index.html" class="action-btn" aria-label="Toggle Language Mobile" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
-                        <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">English</span>
-                    </a>
-                    <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" aria-hidden="true">
-        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Menu"><i class="fa-solid fa-xmark"></i></button>
-        <a href="#home" class="mobile-link">الرئيسية</a>
-        <a href="about-ar.html" class="mobile-link">من نحن</a>
-        <a href="#destinations" class="mobile-link">وجهات</a>
-        <a href="services-ar.html" class="mobile-link">الخدمات</a>
-        <a href="#reviews" class="mobile-link">الآراء</a>
-        <a href="guide-ar.html" class="mobile-link">الدليل</a>
-        <a href="#fleet" class="mobile-link">السيارات</a>
-        
-        <!-- Mobile Settings -->
-        <div class="mobile-settings">
-             <!-- Currency Dropdown (Mobile) -->
-             <div class="custom-select-wrapper" id="currency-mobile">
-                <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('mobile')" aria-haspopup="true">
-                    <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-mobile">
-                    <span id="curr-code-mobile">GEL</span>
-                    <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
-                </button>
-                <div class="custom-options" id="curr-options-mobile">
-                    <!-- Populated by JS -->
-                </div>
-            </div>
-        </div>
-
-        <a href="booking-ar.html" class="mobile-btn-book">احجز الآن</a>
-        
-        <div class="mobile-social-container">
-             <button onclick="App.share()" class="mobile-social-btn" aria-label="Share App">
-                <div class="mobile-social-icon"><i class="fa-solid fa-share-nodes" style="font-size:1.25rem;"></i></div>
-                <span class="mobile-social-text">نشر</span>
-            </button>
-            <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="mobile-social-btn" aria-label="Contact via WhatsApp">
-                <div class="mobile-social-icon"><i class="fa-brands fa-whatsapp" style="font-size:1.25rem;"></i></div>
-                <span class="mobile-social-text">واتساب</span>
-            </a>
-        </div>
-    </div>
 
     <!-- Accessibility Skip Link -->
     <a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
@@ -332,8 +240,8 @@
             <div class="hero-badge">
                 <i class="fa-solid fa-star" style="color:#facc15; font-size:0.75rem;"></i> الخيار الأول للعوائل
             </div>
-            <h1 class="hero-title">اكتشف جورجيا <br><span class="text-accent-light italic font-serif">مع سائق خاص</span></h1>
-            <p class="hero-subtitle">سائقون محترفون وأسطول فاخر. من الاستقبال في المطار إلى الرحلات الجبلية.</p>
+            <h1 id="hero-title" class="hero-title">اكتشف جورجيا <br><span class="text-accent-light italic font-serif">مع سائق خاص</span></h1>
+            <p id="hero-subtitle" class="hero-subtitle">سائقون محترفون وأسطول فاخر. من الاستقبال في المطار إلى الرحلات الجبلية.</p>
             <div class="hero-buttons">
                 <a href="booking-ar.html" class="btn-hero btn-hero-primary">احصل على عرض</a>
                 <a href="#fleet" class="btn-hero btn-hero-secondary">شاهد السيارات</a>
@@ -359,6 +267,47 @@
         </div>
     </div>
 
+    <!-- How It Works (Missing in Arabic - Adding for Consistency) -->
+    <section id="how-it-works" class="section-py bg-surface">
+        <div class="container">
+            <div class="reveal text-center" style="margin-bottom:3rem;">
+                <span class="section-label">عملية بسيطة</span>
+                <h2 id="steps-title" class="section-title">رحلتك في 3 خطوات</h2>
+                <p class="section-desc" style="max-width:40rem; margin:0 auto;">بدون نماذج معقدة أو رسوم خفية. فقط تخطيط سلس للرحلة.</p>
+            </div>
+            
+            <div class="steps-grid">
+                <!-- Step 1 -->
+                <div class="step-card reveal">
+                    <div class="step-icon-wrapper">
+                        <div class="step-number">1</div>
+                        <i class="fa-solid fa-map-location-dot step-icon"></i>
+                    </div>
+                    <h3 id="step1-title" class="step-title">اختر رحلتك</h3>
+                    <p id="step1-desc" class="step-text">اختر وجهة أو صمم مسار رحلتك اليومي الخاص.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="step-card reveal" style="transition-delay: 100ms;">
+                    <div class="step-icon-wrapper">
+                        <div class="step-number">2</div>
+                        <i class="fa-brands fa-whatsapp step-icon"></i>
+                    </div>
+                    <h3 id="step2-title" class="step-title">احصل على عرض واتساب</h3>
+                    <p id="step2-desc" class="step-text">احصل على سعر فوري شامل كلياً مباشرة على هاتفك.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="step-card reveal" style="transition-delay: 200ms;">
+                    <div class="step-icon-wrapper">
+                        <div class="step-number">3</div>
+                        <i class="fa-solid fa-car-side step-icon"></i>
+                    </div>
+                    <h3 id="step3-title" class="step-title">قابل سائقك</h3>
+                    <p id="step3-desc" class="step-text">سائقك المحترف سيستقبلك من فندقك أو المطار.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- About -->
     <section id="about" class="section-py">
         <div class="container" id="main-content">
@@ -366,12 +315,12 @@
                 <div class="about-img-container reveal">
                     <div class="about-blob"></div>
                     <!-- OPTIMIZATION: Added styles to constrain layout shift if image is large -->
-                    <img src="Tbilisi_old_Town.webp" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="تبليسي القديمة" style="max-width:100%; height:auto;">
+                    <img id="about-img" src="Tbilisi_old_Town.webp" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="تبليسي القديمة" style="max-width:100%; height:auto;">
                 </div>
                 <div id="about-content" class="about-content reveal">
                     <span class="section-label">لماذا جورجيا هيلز؟</span>
-                    <h2 class="section-title">أكثر من مجرد رحلة، <br>إنها مغامرتك.</h2>
-                    <p class="section-desc">تتطلب القيادة في جبال جورجيا مهارة عالية. نوفر سائقين محترفين يتحدثون الإنجليزية ويعملون كمرشدين لك.</p>
+                    <h2 id="about-title" class="section-title">أكثر من مجرد رحلة، <br>إنها مغامرتك.</h2>
+                    <p id="about-desc" class="section-desc">تتطلب القيادة في جبال جورجيا مهارة عالية. نوفر سائقين محترفين يتحدثون الإنجليزية ويعملون كمرشدين لك.</p>
                     <div class="feature-grid">
                         <div class="feature-box">
                             <div class="feature-icon icon-green"><i class="fa-solid fa-user-shield" style="font-size:1.25rem;"></i></div>
@@ -892,7 +841,7 @@
         <div class="info-modal-content">
             <button onclick="UIManager.closeModal('privacyModal')" class="modal-close">&times;</button>
             <h2 class="modal-title">سياسة الخصوصية</h2>
-            <p><strong>آخر تحديث: [التاريخ]</strong></p>
+            <p><strong>آخر تحديث: February 17, 2026</strong></p>
             <p>في جورجيا هيلز، نحترم خصوصيتك. تشرح هذه السياسة كيفية تعاملنا مع معلوماتك.</p>
             <h3>1. المعلومات التي نجمعها</h3>
             <p>نجمع المعلومات الشخصية التي تقدمها مباشرة إلينا عبر نموذج الحجز أو واتساب، بما في ذلك الاسم ورقم الهاتف وتفاصيل الرحلة.</p>

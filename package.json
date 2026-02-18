@@ -1,0 +1,10 @@
+{
+  "name": "georgiahills",
+  "private": true,
+  "scripts": {
+    "check": "node scripts/site-check.js"
+  },
+  "dependencies": {
+    "firebase": "^12.9.0"
+  }
+}

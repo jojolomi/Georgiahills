@@ -11,5 +11,5 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-# FIXED: Direct link to the sitemap (assuming your netlify domain is the primary one based on index.html)
-Sitemap: https://georgiahills.netlify.app/sitemap.xml
+# Sitemap
+Sitemap: https://georgiahills.com/sitemap.xml

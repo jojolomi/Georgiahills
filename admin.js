@@ -289,7 +289,7 @@
       const zip = new JSZip();
       const files = [
         'index.html', 'arabic.html', 'destination.html', 'contact.html', 'contact-ar.html',
-        'blog.html', 'blog-ar.html', 'honeymoon-ar.html', 'tbilisi.html', 'tbilisi-ar.html',
+        'blog.html', 'blog-ar.html', 'honeymoon.html', 'honeymoon-ar.html', 'tbilisi.html', 'tbilisi-ar.html',
         'kazbegi.html', 'kazbegi-ar.html', 'martvili.html', 'martvili-ar.html',
         'signagi.html', 'signagi-ar.html', 'batumi.html', 'batumi-ar.html',
         'legal.html', 'script.js', 'style.css', 'manifest.json', 'service-worker.js', 'robots.txt', 'sitemap.xml'

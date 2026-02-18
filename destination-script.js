@@ -8,17 +8,23 @@
 
   const UI = {
     init() {
+      const usingSharedNavbar = !!window.__GH_SHARED_NAVBAR__;
       this.applyPageVisualContext();
-      this.ensureMobileMenu();
+      if (!usingSharedNavbar) {
+        this.ensureMobileMenu();
+      }
       this.setupMobileMenu();
       this.setupScrollEffects();
-      this.normalizeNavigation();
+      if (!usingSharedNavbar) {
+        this.normalizeNavigation();
+      }
       this.normalizeMicrocopy();
       this.normalizeBookingLinks();
       this.ensureBreadcrumbs();
       this.enhanceSecondaryPageHeader();
       this.injectUniversalProfessionalSection();
       this.injectTrustStrip();
+      this.injectMoreDestinations();
       this.ensureProfessionalFooter();
       this.initTracking();
       this.updateCopyright();
@@ -40,6 +46,22 @@
 
     getLangConfig() {
       const isArabic = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
+      let langSwitch = isArabic ? 'index.html' : 'arabic.html';
+      const path = (window.location.pathname || '').toLowerCase();
+      const filename = path.substring(path.lastIndexOf('/') + 1);
+
+      if (filename.includes('destination.html')) {
+          langSwitch = 'javascript:LangManager.toggle()';
+      } else {
+          if (isArabic) {
+              if (filename === 'arabic.html') langSwitch = 'index.html';
+              else if (filename.endsWith('-ar.html')) langSwitch = filename.replace('-ar.html', '.html');
+          } else {
+              if (filename === 'index.html' || filename === '') langSwitch = 'arabic.html';
+              else if (filename.endsWith('.html') && !filename.endsWith('-ar.html')) langSwitch = filename.replace('.html', '-ar.html');
+          }
+      }
+
       return {
         isArabic,
         home: isArabic ? 'arabic.html' : 'index.html',
@@ -49,7 +71,7 @@
         blog: isArabic ? 'blog-ar.html' : 'blog.html',
         contact: isArabic ? 'contact-ar.html' : 'contact.html',
         booking: isArabic ? 'booking-ar.html' : 'booking.html',
-        langSwitch: isArabic ? 'index.html' : 'arabic.html',
+        langSwitch: langSwitch,
         langText: isArabic ? 'English' : 'العربية',
         homeText: isArabic ? 'الرئيسية' : 'Home',
         servicesText: isArabic ? 'الخدمات' : 'Services',
@@ -125,6 +147,7 @@
     },
 
     normalizeNavigation() {
+      if (window.__GH_SHARED_NAVBAR__) return;
       const cfg = this.getLangConfig();
       const nav = document.getElementById('navbar');
       const navInner = document.querySelector('.navbar-inner');
@@ -188,6 +211,7 @@
         link.textContent = cfg.bookText;
       });
 
+      /* Removed text overrides that conflict with shared-navbar language switcher
       document.querySelectorAll('a[href="services.html"].action-btn, a[href="services-ar.html"].action-btn').forEach((link) => {
         link.textContent = cfg.servicesText;
       });
@@ -195,8 +219,14 @@
       document.querySelectorAll('a[href="guide.html"].action-btn, a[href="guide-ar.html"].action-btn').forEach((link) => {
         link.textContent = cfg.guideText;
       });
+      */
 
+      // Only apply contact overrides if the link is NOT the language switcher
       document.querySelectorAll('a[href="contact.html"].btn-book-nav, a[href="contact-ar.html"].btn-book-nav, a[href="contact.html"].action-btn, a[href="contact-ar.html"].action-btn').forEach((link) => {
+        // Check if this is likely a shared-navbar language switcher or mobile control
+        if (link.getAttribute('aria-label') === 'Language switch' || link.closest('.mobile-controls') || link.closest('.desktop-menu')) {
+            return;
+        }
         link.textContent = cfg.isArabic ? 'تواصل مع الفريق' : 'Contact Team';
       });
 
@@ -211,6 +241,9 @@
     },
 
     ensureBreadcrumbs() {
+      // Skip breadcrumbs on pages that have a large Hero section (like Destinations)
+      if (document.querySelector('.dest-hero') || document.querySelector('.hero') || document.querySelector('.about-premium-hero')) return;
+
       const cfg = this.getLangConfig();
       const main = document.getElementById('main-content');
       if (!main || main.querySelector('.pro-breadcrumbs')) return;
@@ -372,6 +405,77 @@
           } catch (e) {}
         });
       });
+    },
+
+    injectMoreDestinations() {
+      const path = (window.location.pathname || '').toLowerCase();
+      // Only run on destination pages
+      const isDest = path.includes('batumi') || path.includes('tbilisi') || path.includes('kazbegi') || path.includes('martvili') || path.includes('signagi');
+      if (!isDest) return;
+      if (document.querySelector('.more-destinations')) return;
+
+      const cfg = this.getLangConfig();
+      const main = document.getElementById('main-content');
+      if (!main) return;
+
+      // Define destinations
+      const allDestinations = [
+        { id: 'tbilisi', title: 'Tbilisi', titleAr: 'تبليسي', img: 'Tbilisi.webp', link: 'tbilisi.html', linkAr: 'tbilisi-ar.html', desc: 'Heart of Georgia', descAr: 'قلب جورجيا' },
+        { id: 'batumi', title: 'Batumi', titleAr: 'باتومي', img: 'Batumi.webp', link: 'batumi.html', linkAr: 'batumi-ar.html', desc: 'Pearl of the Black Sea', descAr: 'لؤلؤة البحر الأسود' },
+        { id: 'kazbegi', title: 'Kazbegi', titleAr: 'كازبيجي', img: 'Kazbegi.webp', link: 'kazbegi.html', linkAr: 'kazbegi-ar.html', desc: 'Mountain Paradise', descAr: 'جنة الجبال' },
+        { id: 'martvili', title: 'Martvili', titleAr: 'مارتفيلي', img: 'Martvili.webp', link: 'martvili.html', linkAr: 'martvili-ar.html', desc: 'Canyons & Greenery', descAr: 'الوديان والطبيعة الخضراء' },
+        { id: 'signagi', title: 'Signagi', titleAr: 'سيغناغي', img: 'Signagi.webp', link: 'signagi.html', linkAr: 'signagi-ar.html', desc: 'City of Love', descAr: 'مدينة الحب' }
+      ];
+
+      // Filter out current page by filename
+      const filename = path.substring(path.lastIndexOf('/') + 1);
+      const filtered = allDestinations.filter(d => !filename.includes(d.id));
+      
+      // Get 3 random or first 3
+      const selected = filtered.slice(0, 3);
+      if (selected.length === 0) return;
+
+      const section = document.createElement('div');
+      section.className = 'more-destinations';
+      
+      const heading = cfg.isArabic ? 'اكتشف وجهات أخرى' : 'Explore More Destinations';
+      const cta = cfg.isArabic ? 'عرض' : 'View';
+      
+      let html = `
+        <h3 class="section-heading" style="margin-bottom:1.5rem;">${heading}</h3>
+        <div class="more-destinations-grid">
+      `;
+
+      selected.forEach(d => {
+        const title = cfg.isArabic ? d.titleAr : d.title;
+        const desc = cfg.isArabic ? d.descAr : d.desc;
+        const link = cfg.isArabic ? d.linkAr : d.link;
+        const arrowClass = cfg.isArabic ? 'fa-arrow-left' : 'fa-arrow-right';
+        
+        html += `
+          <a href="${link}" class="more-dest-card">
+            <img src="${d.img}" alt="${title}" class="more-dest-img" loading="lazy">
+            <div class="more-dest-overlay">
+              <h4 class="more-dest-title">${title}</h4>
+              <p class="more-dest-desc">${desc}</p>
+            </div>
+            <div class="more-dest-arrow">
+              <i class="fa-solid ${arrowClass}"></i>
+            </div>
+          </a>
+        `;
+      });
+
+      html += `</div>`;
+      section.innerHTML = html;
+
+      // Append to the content column (usually .dest-content) if it exists, otherwise main
+      const contentCol = main.querySelector('.dest-content');
+      if (contentCol) {
+          contentCol.appendChild(section);
+      } else {
+          main.appendChild(section);
+      }
     },
 
     standardizeDestinationLayout() {

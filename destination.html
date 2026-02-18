@@ -42,9 +42,9 @@
     <meta property="og:title" content="Georgia Hills Destinations">
     <meta property="og:description" content="Discover amazing places in Georgia.">
     <!-- OPTIMIZATION: Added fallback image for social sharing -->
-    <meta property="og:image" content="https://georgiahills.netlify.app/image-1600.webp">
+    <meta property="og:image" content="https://georgiahills.com/image-1600.webp">
     <meta property="og:type" content="website">
-    <link rel="canonical" href="https://georgiahills.netlify.app/destination.html">
+    <link rel="canonical" href="https://georgiahills.com/destination.html">
 
     <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,6 +80,7 @@
     <!-- Firebase SDKs (Compat) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
 
     <!-- FIX: Immediate Language Direction Application -->
     <script>
@@ -88,84 +89,24 @@
                 var urlParams = new URLSearchParams(window.location.search);
                 var savedLang = urlParams.get('lang') || localStorage.getItem('userLang') || 'en';
                 document.documentElement.lang = savedLang;
-                document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
+                document.documentElement.dir = 'ltr';
             } catch(e) {}
         })();
     </script>
     <!-- OPTIMIZATION: Defer Main Script -->
+    <script src="shared-navbar.js" defer></script>
     <script src="script.js" defer></script>
 </head>
-<body class="page-destination">
+<body class="page-destination page-about secondary-page">
 
     <!-- Accessibility Skip Link -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
     <!-- Navbar -->
-    <nav class="navbar" id="navbar" dir="ltr">
-        <div class="container navbar-inner">
-            <!-- Logo -->
-            <a href="index.html" class="nav-logo">
-                <img src="favicon.ico" alt="GH">
-                <span>Georgia Hills</span>
-            </a>
-
-            <!-- Desktop Menu -->
-            <div class="desktop-menu">
-                <a href="index.html" class="nav-link" data-i18n="nav_home">Home</a>
-                <a href="index.html#destinations" class="nav-link" data-i18n="nav_tours">Destinations</a>
-                <a href="index.html#packages" class="nav-link" data-i18n="nav_packages">Packages</a>
-                <a href="index.html#guide" class="nav-link" data-i18n="nav_guide">Guide</a>
-                <a href="index.html#fleet" class="nav-link" data-i18n="nav_fleet">Fleet</a>
-                <a href="index.html#reviews" class="nav-link" data-i18n="nav_reviews">Reviews</a>
-                
-                <div style="display:flex; gap:0.75rem;">
-                    <!-- Currency Selector (Desktop) -->
-                    <div class="custom-select-wrapper" id="currency-desktop">
-                        <div class="custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('desktop')">
-                            <img id="curr-flag-desktop" src="https://flagcdn.com/w40/ge.png" class="currency-flag-sm" alt="Flag">
-                            <span id="curr-code-desktop">GEL</span>
-                            <i class="fa-solid fa-chevron-down text-xs"></i>
-                        </div>
-                        <div class="custom-options" id="curr-options-desktop">
-                        </div>
-                    </div>
-
-                    <button onclick="LangManager.toggle()" class="action-btn">
-                        <i class="fa-solid fa-globe"></i> <span class="lang-text">العربية</span>
-                    </button>
-                </div>
-
-                <a href="booking.html" class="btn-book-nav" style="color:white; text-decoration:none;">
-                    <span data-i18n="nav_book">Book Now</span>
-                </a>
-            </div>
-
-            <!-- Mobile Toggle -->
-            <div class="mobile-controls">
-                <button onclick="LangManager.toggle()" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;">
-                    <i class="fa-solid fa-globe"></i> <span class="lang-text">العربية</span>
-                </button>
-                <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
-            </div>
-        </div>
-    </nav>
+    <nav id="navbar" class="navbar"></nav>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" aria-hidden="true">
-        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu">
-            <i class="fa-solid fa-xmark"></i>
-        </button>
-        
-        <!-- Mobile Currency Selector -->
-        <div class="custom-select-wrapper" id="currency-mobile" style="margin-bottom: 1.5rem;">
-            <div class="custom-select-trigger action-btn" onclick="UIManager.toggleCurrencyDropdown('mobile')">
-                <img id="curr-flag-mobile" src="https://flagcdn.com/w40/ge.png" class="currency-flag-sm" alt="Flag">
-                <span id="curr-code-mobile">GEL</span>
-                <i class="fa-solid fa-chevron-down text-xs"></i>
-            </div>
-            <div class="custom-options" id="curr-options-mobile">
+<div class="custom-options" id="curr-options-mobile">
             </div>
         </div>
 
@@ -178,47 +119,59 @@
     </div>
 
     <!-- Hero -->
-    <div class="dest-hero">
-        <img id="hero-img" class="skeleton" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Hero">
-        <div class="dest-hero-overlay"></div>
-    </div>
+    <section class="about-premium-hero" aria-labelledby="page-title">
+        <div class="about-premium-hero-bg" id="hero-bg" style="background-color: #111;"></div>
+        <div class="hero-overlay-gradient"></div>
+        <div class="container hero-content-container">
+            <div class="hero-text-content fade-in-up">
+                <span class="hero-badge"><i class="fa-solid fa-location-dot"></i> <span id="crumb-title" class="skeleton">Destination</span></span>
+                <h1 class="section-title about-premium-title" id="page-title">
+                    Loading...
+                </h1>
+                <p class="section-desc about-premium-subtitle" id="page-desc">
+                    Loading destination details...
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Hidden img for script compatibility -->
+    <img id="hero-img" class="hidden" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Hidden Hero">
 
-    <main class="container" id="main-content">
-        <div class="page-grid">
-            <!-- Left: Main Content -->
-            <div class="content-card-wrapper">
-                <div class="content-card">
-                    <noscript>
-                        <div style="padding: 2rem; text-align: center; background: #FEF2F2; color: #991B1B; border-radius: 0.5rem; margin-bottom: 2rem;">
-                            <i class="fa-solid fa-triangle-exclamation"></i> 
-                            Please enable JavaScript to view destination details, photos, and travel guides.
+    <section class="section-py about-premium-content">
+        <main class="container" id="main-content">
+            <div class="page-grid">
+                <!-- Left: Main Content -->
+                <div class="content-card-wrapper">
+                    <div class="content-card about-card-large" style="padding:2rem;">
+                        <noscript>
+                            <div style="padding: 2rem; text-align: center; background: #FEF2F2; color: #991B1B; border-radius: 0.5rem; margin-bottom: 2rem;">
+                                <i class="fa-solid fa-triangle-exclamation"></i> 
+                                Please enable JavaScript to view destination details, photos, and travel guides.
+                            </div>
+                        </noscript>
+
+                        <div class="breadcrumbs">
+                            <a href="index.html" data-i18n="nav_home">Home</a> 
+                            <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i> 
+                            <a href="index.html#destinations" data-i18n="nav_tours">Destinations</a> 
+                            <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+                            <span id="crumb-current" class="text-accent" style="font-weight:600;">...</span>
                         </div>
-                    </noscript>
+                        
+                        <!-- Top Sights -->
+                        <h3 class="section-heading" data-i18n="label_highlights" style="margin-top:2rem;">Top Sights</h3>
+                        <ul id="highlights" class="highlights-list">
+                            <li class="skeleton" style="width:60%;"></li>
+                            <li class="skeleton" style="width:80%;"></li>
+                            <li class="skeleton" style="width:50%;"></li>
+                        </ul>
 
-                    <div class="breadcrumbs">
-                        <a href="index.html" data-i18n="nav_home">Home</a> 
-                        <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i> 
-                        <a href="index.html#destinations" data-i18n="nav_tours">Destinations</a> 
-                        <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
-                        <span id="crumb-title" class="skeleton" style="color:var(--color-accent);">Loading</span>
-                    </div>
-
-                    <h1 id="page-title" class="title-large skeleton">Loading Destination</h1>
-                    <div id="page-desc" class="rich-text skeleton">Loading description...</div>
-                    
-                    <!-- Top Sights -->
-                    <h3 class="section-heading" data-i18n="label_highlights">Top Sights</h3>
-                    <ul id="highlights" class="highlights-list">
-                        <li class="skeleton" style="width:60%;"></li>
-                        <li class="skeleton" style="width:80%;"></li>
-                        <li class="skeleton" style="width:50%;"></li>
-                    </ul>
-
-                    <h3 class="section-heading" data-i18n="label_gallery">Photo Gallery</h3>
-                    <div id="gallery" class="gallery-grid">
-                        <div class="skeleton" style="height:16rem;"></div>
-                        <div class="skeleton" style="height:16rem;"></div>
-                    </div>
+                        <h3 class="section-heading" data-i18n="label_gallery" style="margin-top:2rem;">Photo Gallery</h3>
+                        <div id="gallery" class="gallery-grid">
+                            <div class="skeleton" style="height:16rem;"></div>
+                            <div class="skeleton" style="height:16rem;"></div>
+                        </div>
 
                     <!-- Next Destination -->
                     <div style="margin-top:4rem;">
@@ -268,7 +221,9 @@
         <a href="booking.html" class="btn-book-nav" style="padding:0.75rem 1.5rem; color:white; text-decoration:none;">
             <span id="mob-btn-text" data-i18n="nav_book">Book Now</span>
         </a>
+    </div>
     </main>
+    </section>
 
     <!-- Footer -->
     <footer class="footer">
@@ -326,4 +281,3 @@
     <script type="application/ld+json" id="json-ld-data"></script>
 </body>
 </html>
-

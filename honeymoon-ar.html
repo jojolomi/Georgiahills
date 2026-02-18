@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -8,18 +8,16 @@
     <meta name="keywords" content="شهر العسل في جورجيا, بكج عرسان جورجيا, سياحة جورجيا للعرسان, فنادق رومانسية تبليسي, سائق خاص جورجيا">
     <meta name="author" content="Georgia Hills">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://georgiahills.netlify.app/honeymoon-ar.html">
+    <meta property="og:url" content="https://georgiahills.com/honeymoon-ar.html">
     <meta property="og:title" content="شهر العسل في جورجيا | باقات للعرسان">
     <meta property="og:description" content="برنامج شهر عسل فاخر في جورجيا يشمل إقامة مميزة وسائق خاص وتجارب رومانسية.">
-    <meta property="og:image" content="https://georgiahills.netlify.app/image-1600.webp">
+    <meta property="og:image" content="https://georgiahills.com/image-1600.webp">
     
     <!-- SEO: Multilingual Support -->
-    <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/honeymoon-ar.html" />
-    <link rel="alternate" hreflang="ar-SA" href="https://georgiahills.netlify.app/honeymoon-ar.html" />
-    <link rel="alternate" hreflang="ar-AE" href="https://georgiahills.netlify.app/honeymoon-ar.html" />
-    <link rel="alternate" hreflang="ar-KW" href="https://georgiahills.netlify.app/honeymoon-ar.html" />
-    <link rel="alternate" hreflang="x-default" href="https://georgiahills.netlify.app/honeymoon-ar.html" />
-    <link rel="canonical" href="https://georgiahills.netlify.app/honeymoon-ar.html">
+    <link rel="alternate" hreflang="en" href="https://georgiahills.com/honeymoon.html" />
+    <link rel="alternate" hreflang="ar" href="https://georgiahills.com/honeymoon-ar.html" />
+    <link rel="alternate" hreflang="x-default" href="https://georgiahills.com/honeymoon.html" />
+    <link rel="canonical" href="https://georgiahills.com/honeymoon-ar.html">
 
     <!-- Schema: TourPackage -->
     <script type="application/ld+json">
@@ -47,202 +45,168 @@
     }
     </script>
 
-        <style>
-            :root{--color-gray-400:#9CA3AF}
-            html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;background:#fff}
-            .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
-            .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
-            .navbar{position:relative;z-index:50;background:transparent}
-            .hero-img{width:100%;height:auto;display:block;object-fit:cover}
-            .hero{position:relative;overflow:hidden}
-            .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
-        </style>
-        <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="shared-navbar.js" defer></script>
     <script src="script.js" defer></script>
 </head>
-<body class="bg-gold-light">
+<body class="page-honeymoon page-about secondary-page">
     <a href="#main-content" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
 
-    <!-- Navbar (Simplified) -->
-    <nav id="navbar" class="navbar" dir="ltr">
-        <div class="container navbar-inner">
-            <a href="index.html" class="nav-logo">
-                <img src="favicon.ico" alt="GH">
-                <span>Georgia Hills</span>
-            </a>
-            <div class="desktop-menu">
-                <a href="arabic.html" class="nav-link">الرئيسية</a>
-                <a href="#package" class="nav-link text-gold font-bold">باقة العرسان</a>
-                <a href="booking-ar.html" class="btn-gold" style="padding:0.5rem 1.5rem; border-radius:99px; text-decoration:none;">احجز الآن</a>
+    <nav id="navbar" class="navbar"></nav>
+<!-- Hero -->
+    <section class="about-premium-hero" aria-labelledby="honeymoon-hero-title">
+        <div class="about-premium-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=1200&q=80'); background-color: #2c1a1a;"></div>
+        <div class="hero-overlay-gradient"></div>
+        <div class="container hero-content-container">
+            <div class="hero-text-content fade-in-up">
+                <span class="hero-badge"><i class="fa-solid fa-heart"></i> حصرياً للعرسان</span>
+                <h1 class="section-title about-premium-title" id="honeymoon-hero-title">
+                    بداية <br>
+                    <span class="text-gradient-gold">رحلة العمر</span>
+                </h1>
+                <p class="section-desc about-premium-subtitle">
+                    رحلة خيالية مصممة للراحة والخصوصية ولحظات لا تُنسى في أحضان جورجيا.
+                </p>
             </div>
-            <div class="mobile-controls">
-                <a href="index.html" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;">
-                    <i class="fa-solid fa-globe"></i> <span class="lang-text">English</span>
-                </a>
-                <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
-            </div>
-        </div>
-    </nav>
-
-    <div id="mobile-menu" aria-hidden="true">
-        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu"><i class="fa-solid fa-xmark"></i></button>
-        <a href="arabic.html" class="mobile-link">الرئيسية</a>
-        <a href="#package" class="mobile-link">باقة العرسان</a>
-        <a href="booking-ar.html" class="mobile-btn-book">احجز الآن</a>
-    </div>
-
-    <!-- Hero -->
-    <section class="hero" style="height: 70vh;">
-        <div class="hero-bg-container">
-            <img src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=1200&q=80" class="hero-img" alt="شهر العسل في جورجيا" fetchpriority="high" decoding="async" loading="eager">
-            <div class="hero-overlay" style="background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.6));"></div>
-        </div>
-        <div class="hero-content reveal">
-            <div class="hero-badge border-gold text-gold" style="background: rgba(0,0,0,0.6);">
-                <i class="fa-solid fa-heart"></i> باقة خاصة للعرسان
-            </div>
-            <h1 class="hero-title">ابدأ حياتك <br><span class="text-gold italic font-serif">بقصة خيالية</span></h1>
-            <p class="hero-subtitle">استمتع بالخصوصية والرفاهية في أجمل منتجعات جورجيا مع سائق خاص يهتم بكل التفاصيل.</p>
-            <a href="#package" class="btn-hero btn-gold">شاهد العرض</a>
         </div>
     </section>
 
-    <!-- Package Details -->
-    <section id="package" class="section-py">
-        <div class="container" id="main-content">
-            <div class="text-center reveal" style="margin-bottom: 3rem;">
-                <span class="section-label text-gold">باقة 7 أيام / 6 ليالي</span>
-                <h2 class="section-title">رحلة الأحلام الرومانسية</h2>
-                <p class="section-desc">صممت هذه الباقة لتوفر لكم أقصى درجات الراحة والخصوصية.</p>
-            </div>
+    <section class="section-py about-premium-content">
+        <main class="container" id="main-content">
+            
+            <div class="about-card-large" style="margin-bottom: 3rem;">
+                <div class="breadcrumbs" style="color: var(--color-gray-400); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                    <a href="arabic.html" style="color: inherit; text-decoration: none;">الرئيسية</a> 
+                    <i class="fa-solid fa-chevron-left" style="font-size: 0.7rem; margin: 0 0.5rem; opacity: 0.5;"></i> 
+                    <span style="color: var(--color-accent);">باقة شهر العسل</span>
+                </div>
 
-            <div class="page-grid">
-                <!-- Itinerary -->
-                <div class="content-card reveal">
-                    <h3 class="section-heading text-gold">جدول الرحلة</h3>
-                    <ul class="highlights-list">
-                        <li><i class="fa-solid fa-plane text-gold"></i> <strong>اليوم 1:</strong> استقبال VIP وعشاء رومانسي</li>
-                        <li><i class="fa-solid fa-landmark text-gold"></i> <strong>اليوم 2:</strong> جولة في تبليسي وركوب التلفريك</li>
-                        <li><i class="fa-solid fa-mountain text-gold"></i> <strong>اليوم 3:</strong> الانطلاق إلى جبال القوقاز (كازبيجي)</li>
-                        <li><i class="fa-solid fa-tree text-gold"></i> <strong>اليوم 4:</strong> الاسترخاء في منتجع جبلي فاخر</li>
-                        <li><i class="fa-solid fa-heart text-gold"></i> <strong>اليوم 5:</strong> زيارة سغناغي (مدينة الحب)</li>
-                        <li><i class="fa-solid fa-bag-shopping text-gold"></i> <strong>اليوم 6:</strong> جولة تسوق في مولات تبليسي</li>
-                        <li><i class="fa-solid fa-plane-departure text-gold"></i> <strong>اليوم 7:</strong> توديع المطار</li>
-                    </ul>
+                <div class="grid-2-cols" style="gap: 3rem; align-items: start;">
                     
-                    <h3 class="section-heading text-gold" style="margin-top:2rem;">ماذا تشمل الباقة؟</h3>
-                    <div class="feature-grid">
-                        <div class="feature-box border-gold">
-                            <div class="feature-icon" style="background:#FFFDF5; color:#D4AF37;"><i class="fa-solid fa-car"></i></div>
-                            <div><h3 class="feature-title">سيارة خاصة</h3><p class="feature-text">سيدان فاخرة موديل حديث مع سائق خاص.</p></div>
+                    <!-- Right Column (Visual): Itinerary -->
+                    <div class="typography-pro">
+                        <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+                            <span class="hero-badge" style="margin:0; background:var(--color-primary-light); color:var(--color-primary);">7 أيام / 6 ليالي</span>
+                            <h2 class="section-heading" style="margin:0;">برنامج الرحلة</h2>
                         </div>
-                        <div class="feature-box border-gold">
-                            <div class="feature-icon" style="background:#FFFDF5; color:#D4AF37;"><i class="fa-solid fa-hotel"></i></div>
-                            <div><h3 class="feature-title">فنادق 4-5 نجوم</h3><p class="feature-text">إقامة شاملة الإفطار في أفضل الفنادق.</p></div>
-                        </div>
-                        <div class="feature-box border-gold">
-                            <div class="feature-icon" style="background:#FFFDF5; color:#D4AF37;"><i class="fa-solid fa-camera"></i></div>
-                            <div><h3 class="feature-title">جلسة تصوير</h3><p class="feature-text">هدية مجانية: جلسة تصوير احترافية في تبليسي.</p></div>
+                        
+                        <div class="itinerary-timeline" style="border-right: 2px solid var(--color-gray-200); padding-right: 1.5rem; margin-right: 0.5rem;">
+                            <div class="timeline-item" style="margin-bottom: 2rem; position: relative;">
+                                <div style="position: absolute; right: -1.9rem; top: 0.25rem; background: var(--color-primary); width: 0.8rem; height: 0.8rem; border-radius: 50%;"></div>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">اليوم 1: الوصول والرومانسية</h3>
+                                <p style="font-size: 0.95rem; color: var(--color-gray-600);">استقبال VIP في المطار بسيارة خاصة. تسجيل الدخول في الفندق وعشاء ترحيبي رومانسي في تبليسي.</p>
+                            </div>
+                            
+                            <div class="timeline-item" style="margin-bottom: 2rem; position: relative;">
+                                <div style="position: absolute; right: -1.9rem; top: 0.25rem; background: var(--color-primary); width: 0.8rem; height: 0.8rem; border-radius: 50%;"></div>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">اليوم 2: سحر تبليسي</h3>
+                                <p style="font-size: 0.95rem; color: var(--color-gray-600);">استكشاف شوارع تبليسي القديمة، ركوب التلفريك إلى القلعة، وتجربة حمامات الكبريت الخاصة.</p>
+                            </div>
+
+                            <div class="timeline-item" style="margin-bottom: 2rem; position: relative;">
+                                <div style="position: absolute; right: -1.9rem; top: 0.25rem; background: var(--color-primary); width: 0.8rem; height: 0.8rem; border-radius: 50%;"></div>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">اليوم 3: الطريق إلى كازبيجي</h3>
+                                <p style="font-size: 0.95rem; color: var(--color-gray-600);">رحلة عبر الطريق العسكري الجورجي، وزيارة قلعة أنانوري، والوصول إلى جبال القوقاز.</p>
+                            </div>
+
+                            <div class="timeline-item" style="margin-bottom: 2rem; position: relative;">
+                                <div style="position: absolute; right: -1.9rem; top: 0.25rem; background: var(--color-primary); width: 0.8rem; height: 0.8rem; border-radius: 50%;"></div>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">اليوم 4: استجمام في الجبل</h3>
+                                <p style="font-size: 0.95rem; color: var(--color-gray-600);">إقامة في منتجع جبلي فاخر 5 نجوم مع إطلالة بانورامية على جبل كازبيك ووقت للاسترخاء.</p>
+                            </div>
+
+                            <div class="timeline-item" style="margin-bottom: 2rem; position: relative;">
+                                <div style="position: absolute; right: -1.9rem; top: 0.25rem; background: var(--color-primary); width: 0.8rem; height: 0.8rem; border-radius: 50%;"></div>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">اليوم 5: مدينة الحب - سغناغي</h3>
+                                <p style="font-size: 0.95rem; color: var(--color-gray-600);">السفر إلى منطقة كاخيتي، المشي على أسوار مدينة سغناغي التاريخية وتجربة تذوق النبيذ.</p>
+                            </div>
+
+                            <div class="timeline-item" style="margin-bottom: 2rem; position: relative;">
+                                <div style="position: absolute; right: -1.9rem; top: 0.25rem; background: var(--color-primary); width: 0.8rem; height: 0.8rem; border-radius: 50%;"></div>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">اليوم 6: تسوق وترفيه</h3>
+                                <p style="font-size: 0.95rem; color: var(--color-gray-600);">يوم حر للتسوق في تبليسي مول أو إيست بوينت، أو جولة هادئة في حدائق تبليسي.</p>
+                            </div>
+
+                            <div class="timeline-item" style="position: relative;">
+                                <div style="position: absolute; right: -1.9rem; top: 0.25rem; background: var(--color-primary); width: 0.8rem; height: 0.8rem; border-radius: 50%;"></div>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem;">اليوم 7: المغادرة</h3>
+                                <p style="font-size: 0.95rem; color: var(--color-gray-600);">نقل خاص إلى مطار تبليسي الدولي مع هدية تذكارية بسيطة وتوديعكم بالسلامة.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Booking Sidebar -->
-                <div class="sidebar-col reveal">
-                    <div class="booking-box border-gold" style="position:sticky; top:6rem;">
-                        <h3 class="booking-title text-gold">احجز شهر العسل</h3>
-                        <div class="pkg-price text-gold" style="font-size:2rem; margin:1rem 0;">$1200 <span style="font-size:1rem; color:#666;">/ للزوجين</span></div>
-                        <p class="booking-subtitle">السعر يشمل الفنادق، السيارة، السائق، والضرائب.</p>
+                    
+                    <!-- Left Column (Visual): Details & Booking -->
+                    <div class="content-card" style="padding: 2rem; background: var(--color-gray-50);">
+                        <h3 class="section-heading" style="margin-bottom: 1.5rem; font-size: 1.5rem;">الباقة تشمل</h3>
                         
-                        <form id="honeymoonForm" onsubmit="event.preventDefault(); sendHoneymoonRequest();">
-                            <div style="text-align:right; margin-bottom:1rem;">
-                                <label class="form-label">الاسم</label>
-                                <input type="text" id="hm_name" class="form-input" placeholder="اسمك الكريم" required>
+                        <div style="display: grid; gap: 1rem; margin-bottom: 2rem;">
+                            <div style="display:flex; gap:1rem; align-items:start;">
+                                <div style="color:var(--color-primary); font-size:1.2rem; margin-top:0.2rem;"><i class="fa-solid fa-car"></i></div>
+                                <div><strong>سيارة خاصة</strong><br><span class="text-sm opacity-70">سيارة فخمة مع سائق خاص محترف</span></div>
                             </div>
-                            <div style="text-align:right; margin-bottom:1rem;">
-                                <label class="form-label">رقم واتساب</label>
-                                <input type="tel" id="hm_phone" class="form-input" placeholder="+966..." required>
+                            <div style="display:flex; gap:1rem; align-items:start;">
+                                <div style="color:var(--color-primary); font-size:1.2rem; margin-top:0.2rem;"><i class="fa-solid fa-hotel"></i></div>
+                                <div><strong>فنادق فاخرة</strong><br><span class="text-sm opacity-70">فنادق 4 و 5 نجوم شاملة الإفطار</span></div>
                             </div>
-                            <div style="text-align:right; margin-bottom:1rem;">
-                                <label class="form-label">تاريخ الوصول التقريبي</label>
-                                <input type="date" id="hm_date" class="form-input" required>
+                            <div style="display:flex; gap:1rem; align-items:start;">
+                                <div style="color:var(--color-primary); font-size:1.2rem; margin-top:0.2rem;"><i class="fa-solid fa-camera"></i></div>
+                                <div><strong>جلسة تصوير</strong><br><span class="text-sm opacity-70">ساعة تصوير مجانية لتوثيق الذكريات</span></div>
                             </div>
-                            <button type="submit" class="btn-submit btn-gold">
-                                <i class="fa-brands fa-whatsapp"></i> طلب الحجز الآن
-                            </button>
-                        </form>
-                        
-                        <div class="trust-list">
-                            <div class="trust-item"><i class="fa-solid fa-check icon-check text-gold"></i> خصوصية تامة للعوائل</div>
-                            <div class="trust-item"><i class="fa-solid fa-check icon-check text-gold"></i> سائق يتحدث العربية</div>
-                            <div class="trust-item"><i class="fa-solid fa-check icon-check text-gold"></i> الدفع عند الوصول</div>
+                            <div style="display:flex; gap:1rem; align-items:start;">
+                                <div style="color:var(--color-primary); font-size:1.2rem; margin-top:0.2rem;"><i class="fa-solid fa-sim-card"></i></div>
+                                <div><strong>اتصال دائم</strong><br><span class="text-sm opacity-70">شرائح انترنت مجانية طوال الرحلة</span></div>
+                            </div>
                         </div>
+
+                        <div class="booking-form-box" style="background: white; padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--color-gray-200); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                            <h3 class="text-center font-bold text-xl mb-4 text-primary">طلب حجز الباقة</h3>
+                            <div class="text-center mb-6">
+                                <span class="text-2xl font-bold text-accent">$1200</span>
+                                <span class="text-sm text-gray-500 block">للزوجين (شاملة الضرائب)</span>
+                            </div>
+
+                            <form id="honeymoonFormAx" onsubmit="event.preventDefault(); sendHoneymoonRequestAr();">
+                                <div style="margin-bottom:1rem;">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">الاسم الكريم</label>
+                                    <input type="text" id="hm_name" class="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" placeholder="الاسم هنا" required>
+                                </div>
+                                <div style="margin-bottom:1rem;">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">رقم الواتساب</label>
+                                    <input type="tel" id="hm_phone" class="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" placeholder="009..." required style="direction:ltr; text-align:right;">
+                                </div>
+                                <div style="margin-bottom:1.5rem;">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">تاريخ الوصول (تقريبي)</label>
+                                    <input type="date" id="hm_date" class="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary" required>
+                                </div>
+                                <button type="submit" class="w-full bg-primary text-white font-bold py-3 px-4 rounded-md hover:bg-primary-dark transition duration-300 flex items-center justify-center gap-2">
+                                    <i class="fa-brands fa-whatsapp text-xl"></i> احجز عبر الواتساب
+                                </button>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        </div>
+
+        </main>
     </section>
 
     <script>
-        function sendHoneymoonRequest() {
+        function sendHoneymoonRequestAr() {
             const name = document.getElementById('hm_name').value;
             const phone = document.getElementById('hm_phone').value;
             const date = document.getElementById('hm_date').value;
-            
-            const text = `السلام عليكم، أرغب بحجز باقة شهر العسل:\n👤 الاسم: ${name}\n📱 الهاتف: ${phone}\n📅 التاريخ: ${date}`;
+            const text = `مرحباً جورجيا هيلز! أنا مهتم بباقة شهر العسل.%0A%0A👤 الاسم: ${name}%0A📱 الهاتف: ${phone}%0A📅 الوصول: ${date}%0A%0Aأرجو التواصل معي للتفاصيل.`;
             window.open(`https://wa.me/995579088537?text=${encodeURIComponent(text)}`, '_blank');
         }
     </script>
 
-    <!-- Footer (Simplified) -->
-    <footer class="footer">
-        <div class="container">
-            <div id="footer-content" class="footer-grid">
-                <div>
-                    <div class="footer-brand">
-                        <div class="footer-brand-icon"><i class="fa-solid fa-mountain"></i></div>
-                        <span class="footer-brand-text">Georgia Hills</span>
-                    </div>
-                    <p style="color:var(--color-gray-300); font-size:0.875rem; line-height:1.6; margin-bottom:1.5rem;">حلول نقل فاخرة في جورجيا. أمان وراحة وخبرة محلية في كل ميل.</p>
-                    <div class="footer-social">
-                        <a href="https://instagram.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                        <button onclick="App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
-                    </div>
-                    <div style="margin-top:1.5rem; display:flex; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
-                        <a href="legal.html" style="color:inherit;">سياسة الخصوصية</a>
-                    </div>
-                </div>
-                <div>
-                    <h3>روابط سريعة</h3>
-                    <ul>
-                        <li><a href="arabic.html">الرئيسية</a></li>
-                        <li><a href="arabic.html#fleet">السيارات</a></li>
-                        <li><a href="arabic.html#reviews">الآراء</a></li>
-                        <li><a href="booking-ar.html">احجز الآن</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>اتصل بنا</h3>
-                    <ul style="color:var(--color-gray-400);">
-                        <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
-                        <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
-                        <li class="footer-contact-item"><i class="fa-solid fa-envelope text-accent"></i> info@georgiahills.com</li>
-                    </ul>
-                </div>
-                <div>
-                    <div class="footer-map-container">
-                        <span class="footer-map-overlay"><i class="fa-solid fa-map-location-dot"></i> <span>موقعنا</span></span>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                &copy; <span id="year">2026</span> Georgia Hills. جميع الحقوق محفوظة.
-            </div>
+    <footer class="footer" style="background:#111; color:#fff; padding:3rem 0; margin-top:4rem;">
+        <div class="container" style="text-align:center;">
+             <p>&copy; 2024 Georgia Hills. جميع الحقوق محفوظة.</p>
         </div>
     </footer>
 </body>
 </html>
-

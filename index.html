@@ -41,17 +41,17 @@
     </script>
 
     <!-- SEO: Multilingual Support -->
-    <link rel="alternate" hreflang="ar" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="en" href="https://georgiahills.netlify.app/" />
+    <link rel="alternate" hreflang="ar" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="en" href="https://georgiahills.com/" />
     <!-- Targeted Arabic Locales for GCC Dominance -->
-    <link rel="alternate" hreflang="ar-SA" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="ar-AE" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="ar-KW" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="ar-QA" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="ar-OM" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="ar-BH" href="https://georgiahills.netlify.app/arabic.html" />
-    <link rel="alternate" hreflang="x-default" href="https://georgiahills.netlify.app/" />
-    <link rel="canonical" href="https://georgiahills.netlify.app/">
+    <link rel="alternate" hreflang="ar-SA" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="ar-AE" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="ar-KW" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="ar-QA" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="ar-OM" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="ar-BH" href="https://georgiahills.com/arabic.html" />
+    <link rel="alternate" hreflang="x-default" href="https://georgiahills.com/" />
+    <link rel="canonical" href="https://georgiahills.com/">
 
     <!-- SEO: Structured Data -->
     <script type="application/ld+json">
@@ -60,11 +60,11 @@
       "@graph": [
         {
           "@type": "TravelAgency",
-          "@id": "https://georgiahills.netlify.app/#organization",
+          "@id": "https://georgiahills.com/#organization",
           "name": "Georgia Hills",
-          "url": "https://georgiahills.netlify.app/",
-          "logo": "https://georgiahills.netlify.app/favicon.ico",
-          "image": "https://georgiahills.netlify.app/images/hero.webp",
+          "url": "https://georgiahills.com/",
+          "logo": "https://georgiahills.com/favicon.ico",
+          "image": "https://georgiahills.com/image-1600.webp",
           "description": "The #1 rated private driver and car rental service in Georgia. Specializing in luxury family tours for GCC tourists in Tbilisi, Batumi, and Kazbegi.",
           "telephone": "+995579088537",
           "email": "info@georgiahills.com",
@@ -95,7 +95,7 @@
         {
           "@type": "Service",
           "name": "Private Driver Hire Georgia",
-          "provider": { "@id": "https://georgiahills.netlify.app/#organization" },
+          "provider": { "@id": "https://georgiahills.com/#organization" },
           "description": "Professional English and Arabic speaking drivers for tours in Georgia. Includes fuel, insurance, and 24/7 support.",
           "areaServed": { "@type": "Country", "name": "Georgia" },
           "hasOfferCatalog": {
@@ -152,10 +152,10 @@
     
     <!-- Open Graph & Twitter -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://georgiahills.netlify.app/">
+    <meta property="og:url" content="https://georgiahills.com/">
     <meta property="og:title" content="Private Driver in Georgia | Georgia Hills">
     <meta property="og:description" content="Discover the beauty of Georgia with a professional private driver. VIP service for families and travelers.">
-    <meta property="og:image" content="https://georgiahills.netlify.app/image-1600.webp">
+    <meta property="og:image" content="https://georgiahills.com/image-1600.webp">
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- PWA Manifest & Icons -->
@@ -168,6 +168,7 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
     
     <!-- OPTIMIZATION: Defer Main Script -->
+    <script src="shared-navbar.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body dir="ltr">
@@ -198,101 +199,8 @@
     </div>
 
     <!-- Navbar -->
-    <nav id="navbar" class="navbar">
-        <div class="container">
-            <div class="navbar-inner">
-                <!-- Logo (Converted to Anchor) -->
-                <a href="#home" class="nav-logo">
-                    <div>
-                        <img src="favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img">
-                    </div>
-                    <span>Georgia Hills</span>
-                </a>
+    <nav id="navbar" class="navbar"></nav>
 
-                <!-- Desktop Menu -->
-                <div class="desktop-menu">
-                    <a href="#home" class="nav-link">Home</a>
-                    <a href="about.html" class="nav-link">About</a>
-                    <a href="#destinations" class="nav-link">Destinations</a>
-                    <a href="services.html" class="nav-link">Services</a>
-                    <a href="#fleet" class="nav-link">Fleet</a>
-                    <a href="#reviews" class="nav-link">Reviews</a>
-                    <a href="guide.html" class="nav-link">Guide</a>
-                    
-                    <!-- Desktop Settings -->
-                    <div style="display:flex; gap:0.75rem;">
-                        <!-- Currency Dropdown (Desktop) -->
-                        <div class="custom-select-wrapper" id="currency-desktop">
-                            <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('desktop')" aria-haspopup="true">
-                                <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-desktop">
-                                <span id="curr-code-desktop">GEL</span>
-                                <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
-                            </button>
-                            <div class="custom-options" id="curr-options-desktop">
-                                <!-- Populated by JS -->
-                            </div>
-                        </div>
-
-                        <!-- Language Btn -->
-                        <a href="arabic.html#home" class="action-btn" aria-label="Switch to Arabic">
-                            <i class="fa-solid fa-globe"></i><span class="lang-text">العربية</span>
-                        </a>
-                    </div>
-
-                    <a href="booking.html" class="btn-book-nav">Book Now</a>
-                </div>
-
-                <!-- Mobile Toggle -->
-                <div class="mobile-controls">
-                    <!-- Mobile Language Switcher -->
-                    <a href="arabic.html#home" class="action-btn" aria-label="Switch to Arabic Mobile" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
-                        <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">العربية</span>
-                    </a>
-                    <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" aria-hidden="true">
-        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu"><i class="fa-solid fa-xmark"></i></button>
-        <a href="#home" class="mobile-link">Home</a>
-        <a href="about.html" class="mobile-link">About</a>
-        <a href="#destinations" class="mobile-link">Destinations</a>
-        <a href="services.html" class="mobile-link">Services</a>
-        <a href="#fleet" class="mobile-link">Fleet</a>
-        <a href="#reviews" class="mobile-link">Reviews</a>
-        <a href="guide.html" class="mobile-link">Guide</a>
-        
-        <!-- Mobile Settings -->
-        <div class="mobile-settings">
-             <!-- Currency Dropdown (Mobile) -->
-             <div class="custom-select-wrapper" id="currency-mobile">
-                <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('mobile')" aria-haspopup="true">
-                    <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-mobile">
-                    <span id="curr-code-mobile">GEL</span>
-                    <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
-                </button>
-                <div class="custom-options" id="curr-options-mobile">
-                    <!-- Populated by JS -->
-                </div>
-            </div>
-        </div>
-
-        <a href="booking.html" class="mobile-btn-book">Book Now</a>
-        
-        <div class="mobile-social-container">
-             <button onclick="App.share()" class="mobile-social-btn" aria-label="Share App">
-                <div class="mobile-social-icon"><i class="fa-solid fa-share-nodes" style="font-size:1.25rem;"></i></div>
-                <span class="mobile-social-text">Share</span>
-            </button>
-            <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="mobile-social-btn" aria-label="Contact via WhatsApp">
-                <div class="mobile-social-icon"><i class="fa-brands fa-whatsapp" style="font-size:1.25rem;"></i></div>
-                <span class="mobile-social-text">WhatsApp</span>
-            </a>
-        </div>
-    </div>
 
     <!-- Hero -->
     <section id="home" class="hero" aria-label="Welcome to Georgia Hills">
@@ -311,8 +219,8 @@
             <div class="hero-badge">
                 <i class="fa-solid fa-star" style="color:#facc15; font-size:0.75rem;"></i> #1 FOR FAMILIES
             </div>
-            <h1 class="hero-title">Discover Georgia <br><span class="text-accent-light italic font-serif">Without Limits</span></h1>
-            <p class="hero-subtitle">Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.</p>
+            <h1 id="hero-title" class="hero-title">Discover Georgia <br><span class="text-accent-light italic font-serif">Without Limits</span></h1>
+            <p id="hero-subtitle" class="hero-subtitle">Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.</p>
             <div class="hero-buttons">
                 <a href="booking.html" class="btn-hero btn-hero-primary">Get a Quote</a>
                 <a href="#fleet" class="btn-hero btn-hero-secondary">View Fleet</a>
@@ -338,18 +246,59 @@
         </div>
     </div>
 
+    <!-- How It Works (New Section) -->
+    <section id="how-it-works" class="section-py bg-surface">
+        <div class="container">
+            <div class="reveal text-center" style="margin-bottom:3rem;">
+                <span class="section-label">Simple Process</span>
+                <h2 id="steps-title" class="section-title">Your Journey in 3 Steps</h2>
+                <p class="section-desc" style="max-width:40rem; margin:0 auto;">No complicated forms or hidden fees. Just smooth travel planning.</p>
+            </div>
+            
+            <div class="steps-grid">
+                <!-- Step 1 -->
+                <div class="step-card reveal">
+                    <div class="step-icon-wrapper">
+                        <div class="step-number">1</div>
+                        <i class="fa-solid fa-map-location-dot step-icon"></i>
+                    </div>
+                    <h3 id="step1-title" class="step-title">Choose Your Trip</h3>
+                    <p id="step1-desc" class="step-text">Select a destination or customizing your own daily itinerary.</p>
+                </div>
+                <!-- Step 2 -->
+                <div class="step-card reveal" style="transition-delay: 100ms;">
+                    <div class="step-icon-wrapper">
+                        <div class="step-number">2</div>
+                        <i class="fa-brands fa-whatsapp step-icon"></i>
+                    </div>
+                    <h3 id="step2-title" class="step-title">Get WhatsApp Quote</h3>
+                    <p id="step2-desc" class="step-text">Receive an instant, all-inclusive price directly on your phone.</p>
+                </div>
+                <!-- Step 3 -->
+                <div class="step-card reveal" style="transition-delay: 200ms;">
+                    <div class="step-icon-wrapper">
+                        <div class="step-number">3</div>
+                        <i class="fa-solid fa-car-side step-icon"></i>
+                    </div>
+                    <h3 id="step3-title" class="step-title">Meet Your Driver</h3>
+                    <p id="step3-desc" class="step-text">Your professional driver will pick you up from your hotel or airport.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- About -->
     <section id="about" class="section-py">
         <div id="main-content" class="container">
             <div class="about-grid">
                 <div class="about-img-container reveal">
                     <div class="about-blob"></div>
-                    <img src="Tbilisi_old_Town.webp" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town - تبليسي القديمة" style="max-width: 100%; height: auto;">
+                    <img id="about-img" src="Tbilisi_old_Town.webp" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town - تبليسي القديمة" style="max-width: 100%; height: auto;">
                 </div>
                 <div id="about-content" class="about-content reveal">
                     <span class="section-label">Why Choose Georgia Hills?</span>
-                    <h2 class="section-title">More Than Just A Ride, <br>It's Your Journey.</h2>
-                    <p class="section-desc">Navigating Georgia's mountain passes requires skill and local knowledge. We provide professional, English-speaking drivers who act as your personal guide.</p>
+                    <h2 id="about-title" class="section-title">More Than Just A Ride, <br>It's Your Journey.</h2>
+                    <p id="about-desc" class="section-desc">Navigating Georgia's mountain passes requires skill and local knowledge. We provide professional, English-speaking drivers who act as your personal guide.</p>
                     <div class="feature-grid">
                         <div class="feature-box">
                             <div class="feature-icon icon-green"><i class="fa-solid fa-user-shield" style="font-size:1.25rem;"></i></div>

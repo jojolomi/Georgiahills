@@ -7,9 +7,11 @@
 // ==========================================
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/service-worker.js')
-      .then(reg => {})
-      .catch(err => {});
+    try {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(reg => {})
+          .catch(err => {});
+    } catch(e) {}
   });
 }
 
@@ -18,21 +20,25 @@ if ('serviceWorker' in navigator) {
 // ==========================================
 
 // --- FIREBASE CONFIGURATION ---
-// IMPORTANT: Replace these placeholders with your actual Firebase Config from the Console
-const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+// Uses optional `window.__GH_FIREBASE_CONFIG` override when present.
+const firebaseConfig = window.__GH_FIREBASE_CONFIG || {
+    apiKey: "AIzaSyApLm0zacQiM1VbSQ5INRlQ28ev3QoTw2o",
+    authDomain: "georgiahills-15d19.firebaseapp.com",
+    projectId: "georgiahills-15d19",
+    storageBucket: "georgiahills-15d19.firebasestorage.app",
+    messagingSenderId: "447700508040",
+    appId: "1:447700508040:web:379c32079d09523a14ae3d",
+    measurementId: "G-PTEM4FPQR1"
 };
 
 let db, auth;
+// Only init global SDK if present (not module usage)
 if (typeof firebase !== 'undefined') {
     try {
-        if (firebaseConfig.apiKey === "YOUR_API_KEY") throw new Error("Firebase Config Missing");
-        firebase.initializeApp(firebaseConfig);
+        if (!firebaseConfig || !firebaseConfig.apiKey) throw new Error("Firebase Config Missing");
+        if (!firebase.apps || !firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         db = firebase.firestore();
         if(firebase.auth) auth = firebase.auth();
     } catch (e) {
@@ -40,6 +46,11 @@ if (typeof firebase !== 'undefined') {
         db = null;
         auth = null;
     }
+} else {
+    // If running in Admin Module mode, rely on module variables elsewhere, 
+    // but keep db/auth null here so we don't crash
+    db = null; 
+    auth = null;
 }
 
 const AppConfig = {
@@ -84,7 +95,7 @@ const AnalyticsTracker = {
 // ==========================================
 // START CONFIGURATION (EDIT VIA ADMIN.HTML)
 // ==========================================
-const DestData = {
+window.DestData = {
     'tbilisi': {
         img: 'Tbilisi.webp',
         gallery: [
@@ -157,7 +168,375 @@ const DestData = {
 // END CONFIGURATION
 // ==========================================
 
-const DestKeys = Object.keys(DestData);
+let DestKeys = Object.keys(window.DestData);
+
+function normalizeDestinationShape(id, raw = {}) {
+    const existing = window.DestData[id] || {};
+    return {
+        ...existing,
+        title_en: raw.title_en || raw.title?.en || existing.title_en || '',
+        title_ar: raw.title_ar || raw.title?.ar || existing.title_ar || '',
+        desc_en: raw.desc_en || raw.desc?.en || existing.desc_en || '',
+        desc_ar: raw.desc_ar || raw.desc?.ar || existing.desc_ar || '',
+        img: raw.img || raw.thumbnail || existing.img || '',
+        gallery: raw.gallery || existing.gallery || [],
+        highlights_en: raw.highlights_en || raw.highlights?.en || existing.highlights_en || [],
+        highlights_ar: raw.highlights_ar || raw.highlights?.ar || existing.highlights_ar || [],
+        map_url: raw.map_url || raw.mapUrl || existing.map_url || ''
+    };
+}
+
+function applyNavbarSettings(data = {}) {
+    if (!data.items || !Array.isArray(data.items)) return;
+    
+    const isAr = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
+    
+    // Desktop Nav
+    const desktopNav = document.getElementById('desktop-links-container');
+    if (desktopNav) {
+        // Only clear if we actually have items to replace
+        if(data.items.length > 0) desktopNav.innerHTML = '';
+        
+        data.items.forEach(item => {
+            const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
+            const link = item.link;
+            
+            const a = document.createElement('a');
+            a.href = link;
+            a.className = 'nav-link';
+            // Simple active check heuristic
+            if(window.location.href.includes(link) && link !== '/' && link !== '#') a.classList.add('active');
+            a.textContent = label;
+            desktopNav.appendChild(a);
+        });
+    }
+
+    // Mobile Nav
+    const mobileNav = document.getElementById('mobile-links-container');
+    if (mobileNav) {
+        if(data.items.length > 0) mobileNav.innerHTML = '';
+        
+        data.items.forEach(item => {
+             const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
+             const link = item.link;
+
+             const a = document.createElement('a');
+             a.href = link;
+             a.className = 'mobile-link'; 
+             if(window.location.href.includes(link) && link !== '/' && link !== '#') a.classList.add('active');
+             a.textContent = label;
+             mobileNav.appendChild(a);
+        });
+    }
+}
+
+function renderSliderDestinations(dests) {
+    const slider = document.getElementById('tours-slider');
+    if (!slider) return;
+
+    // Clear slider (remove existing cards and clones) - keep structure clean
+    slider.innerHTML = '';
+    slider.removeAttribute('data-initialized'); // Reset init state
+
+    const lang = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl' ? 'ar' : 'en';
+
+    Object.keys(dests).forEach(id => {
+        const d = dests[id];
+        const title = lang === 'ar' ? (d.title_ar || d.title_en) : d.title_en;
+        const desc = lang === 'ar' ? (d.desc_ar || d.desc_en) : d.desc_en;
+        const btnText = lang === 'ar' ? 'اذهب هنا' : 'Drive Here';
+        // Check if a static file exists for standard ones or route to generic destination.html
+        // We assume generic is safer for dynamically added ones.
+        // For legacy keys (tbilisi, kazbegi, martvili), we might want to keep static links if they exist?
+        // Actually, destination.html?id=... handles everything now via DestinationApp.
+        // But let's check if we want to preserve old links.
+        // The original code had href="tbilisi.html".
+        // Let's use destination.html?id=ID for all to be consistent, OR check a list.
+        // However, standard pages might have custom layouts.
+        // Let's stick to destination.html?id=... for dynamic ones, and maybe hardcode the known statics?
+        // Actually, DestinationApp redirects index.html links but maybe not these.
+        // Let's just use destination.html?id=${id} for simplicity and consistency with the new system.
+        
+        const link = `destination.html?id=${id}`; 
+
+        const card = document.createElement('a');
+        card.href = link;
+        card.className = 'tour-card group';
+        
+        // Image
+        const img = document.createElement('img');
+        img.src = d.img;
+        img.width = 380; // Standardize
+        img.height = 475;
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.className = 'tour-card-img'; // Use consistent class
+        img.alt = title;
+        
+        const overlay = document.createElement('div');
+        overlay.className = 'tour-overlay';
+        
+        const content = document.createElement('div');
+        content.className = 'tour-content';
+        
+        const h3 = document.createElement('h3');
+        h3.className = 'tour-title';
+        h3.textContent = title;
+        
+        const p = document.createElement('p');
+        p.className = 'tour-desc';
+        p.textContent = desc.substring(0, 60) + (desc.length > 60 ? '...' : '');
+        
+        const span = document.createElement('span');
+        span.className = 'tour-btn text-accent-light';
+        span.innerHTML = `${btnText} <i class="fa-solid fa-arrow-right rtl:rotate-180"></i>`;
+        
+        content.appendChild(h3);
+        content.appendChild(p);
+        content.appendChild(span);
+        
+        card.appendChild(img);
+        card.appendChild(overlay);
+        card.appendChild(content);
+        
+        slider.appendChild(card);
+    });
+}
+
+(async function refreshContentFromFirestore() {
+    if (!db) return; // No Firebase
+
+    try {
+        // Fetch Destinations (Dynamic Slider)
+        try {
+            // Fetch all to handle legacy data missing 'active' field
+            const allDestsSnap = await db.collection('destinations').get();
+            
+            if (!allDestsSnap.empty) {
+                const newDests = {};
+                allDestsSnap.forEach(doc => {
+                    const data = doc.data();
+                    // Filter: Only exclude if explicitly set to false
+                    if (data.active === false) return;
+                    newDests[doc.id] = normalizeDestinationShape(doc.id, data);
+                });
+                
+                // Update global data
+                window.DestData = { ...window.DestData, ...newDests };
+                window.DestKeys = Object.keys(window.DestData);
+                
+                // Re-render slider
+                renderSliderDestinations(window.DestData);
+                
+                // Re-initialize slider logic if App is ready
+                if (window.App && window.App.initSlider) {
+                     const slider = document.getElementById('tours-slider');
+                     if (slider && slider.dataset.initialized) {
+                         slider.removeAttribute('data-initialized');
+                         window.App.initSlider();
+                     }
+                }
+            }
+        } catch (e) { console.warn("Destinations fetch failed", e); }
+
+        // Fetch Settings (Prices immediately)
+        const settingsSnap = await db.collection('settings').doc('global').get();
+        if (settingsSnap.exists) {
+            const s = settingsSnap.data();
+            if (s.prices) AppConfig.vehicleRates = { 'Sedan': s.prices.sedan || 150, 'Minivan': s.prices.minivan || 250 };
+        }
+        
+        // Fetch Page Content (Based on body class)
+        const isAr = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
+        const body = document.body;
+
+        try {
+            // Home Page Logic
+            if (!body.classList.contains('secondary-page')) {
+                const homeSnap = await db.collection('settings').doc('page_home').get();
+                if (homeSnap.exists) {
+                    const h = homeSnap.data();
+                    
+                    if (h.hero) {
+                        const heroTitle = document.getElementById('hero-title');
+                        const newTitle = isAr ? h.hero.title_ar : h.hero.title_en;
+                        if(heroTitle && newTitle) heroTitle.innerHTML = newTitle; // HTML supported
+                        
+                        const heroSub = document.getElementById('hero-subtitle');
+                        const newSub = isAr ? h.hero.subtitle_ar : h.hero.subtitle_en;
+                        if(heroSub && newSub) heroSub.innerHTML = newSub; // Allow HTML in subtitle too sometimes
+                        
+                        const heroImg = document.getElementById('hero-img');
+                        if(heroImg && h.hero.bg_image) {
+                            heroImg.src = h.hero.bg_image;
+                            heroImg.srcset = `${h.hero.bg_image} 1x`;
+                        }
+                    }
+
+                    if (h.about) {
+                        const aboutTitle = document.getElementById('about-title');
+                        // ... existing logic for home-about-section ...
+                        const newAboutTitle = isAr ? h.about.title_ar : h.about.title_en;
+                        if(aboutTitle && newAboutTitle) aboutTitle.innerHTML = newAboutTitle;
+
+                        const aboutDesc = document.getElementById('about-desc');
+                        const newAboutDesc = isAr ? h.about.text_ar : h.about.text_en;
+                        if(aboutDesc && newAboutDesc) aboutDesc.innerText = newAboutDesc;
+                        
+                        const aboutImg = document.getElementById('about-img');
+                        if(aboutImg && h.about.image) aboutImg.src = h.about.image;
+                    }
+                    
+                    // Features / How It Works
+                    if (h.hero) {
+                        const setTxt = (id, en, ar) => {
+                            const el = document.getElementById(id);
+                            if(el) el.innerText = isAr ? ar : en;
+                        };
+                        setTxt('steps-title', h.hero.steps_title_en, h.hero.steps_title_ar);
+                        setTxt('step1-title', h.hero.step1_title_en, h.hero.step1_title_ar);
+                        setTxt('step1-desc', h.hero.step1_desc_en, h.hero.step1_desc_ar);
+                        setTxt('step2-title', h.hero.step2_title_en, h.hero.step2_title_ar);
+                        setTxt('step2-desc', h.hero.step2_desc_en, h.hero.step2_desc_ar);
+                        setTxt('step3-title', h.hero.step3_title_en, h.hero.step3_title_ar);
+                        setTxt('step3-desc', h.hero.step3_desc_en, h.hero.step3_desc_ar);
+                    }
+                }
+            }
+            
+            // About Page Logic (Exclusive)
+            else if (body.classList.contains('page-about') && !body.classList.contains('page-services') && !body.classList.contains('page-contact')) {
+                const aboutSnap = await db.collection('settings').doc('page_about').get();
+                if (aboutSnap.exists) {
+                    const a = aboutSnap.data();
+                    
+                    if (a.hero) {
+                        const heroTitle = document.getElementById('hero-title');
+                        const newHeroTitle = isAr ? a.hero.title_ar : a.hero.title_en;
+                        if(heroTitle && newHeroTitle) heroTitle.innerHTML = newHeroTitle;
+
+                        const heroSub = document.getElementById('hero-subtitle');
+                        const newHeroSub = isAr ? a.hero.subtitle_ar : a.hero.subtitle_en;
+                        if(heroSub && newHeroSub) heroSub.innerHTML = newHeroSub;
+                    }
+                    if (a.story) {
+                        const storyTitle = document.getElementById('story-title');
+                        const newStoryTitle = isAr ? a.story.title_ar : a.story.title_en;
+                        if(storyTitle && newStoryTitle) storyTitle.innerHTML = newStoryTitle;
+                        
+                        const storyIntro = document.getElementById('story-intro');
+                        const newIntro = isAr ? a.story.intro_ar : a.story.intro_en;
+                        if(storyIntro && newIntro) storyIntro.innerText = newIntro;
+                    }
+                }
+            }
+
+            // Services Page Logic
+            else if (body.classList.contains('page-services')) {
+                const servSnap = await db.collection('settings').doc('page_services').get();
+                if (servSnap.exists) {
+                    const s = servSnap.data();
+                    if (s.hero) {
+                         const ht = document.getElementById('hero-title');
+                         const newHt = isAr ? s.hero.title_ar : s.hero.title_en;
+                         if(ht && newHt) ht.innerHTML = newHt;
+                         
+                         const hs = document.getElementById('hero-subtitle');
+                         const newHs = isAr ? s.hero.subtitle_ar : s.hero.subtitle_en;
+                         if(hs && newHs) hs.innerHTML = newHs;
+                    }
+                    if (s.intro) {
+                         const it = document.getElementById('intro-title');
+                         const newIt = isAr ? s.intro.title_ar : s.intro.title_en;
+                         if(it && newIt) it.innerText = newIt;
+
+                         const idesc = document.getElementById('intro-desc');
+                         const newIdesc = isAr ? s.intro.desc_ar : s.intro.desc_en;
+                         if(idesc && newIdesc) idesc.innerText = newIdesc;
+                    }
+                }
+            }
+
+            // Contact Page Logic
+            else if (body.classList.contains('page-contact')) {
+                const contSnap = await db.collection('settings').doc('page_contact').get();
+                if (contSnap.exists) {
+                    const c = contSnap.data();
+                    if (c.hero) {
+                         const ht = document.getElementById('hero-title');
+                         const newHt = isAr ? c.hero.title_ar : c.hero.title_en;
+                         if(ht && newHt) ht.innerHTML = newHt;
+                         
+                         const hs = document.getElementById('hero-subtitle');
+                         const newHs = isAr ? c.hero.subtitle_ar : c.hero.subtitle_en;
+                         if(hs && newHs) hs.innerHTML = newHs;
+                    }
+                    if (c.intro) {
+                         const it = document.getElementById('intro-title');
+                         const newIt = isAr ? c.intro.title_ar : c.intro.title_en;
+                         if(it && newIt) it.innerText = newIt;
+
+                         const idesc = document.getElementById('intro-desc');
+                         const newIdesc = isAr ? c.intro.desc_ar : c.intro.desc_en;
+                         if(idesc && newIdesc) idesc.innerText = newIdesc;
+                    }
+                }
+            }
+
+            // Shared Content (Footer, Trust, Booking Flow)
+            const sharedSnap = await db.collection('settings').doc('page_shared').get();
+            if (sharedSnap.exists) {
+                window.SharedContent = sharedSnap.data();
+            }
+
+        } catch(e) { console.warn("Content fetch error", e); }
+
+
+        // Fetch Contact Settings
+        try {
+            const contactSnap = await db.collection('settings').doc('contact').get();
+            if (contactSnap.exists) {
+                const c = contactSnap.data();
+                if(c.whatsapp) {
+                     document.querySelectorAll('a[href*="wa.me"]').forEach(el => el.href = `https://wa.me/${c.whatsapp}`);
+                }
+                if(c.phone) {
+                     document.querySelectorAll('a[href^="tel:"]').forEach(el => el.href = `tel:${c.phone}`);
+                }
+            }
+        } catch(e) { console.warn("Contact settings error", e); }
+
+        // Fetch Navbar Settings
+        try {
+            const navbarSnap = await db.collection('settings').doc('navbar').get();
+            if (navbarSnap.exists) {
+                const navbarSettings = navbarSnap.data();
+                const applyNow = () => applyNavbarSettings(navbarSettings);
+                applyNow();
+                window.addEventListener('DOMContentLoaded', applyNow, { once: true });
+            }
+        } catch (e) { console.warn("Navbar settings error", e); }
+
+        // Fetch Destinations
+        const snapshot = await db.collection('destinations').get();
+        if (!snapshot.empty) {
+            snapshot.forEach(doc => {
+                window.DestData[doc.id] = normalizeDestinationShape(doc.id, doc.data());
+            });
+            
+            // Update Keys
+            DestKeys = Object.keys(window.DestData);
+            
+            // Dispatch Event to notify UI
+            window.dispatchEvent(new CustomEvent('gh-content-updated'));
+            console.log('Content refreshed from Firestore');
+        }
+    } catch(e) {
+        console.error('Error fetching content:', e);
+    }
+})();
+
+
 
 
 // ==========================================
@@ -271,6 +650,22 @@ const UIManager = {
 
     getLangConfig() {
         const isArabic = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
+        let langSwitch = isArabic ? 'index.html' : 'arabic.html';
+        const path = (window.location.pathname || '').toLowerCase();
+        const filename = path.substring(path.lastIndexOf('/') + 1);
+
+        if (filename.includes('destination.html')) {
+            langSwitch = 'javascript:LangManager.toggle()';
+        } else {
+            if (isArabic) {
+                if (filename === 'arabic.html') langSwitch = 'index.html';
+                else if (filename.endsWith('-ar.html')) langSwitch = filename.replace('-ar.html', '.html');
+            } else {
+                if (filename === 'index.html' || filename === '') langSwitch = 'arabic.html';
+                else if (filename.endsWith('.html') && !filename.endsWith('-ar.html')) langSwitch = filename.replace('.html', '-ar.html');
+            }
+        }
+
         return {
             isArabic,
             home: isArabic ? 'arabic.html' : 'index.html',
@@ -280,7 +675,7 @@ const UIManager = {
             blog: isArabic ? 'blog-ar.html' : 'blog.html',
             contact: isArabic ? 'contact-ar.html' : 'contact.html',
             booking: isArabic ? 'booking-ar.html' : 'booking.html',
-            langSwitch: isArabic ? 'index.html' : 'arabic.html',
+            langSwitch: langSwitch,
             langText: isArabic ? 'English' : 'العربية',
             homeText: isArabic ? 'الرئيسية' : 'Home',
             servicesText: isArabic ? 'الخدمات' : 'Services',
@@ -293,6 +688,7 @@ const UIManager = {
     },
 
     normalizeNavigation() {
+        if (window.__GH_SHARED_NAVBAR__) return;
         const nav = document.getElementById('navbar');
         if (!nav) return;
 
@@ -350,6 +746,8 @@ const UIManager = {
             link.textContent = cfg.bookText;
         });
 
+        // Removed improved navbar text overrides that conflict with shared-navbar language switcher
+        /*
         document.querySelectorAll('a[href="services.html"].action-btn, a[href="services-ar.html"].action-btn').forEach((link) => {
             link.textContent = cfg.servicesText;
         });
@@ -357,8 +755,13 @@ const UIManager = {
         document.querySelectorAll('a[href="guide.html"].action-btn, a[href="guide-ar.html"].action-btn').forEach((link) => {
             link.textContent = cfg.guideText;
         });
+        */
 
         document.querySelectorAll('a[href="contact.html"].btn-book-nav, a[href="contact-ar.html"].btn-book-nav, a[href="contact.html"].action-btn, a[href="contact-ar.html"].action-btn').forEach((link) => {
+            // Check if this is likely a shared-navbar language switcher or mobile control
+            if (link.getAttribute('aria-label') === 'Language switch' || link.closest('.mobile-controls') || link.closest('.desktop-menu')) {
+                return;
+            }
             link.textContent = cfg.isArabic ? 'تواصل مع الفريق' : 'Contact Team';
         });
 
@@ -380,17 +783,24 @@ const UIManager = {
         const main = document.getElementById('main-content');
         if (!main) return;
 
+        const shared = window.SharedContent || {};
+        const flow = shared.booking_flow || {};
+
         const cfg = this.getLangConfig();
+        const isAr = cfg.isArabic;
+
+        const t = (keyEn, keyAr) => isAr ? (flow[keyAr] || flow[keyEn]) : flow[keyEn];
+
         const section = document.createElement('section');
         section.className = 'content-card pro-growth-section';
         section.style.cssText = 'padding:2rem; margin-top:2rem;';
         section.innerHTML = cfg.isArabic
             ? `
-                <h2 class="section-heading">الحجز بطريقة احترافية</h2>
+                <h2 class="section-heading">${flow.title_ar || 'الحجز بطريقة احترافية'}</h2>
                 <div class="process-grid" style="margin-bottom:1.5rem;">
-                    <article class="process-card"><span class="process-step">1</span><h3 class="process-title">أرسل تفاصيل الرحلة</h3><p class="process-text">المسار والتواريخ وعدد المسافرين.</p></article>
-                    <article class="process-card"><span class="process-step">2</span><h3 class="process-title">استلم عرض واضح</h3><p class="process-text">سعر وخطة خدمة بدون رسوم مخفية.</p></article>
-                    <article class="process-card"><span class="process-step">3</span><h3 class="process-title">تأكيد سريع</h3><p class="process-text">تأكيد واتساب وتجهيز الجدول قبل الوصول.</p></article>
+                    <article class="process-card"><span class="process-step">1</span><h3 class="process-title">${flow.step1_title_ar || 'أرسل تفاصيل الرحلة'}</h3><p class="process-text">${flow.step1_desc_ar || 'المسار والتواريخ وعدد المسافرين.'}</p></article>
+                    <article class="process-card"><span class="process-step">2</span><h3 class="process-title">${flow.step2_title_ar || 'استلم عرض واضح'}</h3><p class="process-text">${flow.step2_desc_ar || 'سعر وخطة خدمة بدون رسوم مخفية.'}</p></article>
+                    <article class="process-card"><span class="process-step">3</span><h3 class="process-title">${flow.step3_title_ar || 'تأكيد سريع'}</h3><p class="process-text">${flow.step3_desc_ar || 'تأكيد واتساب وتجهيز الجدول قبل الوصول.'}</p></article>
                 </div>
                 <div class="proof-grid">
                     <div class="proof-card"><p class="proof-number">24/7</p><p class="proof-label">دعم</p></div>
@@ -399,11 +809,11 @@ const UIManager = {
                     <div class="proof-card"><p class="proof-number">100%</p><p class="proof-label">رحلات خاصة</p></div>
                 </div>`
             : `
-                <h2 class="section-heading">Professional Booking Flow</h2>
+                <h2 class="section-heading">${flow.title_en || 'Professional Booking Flow'}</h2>
                 <div class="process-grid" style="margin-bottom:1.5rem;">
-                    <article class="process-card"><span class="process-step">1</span><h3 class="process-title">Share trip details</h3><p class="process-text">Route, dates, and passenger count.</p></article>
-                    <article class="process-card"><span class="process-step">2</span><h3 class="process-title">Get clear quote</h3><p class="process-text">Transparent price and service scope.</p></article>
-                    <article class="process-card"><span class="process-step">3</span><h3 class="process-title">Confirm quickly</h3><p class="process-text">WhatsApp confirmation with ready schedule.</p></article>
+                    <article class="process-card"><span class="process-step">1</span><h3 class="process-title">${flow.step1_title_en || 'Share trip details'}</h3><p class="process-text">${flow.step1_desc_en || 'Route, dates, and passenger count.'}</p></article>
+                    <article class="process-card"><span class="process-step">2</span><h3 class="process-title">${flow.step2_title_en || 'Get clear quote'}</h3><p class="process-text">${flow.step2_desc_en || 'Transparent price and service scope.'}</p></article>
+                    <article class="process-card"><span class="process-step">3</span><h3 class="process-title">${flow.step3_title_en || 'Confirm quickly'}</h3><p class="process-text">${flow.step3_desc_en || 'WhatsApp confirmation with ready schedule.'}</p></article>
                 </div>
                 <div class="proof-grid">
                     <div class="proof-card"><p class="proof-number">24/7</p><p class="proof-label">Support</p></div>
@@ -445,29 +855,49 @@ const UIManager = {
     },
 
     setupMobileMenu() {
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const closeBtn = document.getElementById('close-menu-btn');
-        const menu = document.getElementById('mobile-menu');
-        const links = document.querySelectorAll('.mobile-link, .mobile-btn-book');
+        // Use Event Delegation to handle dynamically injected elements (like shared-navbar)
+        document.addEventListener('click', (e) => {
+            const menuBtn = e.target.closest('#mobile-menu-btn');
+            const closeBtn = e.target.closest('#close-menu-btn');
+            const link = e.target.closest('.mobile-link, .mobile-btn-book'); // Handles navigation links inside mobile menu
+            
+            // Only proceed if one of the targets was clicked
+            if (!menuBtn && !closeBtn && !link) return;
 
-        if (menu) menu.setAttribute('aria-hidden', 'true');
-        if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+            const menu = document.getElementById('mobile-menu');
+            const toggleBtn = document.getElementById('mobile-menu-btn'); 
 
-        const toggle = () => {
-            if(!menu) return;
-            const isOpen = menu.classList.toggle('open');
-            if(menuBtn) menuBtn.setAttribute('aria-expanded', isOpen);
-            menu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-            document.body.classList.toggle('overflow-hidden', isOpen);
-        };
+            if (!menu) return;
 
-        if(menuBtn) menuBtn.addEventListener('click', toggle);
-        if(closeBtn) closeBtn.addEventListener('click', toggle);
-        links.forEach(l => l.addEventListener('click', toggle));
+            const isOpen = menu.classList.contains('open');
+
+            // Toggle function
+            const toggle = (forceState) => {
+                const newState = (forceState !== undefined) ? forceState : !isOpen;
+                menu.classList.toggle('open', newState);
+                
+                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', newState);
+                menu.setAttribute('aria-hidden', newState ? 'false' : 'true');
+                document.body.classList.toggle('overflow-hidden', newState);
+            };
+
+            if (menuBtn) {
+                toggle(); // Toggle open/close
+            } else if (closeBtn) {
+                toggle(false); // Force close
+            } else if (link && isOpen) {
+                toggle(false); // Close on link click
+            }
+        });
 
         document.addEventListener('keydown', (event) => {
+            const menu = document.getElementById('mobile-menu');
             if (event.key === 'Escape' && menu && menu.classList.contains('open')) {
-                toggle();
+                const toggleBtn = document.getElementById('mobile-menu-btn');
+                menu.classList.remove('open');
+                if(toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+                menu.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('overflow-hidden');
             }
         });
     },
@@ -507,22 +937,9 @@ const UIManager = {
     },
 
     updateActiveNavLink() {
-        if (!document.querySelector('section[id]')) return;
-
-        const sections = document.querySelectorAll('section[id]');
-        const scrollPos = window.scrollY + 150;
-
-        sections.forEach(section => {
-            const id = section.getAttribute('id');
-            const top = section.offsetTop;
-            const height = section.offsetHeight;
-            const link = document.querySelector(`.nav-link[href="#${id}"]`);
-
-            if (scrollPos >= top && scrollPos < top + height) {
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                if (link) link.classList.add('active');
-            }
-        });
+        // Disabled scroll spy updates for removed anchors
+        // Only active link provided by current page URL is sufficient
+        return;
     },
 
     openModal(id) {
@@ -1007,16 +1424,47 @@ const MainApp = {
          const slider = document.getElementById('tours-slider');
          if(!slider) return;
 
+         // Prevent multiple initializations or clean up if re-initializing
+         if (slider.dataset.initialized === 'true') {
+            // Remove existing clones to reset state
+            const clones = slider.querySelectorAll('[aria-hidden="true"]');
+            clones.forEach(clone => clone.remove());
+            // Clear old listeners if possible (hard without reference), 
+            // but since we are just re-cloning, maybe it's fine?
+            // Actually, we should be careful about button listeners piling up.
+            // Let's assume for now we just reset the clones.
+         }
+         slider.dataset.initialized = 'true';
+
          const prevBtns = [document.getElementById('prevBtnDesk'), document.getElementById('prevBtnMob')];
          const nextBtns = [document.getElementById('nextBtnDesk'), document.getElementById('nextBtnMob')];
+
+         // Clear existing listeners to prevent duplicates (requires storing abort controllers or named functions)
+         // For simplicity, we'll use cloning to wipe listeners on buttons
+         prevBtns.forEach((btn, i) => {
+             if(btn) {
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+                prevBtns[i] = newBtn; // Update reference
+             }
+         });
+         nextBtns.forEach((btn, i) => {
+             if(btn) {
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+                nextBtns[i] = newBtn; // Update reference
+             }
+         });
 
          let autoScrollInterval;
          const intervalTime = 3500;
          let isPaused = false;
          
-         const originalCards = Array.from(slider.children);
+         // Get updated original cards (excluding any clones if we missed them)
+         const originalCards = Array.from(slider.children).filter(c => !c.hasAttribute('aria-hidden'));
          if(originalCards.length === 0) return;
 
+         // Append clones for infinite scroll
          originalCards.forEach(card => {
              const clone = card.cloneNode(true);
              clone.setAttribute('aria-hidden', 'true');
@@ -1155,14 +1603,14 @@ const DestinationApp = {
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id') || 'tbilisi';
         
-        let data = DestData[id]; // Fallback to local data
+        let data = normalizeDestinationShape(id, window.DestData[id] || {}); // Fallback to local data
 
         // FETCH FROM FIREBASE
         if (db) {
             try {
                 const docSnap = await db.collection('destinations').doc(id).get();
                 if (docSnap.exists) {
-                    data = docSnap.data();
+                    data = normalizeDestinationShape(id, docSnap.data());
                 }
             } catch(e) { console.log("Using offline data"); }
         }
@@ -1192,7 +1640,7 @@ const DestinationApp = {
             };
             setMeta('og:title', title);
             setMeta('og:description', desc.substring(0, 200));
-            setMeta('og:image', data.img.startsWith('http') ? data.img : `https://georgiahills.netlify.app/${data.img}`);
+            setMeta('og:image', data.img.startsWith('http') ? data.img : `https://georgiahills.com/${data.img}`);
 
             // 2. Clean Canonical URL (Remove tracking params)
             const canonicalLink = document.querySelector('link[rel="canonical"]');
@@ -1211,7 +1659,7 @@ const DestinationApp = {
                     "@type": "TouristAttraction",
                     "name": title,
                     "description": data[`desc_${lang}`],
-                    "image": data.img.startsWith('http') ? data.img : `https://georgiahills.netlify.app/${data.img}`,
+                    "image": data.img.startsWith('http') ? data.img : `https://georgiahills.com/${data.img}`,
                     "url": window.location.href,
                     "address": {
                         "@type": "PostalAddress",
@@ -1228,10 +1676,10 @@ const DestinationApp = {
                 // FIX: Set handlers before src to catch cached loads
                 heroImg.onload = function() { this.classList.remove('skeleton'); };
                 heroImg.onerror = function() { this.src = 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80'; }; // Fallback
-                heroImg.src = data.img;
+                document.getElementById('hero-bg').style.backgroundImage = 'url(' + (data.img.startsWith('http') ? data.img : data.img) + ')'; heroImg.src = data.img;
             }
             
-            const crumbTitle = document.getElementById('crumb-title');
+            const crumbTitle = document.getElementById('crumb-title'); const crumbCurrent = document.getElementById('crumb-current'); if(crumbCurrent) crumbCurrent.innerText = title;
             if(crumbTitle) {
                 crumbTitle.innerText = title;
                 crumbTitle.classList.remove('skeleton');
@@ -1251,14 +1699,14 @@ const DestinationApp = {
             
             const highlightsEl = document.getElementById('highlights');
             if(highlightsEl) {
-                const highlightsList = data[`highlights_${lang}`];
+                const highlightsList = data[`highlights_${lang}`] || [];
                 const highlightsHTML = highlightsList.map(h => `<li><i class="fa-solid fa-star"></i> ${h}</li>`).join('');
                 highlightsEl.innerHTML = highlightsHTML;
             }
 
             const mapLink = document.getElementById('map-link');
             if(mapLink) {
-                mapLink.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.title_en)}`;
+                mapLink.href = data.map_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.title_en)}`;
                 mapLink.rel = "noopener noreferrer";
             }
 
@@ -1271,7 +1719,7 @@ const DestinationApp = {
 
             const idx = DestKeys.indexOf(id);
             const nextId = DestKeys[(idx + 1) % DestKeys.length];
-            const nextData = DestData[nextId];
+            const nextData = normalizeDestinationShape(nextId, window.DestData[nextId] || {});
             
             const nextLink = document.getElementById('next-link');
             // Update next link to preserve language choice in URL
@@ -1289,6 +1737,65 @@ const DestinationApp = {
     }
 };
 
+// --- Destination Loader ---
+const DestinationLoader = {
+    async load() {
+        const slider = document.getElementById('tours-slider');
+        if (!slider) return;
+
+        try {
+            const db = firebase.firestore();
+            // Fetch all destinations (client-side filtering for legacy support)
+            const snapshot = await db.collection('destinations').get();
+            
+            if (snapshot.empty) {
+                console.warn("No destinations found in Firestore.");
+                return; 
+            }
+            
+            let html = '';
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                // Skip inactive
+                if (data.active === false) return;
+
+                const id = doc.id;
+                const lang = document.documentElement.lang || 'en';
+                const isAr = lang === 'ar';
+                
+                const title = isAr ? (data.title_ar || data.title_en) : data.title_en;
+                const desc = isAr ? (data.desc_ar || data.desc_en) : data.desc_en;
+                // Prefer explicit slug or route handling if available, else link to dynamic page
+                // Note: The static site has tbilisi.html etc. We might want to link there if ID matches?
+                // But for new destinations, we rely on destination.html?id=...
+                const link = `destination.html?id=${id}`; 
+
+                html += `
+                <a href="${link}" class="tour-card group">
+                    <img src="${data.thumbnail || 'https://placehold.co/600x800'}" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="${title}">
+                    <div class="tour-overlay"></div>
+                    <div class="tour-content">
+                        <h3 class="tour-title">${title}</h3>
+                        <p class="tour-desc">${desc || ''}</p>
+                        <span class="tour-btn text-accent-light">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
+                    </div>
+                </a>`;
+            });
+            
+            slider.innerHTML = html;
+            
+            // Re-init slider logic because we replaced DOM elements
+            if(window.App && App.initSlider) {
+                // Reset initialized flag to force re-bind
+                slider.dataset.initialized = 'false';
+                App.initSlider();
+            }
+        } catch (e) {
+            console.error("Failed to load destinations", e);
+        }
+    }
+};
+
 // ==========================================
 // 5. GLOBAL EXPORTS
 // ==========================================
@@ -1298,6 +1805,8 @@ window.UIManager = UIManager;
 window.CurrencyManager = CurrencyManager;
 window.BookingManager = BookingManager;
 window.LangManager = LangManager;
+// Expose Loader
+window.DestinationLoader = DestinationLoader;
 
 // Expose MainApp as 'App' because the main page HTML calls 'App.prefillVehicle' etc.
 window.App = MainApp; 
@@ -1313,9 +1822,11 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // Detect which page we are on and run the appropriate logic
     
-    // Condition 1: Main Page (has 'tours-slider' or 'hero')
-    if (document.getElementById('tours-slider') || document.querySelector('.hero')) {
+    // Condition 1: Main Page (has 'tours-slider' or 'hero' or 'dest-hero')
+    if (document.getElementById('tours-slider') || document.querySelector('.hero') || document.querySelector('.about-premium-hero') || document.querySelector('.dest-hero')) {
         MainApp.start();
+        // Load dynamic destinations if slider exists
+        if(document.getElementById('tours-slider')) DestinationLoader.load();
     } 
     // Condition 2: Dynamic Destination Page (ONLY destination.html)
     else if (window.location.pathname.includes('destination.html')) {

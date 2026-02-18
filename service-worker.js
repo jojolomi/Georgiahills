@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gh-cache-v22';
+const CACHE_NAME = 'gh-cache-v23';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -15,13 +15,13 @@ const ASSETS_TO_CACHE = [
   '/article-7-days-georgia.html',
   '/article-7-days-georgia-ar.html',
   '/article-is-georgia-safe.html',
-  '/article-is-georgia-safe-ar.html',
   '/services.html',
   '/services-ar.html',
   '/guide.html',
   '/guide-ar.html',
   '/about.html',
   '/about-ar.html',
+  '/honeymoon.html',
   '/honeymoon-ar.html',
   '/tbilisi.html',
   '/tbilisi-ar.html',
