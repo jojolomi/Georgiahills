@@ -21,6 +21,7 @@
     "perf:asset-budget": "node scripts/audit/perf/asset-budget.js astro-site/dist",
     "ops:runtime-parity": "node scripts/audit/ops/check-runtime-parity.js",
     "lighthouse:ci": "lhci autorun --config=.lighthouserc.json",
+    "test": "playwright test",
     "test:crossbrowser": "playwright test",
     "test:admin-v3": "npm run build:admin-v3:hosting && playwright test --config=playwright.admin-v3.config.js",
     "test:admin-v3:auth": "npm run build:admin-v3:hosting && playwright test --config=playwright.admin-v3.auth.config.js",
