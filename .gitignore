@@ -4,3 +4,11 @@ functions/node_modules/
 .firebase/
 firebase-config.js
 *.log
+test-results/
+playwright-report/
+.lighthouseci/
+scripts/audit/perf/*.json
+scripts/seo-report.json
+admin-v3/dist/
+admin-v3/assets/
+admin-v3/index.prod.html

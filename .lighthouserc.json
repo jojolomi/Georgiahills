@@ -1,0 +1,32 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./astro-site/dist",
+      "url": [
+        "http://localhost/index.html",
+        "http://localhost/arabic.html",
+        "http://localhost/booking.html",
+        "http://localhost/booking-ar.html"
+      ],
+      "numberOfRuns": 1
+    },
+    "assert": {
+      "preset": "lighthouse:recommended",
+      "assertions": {
+        "categories:performance": ["error", { "minScore": 0.85 }],
+        "categories:accessibility": ["error", { "minScore": 0.95 }],
+        "categories:best-practices": ["error", { "minScore": 0.95 }],
+        "categories:seo": ["error", { "minScore": 0.95 }],
+        "categories:pwa": "off",
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["warn", { "maxNumericValue": 0.1 }],
+        "interactive": ["warn", { "maxNumericValue": 3800 }],
+        "resource-summary:script:size": ["error", { "maxNumericValue": 360000 }],
+        "resource-summary:total:size": ["error", { "maxNumericValue": 1000000 }]
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}

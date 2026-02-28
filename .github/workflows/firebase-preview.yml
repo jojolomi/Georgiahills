@@ -1,0 +1,57 @@
+name: Staging Preview Deploy
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    environment: staging
+    concurrency:
+      group: firebase-preview-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install admin-v3 dependencies
+        run: npm ci
+        working-directory: admin-v3
+
+      - name: Runtime parity assertion
+        run: npm run ops:runtime-parity
+        env:
+          GH_ENVIRONMENT: staging
+          EXPECTED_NODE_MAJOR: "20"
+          REQUIRED_ENV_KEYS: FIREBASE_PROJECT_ID
+          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID_STAGING }}
+
+      - name: Build Astro site
+        run: npm run build:astro
+
+      - name: Build admin-v3 hosting bundle
+        run: npm run build:admin-v3:hosting
+
+      - name: Deploy to staging preview channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_STAGING }}"
+          projectId: "${{ vars.FIREBASE_PROJECT_ID_STAGING }}"
+          expires: 7d

@@ -1,0 +1,89 @@
+name: CI Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install Astro dependencies
+        run: npm ci
+        working-directory: astro-site
+
+      - name: Install admin-v3 dependencies
+        run: npm ci
+        working-directory: admin-v3
+
+      - name: Install functions dependencies
+        run: npm ci
+        working-directory: functions
+
+      - name: Functions tests
+        run: npm test
+        working-directory: functions
+        env:
+          FIREBASE_CONFIG: '{"storageBucket":"ci-bucket.appspot.com"}'
+          GCLOUD_PROJECT: ci-project
+
+      - name: Site checks
+        run: npm run check
+
+      - name: Runtime parity assertion
+        run: npm run ops:runtime-parity
+        env:
+          GH_ENVIRONMENT: ci
+          EXPECTED_NODE_MAJOR: "20"
+
+      - name: Build Astro site
+        run: npm run build:astro
+
+      - name: Build admin-v3 hosting bundle
+        run: npm run build:admin-v3:hosting
+
+      - name: Technical SEO validation
+        run: npm run seo:validate
+
+      - name: Asset budget report
+        run: npm run perf:asset-budget
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: Cross-browser smoke tests
+        run: npm run test:crossbrowser
+
+      - name: Admin v3 smoke tests
+        run: npm run test:admin-v3
+
+      - name: Admin v3 authenticated smoke tests (optional)
+        if: ${{ secrets.ADMIN_V3_E2E_EMAIL != '' && secrets.ADMIN_V3_E2E_PASSWORD != '' }}
+        run: npm run test:admin-v3:auth
+        env:
+          ADMIN_V3_E2E_EMAIL: ${{ secrets.ADMIN_V3_E2E_EMAIL }}
+          ADMIN_V3_E2E_PASSWORD: ${{ secrets.ADMIN_V3_E2E_PASSWORD }}
+
+      - name: Lighthouse budgets
+        run: npm run lighthouse:ci
+
+      - name: Syntax checks
+        run: |
+          node --check script.js
+          node --check admin-v2.js
+          node --check scripts/prepare-admin-v3-hosting.js
+          node --check functions/index.js

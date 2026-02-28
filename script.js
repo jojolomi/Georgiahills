@@ -63,6 +63,64 @@ const AppConfig = {
     defaultRates: { GEL: 1, USD: 0.37, EUR: 0.34, AED: 1.35, SAR: 1.38, KWD: 0.11, QAR: 1.34, OMR: 0.14 }
 };
 
+function getBookingEndpoint() {
+    if (firebaseConfig.bookingEndpoint) return firebaseConfig.bookingEndpoint;
+    if (firebaseConfig.projectId) {
+        const region = firebaseConfig.functionsRegion || 'europe-west1';
+        return `https://${region}-${firebaseConfig.projectId}.cloudfunctions.net/createBookingLead`;
+    }
+    return '';
+}
+
+const AttributionManager = {
+    storageKey: 'gh_attribution',
+    capture() {
+        try {
+            const url = new URL(window.location.href);
+            const params = url.searchParams;
+            const existing = JSON.parse(localStorage.getItem(this.storageKey) || '{}');
+            const next = {
+                firstSeenAt: existing.firstSeenAt || new Date().toISOString(),
+                firstReferrer: existing.firstReferrer || document.referrer || '',
+                lastReferrer: document.referrer || existing.lastReferrer || '',
+                landingPath: existing.landingPath || window.location.pathname,
+                lastPath: window.location.pathname,
+                utm_source: params.get('utm_source') || existing.utm_source || '',
+                utm_medium: params.get('utm_medium') || existing.utm_medium || '',
+                utm_campaign: params.get('utm_campaign') || existing.utm_campaign || '',
+                utm_term: params.get('utm_term') || existing.utm_term || '',
+                utm_content: params.get('utm_content') || existing.utm_content || ''
+            };
+            localStorage.setItem(this.storageKey, JSON.stringify(next));
+        } catch (e) {}
+    },
+    current() {
+        try { return JSON.parse(localStorage.getItem(this.storageKey) || '{}'); }
+        catch (e) { return {}; }
+    }
+};
+
+const ExperimentManager = {
+    storageKey: 'gh_experiments',
+    assignBookingVariant() {
+        try {
+            const state = JSON.parse(localStorage.getItem(this.storageKey) || '{}');
+            if (!state.bookingFormVariant) {
+                state.bookingFormVariant = Math.random() < 0.5 ? 'control' : 'variant_a';
+                state.assignedAt = new Date().toISOString();
+                localStorage.setItem(this.storageKey, JSON.stringify(state));
+            }
+            return state.bookingFormVariant;
+        } catch (e) {
+            return 'control';
+        }
+    },
+    current() {
+        try { return JSON.parse(localStorage.getItem(this.storageKey) || '{}'); }
+        catch (e) { return {}; }
+    }
+};
+
 const Translations = {
     en: {
         nav_home: "Home", nav_tours: "Destinations", nav_packages: "Packages", nav_guide: "Guide", nav_fleet: "Fleet", nav_reviews: "Reviews", nav_book: "Book Now",
@@ -91,6 +149,56 @@ const AnalyticsTracker = {
         } catch (e) {}
     }
 };
+
+function sanitizeRichText(input) {
+    if (typeof input !== 'string') return '';
+
+    const template = document.createElement('template');
+    template.innerHTML = input;
+
+    const allowedTags = new Set(['BR', 'SPAN', 'B', 'STRONG', 'I', 'EM']);
+    const nodes = [];
+    const walker = document.createTreeWalker(template.content, NodeFilter.SHOW_ELEMENT);
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+
+    nodes.forEach((el) => {
+        if (!allowedTags.has(el.tagName)) {
+            el.replaceWith(document.createTextNode(el.textContent || ''));
+            return;
+        }
+
+        Array.from(el.attributes).forEach((attr) => {
+            if (attr.name !== 'class') {
+                el.removeAttribute(attr.name);
+                return;
+            }
+
+            const safeClasses = attr.value
+                .split(/\s+/)
+                .filter((c) => /^[a-zA-Z0-9_-]{1,40}$/.test(c));
+
+            if (safeClasses.length) el.setAttribute('class', safeClasses.join(' '));
+            else el.removeAttribute('class');
+        });
+    });
+
+    return template.innerHTML;
+}
+
+function setSafeHTML(el, value) {
+    if (!el || !value) return;
+    el.innerHTML = sanitizeRichText(value);
+}
+
+function sanitizeImageUrl(url) {
+    if (typeof url !== 'string') return '';
+    const trimmed = url.trim();
+    if (!trimmed) return '';
+
+    if (/^(https?:)?\/\//i.test(trimmed)) return trimmed;
+    if (/^[./a-zA-Z0-9_-]+\.(webp|png|jpg|jpeg|gif|avif|svg)$/i.test(trimmed)) return trimmed;
+    return '';
+}
 
 // ==========================================
 // START CONFIGURATION (EDIT VIA ADMIN.HTML)
@@ -360,16 +468,17 @@ function renderSliderDestinations(dests) {
                     if (h.hero) {
                         const heroTitle = document.getElementById('hero-title');
                         const newTitle = isAr ? h.hero.title_ar : h.hero.title_en;
-                        if(heroTitle && newTitle) heroTitle.innerHTML = newTitle; // HTML supported
+                        setSafeHTML(heroTitle, newTitle);
                         
                         const heroSub = document.getElementById('hero-subtitle');
                         const newSub = isAr ? h.hero.subtitle_ar : h.hero.subtitle_en;
-                        if(heroSub && newSub) heroSub.innerHTML = newSub; // Allow HTML in subtitle too sometimes
+                        setSafeHTML(heroSub, newSub);
                         
                         const heroImg = document.getElementById('hero-img');
-                        if(heroImg && h.hero.bg_image) {
-                            heroImg.src = h.hero.bg_image;
-                            heroImg.srcset = `${h.hero.bg_image} 1x`;
+                        const safeHeroImage = sanitizeImageUrl(h.hero.bg_image);
+                        if(heroImg && safeHeroImage) {
+                            heroImg.src = safeHeroImage;
+                            heroImg.srcset = `${safeHeroImage} 1x`;
                         }
                     }
 
@@ -377,7 +486,7 @@ function renderSliderDestinations(dests) {
                         const aboutTitle = document.getElementById('about-title');
                         // ... existing logic for home-about-section ...
                         const newAboutTitle = isAr ? h.about.title_ar : h.about.title_en;
-                        if(aboutTitle && newAboutTitle) aboutTitle.innerHTML = newAboutTitle;
+                        setSafeHTML(aboutTitle, newAboutTitle);
 
                         const aboutDesc = document.getElementById('about-desc');
                         const newAboutDesc = isAr ? h.about.text_ar : h.about.text_en;
@@ -413,16 +522,16 @@ function renderSliderDestinations(dests) {
                     if (a.hero) {
                         const heroTitle = document.getElementById('hero-title');
                         const newHeroTitle = isAr ? a.hero.title_ar : a.hero.title_en;
-                        if(heroTitle && newHeroTitle) heroTitle.innerHTML = newHeroTitle;
+                        setSafeHTML(heroTitle, newHeroTitle);
 
                         const heroSub = document.getElementById('hero-subtitle');
                         const newHeroSub = isAr ? a.hero.subtitle_ar : a.hero.subtitle_en;
-                        if(heroSub && newHeroSub) heroSub.innerHTML = newHeroSub;
+                        setSafeHTML(heroSub, newHeroSub);
                     }
                     if (a.story) {
                         const storyTitle = document.getElementById('story-title');
                         const newStoryTitle = isAr ? a.story.title_ar : a.story.title_en;
-                        if(storyTitle && newStoryTitle) storyTitle.innerHTML = newStoryTitle;
+                        setSafeHTML(storyTitle, newStoryTitle);
                         
                         const storyIntro = document.getElementById('story-intro');
                         const newIntro = isAr ? a.story.intro_ar : a.story.intro_en;
@@ -439,11 +548,11 @@ function renderSliderDestinations(dests) {
                     if (s.hero) {
                          const ht = document.getElementById('hero-title');
                          const newHt = isAr ? s.hero.title_ar : s.hero.title_en;
-                         if(ht && newHt) ht.innerHTML = newHt;
+                         setSafeHTML(ht, newHt);
                          
                          const hs = document.getElementById('hero-subtitle');
                          const newHs = isAr ? s.hero.subtitle_ar : s.hero.subtitle_en;
-                         if(hs && newHs) hs.innerHTML = newHs;
+                         setSafeHTML(hs, newHs);
                     }
                     if (s.intro) {
                          const it = document.getElementById('intro-title');
@@ -465,11 +574,11 @@ function renderSliderDestinations(dests) {
                     if (c.hero) {
                          const ht = document.getElementById('hero-title');
                          const newHt = isAr ? c.hero.title_ar : c.hero.title_en;
-                         if(ht && newHt) ht.innerHTML = newHt;
+                         setSafeHTML(ht, newHt);
                          
                          const hs = document.getElementById('hero-subtitle');
                          const newHs = isAr ? c.hero.subtitle_ar : c.hero.subtitle_en;
-                         if(hs && newHs) hs.innerHTML = newHs;
+                         setSafeHTML(hs, newHs);
                     }
                     if (c.intro) {
                          const it = document.getElementById('intro-title');
@@ -972,6 +1081,11 @@ const UIManager = {
 const BookingManager = {
     fpInstance: null,
     initialized: false,
+    startedAt: Date.now(),
+    trackedView: false,
+    currentStep: 1,
+    maxStepReached: 1,
+    totalSteps: 3,
 
     init() {
         const form = document.getElementById('bookingForm');
@@ -1000,10 +1114,159 @@ const BookingManager = {
         }
 
         if (!this.initialized) {
+            this.startedAt = Date.now();
             this.loadDraft();
             form.addEventListener('input', () => this.saveDraft());
+            this.initStepper();
+            this.bindIntentCta();
             this.initialized = true;
         }
+
+        if (!this.trackedView) {
+            this.trackedView = true;
+            AnalyticsTracker.event('funnel_booking_form_view', {
+                page_path: window.location.pathname,
+                variant: (ExperimentManager.current() || {}).bookingFormVariant || 'control'
+            });
+        }
+        this.updateIntentCta();
+    },
+
+    initStepper() {
+        const steps = document.querySelectorAll('.booking-step');
+        if (!steps.length) return;
+
+        const prevBtn = document.getElementById('stepPrev');
+        const nextBtn = document.getElementById('stepNext');
+        for (let i = 1; i <= this.totalSteps; i++) {
+            const pill = document.getElementById(`step-pill-${i}`);
+            if (!pill) continue;
+            pill.onclick = () => {
+                if (i <= this.maxStepReached) this.goToStep(i);
+            };
+        }
+
+        if (prevBtn) prevBtn.onclick = () => this.goToStep(this.currentStep - 1);
+        if (nextBtn) {
+            nextBtn.onclick = () => {
+                if (!this.validateStep(this.currentStep)) return;
+                this.goToStep(this.currentStep + 1);
+                AnalyticsTracker.event('booking_step_next', {
+                    page_path: window.location.pathname,
+                    step: this.currentStep
+                });
+            };
+        }
+
+        this.goToStep(this.currentStep, true);
+    },
+
+    goToStep(step, silent = false) {
+        const steps = Array.from(document.querySelectorAll('.booking-step'));
+        if (!steps.length) return;
+
+        const bounded = Math.max(1, Math.min(this.totalSteps, step));
+        this.currentStep = bounded;
+        this.maxStepReached = Math.max(this.maxStepReached, bounded);
+
+        steps.forEach((el) => {
+            const s = Number(el.dataset.step || '1');
+            el.classList.toggle('hidden', s !== bounded);
+        });
+
+        const prevBtn = document.getElementById('stepPrev');
+        const nextBtn = document.getElementById('stepNext');
+        const submitBtn = document.getElementById('submitBtn');
+        if (prevBtn) prevBtn.classList.toggle('hidden', bounded === 1);
+        if (nextBtn) nextBtn.classList.toggle('hidden', bounded === this.totalSteps);
+        if (submitBtn) submitBtn.classList.toggle('hidden', bounded !== this.totalSteps);
+
+        const progress = document.getElementById('bookingStepProgress');
+        if (progress) progress.style.width = `${Math.round((bounded / this.totalSteps) * 100)}%`;
+
+        for (let i = 1; i <= this.totalSteps; i++) {
+            const pill = document.getElementById(`step-pill-${i}`);
+            if (!pill) continue;
+            pill.classList.toggle('active', i === bounded);
+            pill.disabled = i > this.maxStepReached;
+            pill.setAttribute('aria-current', i === bounded ? 'step' : 'false');
+            pill.setAttribute('aria-disabled', pill.disabled ? 'true' : 'false');
+        }
+
+        const state = document.getElementById('bookingStepState');
+        if (state) state.value = String(bounded);
+        this.saveDraft();
+
+        if (!silent) {
+            AnalyticsTracker.event('booking_step_view', {
+                page_path: window.location.pathname,
+                step: bounded
+            });
+        }
+    },
+
+    bindIntentCta() {
+        const intent = document.getElementById('travelIntent');
+        if (!intent) return;
+        intent.addEventListener('change', () => {
+            this.updateIntentCta();
+            AnalyticsTracker.event('booking_intent_selected', {
+                page_path: window.location.pathname,
+                intent: intent.value
+            });
+        });
+    },
+
+    updateIntentCta() {
+        const intentEl = document.getElementById('travelIntent');
+        const hintEl = document.getElementById('intentCtaHint');
+        const btnText = document.getElementById('btnText');
+        if (!intentEl || !hintEl || !btnText) return;
+
+        const isArabic = document.documentElement.lang === 'ar';
+        const intent = intentEl.value || 'family';
+        const map = isArabic
+            ? {
+                honeymoon: ['احصل على عرض شهر العسل عبر واتساب', 'تجهيز برنامج رومانسي خاص مع سائق خاص.'],
+                family: ['احصل على عرض عائلي عبر واتساب', 'خطة عائلية مريحة مع محطات مناسبة للأطفال.'],
+                women_only: ['احصل على عرض للمجموعة النسائية', 'خيار رحلات مناسب للمجموعات النسائية حسب الطلب.'],
+                halal: ['احصل على عرض البرنامج الحلال', 'يتضمن خيارات مطاعم حلال ومحطات صلاة.'],
+                luxury: ['احصل على عرض الجولة الفاخرة', 'برنامج فاخر مع أولوية خدمة واستقبال مميز.']
+            }
+            : {
+                honeymoon: ['Get Honeymoon Quote on WhatsApp', 'Romantic private itinerary with premium comfort.'],
+                family: ['Get Family Quote on WhatsApp', 'Family-optimized route plan with kid-friendly pacing.'],
+                women_only: ['Get Women-Only Group Quote', 'Women-friendly journey planning available on request.'],
+                halal: ['Get Halal Itinerary Quote', 'Includes halal dining and prayer-stop planning.'],
+                luxury: ['Get Luxury Tour Quote', 'Premium private route with priority support and VIP pacing.']
+            };
+
+        const fallback = map.family;
+        const selected = map[intent] || fallback;
+        btnText.innerText = selected[0];
+        hintEl.innerText = selected[1];
+    },
+
+    getSegmentation() {
+        const tags = [];
+        const intent = document.getElementById('travelIntent')?.value || 'family';
+        if (document.getElementById('segFamily')?.checked) tags.push('family_friendly');
+        if (document.getElementById('segWomen')?.checked) tags.push('women_friendly');
+        if (document.getElementById('segHalal')?.checked) tags.push('halal_focus');
+        if (document.getElementById('segLuxury')?.checked) tags.push('luxury_vehicle');
+        return { intent, tags };
+    },
+
+    calculateLeadScore(data, segmentation) {
+        let score = 35;
+        const pax = Number(data.passengers || 0);
+        if (pax >= 4) score += 10;
+        if ((data.vehicle || '').toLowerCase().includes('minivan')) score += 10;
+        if ((data.duration || '').length > 0) score += 10;
+        if ((data.notes || '').trim().length >= 30) score += 10;
+        if (segmentation.intent === 'honeymoon' || segmentation.intent === 'luxury') score += 10;
+        if (segmentation.tags.length >= 2) score += 5;
+        return Math.max(0, Math.min(100, score));
     },
 
     saveDraft() {
@@ -1015,7 +1278,14 @@ const BookingManager = {
             phone: document.getElementById('phone').value,
             passengers: document.getElementById('passengers').value,
             vehicle: document.getElementById('vehicle').value,
-            notes: document.getElementById('notes').value
+            notes: document.getElementById('notes').value,
+            travelIntent: document.getElementById('travelIntent')?.value || '',
+            segFamily: Boolean(document.getElementById('segFamily')?.checked),
+            segWomen: Boolean(document.getElementById('segWomen')?.checked),
+            segHalal: Boolean(document.getElementById('segHalal')?.checked),
+            segLuxury: Boolean(document.getElementById('segLuxury')?.checked),
+            step: this.currentStep,
+            maxStepReached: this.maxStepReached
         };
         try { sessionStorage.setItem('booking_draft', JSON.stringify(data)); } catch(e){}
     },
@@ -1032,6 +1302,16 @@ const BookingManager = {
                 document.getElementById('passengers').value = data.passengers || '';
                 document.getElementById('vehicle').value = data.vehicle || 'Sedan';
                 document.getElementById('notes').value = data.notes || '';
+                const intent = document.getElementById('travelIntent');
+                if (intent && data.travelIntent) intent.value = data.travelIntent;
+                if (document.getElementById('segFamily')) document.getElementById('segFamily').checked = Boolean(data.segFamily);
+                if (document.getElementById('segWomen')) document.getElementById('segWomen').checked = Boolean(data.segWomen);
+                if (document.getElementById('segHalal')) document.getElementById('segHalal').checked = Boolean(data.segHalal);
+                if (document.getElementById('segLuxury')) document.getElementById('segLuxury').checked = Boolean(data.segLuxury);
+                this.currentStep = Math.max(1, Math.min(this.totalSteps, Number(data.step || 1)));
+                this.maxStepReached = Math.max(this.currentStep, Number(data.maxStepReached || this.currentStep));
+                this.goToStep(this.currentStep, true);
+                this.updateIntentCta();
             }
         } catch(e){}
     },
@@ -1078,12 +1358,18 @@ const BookingManager = {
         }
     },
 
-    handleSubmit(e) {
+    async handleSubmit(e) {
         e.preventDefault();
         if (!this.validate()) return;
 
         const honeypot = document.getElementById('companyWebsite');
         if (honeypot && honeypot.value.trim()) {
+            return;
+        }
+
+        // Basic client-side bot friction before backend checks.
+        if (Date.now() - this.startedAt < 2500) {
+            UIManager.showToast(document.documentElement.lang === 'ar' ? 'يرجى المحاولة بعد ثانيتين' : 'Please wait a moment before submitting.');
             return;
         }
         
@@ -1103,6 +1389,7 @@ const BookingManager = {
         const serviceEl = document.querySelector('input[name="driver"]:checked').nextElementSibling;
         const serviceText = serviceEl ? serviceEl.innerText.trim() : "";
 
+        const segmentation = this.getSegmentation();
         const data = {
             name: document.getElementById('name').value,
             phone: document.getElementById('phone').value,
@@ -1112,22 +1399,66 @@ const BookingManager = {
             dates: dString,
             duration: durationText,
             price: priceText,
-            notes: document.getElementById('notes').value
+            notes: document.getElementById('notes').value,
+            intent: segmentation.intent
         };
+        const leadScoreClient = this.calculateLeadScore(data, segmentation);
 
         const isArabic = document.documentElement.lang === 'ar';
         const header = isArabic ? "السلام عليكم، أريد الاستفسار عن" : "New Booking Request";
 
-        const text = `${header}:\n👤 ${data.name}\n📱 ${data.phone}\n🚗 ${data.vehicle} (${data.passengers} pax)\n📅 ${data.dates} (${data.duration})\n💰 Estimate: ${data.price}\n📝 ${data.notes}`;
+        const text = `${header}:\n👤 ${data.name}\n📱 ${data.phone}\n🎯 Intent: ${data.intent}\n🚗 ${data.vehicle} (${data.passengers} pax)\n📅 ${data.dates} (${data.duration})\n💰 Estimate: ${data.price}\n📝 ${data.notes}`;
         const waUrl = `https://wa.me/995579088537?text=${encodeURIComponent(text)}`;
         document.getElementById('whatsappLink').href = waUrl;
-        AnalyticsTracker.event('booking_submit', { page_path: window.location.pathname, vehicle: data.vehicle });
+        AnalyticsTracker.event('booking_submit_attempt', { page_path: window.location.pathname, vehicle: data.vehicle, intent: segmentation.intent, lead_score_client: leadScoreClient });
 
-        if(typeof emailjs !== 'undefined') {
-            emailjs.send('service_booking', 'template_40h23xf', { ...data, message: text })
-                   .finally(() => this.finishSubmit());
-        } else {
-            setTimeout(() => this.finishSubmit(), 1000);
+        const endpoint = getBookingEndpoint();
+        const payload = {
+            ...data,
+            sourcePage: window.location.pathname,
+            sourceLang: isArabic ? 'ar' : 'en',
+            companyWebsite: honeypot ? honeypot.value : '',
+            consent: Boolean(document.getElementById('bookingConsent')?.checked),
+            attribution: AttributionManager.current(),
+            experiment: ExperimentManager.current(),
+            segmentation,
+            leadScoreClient,
+            funnel: {
+                currentStep: this.currentStep,
+                maxStepReached: this.maxStepReached,
+                totalSteps: this.totalSteps,
+                completionPercent: Math.round((this.maxStepReached / this.totalSteps) * 100)
+            }
+        };
+
+        try {
+            if (!endpoint) throw new Error('booking_endpoint_missing');
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errBody = await response.json().catch(() => ({}));
+                throw new Error(errBody.error || 'booking_api_failed');
+            }
+
+            AnalyticsTracker.event('booking_submit_success', {
+                page_path: window.location.pathname,
+                vehicle: data.vehicle,
+                intent: segmentation.intent,
+                lead_score_client: leadScoreClient,
+                variant: (ExperimentManager.current() || {}).bookingFormVariant || 'control'
+            });
+            this.finishSubmit();
+        } catch (apiError) {
+            // Fallback to WhatsApp intent so leads are not lost.
+            AnalyticsTracker.event('booking_submit_fallback_whatsapp', {
+                page_path: window.location.pathname,
+                reason: (apiError && apiError.message) || 'unknown'
+            });
+            this.finishSubmit();
         }
     },
 
@@ -1190,6 +1521,29 @@ const BookingManager = {
 
         if(!valid && navigator.vibrate) navigator.vibrate([50, 50, 50]);
         return valid;
+    },
+
+    validateStep(step) {
+        if (step <= 1) {
+            const name = document.getElementById('name');
+            const phone = document.getElementById('phone');
+            if (!name?.value?.trim() || !phone?.value?.trim()) {
+                UIManager.showToast(document.documentElement.lang === 'ar' ? 'يرجى إدخال الاسم ورقم واتساب أولاً' : 'Please add name and WhatsApp first.');
+                return false;
+            }
+            return true;
+        }
+        if (step === 2) {
+            const passengers = document.getElementById('passengers');
+            const dateInput = document.getElementById('dateRange');
+            const hasDates = this.fpInstance ? this.fpInstance.selectedDates.length === 2 : Boolean(dateInput?.value?.trim());
+            if (!passengers?.value?.trim() || !hasDates) {
+                UIManager.showToast(document.documentElement.lang === 'ar' ? 'يرجى إدخال الركاب والتواريخ قبل المتابعة' : 'Please complete passengers and dates before continuing.');
+                return false;
+            }
+            return true;
+        }
+        return true;
     },
 
     finishSubmit() {
@@ -1299,6 +1653,10 @@ const MainApp = {
     start() {
         UIManager.init();
         BookingManager.init();
+        AttributionManager.capture();
+        const bookingVariant = ExperimentManager.assignBookingVariant();
+        AnalyticsTracker.event('funnel_landing_view', { page_path: window.location.pathname });
+        AnalyticsTracker.event('experiment_assigned', { experiment: 'booking_form_variant', variant: bookingVariant });
         this.normalizeBookingLinks();
         this.initTracking();
         
@@ -1317,11 +1675,9 @@ const MainApp = {
 
                     Promise.all([
                         LibraryLoader.load('https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css', 'css'),
-                        LibraryLoader.load('https://cdn.jsdelivr.net/npm/flatpickr'),
-                        LibraryLoader.load('https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js')
+                        LibraryLoader.load('https://cdn.jsdelivr.net/npm/flatpickr')
                     ]).then(() => {
                         BookingManager.init();
-                        if(typeof emailjs !== 'undefined') emailjs.init("gFHD0l5sBGRvS44V8");
                     }).catch(() => {
                         BookingManager.init();
                     }).finally(() => {
@@ -1575,6 +1931,16 @@ const MainApp = {
     },
 
     initTracking() {
+        const attr = AttributionManager.current();
+        if (attr && (attr.utm_source || attr.utm_campaign)) {
+            AnalyticsTracker.event('traffic_attribution', {
+                page_path: window.location.pathname,
+                utm_source: attr.utm_source || '(none)',
+                utm_medium: attr.utm_medium || '(none)',
+                utm_campaign: attr.utm_campaign || '(none)'
+            });
+        }
+
         document.querySelectorAll('a.btn-book-nav, a.mobile-btn-book, .btn-submit').forEach((el) => {
             el.addEventListener('click', () => {
                 AnalyticsTracker.event('cta_click', {
@@ -1700,8 +2066,15 @@ const DestinationApp = {
             const highlightsEl = document.getElementById('highlights');
             if(highlightsEl) {
                 const highlightsList = data[`highlights_${lang}`] || [];
-                const highlightsHTML = highlightsList.map(h => `<li><i class="fa-solid fa-star"></i> ${h}</li>`).join('');
-                highlightsEl.innerHTML = highlightsHTML;
+                highlightsEl.innerHTML = '';
+                highlightsList.forEach((h) => {
+                    const li = document.createElement('li');
+                    const icon = document.createElement('i');
+                    icon.className = 'fa-solid fa-star';
+                    li.appendChild(icon);
+                    li.appendChild(document.createTextNode(` ${h}`));
+                    highlightsEl.appendChild(li);
+                });
             }
 
             const mapLink = document.getElementById('map-link');
@@ -1712,9 +2085,18 @@ const DestinationApp = {
 
             const galleryEl = document.getElementById('gallery');
             if(galleryEl) {
-                galleryEl.innerHTML = data.gallery.map(url => 
-                    `<img src="${url}" class="gallery-img skeleton" loading="lazy" onload="this.classList.remove('skeleton')" onerror="this.style.display='none'">`
-                ).join('');
+                galleryEl.innerHTML = '';
+                (data.gallery || []).forEach((url) => {
+                    const safeUrl = sanitizeImageUrl(url);
+                    if (!safeUrl) return;
+                    const img = document.createElement('img');
+                    img.src = safeUrl;
+                    img.className = 'gallery-img skeleton';
+                    img.loading = 'lazy';
+                    img.addEventListener('load', () => img.classList.remove('skeleton'));
+                    img.addEventListener('error', () => { img.style.display = 'none'; });
+                    galleryEl.appendChild(img);
+                });
             }
 
             const idx = DestKeys.indexOf(id);
@@ -1796,6 +2178,57 @@ const DestinationLoader = {
     }
 };
 
+// --- Blog Manager (Dynamic) ---
+const BlogManager = {
+    async init() {
+        const container = document.getElementById('blog-grid');
+        if (!container) return;
+
+        // Check if we are in static mode or firebase mode
+        if (!db) {
+            console.warn("Firebase not initialized, cannot load dynamic blogs.");
+            return;
+        }
+
+        try {
+            const snapshot = await db.collection('articles').orderBy('date', 'desc').get();
+            if (snapshot.empty) return;
+
+            container.innerHTML = ''; // Clear static placeholders if any
+            const lang = document.documentElement.lang === 'ar' ? 'ar' : 'en';
+            const isAr = lang === 'ar';
+
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const title = isAr ? (data.title?.ar || data.title?.en) : data.title?.en;
+                const excerpt = isAr ? (data.excerpt?.ar || data.excerpt?.en) : data.excerpt?.en;
+                // We link to a generic article viewer or just use the ID
+                // For now, let's assume we might have a generic article.html?id=... 
+                // or we just link to the static ones if they match specific IDs.
+                // To make this "Top Tier", you should create an article.html that reads ?id=
+                const link = `article.html?id=${doc.id}`; 
+
+                const html = `
+                    <article class="blog-card reveal">
+                        <div class="blog-img-container">
+                            <img src="${data.image || 'https://placehold.co/600x400'}" alt="${title}" loading="lazy">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-date"><i class="fa-regular fa-calendar"></i> ${data.date}</div>
+                            <h3 class="blog-title">${title}</h3>
+                            <p class="blog-excerpt">${excerpt}</p>
+                            <a href="${link}" class="blog-link">${isAr ? 'اقرأ المزيد' : 'Read More'} <i class="fa-solid ${isAr ? 'fa-arrow-left' : 'fa-arrow-right'}"></i></a>
+                        </div>
+                    </article>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        } catch (e) {
+            console.error("Error loading blogs:", e);
+        }
+    }
+};
+
 // ==========================================
 // 5. GLOBAL EXPORTS
 // ==========================================
@@ -1805,6 +2238,7 @@ window.UIManager = UIManager;
 window.CurrencyManager = CurrencyManager;
 window.BookingManager = BookingManager;
 window.LangManager = LangManager;
+window.BlogManager = BlogManager;
 // Expose Loader
 window.DestinationLoader = DestinationLoader;
 
@@ -1814,6 +2248,8 @@ window.App = MainApp;
 window.addEventListener('DOMContentLoaded', () => {
     // Sync language state with current page
     LangManager.sync();
+    AttributionManager.capture();
+    ExperimentManager.assignBookingVariant();
 
     // Ensure Cookie Banner runs on all pages (except Admin)
     if (!window.location.pathname.includes('admin.html')) {
@@ -1831,6 +2267,11 @@ window.addEventListener('DOMContentLoaded', () => {
     // Condition 2: Dynamic Destination Page (ONLY destination.html)
     else if (window.location.pathname.includes('destination.html')) {
         DestinationApp.init();
+    }
+    // Condition 3: Blog Page
+    else if (window.location.pathname.includes('blog')) {
+        UIManager.init();
+        BlogManager.init();
     }
     // Condition 3: Static Pages (tbilisi.html, honeymoon.html, etc.)
     else {

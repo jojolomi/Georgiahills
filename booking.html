@@ -23,82 +23,185 @@
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
   <nav id="navbar" class="navbar"></nav>
-<section class="hero" style="height:45vh; min-height:320px;" id="main-content">
-    <div class="hero-bg-container"><img src="image-1024.webp" class="hero-img" alt="Book in Georgia" loading="eager" decoding="async"><div class="hero-overlay"></div></div>
-    <div class="hero-content"><h1 class="hero-title">Book Your Trip</h1><p class="hero-subtitle">Fast quote. Clear price. Confirm on WhatsApp in minutes.</p></div>
-  </section>
-
-  <section class="section-py" style="padding-bottom:0;">
-    <div class="container">
-      <div class="content-card" style="padding:2rem; margin-bottom:2rem;">
-        <h2 class="section-heading">Before You Submit</h2>
-        <div class="process-grid">
-          <article class="process-card"><span class="process-step">1</span><h3 class="process-title">Share route and dates</h3><p class="process-text">Include arrival/departure and key destinations.</p></article>
-          <article class="process-card"><span class="process-step">2</span><h3 class="process-title">Receive clear quote</h3><p class="process-text">Vehicle type, inclusions, and total estimate are shared clearly.</p></article>
-          <article class="process-card"><span class="process-step">3</span><h3 class="process-title">Confirm by WhatsApp</h3><p class="process-text">Your booking is confirmed with driver and schedule details.</p></article>
-        </div>
-      </div>
+  <main id="main-content">
+  
+  <!-- Premium Hero Section -->
+  <section class="booking-hero">
+    <div class="booking-hero-bg"></div>
+    <div class="booking-hero-overlay"></div>
+    <div class="booking-hero-content">
+      <div class="hero-badge"><i class="fa-solid fa-check-circle"></i> Premium Transport</div>
+      <h1 class="booking-hero-title">Secure Your Journey</h1>
+      <p class="booking-hero-subtitle">Professional drivers, transparent pricing, and instant confirmation via WhatsApp.</p>
     </div>
   </section>
 
-  <section id="booking" class="booking-section">
-    <div class="container relative z-10">
-      <div class="reveal text-center" style="margin-bottom:1rem; color:white;">
-        <h2 class="font-bold" style="font-size:2rem; margin-bottom:0.5rem;">Complete Booking Request</h2>
-        <p class="opacity-80">Response time: usually within 10 minutes.</p>
-      </div>
-      <div class="booking-card reveal">
-        <form id="bookingForm" onsubmit="BookingManager.handleSubmit(event)" novalidate>
-          <input type="text" id="companyWebsite" name="companyWebsite" autocomplete="off" tabindex="-1" aria-hidden="true" class="hidden">
-          <div class="form-grid">
-            <div><label for="name" class="form-label">Full Name</label><input type="text" id="name" name="user_name" class="form-input" autocomplete="name" placeholder="Your name"><span class="error-text hidden" id="nameError">Please enter your name</span></div>
-            <div><label for="phone" class="form-label">WhatsApp Number</label><input type="tel" id="phone" name="user_phone" class="form-input" autocomplete="tel" placeholder="+995 579 08 85 37"><span class="error-text hidden" id="phoneError">Enter a valid phone</span></div>
-            <div class="form-row-responsive">
-              <div><label for="vehicle" class="form-label">Vehicle</label><select id="vehicle" onchange="BookingManager.updateEstimate()" class="form-select"><option value="Sedan">Sedan</option><option value="Minivan">Minivan</option></select></div>
-              <div><label for="passengers" class="form-label">Passengers</label><input type="number" id="passengers" min="1" class="form-input" placeholder="2"><span class="error-text hidden" id="passengersError">Minimum 1 passenger</span></div>
+  <!-- Main Content Area -->
+  <section class="booking-content-section">
+    <div class="container">
+      <div class="booking-grid-layout">
+        
+        <!-- Left Column: Premium Form -->
+        <div class="booking-main-column">
+          <div class="booking-card-premium reveal">
+            <div class="booking-header">
+              <h2>Request a Quote</h2>
+              <p>Fill in the details below. We usually reply within 10 minutes.</p>
             </div>
-            <div><label class="form-label">Service Type</label><div class="radio-group"><label class="radio-label"><input type="radio" name="driver" value="with_driver" checked class="radio-input hidden"><span class="radio-content">With Driver</span></label><label class="radio-label"><input type="radio" name="driver" value="no_driver" class="radio-input hidden"><span class="radio-content">Self Drive</span></label></div></div>
-            <div class="col-span-full"><label for="dateRange" class="form-label">Trip Dates <span id="dates-helper" class="text-primary text-xs font-normal ml-2 hidden"></span></label><input type="text" id="dateRange" class="form-input" placeholder="Select Pick-up & Drop-off Dates"><span class="error-text hidden" id="dateError">Please select date range</span></div>
-            <div class="col-span-full"><label for="notes" class="form-label">Notes</label><textarea id="notes" rows="3" class="form-textarea"></textarea></div>
-            <div class="col-span-full"><label style="display:flex; align-items:flex-start; gap:0.5rem;"><input type="checkbox" id="bookingConsent" style="margin-top:0.2rem;"><span style="font-size:0.85rem; color:var(--color-gray-600);">I agree to be contacted about this booking request.</span></label><span class="error-text hidden" id="consentError">Please confirm consent</span></div>
-          </div>
-          <div id="price-estimate" class="hidden price-estimate-box"><div><span style="font-size:0.875rem; font-weight:700; color:var(--color-gray-600);">Estimated Total:</span> <span style="font-size:1.5rem; font-weight:800; color:var(--color-primary);" class="price-display" id="total-price-display">0 GEL</span></div><div id="trip-duration" class="text-sm text-gray-600 mt-1" style="font-weight:600;"></div></div>
-          <button type="submit" id="submitBtn" class="btn-submit"><span id="btnText">Send via WhatsApp</span><i id="btnIcon" class="fa-brands fa-whatsapp" style="font-size:1.5rem;"></i><div id="btnSpinner" class="hidden"><i class="fa-solid fa-circle-notch animate-spin"></i></div></button>
-        </form>
-      </div>
-    </div>
-  </section>
+            
+            <form id="bookingForm" onsubmit="BookingManager.handleSubmit(event)" novalidate>
+              <input type="text" id="companyWebsite" name="companyWebsite" autocomplete="off" tabindex="-1" aria-hidden="true" class="hidden">
+              
+              <div class="form-grid-premium">
+                <div class="form-group">
+                  <label for="name" class="form-label-premium">Full Name</label>
+                  <div class="input-wrapper">
+                    <i class="fa-regular fa-user input-icon"></i>
+                    <input type="text" id="name" name="user_name" class="form-input-premium" placeholder="Your Name" autocomplete="name">
+                  </div>
+                  <span class="error-text hidden" id="nameError">Name is required</span>
+                </div>
 
-  <section class="section-py" style="padding-top:2rem;">
-    <div class="container">
-      <div class="content-card" style="padding:2rem; margin-bottom:2rem;">
-        <h2 class="section-heading">What’s Included in Standard Quotes</h2>
-        <div class="compare-grid">
-          <div class="compare-card">
-            <h3><i class="fa-solid fa-circle-check text-success"></i> Included</h3>
-            <ul>
-              <li><i class="fa-solid fa-check"></i> Driver service and trip coordination</li>
-              <li><i class="fa-solid fa-check"></i> Fuel and parking in normal route scope</li>
-              <li><i class="fa-solid fa-check"></i> WhatsApp support before and during trip</li>
-            </ul>
-          </div>
-          <div class="compare-card">
-            <h3><i class="fa-solid fa-circle-xmark text-accent"></i> Not Included by default</h3>
-            <ul>
-              <li><i class="fa-solid fa-xmark"></i> Hotels, meals, attraction tickets</li>
-              <li><i class="fa-solid fa-xmark"></i> Overtime beyond confirmed hours</li>
-              <li><i class="fa-solid fa-xmark"></i> Major route changes after confirmation</li>
-            </ul>
+                <div class="form-group">
+                  <label for="phone" class="form-label-premium">WhatsApp Number</label>
+                  <div class="input-wrapper">
+                    <i class="fa-brands fa-whatsapp input-icon"></i>
+                    <input type="tel" id="phone" name="user_phone" class="form-input-premium" placeholder="+995 5xx xx xx xx" autocomplete="tel">
+                  </div>
+                  <span class="error-text hidden" id="phoneError">Valid number required</span>
+                </div>
+
+                <div class="form-group">
+                  <label for="vehicle" class="form-label-premium">Vehicle Type</label>
+                  <div class="input-wrapper">
+                    <i class="fa-solid fa-car input-icon"></i>
+                    <select id="vehicle" onchange="BookingManager.updateEstimate()" class="form-input-premium">
+                      <option value="Sedan">Sedan (1-3 Pax)</option>
+                      <option value="Minivan">Minivan (4-7 Pax)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="passengers" class="form-label-premium">Passengers</label>
+                  <div class="input-wrapper">
+                    <i class="fa-solid fa-users input-icon"></i>
+                    <input type="number" id="passengers" min="1" class="form-input-premium" placeholder="2">
+                  </div>
+                  <span class="error-text hidden" id="passengersError">Min 1 passenger</span>
+                </div>
+
+                <div class="form-group full-width">
+                  <label class="form-label-premium">Service Preference</label>
+                  <div class="radio-group-premium">
+                    <label class="radio-option">
+                      <input type="radio" name="driver" value="with_driver" checked>
+                      <span class="radio-tile">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <span>With Driver</span>
+                      </span>
+                    </label>
+                    <label class="radio-option">
+                      <input type="radio" name="driver" value="no_driver">
+                      <span class="radio-tile">
+                        <i class="fa-solid fa-car-side"></i>
+                        <span>Self Drive</span>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="dateRange" class="form-label-premium">Trip Dates <span id="dates-helper" class="text-primary text-xs font-normal ml-2 hidden"></span></label>
+                  <div class="input-wrapper">
+                    <i class="fa-regular fa-calendar input-icon"></i>
+                    <input type="text" id="dateRange" class="form-input-premium" placeholder="Select Pick-up & Drop-off Dates">
+                  </div>
+                  <span class="error-text hidden" id="dateError">Select dates</span>
+                </div>
+
+                <div class="form-group full-width">
+                  <label for="notes" class="form-label-premium">Itinerary / Notes</label>
+                  <textarea id="notes" rows="3" class="form-input-premium" placeholder="E.g. Pick up at Tbilisi Airport, drive to Kazbegi..."></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="bookingConsent">
+                    <span>I agree to receive a quote via WhatsApp.</span>
+                  </label>
+                  <span class="error-text hidden" id="consentError">Please confirm</span>
+                </div>
+              </div>
+
+              <div id="price-estimate" class="price-estimate-premium hidden">
+                <div class="estimate-row">
+                  <span>Estimated Total</span>
+                  <span class="estimate-price" id="total-price-display">0 GEL</span>
+                </div>
+                <div id="trip-duration" class="estimate-sub"></div>
+              </div>
+
+              <button type="submit" id="submitBtn" class="btn-submit-premium">
+                <span id="btnText">Get Quote on WhatsApp</span>
+                <i id="btnIcon" class="fa-brands fa-whatsapp"></i>
+                <div id="btnSpinner" class="hidden"><i class="fa-solid fa-circle-notch animate-spin"></i></div>
+              </button>
+            </form>
           </div>
         </div>
-      </div>
-      <div class="content-card" style="padding:2rem;">
-        <h2 class="section-heading">Booking Confidence</h2>
-        <div class="proof-grid">
-          <div class="proof-card"><p class="proof-number">24/7</p><p class="proof-label">Support</p></div>
-          <div class="proof-card"><p class="proof-number">10m</p><p class="proof-label">Reply Time</p></div>
-          <div class="proof-card"><p class="proof-number">4.9/5</p><p class="proof-label">Satisfaction</p></div>
-          <div class="proof-card"><p class="proof-number">No Hidden</p><p class="proof-label">Standard Fees</p></div>
+
+        <!-- Right Column: Info & Trust -->
+        <div class="booking-sidebar-column">
+          
+          <!-- Process Widget -->
+          <div class="sidebar-widget">
+            <h3>Booking Process</h3>
+            <div class="vertical-steps">
+              <div class="v-step">
+                <div class="v-step-icon">1</div>
+                <div class="v-step-content">
+                  <h4>Submit Details</h4>
+                  <p>Send us your route and dates.</p>
+                </div>
+              </div>
+              <div class="v-step">
+                <div class="v-step-icon">2</div>
+                <div class="v-step-content">
+                  <h4>Receive Quote</h4>
+                  <p>We'll send a clear price via WhatsApp.</p>
+                </div>
+              </div>
+              <div class="v-step">
+                <div class="v-step-icon">3</div>
+                <div class="v-step-content">
+                  <h4>Confirm</h4>
+                  <p>Approve to lock in your driver.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inclusions Widget -->
+          <div class="sidebar-widget">
+            <h3>What's Included</h3>
+            <ul class="check-list-premium">
+              <li><i class="fa-solid fa-check"></i> Professional Driver</li>
+              <li><i class="fa-solid fa-check"></i> Fuel & Parking</li>
+              <li><i class="fa-solid fa-check"></i> Vehicle Insurance</li>
+              <li><i class="fa-solid fa-check"></i> 24/7 Support</li>
+              <li><i class="fa-solid fa-check"></i> Free Cancellation</li>
+            </ul>
+          </div>
+
+          <!-- Trust Widget -->
+          <div class="sidebar-widget trust-widget">
+            <div class="trust-row">
+              <div class="trust-item"><i class="fa-solid fa-star"></i> 4.9/5 Rating</div>
+              <div class="trust-item"><i class="fa-solid fa-clock"></i> Fast Reply</div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
@@ -106,6 +209,7 @@
 
   <div id="successModal" class="hidden modal-overlay"><div class="modal-content"><button onclick="UIManager.closeModal('successModal')" class="modal-close">&times;</button><div class="modal-icon-circle"><i class="fa-solid fa-check" style="font-size:2rem;"></i></div><h3 class="modal-title">Quote Ready!</h3><p class="modal-desc">Your trip details are ready to send.</p><a id="whatsappLink" href="#" target="_blank" rel="noopener noreferrer" class="modal-btn"><i class="fa-brands fa-whatsapp" style="font-size:1.25rem;"></i> <span>Open WhatsApp</span></a></div></div>
 
+  </main>
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">

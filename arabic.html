@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr" class="scroll-smooth">
+<html lang="ar" dir="rtl" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -99,6 +99,49 @@
       ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "LocalBusiness",
+          "@id": "https://georgiahills.com/arabic.html#localbusiness",
+          "name": "Georgia Hills",
+          "url": "https://georgiahills.com/arabic.html",
+          "telephone": "+995579088537",
+          "address": { "@type": "PostalAddress", "addressLocality": "Tbilisi", "addressCountry": "GE" }
+        },
+        {
+          "@type": "TouristTrip",
+          "@id": "https://georgiahills.com/arabic.html#premium-tour",
+          "name": "برنامج سياحي خاص في جورجيا",
+          "description": "رحلات خاصة مع سائق محترف للعائلات الخليجية في جورجيا."
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "هل يتوفر سائق يتحدث العربية؟",
+              "acceptedAnswer": { "@type": "Answer", "text": "نعم، يتوفر دعم وسائقون يتحدثون العربية حسب الطلب." }
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "الرئيسية", "item": "https://georgiahills.com/arabic.html" }
+          ]
+        },
+        {
+          "@type": "AggregateRating",
+          "itemReviewed": { "@type": "Organization", "name": "Georgia Hills" },
+          "ratingValue": "4.9",
+          "reviewCount": "500"
+        }
+      ]
+    }
+    </script>
 
     <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -107,8 +150,8 @@
     
     <!-- OPTIMIZATION: Preload Hero Image BEFORE CSS -->
         <link rel="preload" as="image" 
-            href="image-1600.webp" 
-            imagesrcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" 
+            href="image-1600.avif" 
+            imagesrcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" 
           imagesizes="100vw"
           fetchpriority="high">
 
@@ -193,7 +236,7 @@
         });
     </script>
 </head>
-<body dir="ltr">
+<body dir="rtl">
 
     <!-- Accessibility & Network -->
     <noscript>
@@ -227,7 +270,10 @@
     <!-- Hero -->
     <section id="home" class="hero" aria-label="مرحباً بكم في جورجيا هيلز">
         <div class="hero-bg-container">
-             <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="جبال جورجيا الخلابة" fetchpriority="high" decoding="async" loading="eager">
+             <picture>
+                <source type="image/avif" srcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" sizes="100vw">
+                <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="جبال جورجيا الخلابة" fetchpriority="high" decoding="async" loading="eager">
+             </picture>
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content">
@@ -310,12 +356,12 @@
 
     <!-- About -->
     <section id="about" class="section-py">
-        <div class="container" id="main-content">
+        <main class="container" id="main-content">
             <div class="about-grid">
                 <div class="about-img-container reveal">
                     <div class="about-blob"></div>
                     <!-- OPTIMIZATION: Added styles to constrain layout shift if image is large -->
-                    <img id="about-img" src="Tbilisi_old_Town.webp" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="تبليسي القديمة" style="max-width:100%; height:auto;">
+                    <img id="about-img" src="tbilisi-old-town-1024.webp" srcset="tbilisi-old-town-640.webp 640w, tbilisi-old-town-1024.webp 1024w, tbilisi-old-town-1600.webp 1600w" sizes="(max-width: 1024px) 100vw, 665px" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="تبليسي القديمة" style="max-width:100%; height:auto;">
                 </div>
                 <div id="about-content" class="about-content reveal">
                     <span class="section-label">لماذا جورجيا هيلز؟</span>
@@ -333,7 +379,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </section>
 
     <!-- Destinations -->
@@ -607,6 +653,29 @@
                 <p class="section-desc">جميع الأسئلة والإجابات المحدثة موجودة في صفحة الدليل.</p>
             </div>
             <div class="text-center"><a href="guide-ar.html" class="btn-book-nav">افتح صفحة الأسئلة</a></div>
+        </div>
+    </section>
+
+    <section id="travel-hubs" class="section-py bg-surface">
+        <div class="container">
+            <div class="text-center reveal" style="margin-bottom:2rem;">
+                <h2 class="section-title">الصفحات المحورية للسفر</h2>
+                <p class="section-desc">دليل منظم للوجهات وخطط الرحلات والسياحة الحلال والسفر العائلي والأمان.</p>
+            </div>
+            <div class="guide-grid">
+                <a href="destinations-hub-ar.html" class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-map-location-dot"></i></div><h3 class="guide-title">دليل الوجهات</h3></a>
+                <a href="itineraries-hub-ar.html" class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-route"></i></div><h3 class="guide-title">خطط الرحلات</h3></a>
+                <a href="halal-travel-hub-ar.html" class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-utensils"></i></div><h3 class="guide-title">السياحة الحلال</h3></a>
+                <a href="family-travel-hub-ar.html" class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-people-roof"></i></div><h3 class="guide-title">السفر العائلي</h3></a>
+                <a href="safety-hub-ar.html" class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-shield-heart"></i></div><h3 class="guide-title">دليل الأمان</h3></a>
+            </div>
+            <div class="text-center" style="margin-top:2rem; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+                <a href="sa/" class="action-btn">المسافرون من السعودية</a>
+                <a href="ae/" class="action-btn">المسافرون من الإمارات</a>
+                <a href="qa/" class="action-btn">المسافرون من قطر</a>
+                <a href="kw/" class="action-btn">المسافرون من الكويت</a>
+                <a href="eg/" class="action-btn">المسافرون من مصر</a>
+            </div>
         </div>
     </section>
 

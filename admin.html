@@ -21,6 +21,15 @@
             <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
         </div>
     </div>
+    <script>
+        // Admin should always use fresh scripts/config; avoid stale SW cache issues.
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations()
+                .then((regs) => Promise.all(regs.map((r) => r.unregister())))
+                .catch(() => {});
+        }
+    </script>
     <script type="module" src="admin-v2.js"></script>
 </body>
 </html>
+

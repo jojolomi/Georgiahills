@@ -126,6 +126,49 @@
       ]
     }
     </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "LocalBusiness",
+          "@id": "https://georgiahills.com/#localbusiness",
+          "name": "Georgia Hills",
+          "url": "https://georgiahills.com/",
+          "telephone": "+995579088537",
+          "address": { "@type": "PostalAddress", "addressLocality": "Tbilisi", "addressCountry": "GE" }
+        },
+        {
+          "@type": "TouristTrip",
+          "@id": "https://georgiahills.com/#premium-tour",
+          "name": "Premium Private Tour in Georgia",
+          "description": "Private chauffeur-led itineraries for GCC travelers and families in Georgia."
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Do you provide Arabic-speaking drivers?",
+              "acceptedAnswer": { "@type": "Answer", "text": "Yes. Arabic-speaking support and drivers are available on request." }
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://georgiahills.com/" }
+          ]
+        },
+        {
+          "@type": "AggregateRating",
+          "itemReviewed": { "@type": "Organization", "name": "Georgia Hills" },
+          "ratingValue": "4.9",
+          "reviewCount": "500"
+        }
+      ]
+    }
+    </script>
 
     <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -134,7 +177,7 @@
     
     <!-- OPTIMIZATION: Preload Hero Image BEFORE CSS to boost LCP -->
     <!-- Updated srcset for larger screens -->
-    <link rel="preload" as="image" href="image-1600.webp" imagesrcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" imagesizes="100vw" fetchpriority="high">
+    <link rel="preload" as="image" href="image-1600.avif" imagesrcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" imagesizes="100vw" fetchpriority="high">
 
     <!-- Optimized CSS Loading -->
     <link rel="stylesheet" href="style.css">
@@ -206,7 +249,10 @@
     <section id="home" class="hero" aria-label="Welcome to Georgia Hills">
         <div class="hero-bg-container">
              <!-- Replaced Unsplash with local placeholder -->
-             <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="Scenic Georgia Mountains" fetchpriority="high">
+             <picture>
+                <source type="image/avif" srcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" sizes="100vw">
+                <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="Scenic Georgia Mountains" fetchpriority="high">
+             </picture>
             <div class="hero-overlay"></div>
         </div>
         <div class="hero-content reveal">
@@ -289,11 +335,11 @@
 
     <!-- About -->
     <section id="about" class="section-py">
-        <div id="main-content" class="container">
+        <main id="main-content" class="container">
             <div class="about-grid">
                 <div class="about-img-container reveal">
                     <div class="about-blob"></div>
-                    <img id="about-img" src="Tbilisi_old_Town.webp" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town - تبليسي القديمة" style="max-width: 100%; height: auto;">
+                    <img id="about-img" src="tbilisi-old-town-1024.webp" srcset="tbilisi-old-town-640.webp 640w, tbilisi-old-town-1024.webp 1024w, tbilisi-old-town-1600.webp 1600w" sizes="(max-width: 1024px) 100vw, 665px" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town - تبليسي القديمة" style="max-width: 100%; height: auto;">
                 </div>
                 <div id="about-content" class="about-content reveal">
                     <span class="section-label">Why Choose Georgia Hills?</span>
@@ -311,7 +357,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     </section>
 
     <!-- Destinations -->
@@ -585,6 +631,29 @@
                 <p class="section-desc">We keep a full and updated FAQ on our dedicated guide page.</p>
             </div>
             <div class="text-center"><a href="guide.html" class="btn-book-nav">Open Full FAQ</a></div>
+        </div>
+    </section>
+
+    <section id="travel-hubs" class="section-py bg-surface">
+        <div class="container">
+            <div class="text-center reveal" style="margin-bottom:2rem;">
+                <h2 class="section-title">Travel Strategy Hubs</h2>
+                <p class="section-desc">Explore structured guides for destinations, halal travel, family trips, itineraries, and safety.</p>
+            </div>
+            <div class="guide-grid">
+                <a href="destinations-hub.html" class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-map-location-dot"></i></div><h3 class="guide-title">Destinations</h3></a>
+                <a href="itineraries-hub.html" class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-route"></i></div><h3 class="guide-title">Itineraries</h3></a>
+                <a href="halal-travel-hub.html" class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-utensils"></i></div><h3 class="guide-title">Halal Travel</h3></a>
+                <a href="family-travel-hub.html" class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-people-roof"></i></div><h3 class="guide-title">Family Travel</h3></a>
+                <a href="safety-hub.html" class="guide-box reveal"><div class="guide-icon"><i class="fa-solid fa-shield-heart"></i></div><h3 class="guide-title">Safety</h3></a>
+            </div>
+            <div class="text-center" style="margin-top:2rem; display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+                <a href="sa/" class="action-btn">Saudi Travelers</a>
+                <a href="ae/" class="action-btn">UAE Travelers</a>
+                <a href="qa/" class="action-btn">Qatar Travelers</a>
+                <a href="kw/" class="action-btn">Kuwait Travelers</a>
+                <a href="eg/" class="action-btn">Egypt Travelers</a>
+            </div>
         </div>
     </section>
 

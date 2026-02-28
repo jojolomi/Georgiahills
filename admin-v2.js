@@ -1,26 +1,54 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, setDoc, getDocs, deleteDoc, updateDoc, addDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+import { getFirestore, collection, doc, getDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 // --- Configuration ---
-const firebaseConfig = window.__GH_FIREBASE_CONFIG || window.firebaseConfig;
-if (!firebaseConfig) {
+const defaultFirebaseConfig = {
+    apiKey: "AIzaSyApLm0zacQiM1VbSQ5INRlQ28ev3QoTw2o",
+    authDomain: "georgiahills-15d19.firebaseapp.com",
+    projectId: "georgiahills-15d19",
+    storageBucket: "georgiahills-15d19.firebasestorage.app",
+    messagingSenderId: "447700508040",
+    appId: "1:447700508040:web:379c32079d09523a14ae3d",
+    measurementId: "G-PTEM4FPQR1",
+    functionsRegion: "europe-west1",
+    bookingEndpoint: "https://europe-west1-georgiahills-15d19.cloudfunctions.net/createBookingLead",
+    adminApiEndpoint: "https://europe-west1-georgiahills-15d19.cloudfunctions.net/adminApi"
+};
+
+const firebaseConfig = window.__GH_FIREBASE_CONFIG || window.firebaseConfig || defaultFirebaseConfig;
+if (!firebaseConfig || !firebaseConfig.apiKey) {
     console.error("Firebase Config Missing!");
-    alert("System Error: Firebase Configuration not found.");
+    const appEl = document.getElementById("app");
+    if (appEl) {
+        appEl.innerHTML = `
+            <div class="min-h-screen flex items-center justify-center p-6 bg-red-50">
+                <div class="max-w-lg bg-white border border-red-200 rounded-lg p-6 shadow">
+                    <h2 class="text-xl font-bold text-red-700 mb-2">Admin Configuration Error</h2>
+                    <p class="text-sm text-gray-700">Firebase configuration is missing. Make sure <code>firebase-config.js</code> is loaded or fallback config is valid.</p>
+                </div>
+            </div>`;
+    }
+    throw new Error("Firebase configuration missing");
 }
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+const functionsRegion = firebaseConfig.functionsRegion || "europe-west1";
+const adminApiEndpoint = firebaseConfig.adminApiEndpoint
+    || `https://${functionsRegion}-${firebaseConfig.projectId}.cloudfunctions.net/adminApi`;
 
 // --- State Management ---
 const State = {
     user: null,
+    userRole: 'viewer',
     currentTab: 'dashboard',
     destinations: [],
+    articles: [],
     pages: {
         home: {},
         about: {},
@@ -28,13 +56,35 @@ const State = {
         shared: {},
         services: {} // Future use
     },
+    pageMeta: {},
     settings: {
         navbar: [],
         contact: {},
         social: {}
     },
+    conversionStats: null,
+    mediaAssets: [],
+    mediaFilters: { query: '', tag: '' },
+    unsavedChanges: false,
+    currentEditorPage: null,
+    autosaveTimers: {},
     loaded: false
 };
+
+const Security = {
+    isAdmin() {
+        return State.userRole === 'admin';
+    },
+    canEdit() {
+        return State.userRole === 'admin' || State.userRole === 'editor';
+    }
+};
+
+window.addEventListener('beforeunload', (e) => {
+    if (!State.unsavedChanges) return;
+    e.preventDefault();
+    e.returnValue = '';
+});
 
 const DefaultContent = {
     home: {
@@ -271,28 +321,61 @@ const PageSchemas = {
 
 // --- Data Layer ---
 const Data = {
-    async loadAll() {
-        try {
-            await Promise.all([
-                this.fetchDestinations(),
-                this.fetchSettings(),
-                this.fetchPage('home'),
-                this.fetchPage('about'),
-                this.fetchPage('services'), // Added
-                this.fetchPage('contact'),   // Added
-                this.fetchPage('shared')    // Added
-            ]);
-            State.loaded = true;
-        } catch (error) {
-            console.error("Load Error:", error);
-            UI.toast("Failed to load data. Check console.", "error");
+    adminApiHealthy: true,
+
+    async callAdminApi(action, payload = {}) {
+        const user = auth.currentUser;
+        if (!user) throw new Error("Authentication required");
+        const token = await user.getIdToken();
+        const response = await fetch(adminApiEndpoint, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify({ action, payload })
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || !result.ok) {
+            this.adminApiHealthy = false;
+            throw new Error(result.message || result.error || "Admin API request failed");
         }
+        this.adminApiHealthy = true;
+        return result;
+    },
+
+    async loadAll() {
+        const tasks = [
+            this.fetchDestinations(),
+            this.fetchArticles(),
+            this.fetchSettings(),
+            this.fetchPage('home'),
+                this.fetchPage('about'),
+                this.fetchPage('services'),
+                this.fetchPage('contact'),
+                this.fetchPage('shared'),
+                this.fetchConversionStats(),
+                this.fetchMediaLibrary()
+            ];
+
+        const results = await Promise.allSettled(tasks);
+        const failed = results.filter(r => r.status === "rejected");
+        if (failed.length > 0) {
+            console.warn(`[Admin] Partial load: ${failed.length} task(s) failed`, failed.map(f => f.reason?.message || f.reason));
+        }
+        State.loaded = true;
     },
 
     async fetchDestinations() {
         const snap = await getDocs(collection(db, "destinations"));
         console.log(`[Admin] Fetched ${snap.size} destinations`);
         State.destinations = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    },
+
+    async fetchArticles() {
+        const q = query(collection(db, "articles"), orderBy("date", "desc"));
+        const snap = await getDocs(q);
+        State.articles = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     },
 
     async fetchSettings() {
@@ -317,78 +400,144 @@ const Data = {
 
     async fetchPage(pageId) {
         try {
-            const docSnap = await getDoc(doc(db, "settings", `page_${pageId}`));
-            if (docSnap.exists()) {
-                State.pages[pageId] = docSnap.data();
-            } else {
-                // Use DefaultContent if available
+            const pageRes = await this.callAdminApi("getPageEditor", { pageId });
+            const fallback = DefaultContent[pageId] ? JSON.parse(JSON.stringify(DefaultContent[pageId])) : {};
+            State.pages[pageId] = pageRes.draft && Object.keys(pageRes.draft).length
+                ? pageRes.draft
+                : (pageRes.published || fallback);
+            State.pageMeta[pageId] = {
+                published: pageRes.published || {},
+                status: pageRes.status || "draft",
+                updatedAt: pageRes.updatedAt || null,
+                publishedAt: pageRes.publishedAt || null,
+                lastPublishNote: pageRes.lastPublishNote || '',
+                lastChangeSummary: pageRes.lastChangeSummary || '',
+                revisions: pageRes.revisions || []
+            };
+        } catch (e) {
+            console.warn(`Page ${pageId} load via adminApi failed, falling back to settings/page_${pageId}`, e);
+            try {
+                const fallbackSnap = await getDoc(doc(db, "settings", `page_${pageId}`));
+                if (fallbackSnap.exists()) {
+                    State.pages[pageId] = fallbackSnap.data();
+                } else {
+                    State.pages[pageId] = DefaultContent[pageId] ? JSON.parse(JSON.stringify(DefaultContent[pageId])) : {};
+                }
+            } catch (_e2) {
                 State.pages[pageId] = DefaultContent[pageId] ? JSON.parse(JSON.stringify(DefaultContent[pageId])) : {};
             }
-        } catch (e) {
-            console.warn(`Page ${pageId} settings not found`, e);
-            State.pages[pageId] = DefaultContent[pageId] ? JSON.parse(JSON.stringify(DefaultContent[pageId])) : {};
+            State.pageMeta[pageId] = { revisions: [], status: "draft" };
         }
     },
 
     async saveDestination(destId, data) {
-        if (!destId) {
-            const newRef = doc(collection(db, "destinations"));
-            destId = newRef.id;
-            // data.id = destId; // Don't save ID inside doc if not needed, but typical usage
-        }
-        await setDoc(doc(db, "destinations", destId), { ...data, id: destId }, { merge: true });
+        const result = await this.callAdminApi("upsertDestination", { id: destId || null, data });
         await this.fetchDestinations();
-        this.logAction('update_destination', `Updated destination: ${data.title?.en || destId}`);
-        return destId;
+        return result.id;
+    },
+
+    async saveArticle(id, data) {
+        const result = await this.callAdminApi("upsertArticle", { id: id || null, data });
+        await this.fetchArticles();
+        return result.id;
     },
 
     async deleteDestination(destId) {
-        // if(!confirm("Are you sure you want to delete this destination?")) return; // Moved confirmation to UI
-        await deleteDoc(doc(db, "destinations", destId));
-        this.logAction('delete_destination', `Deleted destination: ${destId}`);
+        await this.callAdminApi("deleteDestination", { id: destId });
         await this.fetchDestinations();
     },
 
+    async deleteArticle(id) {
+        await this.callAdminApi("deleteArticle", { id });
+        await this.fetchArticles();
+    },
+
     async saveSettings(type, data) {
-        await setDoc(doc(db, "settings", type), data, { merge: true });
+        await this.callAdminApi("saveSettings", { type, data });
         if(type === 'navbar') State.settings.navbar = data.items;
         if(type === 'contact') {
             State.settings.contact = data;
             State.settings.social = data.social;
         }
-        this.logAction('update_settings', `Updated ${type} settings`);
     },
 
     async savePage(pageId, data) {
-        await setDoc(doc(db, "settings", `page_${pageId}`), data, { merge: true });
+        await this.callAdminApi("savePageDraft", { pageId, data });
         State.pages[pageId] = data;
-        this.logAction('update_page', `Updated page: ${pageId}`);
+        await this.fetchPage(pageId);
+    },
+
+    async publishPage(pageId, options = {}) {
+        await this.callAdminApi("publishPage", {
+            pageId,
+            note: options.note || "",
+            changeSummary: options.changeSummary || ""
+        });
+        await this.fetchPage(pageId);
+    },
+
+    async rollbackPage(pageId, revisionId, publishNow = false) {
+        await this.callAdminApi("rollbackPage", { pageId, revisionId, publishNow });
+        await this.fetchPage(pageId);
     },
 
     async uploadImage(file, path) {
         const storageRef = ref(storage, `${path}/${Date.now()}_${file.name}`);
         const snapshot = await uploadBytes(storageRef, file);
-        return await getDownloadURL(snapshot.ref);
-    },
-
-    async logAction(action, details) {
+        const url = await getDownloadURL(snapshot.ref);
         try {
-            const user = auth.currentUser ? auth.currentUser.email : 'Unknown';
-            await addDoc(collection(db, "admin_logs"), {
-                action,
-                details,
-                user,
-                timestamp: Date.now()
-            });
-        } catch(e) { console.warn("Log failed", e); }
+            await this.saveMediaMeta(url, [], '');
+        } catch (_e) {}
+        return url;
     },
 
     async fetchLogs() {
         try {
-            const q = query(collection(db, "admin_logs"), orderBy("timestamp", "desc"), limit(5));
-            const snap = await getDocs(q);
-            return snap.docs.map(d => d.data());
-        } catch(e) { return []; }
+            const result = await this.callAdminApi("getAuditLogs", { limit: 8 });
+            return result.logs || [];
+        } catch(e) {
+            console.warn("[Admin] Audit logs unavailable", e.message || e);
+            return [];
+        }
+    },
+
+    async fetchConversionStats() {
+        try {
+            const result = await this.callAdminApi("getConversionDashboard", { days: 30 });
+            State.conversionStats = result;
+        } catch (e) {
+            State.conversionStats = null;
+            console.warn("[Admin] Conversion stats unavailable", e.message || e);
+        }
+    },
+
+    async fetchMediaLibrary() {
+        try {
+            const result = await this.callAdminApi("getMediaLibrary", {
+                query: State.mediaFilters.query || "",
+                tag: State.mediaFilters.tag || ""
+            });
+            State.mediaAssets = result.assets || [];
+        } catch (e) {
+            State.mediaAssets = [];
+            console.warn("[Admin] Media library unavailable", e.message || e);
+        }
+    },
+
+    async saveMediaMeta(url, tags = [], alt = "") {
+        await this.callAdminApi("saveMediaMeta", { url, tags, alt });
+    },
+
+    async replaceMediaAsset(oldUrl, newUrl) {
+        return this.callAdminApi("replaceMediaAsset", { oldUrl, newUrl });
+    },
+
+    async schedulePublish(pageId, scheduledAt, note = "", changeSummary = "") {
+        return this.callAdminApi("schedulePublish", { pageId, scheduledAt, note, changeSummary });
+    },
+
+    async runScheduledPublishes() {
+        return this.callAdminApi("runScheduledPublishes", {});
     }
 };
 
@@ -459,21 +608,25 @@ const UI = {
                         <div class="pt-4 pb-2 px-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Content Management</div>
                         ${this.renderSidebarItem('page-home', 'fa-house', 'Home Page')}
                         ${this.renderSidebarItem('destinations', 'fa-map-location-dot', 'Destinations')}
+                        ${this.renderSidebarItem('articles', 'fa-newspaper', 'Blog / Articles')}
                         ${this.renderSidebarItem('page-about', 'fa-circle-info', 'About Page')}
                         ${this.renderSidebarItem('page-services', 'fa-briefcase', 'Services Page')}
                         ${this.renderSidebarItem('page-contact', 'fa-envelope', 'Contact Page')}
                         ${this.renderSidebarItem('page-shared', 'fa-layer-group', 'Shared Content')}
-                        <div class="pt-4 pb-2 px-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Configuration</div>
-                        ${this.renderSidebarItem('settings-global', 'fa-globe', 'Global Settings')}
-                        ${this.renderSidebarItem('settings-navbar', 'fa-bars', 'Navigation Menu')}
+                        ${this.renderSidebarItem('media-library', 'fa-photo-film', 'Media Library')}
+                        ${Security.isAdmin() ? `
+                            <div class="pt-4 pb-2 px-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">Configuration</div>
+                            ${this.renderSidebarItem('settings-global', 'fa-globe', 'Global Settings')}
+                            ${this.renderSidebarItem('settings-navbar', 'fa-bars', 'Navigation Menu')}
+                        ` : ''}
                     </nav>
 
                     <div class="p-4 border-t border-gray-100 bg-gray-50">
                         <div class="flex items-center gap-3 mb-3">
                             <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-sm">A</div>
                             <div class="text-sm">
-                                <p class="font-medium text-gray-900">Admin User</p>
-                                <p class="text-xs text-gray-500">Super Admin</p>
+                                <p class="font-medium text-gray-900">${State.user?.email || 'User'}</p>
+                                <p class="text-xs text-gray-500">${State.userRole}</p>
                             </div>
                         </div>
                         <button onclick="window.Admin.logout()" class="w-full text-center py-2 text-sm text-red-600 hover:bg-red-50 rounded transition-colors">Sign Out</button>
@@ -523,6 +676,17 @@ const UI = {
     },
 
     async loadTab(tab) {
+        if (tab !== State.currentTab && State.unsavedChanges) {
+            const leave = confirm('You have unsaved changes. Leave this page?');
+            if (!leave) return;
+            State.unsavedChanges = false;
+        }
+
+        if (!Security.isAdmin() && (tab === 'settings-global' || tab === 'settings-navbar')) {
+            UI.toast("Only admin can access configuration tabs.", "error");
+            tab = 'dashboard';
+        }
+
         State.currentTab = tab;
         // Re-render sidebar to update active state
         // In a real framework we'd use reactive state, here we cheat slightly or just re-render sidebar
@@ -546,11 +710,13 @@ const UI = {
         switch(tab) {
             case 'dashboard': this.renderDashboard(content); break;
             case 'destinations': this.renderDestinations(content); break;
+            case 'articles': this.renderArticles(content); break;
             case 'page-home': this.renderPageEditor(content, 'home'); break;
             case 'page-about': this.renderPageEditor(content, 'about'); break;
             case 'page-services': this.renderPageEditor(content, 'services'); break;
             case 'page-contact': this.renderPageEditor(content, 'contact'); break;
             case 'page-shared': this.renderPageEditor(content, 'shared'); break;
+            case 'media-library': this.renderMediaLibrary(content); break;
             case 'settings-global': this.renderGlobalSettings(content); break;
             case 'settings-navbar': this.renderNavbarSettings(content); break;
             default: content.innerHTML = `<div class="text-center text-gray-500 mt-20">Page not found</div>`;
@@ -560,8 +726,10 @@ const UI = {
     async renderDashboard(container) {
         const destCount = State.destinations.length;
         const activeDestCount = State.destinations.filter(d => d.active !== false).length;
+        const articleCount = State.articles.length;
         const navCount = State.settings.navbar ? State.settings.navbar.length : 0;
         const contactConfigured = State.settings.contact && State.settings.contact.phone ? 'Configured' : 'Pending';
+        const conv = State.conversionStats?.totals || { bookings: 0, en: 0, ar: 0 };
         
         const logs = await Data.fetchLogs();
 
@@ -579,12 +747,12 @@ const UI = {
                         <div class="p-3 bg-blue-50 rounded-lg text-blue-600"><i class="fa-solid fa-map-location-dot text-xl"></i></div>
                     </div>
 
-                    <!-- Navbar Items -->
+                    <!-- Articles -->
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
                         <div>
-                            <p class="text-sm font-medium text-gray-500">Menu Items</p>
-                            <h3 class="text-2xl font-bold text-gray-900 mt-1">${navCount}</h3>
-                            <p class="text-xs text-gray-400 mt-1">Navigation Links</p>
+                            <p class="text-sm font-medium text-gray-500">Blog Articles</p>
+                            <h3 class="text-2xl font-bold text-gray-900 mt-1">${articleCount}</h3>
+                            <p class="text-xs text-gray-400 mt-1">Published Posts</p>
                         </div>
                         <div class="p-3 bg-indigo-50 rounded-lg text-indigo-600"><i class="fa-solid fa-bars text-xl"></i></div>
                     </div>
@@ -608,6 +776,16 @@ const UI = {
                         </div>
                         <div class="p-3 bg-orange-50 rounded-lg text-orange-600"><i class="fa-solid fa-chart-line text-xl"></i></div>
                     </div>
+
+                    <!-- Conversion KPI -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500">30d Booking Leads</p>
+                            <h3 class="text-2xl font-bold text-gray-900 mt-1">${conv.bookings}</h3>
+                            <p class="text-xs text-gray-400 mt-1">EN: ${conv.en} | AR: ${conv.ar}</p>
+                        </div>
+                        <div class="p-3 bg-emerald-50 rounded-lg text-emerald-600"><i class="fa-solid fa-bullseye text-xl"></i></div>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -625,11 +803,15 @@ const UI = {
                                 <i class="fa-solid fa-house text-2xl mb-2 text-purple-500 group-hover:scale-110 transition-transform block"></i>
                                 <span class="font-medium text-sm">Edit Home Page</span>
                             </button>
-                            <button onclick="window.Admin.switchTab('settings-global')" class="p-4 border border-gray-200 rounded-lg hover:bg-green-50 hover:border-green-200 hover:text-green-700 transition-all text-left group">
+                            <button onclick="window.Admin.switchTab('settings-global')" ${Security.isAdmin() ? '' : 'disabled'} class="p-4 border border-gray-200 rounded-lg hover:bg-green-50 hover:border-green-200 hover:text-green-700 transition-all text-left group disabled:opacity-50 disabled:cursor-not-allowed">
                                 <i class="fa-solid fa-phone text-2xl mb-2 text-green-500 group-hover:scale-110 transition-transform block"></i>
                                 <span class="font-medium text-sm">Update Contact</span>
                             </button>
-                            <button onclick="window.Admin.switchTab('settings-navbar')" class="p-4 border border-gray-200 rounded-lg hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700 transition-all text-left group">
+                            <button onclick="window.Admin.openArticleModal()" class="p-4 border border-gray-200 rounded-lg hover:bg-orange-50 hover:border-orange-200 hover:text-orange-700 transition-all text-left group">
+                                <i class="fa-solid fa-newspaper text-2xl mb-2 text-orange-500 group-hover:scale-110 transition-transform block"></i>
+                                <span class="font-medium text-sm">Write Article</span>
+                            </button>
+                            <button onclick="window.Admin.switchTab('settings-navbar')" ${Security.isAdmin() ? '' : 'disabled'} class="p-4 border border-gray-200 rounded-lg hover:bg-indigo-50 hover:border-indigo-200 hover:text-indigo-700 transition-all text-left group disabled:opacity-50 disabled:cursor-not-allowed">
                                 <i class="fa-solid fa-bars text-2xl mb-2 text-indigo-500 group-hover:scale-110 transition-transform block"></i>
                                 <span class="font-medium text-sm">Manage Menu</span>
                             </button>
@@ -682,7 +864,7 @@ const UI = {
                                         <tr class="border-b hover:bg-gray-50">
                                             <td class="px-4 py-3 font-medium text-gray-900 capitalize">${log.action.replace('_', ' ')}</td>
                                             <td class="px-4 py-3">${log.details}</td>
-                                            <td class="px-4 py-3">${log.user}</td>
+                                            <td class="px-4 py-3">${log.userEmail || log.user || '-'}</td>
                                             <td class="px-4 py-3">${new Date(log.timestamp).toLocaleString()}</td>
                                         </tr>
                                     `).join('') : '<tr><td colspan="4" class="px-4 py-3 text-center text-gray-400">No recent activity recorded.</td></tr>'}
@@ -713,7 +895,7 @@ const UI = {
                         <div class="relative h-48 bg-gray-100 shrink-0">
                             <img src="${dest.thumbnail || 'https://placehold.co/600x400?text=No+Image'}" class="w-full h-full object-cover">
                             <div class="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onclick="window.Admin.deleteDestination('${dest.id}')" class="bg-white p-2 text-red-600 rounded shadow hover:bg-red-50" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                                ${Security.isAdmin() ? `<button onclick="window.Admin.deleteDestination('${dest.id}')" class="bg-white p-2 text-red-600 rounded shadow hover:bg-red-50" title="Delete"><i class="fa-solid fa-trash"></i></button>` : ''}
                             </div>
                         </div>
                         <div class="p-5 flex flex-col flex-1">
@@ -732,6 +914,38 @@ const UI = {
         if(State.destinations.length === 0) {
             container.innerHTML += `<div class="bg-white p-10 text-center rounded shadow"><p class="text-gray-500">No destinations found.</p></div>`;
         }
+    },
+
+    renderArticles(container) {
+        container.innerHTML = `
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">Blog Articles</h2>
+                    <p class="text-sm text-gray-500">Manage news and travel guides</p>
+                </div>
+                <button onclick="window.Admin.openArticleModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-sm font-medium flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Write New
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-4">
+                ${State.articles.map(art => `
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
+                        <img src="${art.image || 'https://placehold.co/100x100'}" class="w-20 h-20 rounded-lg object-cover bg-gray-100">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-gray-900">${art.title?.en || 'Untitled'}</h3>
+                            <p class="text-sm text-gray-500 line-clamp-1">${art.excerpt?.en || ''}</p>
+                            <div class="text-xs text-gray-400 mt-1">Published: ${art.date || 'N/A'}</div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="window.Admin.openArticleModal('${art.id}')" class="p-2 text-blue-600 hover:bg-blue-50 rounded"><i class="fa-solid fa-pen"></i></button>
+                            ${Security.isAdmin() ? `<button onclick="window.Admin.deleteArticle('${art.id}')" class="p-2 text-red-600 hover:bg-red-50 rounded"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        </div>
+                    </div>
+                `).join('')}
+                ${State.articles.length === 0 ? '<div class="bg-white p-10 text-center rounded shadow"><p class="text-gray-500">No articles found.</p></div>' : ''}
+            </div>
+        `;
     },
 
     renderPageEditor: (container, pageId) => Admin.renderPageEditor(container, pageId), // Redirect to the robust implementation
@@ -855,6 +1069,51 @@ const UI = {
         `;
     },
 
+    async renderMediaLibrary(container) {
+        await Data.fetchMediaLibrary();
+        const assets = State.mediaAssets || [];
+        container.innerHTML = `
+            <div class="space-y-6">
+                <div class="flex items-center justify-between flex-wrap gap-3">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Media Library</h2>
+                        <p class="text-sm text-gray-500">Search, tag, replace references, and inspect optimization variants.</p>
+                    </div>
+                    <button onclick="window.Admin.refreshMediaLibrary()" class="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 text-sm">
+                        <i class="fa-solid fa-rotate mr-1"></i> Refresh
+                    </button>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-xl p-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <input id="media-query" type="text" placeholder="Search by file name..." value="${Admin.escapeHtml(State.mediaFilters.query || '')}" class="border border-gray-300 rounded px-3 py-2 text-sm">
+                    <input id="media-tag" type="text" placeholder="Filter by tag..." value="${Admin.escapeHtml(State.mediaFilters.tag || '')}" class="border border-gray-300 rounded px-3 py-2 text-sm">
+                    <button onclick="window.Admin.applyMediaFilters()" class="px-4 py-2 rounded bg-slate-100 hover:bg-slate-200 text-sm">Apply Filters</button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                    ${assets.map((a, idx) => `
+                        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+                            <div class="h-44 bg-slate-100 flex items-center justify-center">
+                                <img src="${a.url}" class="w-full h-full object-cover" loading="lazy" onerror="this.style.display='none'">
+                            </div>
+                            <div class="p-3 space-y-2">
+                                <div class="text-xs font-mono text-gray-500 truncate" title="${Admin.escapeHtml(a.path)}">${Admin.escapeHtml(a.path)}</div>
+                                <div class="text-xs text-gray-600">${Math.round((a.size || 0) / 1024)} KB</div>
+                                <input id="media-alt-${idx}" type="text" value="${Admin.escapeHtml(a.alt || '')}" placeholder="Alt text..." class="w-full border border-gray-300 rounded px-2 py-1 text-xs">
+                                <input id="media-tags-${idx}" type="text" value="${Admin.escapeHtml((a.tags || []).join(', '))}" placeholder="tags, comma-separated" class="w-full border border-gray-300 rounded px-2 py-1 text-xs">
+                                <div class="text-[11px] text-gray-500">Usages: ${(a.usages || []).length}</div>
+                                <div class="text-[11px] text-gray-500">Optimized variants: ${(a.optimizedVariants || []).length}</div>
+                                <div class="flex gap-2 pt-1">
+                                    <button onclick="window.Admin.saveMediaAssetMeta(${idx})" class="px-2 py-1 text-xs rounded bg-emerald-100 text-emerald-800 hover:bg-emerald-200">Save Meta</button>
+                                    <button onclick="window.Admin.replaceMediaAssetPrompt(${idx})" class="px-2 py-1 text-xs rounded bg-amber-100 text-amber-800 hover:bg-amber-200">Replace Refs</button>
+                                    <a href="${a.url}" target="_blank" class="px-2 py-1 text-xs rounded bg-slate-100 text-slate-700 hover:bg-slate-200">Open</a>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    },
+
     openDestinationModal(id = null) {
         const dest = id ? State.destinations.find(d => d.id === id) : {};
         const modalPanel = document.getElementById('modal-panel');
@@ -968,20 +1227,25 @@ const App = {
             if (user) {
                 State.user = user;
                 try {
+                    const tokenResult = await user.getIdTokenResult(true);
+                    const claims = tokenResult.claims || {};
+                    State.userRole = claims.admin === true ? 'admin' : (claims.role || 'viewer');
+                } catch (_e) {
+                    State.userRole = 'viewer';
+                }
+                try {
                     await Data.loadAll();
-                    UI.renderLayout();
                 } catch (e) {
                     console.error("Critical:", e);
-                    // If permissions error, force logout
-                    if(e.code === 'permission-denied') {
-                         UI.toast("Access Denied. You are not an admin.", "error");
-                         await signOut(auth);
-                    } else {
-                         UI.toast("Failed to initialize app. Check console.", "error");
+                } finally {
+                    UI.renderLayout();
+                    if (!Security.canEdit()) {
+                        UI.toast("Read-only account. Ask admin for editor/admin access.", "error");
                     }
                 }
             } else {
                 State.user = null;
+                State.userRole = 'viewer';
                 UI.renderLogin();
             }
         });
@@ -1004,6 +1268,7 @@ const Admin = {
     logout: App.logout,
     switchTab: (tab) => UI.loadTab(tab),
     openDestinationModal: UI.openDestinationModal,
+    openArticleModal: (id) => UI.openArticleModal(id),
     closeModal: UI.closeModal,
     getNestedValue: UI.getNestedValue,
     setNestedValue: UI.setNestedValue,
@@ -1074,6 +1339,10 @@ const Admin = {
     },
 
     deleteDestination: async (id) => {
+        if (!Security.isAdmin()) {
+            UI.toast("Only admin can delete destinations.", "error");
+            return;
+        }
         if(!confirm("Are you sure? This cannot be undone.")) return;
         try {
             await Data.deleteDestination(id);
@@ -1084,6 +1353,21 @@ const Admin = {
         }
     },
     
+    deleteArticle: async (id) => {
+        if (!Security.isAdmin()) {
+            UI.toast("Only admin can delete articles.", "error");
+            return;
+        }
+        if(!confirm("Delete this article?")) return;
+        try {
+            await Data.deleteArticle(id);
+            UI.toast("Article deleted", "success");
+            UI.loadTab('articles');
+        } catch(e) {
+            UI.toast("Error: " + e.message, "error");
+        }
+    },
+
     handleImageUpload: async (input, targetId) => {
         if (!input.files || !input.files[0]) return;
         const file = input.files[0];
@@ -1154,6 +1438,10 @@ const Admin = {
     },
     
     saveNavbar: async () => {
+        if (!Security.isAdmin()) {
+            UI.toast("Only admin can update navigation settings.", "error");
+            return;
+        }
         const rows = document.querySelectorAll('#navbar-list > div');
         const newItems = [];
         rows.forEach(row => {
@@ -1170,6 +1458,114 @@ const Admin = {
         } catch(e) {
             UI.toast("Failed to update menu: " + e.message, "error");
         }
+    },
+
+    refreshMediaLibrary: async () => {
+        await Data.fetchMediaLibrary();
+        UI.loadTab('media-library');
+    },
+
+    applyMediaFilters: async () => {
+        const q = document.getElementById('media-query')?.value || '';
+        const tag = document.getElementById('media-tag')?.value || '';
+        State.mediaFilters = { query: q.trim(), tag: tag.trim() };
+        await Data.fetchMediaLibrary();
+        UI.loadTab('media-library');
+    },
+
+    saveMediaAssetMeta: async (idx) => {
+        const asset = (State.mediaAssets || [])[idx];
+        if (!asset) return;
+        const alt = document.getElementById(`media-alt-${idx}`)?.value || '';
+        const tagsRaw = document.getElementById(`media-tags-${idx}`)?.value || '';
+        const tags = tagsRaw.split(',').map((t) => t.trim()).filter(Boolean);
+        try {
+            await Data.saveMediaMeta(asset.url, tags, alt);
+            UI.toast('Media metadata updated', 'success');
+            await Data.fetchMediaLibrary();
+        } catch (e) {
+            UI.toast(`Failed: ${e.message}`, 'error');
+        }
+    },
+
+    replaceMediaAssetPrompt: async (idx) => {
+        if (!Security.isAdmin()) {
+            UI.toast("Only admin can replace media references.", "error");
+            return;
+        }
+        const asset = (State.mediaAssets || [])[idx];
+        if (!asset) return;
+        const newUrl = prompt('Enter replacement URL:', asset.url);
+        if (!newUrl || newUrl === asset.url) return;
+        try {
+            const res = await Data.replaceMediaAsset(asset.url, newUrl.trim());
+            UI.toast(`Updated ${res.updatedDocs || 0} documents`, 'success');
+            await Data.fetchMediaLibrary();
+            UI.loadTab('media-library');
+        } catch (e) {
+            UI.toast(`Replace failed: ${e.message}`, 'error');
+        }
+    },
+
+    publishPage: async (pageId) => {
+        const checklist = Admin.runPrePublishChecklist(pageId);
+        if (checklist.critical.length > 0) {
+            alert(`Cannot publish yet:\n- ${checklist.critical.join('\n- ')}`);
+            return;
+        }
+        if (checklist.warnings.length > 0) {
+            const proceed = confirm(`Publish with warnings?\n- ${checklist.warnings.join('\n- ')}`);
+            if (!proceed) return;
+        }
+        const note = document.getElementById(`publish-note-${pageId}`)?.value || '';
+        const changeSummary = document.getElementById(`change-summary-${pageId}`)?.value || '';
+        try {
+            await Data.publishPage(pageId, { note, changeSummary });
+            UI.toast(`Published ${pageId} page`, "success");
+            State.unsavedChanges = false;
+            UI.loadTab(`page-${pageId}`);
+        } catch (e) {
+            UI.toast(`Publish failed: ${e.message}`, "error");
+        }
+    },
+
+    schedulePublish: async (pageId) => {
+        const scheduledAt = document.getElementById(`schedule-at-${pageId}`)?.value || '';
+        const note = document.getElementById(`publish-note-${pageId}`)?.value || '';
+        const changeSummary = document.getElementById(`change-summary-${pageId}`)?.value || '';
+        if (!scheduledAt) {
+            UI.toast("Pick a schedule time first", "error");
+            return;
+        }
+        try {
+            await Data.schedulePublish(pageId, scheduledAt, note, changeSummary);
+            UI.toast(`Scheduled publish for ${pageId}`, "success");
+            if (Security.isAdmin()) {
+                const run = await Data.runScheduledPublishes();
+                if ((run.processed || 0) > 0) {
+                    UI.toast(`Processed ${run.processed} due scheduled publish(es)`, "success");
+                }
+            }
+            UI.loadTab(`page-${pageId}`);
+        } catch (e) {
+            UI.toast(`Schedule failed: ${e.message}`, "error");
+        }
+    },
+
+    rollbackPage: async (pageId) => {
+        const select = document.getElementById(`revision-select-${pageId}`);
+        if (!select || !select.value) {
+            UI.toast("Select a revision first", "error");
+            return;
+        }
+        const publishNow = confirm("Rollback and publish immediately?");
+        try {
+            await Data.rollbackPage(pageId, select.value, publishNow);
+            UI.toast(`Rolled back ${pageId}`, "success");
+            UI.loadTab(`page-${pageId}`);
+        } catch (e) {
+            UI.toast(`Rollback failed: ${e.message}`, "error");
+        }
     }
 };
 
@@ -1177,6 +1573,181 @@ const Admin = {
 window.Admin = Admin;
 
 // --- Extension: Translation & Sections Support ---
+
+Admin.flattenObject = function(obj, prefix = '', out = {}) {
+    if (!obj || typeof obj !== 'object') return out;
+    Object.keys(obj).forEach((key) => {
+        const path = prefix ? `${prefix}.${key}` : key;
+        const val = obj[key];
+        if (val && typeof val === 'object' && !Array.isArray(val)) {
+            Admin.flattenObject(val, path, out);
+        } else {
+            out[path] = val;
+        }
+    });
+    return out;
+};
+
+Admin.escapeHtml = function(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+};
+
+Admin.getLocalDraftKey = (pageId) => `gh_admin_localdraft_${pageId}`;
+
+Admin.readLocalDraft = function(pageId) {
+    try {
+        const raw = localStorage.getItem(Admin.getLocalDraftKey(pageId));
+        return raw ? JSON.parse(raw) : null;
+    } catch (_e) {
+        return null;
+    }
+};
+
+Admin.writeLocalDraft = function(pageId, data) {
+    try {
+        localStorage.setItem(Admin.getLocalDraftKey(pageId), JSON.stringify({
+            savedAt: Date.now(),
+            data
+        }));
+    } catch (_e) {}
+};
+
+Admin.clearLocalDraft = function(pageId) {
+    try { localStorage.removeItem(Admin.getLocalDraftKey(pageId)); } catch (_e) {}
+};
+
+Admin.runPrePublishChecklist = function(pageId) {
+    const data = State.pages[pageId] || {};
+    const schema = PageSchemas[pageId] || [];
+    const critical = [];
+    const warnings = [];
+
+    const requiredSeo = ['seo.meta_title', 'seo.meta_description'];
+    requiredSeo.forEach((k) => {
+        const v = Admin.getNestedValue(data, k);
+        if (!v || !String(v).trim()) critical.push(`${k} is required`);
+    });
+
+    schema.filter((f) => f.type && f.key).forEach((f) => {
+        const v = Admin.getNestedValue(data, f.key);
+        if ((f.key.endsWith('_en') || f.key.endsWith('_ar')) && (!v || !String(v).trim())) {
+            warnings.push(`${f.key} is empty`);
+        }
+        if ((f.type === 'image' || /url|image|thumbnail|map_url/i.test(f.key)) && v) {
+            const s = String(v).trim();
+            const valid = /^(https?:\/\/|\/|\.\/|[a-zA-Z0-9._-]+\.(webp|png|jpe?g|gif|svg|avif))/i.test(s);
+            if (!valid) critical.push(`${f.key} has invalid URL format`);
+        }
+        if (/title/i.test(f.key) && (!v || !String(v).trim())) {
+            warnings.push(`Heading-like field ${f.key} is empty`);
+        }
+    });
+
+    // Alt text quality check for image fields.
+    schema.filter((f) => f.type === 'image').forEach((imgField) => {
+        const base = imgField.key.replace(/(\.bg_image|\.image|thumbnail)$/i, '');
+        const altCandidates = [
+            `${base}.alt_en`, `${base}.alt_ar`,
+            `${imgField.key}_alt_en`, `${imgField.key}_alt_ar`,
+            `${imgField.key}.alt_en`, `${imgField.key}.alt_ar`
+        ];
+        const hasAlt = altCandidates.some((k) => {
+            const v = Admin.getNestedValue(data, k);
+            return v && String(v).trim().length > 0;
+        });
+        if (!hasAlt) warnings.push(`Missing alt text near image field: ${imgField.key}`);
+    });
+
+    // Broken link heuristic check in content text.
+    const flattened = Admin.flattenObject(data);
+    Object.keys(flattened).forEach((k) => {
+        const v = flattened[k];
+        if (typeof v !== 'string') return;
+        const links = v.match(/https?:\/\/[^\s"'<>()]+/g) || [];
+        links.forEach((u) => {
+            if (!/^https?:\/\/[^\s]+$/i.test(u)) warnings.push(`Possibly broken link in ${k}`);
+        });
+    });
+
+    return { critical, warnings: warnings.slice(0, 8) };
+};
+
+Admin.validateContentData = function(pageId, schema, newData) {
+    const errors = [];
+    const warnings = [];
+    const seoTitle = Admin.getNestedValue(newData, 'seo.meta_title');
+    const seoDesc = Admin.getNestedValue(newData, 'seo.meta_description');
+
+    if (!seoTitle || !String(seoTitle).trim()) errors.push('SEO meta title is required');
+    if (!seoDesc || !String(seoDesc).trim()) errors.push('SEO meta description is required');
+    if (seoTitle && String(seoTitle).length > 70) warnings.push('SEO meta title is longer than recommended (70)');
+    if (seoDesc && String(seoDesc).length > 180) warnings.push('SEO meta description is longer than recommended (180)');
+
+    schema.filter((f) => f.type && f.key).forEach((f) => {
+        const v = Admin.getNestedValue(newData, f.key);
+        if (typeof v !== 'string') return;
+        if (f.type === 'text' && v.length > 300) errors.push(`${f.key} exceeds 300 chars`);
+        if (f.type === 'textarea' && v.length > 5000) errors.push(`${f.key} exceeds 5000 chars`);
+        if ((f.type === 'image' || /url|image|thumbnail|map_url/i.test(f.key)) && v) {
+            const ok = /^(https?:\/\/|\/|\.\/|[a-zA-Z0-9._-]+\.(webp|png|jpe?g|gif|svg|avif))/i.test(v.trim());
+            if (!ok) errors.push(`${f.key} has invalid URL format`);
+        }
+    });
+
+    return { errors, warnings };
+};
+
+Admin.openDiffModal = function(pageId) {
+    const draft = State.pages[pageId] || {};
+    const published = State.pageMeta[pageId]?.published || {};
+    const dFlat = Admin.flattenObject(draft);
+    const pFlat = Admin.flattenObject(published);
+    const keys = Array.from(new Set([...Object.keys(dFlat), ...Object.keys(pFlat)])).sort();
+    const rows = keys
+        .filter((k) => String(dFlat[k] ?? '') !== String(pFlat[k] ?? ''))
+        .map((k) => `
+            <tr class="border-b">
+                <td class="px-3 py-2 text-xs font-mono">${Admin.escapeHtml(k)}</td>
+                <td class="px-3 py-2 text-xs text-red-700 whitespace-pre-wrap">${Admin.escapeHtml(pFlat[k] ?? '')}</td>
+                <td class="px-3 py-2 text-xs text-emerald-700 whitespace-pre-wrap">${Admin.escapeHtml(dFlat[k] ?? '')}</td>
+            </tr>
+        `).join('');
+
+    const modalPanel = document.getElementById('modal-panel');
+    const backdrop = document.getElementById('modal-backdrop');
+    modalPanel.innerHTML = `
+        <div class="h-full flex flex-col">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+                <h3 class="text-lg font-bold text-gray-800">Draft vs Published: ${pageId}</h3>
+                <button type="button" onclick="window.Admin.closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fa-solid fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-4 overflow-auto">
+                <table class="min-w-full bg-white border border-gray-200 rounded">
+                    <thead class="bg-gray-50 text-xs uppercase text-gray-500">
+                        <tr>
+                            <th class="px-3 py-2 text-left">Field</th>
+                            <th class="px-3 py-2 text-left">Published</th>
+                            <th class="px-3 py-2 text-left">Draft</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rows || '<tr><td colspan="3" class="px-3 py-6 text-center text-gray-500">No differences</td></tr>'}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    `;
+    backdrop.classList.remove('hidden');
+    void backdrop.offsetWidth;
+    backdrop.classList.remove('opacity-0');
+    modalPanel.classList.remove('translate-x-full');
+};
 
 // Helper for rendering schema-based forms with sections & translation
 Admin.renderFormContainer = function(container, schema, data, title, onSave, isModal = false, pageId = null) {
@@ -1351,8 +1922,47 @@ Admin.renderFormContainer = function(container, schema, data, title, onSave, isM
     const editBtn = document.getElementById(`edit-btn-${formId}`);
     const saveBtn = document.getElementById(`save-btn-${formId}`);
     const form = document.getElementById(formId);
+
+    if (!Security.canEdit()) {
+        if (editBtn) {
+            editBtn.disabled = true;
+            editBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        }
+        if (saveBtn) saveBtn.disabled = true;
+    }
+    const collectFormData = () => {
+        const formData = new FormData(form);
+        const newData = JSON.parse(JSON.stringify(data));
+        for(let [key, value] of formData.entries()) {
+            if(key.includes('.')) Admin.setNestedValue(newData, key, value);
+            else newData[key] = value;
+
+            const checkbox = form.querySelector(`input[name="${key}"][type="checkbox"]`);
+            if(checkbox) newData[key] = checkbox.checked;
+        }
+        form.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+            if(!formData.has(chk.name)) {
+                if(chk.name.includes('.')) Admin.setNestedValue(newData, chk.name, false);
+                else newData[chk.name] = false;
+            }
+        });
+        return newData;
+    };
+
+    if (pageId) {
+        const localDraft = Admin.readLocalDraft(pageId);
+        if (localDraft?.data && confirm('Local autosave draft found. Restore it?')) {
+            data = localDraft.data;
+            form.querySelectorAll('input[name], textarea[name], select[name]').forEach((el) => {
+                const v = Admin.getNestedValue(data, el.name);
+                if (el.type === 'checkbox') el.checked = !!v;
+                else el.value = v ?? '';
+            });
+        }
+    }
     
     editBtn.addEventListener('click', () => {
+        if (!Security.canEdit()) return;
         const isEditing = editBtn.classList.contains('active-edit');
         if(!isEditing) {
             // Enable
@@ -1391,36 +2001,35 @@ Admin.renderFormContainer = function(container, schema, data, title, onSave, isM
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const formData = new FormData(e.target);
-        const newData = JSON.parse(JSON.stringify(data)); 
-        
-        for(let [key, value] of formData.entries()) {
-            if(key.includes('.')) Admin.setNestedValue(newData, key, value);
-            else newData[key] = value;
-            
-            // Handle checkboxes (if unchecked they don't appear in FormData, handle manually if needed, but for simple string/bool configs:)
-            const checkbox = form.querySelector(`input[name="${key}"][type="checkbox"]`);
-            if(checkbox) newData[key] = checkbox.checked;
-        }
-        
-        // Also catch unchecked checkboxes
-        form.querySelectorAll('input[type="checkbox"]').forEach(chk => {
-            if(!formData.has(chk.name)) {
-                if(chk.name.includes('.')) Admin.setNestedValue(newData, chk.name, false);
-                else newData[chk.name] = false;
-            }
-        });
-        
+        const newData = collectFormData();
         await onSave(newData);
-        
-        // Disable edit mode after save? Or keep it open?
-        // Let's keep it open but toast success
+        if (pageId) Admin.clearLocalDraft(pageId);
+        State.unsavedChanges = false;
     });
+
+    if (pageId) {
+        form.addEventListener('input', () => {
+            State.unsavedChanges = true;
+            State.currentEditorPage = pageId;
+            const snapshot = collectFormData();
+            Admin.writeLocalDraft(pageId, snapshot);
+
+            if (State.autosaveTimers[pageId]) clearTimeout(State.autosaveTimers[pageId]);
+            State.autosaveTimers[pageId] = setTimeout(async () => {
+                if (!editBtn.classList.contains('active-edit')) return;
+                try {
+                    await Data.savePage(pageId, snapshot);
+                    State.pages[pageId] = snapshot;
+                } catch (_e) {}
+            }, 3000);
+        });
+    }
 };
 
 Admin.renderPageEditor = function(container, pageId) {
     const schema = PageSchemas[pageId];
     const data = State.pages[pageId] || {};
+    const meta = State.pageMeta[pageId] || { revisions: [] };
 
     if (!schema) {
         container.innerHTML = `<div class="p-10 text-center text-gray-500">No editor schema defined for ${pageId}</div>`;
@@ -1429,12 +2038,68 @@ Admin.renderPageEditor = function(container, pageId) {
     
     Admin.renderFormContainer(container, schema, data, `${pageId.replace('page_', '')} Content`, async (newData) => {
         try {
+            const validation = Admin.validateContentData(pageId, schema, newData);
+            if (validation.errors.length > 0) {
+                UI.toast(validation.errors[0], 'error');
+                return;
+            }
+            if (validation.warnings.length > 0) {
+                const proceed = confirm(`Save with warnings?\n- ${validation.warnings.join('\n- ')}`);
+                if (!proceed) return;
+            }
             await Data.savePage(pageId, newData);
             UI.toast('Page saved successfully', 'success');
         } catch (err) {
             UI.toast(err.message, 'error');
         }
     }, false, pageId);
+
+    const wrapper = container.querySelector('.max-w-5xl');
+    if (wrapper) {
+        const revisions = (meta.revisions || []).map((r) => {
+            const t = r.createdAt?.seconds ? new Date(r.createdAt.seconds * 1000) : null;
+            const label = `${r.type || 'revision'} ${t ? `- ${t.toLocaleString()}` : ''}`;
+            return `<option value="${r.id}">${label}</option>`;
+        }).join('');
+
+        const publishedAt = meta.publishedAt?.seconds
+            ? new Date(meta.publishedAt.seconds * 1000).toLocaleString()
+            : 'Not published yet';
+
+        wrapper.insertAdjacentHTML('afterbegin', `
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div>
+                    <div class="text-sm font-semibold text-gray-800">CMS Workflow</div>
+                    <div class="text-xs text-gray-500">Status: ${meta.status || 'draft'} | Last publish: ${publishedAt}</div>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button onclick="window.Admin.openDiffModal('${pageId}')" class="px-3 py-2 bg-slate-100 text-slate-800 rounded hover:bg-slate-200 text-sm font-medium">
+                        <i class="fa-solid fa-code-compare mr-1"></i> View Diff
+                    </button>
+                    <button onclick="window.Admin.publishPage('${pageId}')" ${Security.canEdit() ? '' : 'disabled'} class="px-3 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-cloud-arrow-up mr-1"></i> Publish
+                    </button>
+                    <select id="revision-select-${pageId}" class="px-3 py-2 border border-gray-300 rounded text-sm bg-white">
+                        <option value="">Select revision</option>
+                        ${revisions}
+                    </select>
+                    <button onclick="window.Admin.rollbackPage('${pageId}')" ${Security.isAdmin() ? '' : 'disabled'} class="px-3 py-2 bg-amber-100 text-amber-800 rounded hover:bg-amber-200 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Rollback
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 grid grid-cols-1 md:grid-cols-3 gap-3">
+                <input id="publish-note-${pageId}" type="text" value="${Admin.escapeHtml(meta.lastPublishNote || '')}" placeholder="Publish note (optional)" class="border border-gray-300 rounded px-3 py-2 text-sm">
+                <input id="change-summary-${pageId}" type="text" value="${Admin.escapeHtml(meta.lastChangeSummary || '')}" placeholder="Change summary (optional)" class="border border-gray-300 rounded px-3 py-2 text-sm">
+                <div class="flex gap-2">
+                    <input id="schedule-at-${pageId}" type="datetime-local" class="border border-gray-300 rounded px-3 py-2 text-sm flex-1">
+                    <button onclick="window.Admin.schedulePublish('${pageId}')" ${Security.canEdit() ? '' : 'disabled'} class="px-3 py-2 bg-violet-100 text-violet-800 rounded hover:bg-violet-200 text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-clock mr-1"></i> Schedule
+                    </button>
+                </div>
+            </div>
+        `);
+    }
 };
 
 // Destination Modal using the same engine
@@ -1499,6 +2164,52 @@ Admin.openDestinationModal = function(id = null) {
     modalPanel.classList.remove('translate-x-full');
 };
 
+Admin.openArticleModal = function(id = null) {
+    const existing = id ? State.articles.find(a => a.id === id) : null;
+    const article = existing ? {
+        ...existing,
+        title_en: existing.title?.en || '',
+        title_ar: existing.title?.ar || '',
+        excerpt_en: existing.excerpt?.en || '',
+        excerpt_ar: existing.excerpt?.ar || '',
+        content_en: existing.content?.en || '',
+        content_ar: existing.content?.ar || ''
+    } : { date: new Date().toISOString().split('T')[0] };
+
+    const modalPanel = document.getElementById('modal-panel');
+    const backdrop = document.getElementById('modal-backdrop');
+
+    const schema = [
+        { section: "Article Info", description: "Basic metadata." },
+        { type: "image", key: "image", label: "Cover Image" },
+        { type: "text", key: "date", label: "Publish Date (YYYY-MM-DD)" },
+        { type: "text", key: "title_en", label: "Title (English)" },
+        { type: "text", key: "title_ar", label: "Title (Arabic)", dir: "rtl" },
+        { type: "textarea", key: "excerpt_en", label: "Short Excerpt (English)" },
+        { type: "textarea", key: "excerpt_ar", label: "Short Excerpt (Arabic)", dir: "rtl" },
+        { section: "Content", description: "Main article body." },
+        { type: "textarea", key: "content_en", label: "Content (English - HTML allowed)" },
+        { type: "textarea", key: "content_ar", label: "Content (Arabic - HTML allowed)", dir: "rtl" }
+    ];
+
+    Admin.renderFormContainer(modalPanel, schema, article, id ? 'Edit Article' : 'New Article', async (newData) => {
+        const normalized = { ...newData };
+        normalized.title = { en: newData.title_en, ar: newData.title_ar };
+        normalized.excerpt = { en: newData.excerpt_en, ar: newData.excerpt_ar };
+        normalized.content = { en: newData.content_en, ar: newData.content_ar };
+        ['title_en','title_ar','excerpt_en','excerpt_ar','content_en','content_ar'].forEach(k => delete normalized[k]);
+
+        await Data.saveArticle(id, normalized);
+        UI.toast('Article saved', 'success');
+        window.Admin.closeModal();
+        UI.loadTab('articles');
+    }, true);
+    
+    backdrop.classList.remove('hidden');
+    void backdrop.offsetWidth;
+    backdrop.classList.remove('opacity-0');
+    modalPanel.classList.remove('translate-x-full');
+};
 
 
 Admin.toggleSection = function(header) {

@@ -1,0 +1,86 @@
+name: Production Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: firebase-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install functions dependencies
+        run: npm ci
+        working-directory: functions
+
+      - name: Install Astro dependencies
+        run: npm ci
+        working-directory: astro-site
+
+      - name: Install admin-v3 dependencies
+        run: npm ci
+        working-directory: admin-v3
+
+      - name: Functions tests
+        run: npm test
+        working-directory: functions
+        env:
+          FIREBASE_CONFIG: '{"storageBucket":"ci-bucket.appspot.com"}'
+          GCLOUD_PROJECT: ci-project
+
+      - name: Site checks
+        run: npm run check
+
+      - name: Runtime parity assertion
+        run: npm run ops:runtime-parity
+        env:
+          GH_ENVIRONMENT: production
+          EXPECTED_NODE_MAJOR: "20"
+          REQUIRED_ENV_KEYS: FIREBASE_PROJECT_ID,FIREBASE_TOKEN_PRODUCTION
+          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}
+          FIREBASE_PROJECT_ID_STAGING_FALLBACK: ${{ vars.FIREBASE_PROJECT_ID_STAGING }}
+          FIREBASE_TOKEN_PRODUCTION: ${{ secrets.FIREBASE_TOKEN_PRODUCTION }}
+
+      - name: Build Astro site
+        run: npm run build:astro
+
+      - name: Build admin-v3 hosting bundle
+        run: npm run build:admin-v3:hosting
+
+      - name: Technical SEO validation
+        run: npm run seo:validate
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Deploy hosting, functions, and rules to production
+        run: firebase deploy --project "${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}" --only hosting,functions,firestore:rules --non-interactive
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN_PRODUCTION }}
+
+      - name: Post-deploy smoke check
+        run: |
+          curl -fsSL https://georgiahills.com/ >/dev/null
+          curl -fsSL https://georgiahills.com/sitemap.xml >/dev/null
+          curl -fsSL https://georgiahills.com/admin-v3/ >/dev/null

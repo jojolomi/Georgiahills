@@ -9,5 +9,6 @@ window.__GH_FIREBASE_CONFIG = {
   messagingSenderId: "YOUR_SENDER_ID",
   appId: "YOUR_APP_ID",
   functionsRegion: "europe-west1",
-  bookingEndpoint: "https://europe-west1-YOUR_PROJECT_ID.cloudfunctions.net/createBookingLead"
+  bookingEndpoint: "https://europe-west1-YOUR_PROJECT_ID.cloudfunctions.net/createBookingLead",
+  adminApiEndpoint: "https://europe-west1-YOUR_PROJECT_ID.cloudfunctions.net/adminApi"
 };

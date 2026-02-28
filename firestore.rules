@@ -1,27 +1,62 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    function isAdmin() {
-      return request.auth != null;
+    function isAdminOrEditor() {
+      return request.auth != null
+        && (
+          request.auth.token.admin == true
+          || request.auth.token.role == 'admin'
+          || request.auth.token.role == 'editor'
+        );
     }
 
     match /destinations/{docId} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if false;
+    }
+
+    match /articles/{docId} {
+      allow read: if true;
+      allow write: if false;
     }
 
     match /bookings/{docId} {
-      allow create: if true;
-      allow read, update, delete: if isAdmin();
+      allow create: if false;
+      allow read, update, delete: if false;
     }
 
     match /settings/{docId} {
-      allow read: if true;
-      allow write: if isAdmin();
+      allow read: if (
+        docId == 'navbar'
+        || docId == 'contact'
+        || docId == 'global'
+        || docId.matches('^page_.*$')
+      );
+      allow write: if false;
+    }
+
+    match /cms_pages/{pageId} {
+      allow read: if false;
+      allow write: if false;
+      match /revisions/{revisionId} {
+        allow read, write: if false;
+      }
+    }
+
+    match /admin_logs/{docId} {
+      allow read, write: if false;
+    }
+
+    match /analytics_booking_daily/{docId} {
+      allow read, write: if false;
+    }
+
+    match /rate_limits/{docId} {
+      allow read, write: if false;
     }
 
     match /{document=**} {
-      allow read: if true;
+      allow read: if false;
       allow write: if false;
     }
   }

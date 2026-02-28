@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gh-cache-v23';
+const CACHE_NAME = 'gh-cache-v24';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -39,8 +39,7 @@ const ASSETS_TO_CACHE = [
   '/manifest.json',
   'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
   'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css',
-  'https://cdn.jsdelivr.net/npm/flatpickr',
-  'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js'
+  'https://cdn.jsdelivr.net/npm/flatpickr'
 ];
 
 // 1. INSTALL: Browser downloads and saves the critical files
