@@ -13,6 +13,7 @@ const defaultBlurDataURL =
   "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PSc5Jz48cmVjdCB3aWR0aD0nMTYnIGhlaWdodD0nOScgZmlsbD0nI2UyZThmMCcvPjwvc3ZnPg==";
 
 export function OptimizedImage({
+  alt,
   priority = false,
   withBlur = true,
   blurDataURL,
@@ -25,6 +26,7 @@ export function OptimizedImage({
   return (
     <Image
       {...props}
+      alt={alt}
       priority={priority}
       sizes={sizes}
       placeholder={shouldUseBlur ? "blur" : "empty"}
