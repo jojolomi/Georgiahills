@@ -33,7 +33,8 @@
     "test:admin-v3": "npm run build:astro && npm run build:admin-v3:hosting && playwright test --config=playwright.admin-v3.config.js",
     "test:admin-v3:auth": "npm run build:astro && npm run build:admin-v3:hosting && playwright test --config=playwright.admin-v3.auth.config.js",
     "test:browserstack": "browserstack-node-sdk playwright test",
-    "ops:firebase-cost": "node scripts/audit/ops/check-firebase-cost-threshold.js"
+    "ops:firebase-cost": "node scripts/audit/ops/check-firebase-cost-threshold.js",
+    "test:a11y": "playwright test --config=playwright.a11y.config.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -53,6 +54,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
     "@lhci/cli": "^0.15.0",
     "@playwright/test": "^1.55.0",
     "@types/pg": "^8.18.0",

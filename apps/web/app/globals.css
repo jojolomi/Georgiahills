@@ -14,5 +14,19 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+:lang(ar) {
+  font-family: var(--font-arabic), var(--font-inter), system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid rgb(15 23 42 / 0.8);
+  outline-offset: 2px;
 }

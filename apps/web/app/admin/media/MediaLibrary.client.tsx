@@ -162,7 +162,13 @@ export function MediaLibraryClient({ initialItems, contentTargets }: MediaLibrar
 
           return (
             <article key={item.id} className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-              <img src={preview} alt={item.fileName} className="h-40 w-full rounded-md border border-slate-200 object-cover" />
+              <img
+                src={preview}
+                alt={item.fileName}
+                width={320}
+                height={160}
+                className="h-40 w-full rounded-md border border-slate-200 object-cover"
+              />
 
               <div className="mt-3">
                 <p className="truncate text-sm font-medium text-slate-900" title={item.fileName}>
