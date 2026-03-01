@@ -96,17 +96,24 @@ jobs:
 
       - name: Deploy functions to production
         id: deploy_functions
+        if: ${{ false }}
         continue-on-error: true
         run: firebase deploy --project "${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}" --only "functions" --non-interactive
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN_PRODUCTION }}
 
       - name: Functions deploy status
-        if: steps.deploy_functions.outcome != 'success'
+        if: ${{ false }}
         run: |
           echo "Functions deployment did not complete."
           echo "Most likely billing is not enabled for Cloud Build/Artifact Registry."
           echo "Hosting and Firestore rules were still deployed successfully."
+
+      - name: Functions deploy skipped
+        if: ${{ always() }}
+        run: |
+          echo "Functions deployment is disabled in this workflow."
+          echo "This is expected on Firebase Spark plan."
 
       - name: Post-deploy smoke check
         run: |
