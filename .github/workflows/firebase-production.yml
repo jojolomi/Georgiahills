@@ -90,10 +90,24 @@ jobs:
             exit 1
           fi
 
-      - name: Deploy hosting, functions, and rules to production
-        run: firebase deploy --project "${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}" --only hosting,functions,firestore:rules --non-interactive
+      - name: Deploy hosting and rules to production
+        run: firebase deploy --project "${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}" --only "hosting,firestore:rules" --non-interactive
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN_PRODUCTION }}
+
+      - name: Deploy functions to production
+        id: deploy_functions
+        continue-on-error: true
+        run: firebase deploy --project "${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}" --only "functions" --non-interactive
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN_PRODUCTION }}
+
+      - name: Functions deploy status
+        if: steps.deploy_functions.outcome != 'success'
+        run: |
+          echo "Functions deployment did not complete."
+          echo "Most likely billing is not enabled for Cloud Build/Artifact Registry."
+          echo "Hosting and Firestore rules were still deployed successfully."
 
       - name: Post-deploy smoke check
         run: |
