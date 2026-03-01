@@ -1,15 +1,10 @@
 {
   "hosting": {
-    "public": ".",
+    "public": "astro-site/dist",
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**",
-      "admin-v3/src/**",
-      "admin-v3/index.html",
-      "admin-v3/package.json",
-      "admin-v3/package-lock.json",
-      "admin-v3/vite.config.js"
+      "**/node_modules/**"
     ],
     "redirects": [
       {
@@ -19,18 +14,18 @@
       },
       {
         "source": "/admin-v2",
-        "destination": "/admin.html",
+        "destination": "/admin-v3/",
         "type": 302
       }
     ],
     "rewrites": [
       {
         "source": "/admin-v3",
-        "destination": "/admin-v3/index.prod.html"
+        "destination": "/admin-v3/index.html"
       },
       {
         "source": "/admin-v3/**",
-        "destination": "/admin-v3/index.prod.html"
+        "destination": "/admin-v3/index.html"
       }
     ],
     "headers": [

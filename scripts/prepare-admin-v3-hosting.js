@@ -3,9 +3,11 @@ const path = require("path");
 
 const rootDir = process.cwd();
 const distDir = path.join(rootDir, "admin-v3", "dist");
-const publishDir = path.join(rootDir, "admin-v3");
+const legacyPublishDir = path.join(rootDir, "admin-v3");
+const astroDistDir = path.join(rootDir, "astro-site", "dist");
+const astroPublishDir = path.join(astroDistDir, "admin-v3");
 const distIndex = path.join(distDir, "index.html");
-const prodIndex = path.join(publishDir, "index.prod.html");
+const legacyProdIndex = path.join(legacyPublishDir, "index.prod.html");
 
 function copyRecursive(source, destination) {
   fs.cpSync(source, destination, { recursive: true, force: true });
@@ -21,16 +23,31 @@ for (const entry of distEntries) {
     continue;
   }
   const sourcePath = path.join(distDir, entry);
-  const targetPath = path.join(publishDir, entry);
-  if (fs.existsSync(targetPath)) {
-    fs.rmSync(targetPath, { recursive: true, force: true });
+  const legacyTargetPath = path.join(legacyPublishDir, entry);
+  if (fs.existsSync(legacyTargetPath)) {
+    fs.rmSync(legacyTargetPath, { recursive: true, force: true });
   }
-  copyRecursive(sourcePath, targetPath);
+  copyRecursive(sourcePath, legacyTargetPath);
 }
 
-fs.copyFileSync(distIndex, prodIndex);
+fs.copyFileSync(distIndex, legacyProdIndex);
+
+if (fs.existsSync(astroDistDir)) {
+  fs.mkdirSync(astroPublishDir, { recursive: true });
+  for (const entry of distEntries) {
+    const sourcePath = path.join(distDir, entry);
+    const astroTargetPath = path.join(astroPublishDir, entry);
+    if (fs.existsSync(astroTargetPath)) {
+      fs.rmSync(astroTargetPath, { recursive: true, force: true });
+    }
+    copyRecursive(sourcePath, astroTargetPath);
+  }
+}
+
 console.log("Prepared admin-v3 hosting artifacts:", {
-  index: "admin-v3/index.prod.html",
+  legacyIndex: "admin-v3/index.prod.html",
+  astroIndex: fs.existsSync(astroDistDir) ? "astro-site/dist/admin-v3/index.html" : "skipped (astro-site/dist not found)",
   assetsFrom: "admin-v3/dist",
-  assetsTo: "admin-v3/"
+  assetsToLegacy: "admin-v3/",
+  assetsToAstro: fs.existsSync(astroDistDir) ? "astro-site/dist/admin-v3/" : "skipped"
 });

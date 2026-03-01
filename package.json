@@ -23,8 +23,8 @@
     "lighthouse:ci": "lhci autorun --config=.lighthouserc.json",
     "test": "echo \"No tests needed\"",
     "test:crossbrowser": "playwright test",
-    "test:admin-v3": "npm run build:admin-v3:hosting && playwright test --config=playwright.admin-v3.config.js",
-    "test:admin-v3:auth": "npm run build:admin-v3:hosting && playwright test --config=playwright.admin-v3.auth.config.js",
+    "test:admin-v3": "npm run build:astro && npm run build:admin-v3:hosting && playwright test --config=playwright.admin-v3.config.js",
+    "test:admin-v3:auth": "npm run build:astro && npm run build:admin-v3:hosting && playwright test --config=playwright.admin-v3.auth.config.js",
     "test:browserstack": "browserstack-node-sdk playwright test",
     "ops:firebase-cost": "node scripts/audit/ops/check-firebase-cost-threshold.js"
   },
