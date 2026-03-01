@@ -49,7 +49,8 @@ jobs:
 
       - name: Runtime parity skipped
         if: ${{ vars.FIREBASE_PROJECT_ID_STAGING == '' }}
-        run: echo "Skipping runtime parity in staging preview: vars.FIREBASE_PROJECT_ID_STAGING is not configured."
+        run: |
+          echo "Skipping runtime parity in staging preview: vars.FIREBASE_PROJECT_ID_STAGING is not configured."
 
       - name: Build Astro site
         run: npm run build:astro
@@ -68,4 +69,5 @@ jobs:
 
       - name: Deploy skipped
         if: ${{ vars.FIREBASE_PROJECT_ID_STAGING == '' || secrets.FIREBASE_SERVICE_ACCOUNT_STAGING == '' }}
-        run: echo "Skipping staging preview deploy: missing FIREBASE_PROJECT_ID_STAGING var or FIREBASE_SERVICE_ACCOUNT_STAGING secret."
+        run: |
+          echo "Skipping staging preview deploy: missing FIREBASE_PROJECT_ID_STAGING var or FIREBASE_SERVICE_ACCOUNT_STAGING secret."
