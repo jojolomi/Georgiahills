@@ -185,3 +185,38 @@ From `test-results/lighthouse/booking-mobile.json`:
   "logs": "Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server."
 }
 ```
+
+## 9) Full plan compliance audit (Blocks 0–24)
+
+- Block 0: **PARTIAL** — canonical Next.js+TypeScript+pnpm stack is in place, but legacy root `.html` files still exist.
+- Block 1: **DONE** — workspace skeleton/packages exist; `pnpm-workspace.yaml` is configured and `pnpm -w list` works.
+- Block 2: **DONE** — Next.js 14 App Router + TS scaffold in `apps/web` is functional.
+- Block 3: **DONE** — Tailwind + shadcn/lucide/framer-motion baseline and shared `packages/ui` primitives exist.
+- Block 4: **DONE** — shared `packages/lib` and `packages/types` are wired and importable.
+- Block 5: **DONE** — image optimization config/wrapper and Sharp conversion script exist.
+- Block 6: **DONE** — localized routing (`/en`, `/ar`) + hreflang helper implemented.
+- Block 7: **DONE** — metadata + JSON-LD helper usage implemented on homepage and destination page.
+- Block 8: **DONE** — dynamic `sitemap.xml` and `robots.txt` routes are implemented.
+- Block 9: **DONE** — MDX content layer and localized blog/destination content exist.
+- Block 10: **DONE** — bookings + Stripe API/webhook routes implemented with validation.
+- Block 11: **DONE** — booking wizard client flow integrated on `/booking`.
+- Block 12: **DONE** — Supabase auth-protected customer portal routes implemented.
+- Block 13: **DONE** — role-based admin panel and bookings table are implemented.
+- Block 14: **DONE** — media upload/optimization endpoint + admin media UI implemented.
+- Block 15: **DONE** — workflows and Playwright/Lighthouse CI configs are present.
+- Block 16: **DONE** — GA4 + Sentry + booking observability paths implemented.
+- Block 17: **DONE** — security headers and API rate limiting implemented.
+- Block 18: **DONE** — caching headers and CDN notes implemented and validated.
+- Block 19: **PARTIAL** — axe critical violations pass; booking CLS in Lighthouse report is `0.135` (target `< 0.1`).
+- Block 20: **DONE** — root docs, onboarding, handover, contributing/changelog are present.
+- Block 21: **PARTIAL** — AVIF/preloads/meta/hreflang implemented; before/after Lighthouse snapshots unavailable due local Windows runner constraints.
+- Block 22: **PARTIAL** — `REPORT.md` exists and branch pushed, but open PR + reviewer request not completed automatically (auth missing).
+- Block 23: **PARTIAL** — no secrets and metadata/lang requirements satisfied; remaining gap is unresolved legacy root `.html` footprint from Block 0 policy.
+- Block 24: **DONE** — JSON failure objects included in this report.
+
+### Required operator actions to fully close remaining gaps
+
+1. Authenticate GitHub CLI and create/open PR from `feature/nextjs-rebuild`, then request reviewer.
+2. Run Lighthouse mobile in CI/Linux for `/en` and `/en/destinations/tbilisi` and append scores to this report.
+3. Improve booking page CLS from `0.135` to `<0.1` and re-run Lighthouse.
+4. Decide legacy root `.html` migration/removal strategy, then implement in tracked commits.
