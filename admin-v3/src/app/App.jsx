@@ -8,67 +8,124 @@ import { ArticlesModule } from "../modules/articles/ArticlesModule";
 import { MediaModule } from "../modules/media/MediaModule";
 import { SeoMarketsModule } from "../modules/seo-markets/SeoMarketsModule";
 import { LeadsModule } from "../modules/leads/LeadsModule";
+import { ReviewQueueModule } from "../modules/leads/ReviewQueueModule";
 import { PublishingModule } from "../modules/publishing/PublishingModule";
 import { IntegrationsModule } from "../modules/integrations/IntegrationsModule";
 import { AuditModule } from "../modules/audit/AuditModule";
 
+import {
+  LayoutDashboard,
+  Users,
+  ShieldAlert,
+  FileText,
+  MapPin,
+  Newspaper,
+  Image as ImageIcon,
+  Globe2,
+  Send,
+  Plug,
+  ActivitySquare,
+  LogOut,
+  Mountain
+} from "lucide-react";
+
 function LoginView({ onLogin, error }) {
   return (
-    <div style={{ maxWidth: 420, margin: "4rem auto" }} className="card">
-      <h2>Owner Login</h2>
+    <div className="login-card card">
+      <h2>Georgia Hills<br/><span style={{ fontSize: "1rem", color: "var(--muted-foreground)", fontWeight: 500 }}>Admin V3 Login</span></h2>
       <form onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); onLogin(fd.get("email"), fd.get("password")); }}>
-        <div style={{ marginBottom: 10 }}><input className="input" name="email" type="email" placeholder="Admin email" required /></div>
-        <div style={{ marginBottom: 10 }}><input className="input" name="password" type="password" placeholder="Password" required /></div>
-        <button className="btn btn-primary" type="submit">Login</button>
+        <div style={{ marginBottom: "1rem" }}><input className="input" name="email" type="email" placeholder="Admin email" required /></div>
+        <div style={{ marginBottom: "1.5rem" }}><input className="input" name="password" type="password" placeholder="Password" required /></div>
+        <button className="btn btn-primary" style={{ width: "100%", padding: "0.75rem" }} type="submit">Sign In to Dashboard</button>
       </form>
-      {error && <p className="muted" style={{ color: "#b91c1c" }}>{error}</p>}
+      {error && <p className="muted" style={{ color: "var(--destructive)", marginTop: "1rem", textAlign: "center" }}>{error}</p>}
     </div>
   );
 }
 
 function AppShell({ onLogout, email }) {
-  const nav = useMemo(() => [
-    ["/dashboard", "Dashboard"],
-    ["/content/pages", "Pages"],
-    ["/content/destinations", "Destinations"],
-    ["/content/articles", "Articles"],
-    ["/media", "Media"],
-    ["/seo/markets", "SEO Markets"],
-    ["/leads", "Leads"],
-    ["/publishing", "Publishing"],
-    ["/integrations", "Integrations"],
-    ["/audit", "Audit"]
-  ], []);
+  const groups = [
+    {
+      title: "Overview",
+      items: [
+        { to: "/dashboard", label: "Dashboard", icon: <LayoutDashboard size={18} /> }
+      ]
+    },
+    {
+      title: "Sales & Leads",
+      items: [
+        { to: "/leads", label: "Sales Leads", icon: <Users size={18} /> },
+        { to: "/leads/queue", label: "Review Queue", icon: <ShieldAlert size={18} /> }
+      ]
+    },
+    {
+      title: "Content & Assets",
+      items: [
+        { to: "/content/pages", label: "Web Pages", icon: <FileText size={18} /> },
+        { to: "/content/destinations", label: "Destinations", icon: <MapPin size={18} /> },
+        { to: "/content/articles", label: "Articles", icon: <Newspaper size={18} /> },
+        { to: "/media", label: "Media Library", icon: <ImageIcon size={18} /> },
+        { to: "/seo/markets", label: "SEO & Markets", icon: <Globe2 size={18} /> }
+      ]
+    },
+    {
+      title: "System & Config",
+      items: [
+        { to: "/publishing", label: "Publishing", icon: <Send size={18} /> },
+        { to: "/integrations", label: "Integrations", icon: <Plug size={18} /> },
+        { to: "/audit", label: "Audit Logs", icon: <ActivitySquare size={18} /> }
+      ]
+    }
+  ];
 
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <h1>Georgia Hills Admin v3</h1>
-        {nav.map(([to, label]) => (
-          <NavLink key={to} to={to} className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}>{label}</NavLink>
-        ))}
-      </aside>
-      <main className="main">
-        <div className="topbar">
-          <div>
-            <strong>Single Owner Mode</strong>
-            <div className="muted">{email}</div>
-          </div>
-          <button className="btn" onClick={onLogout}>Logout</button>
+        <h1><Mountain size={24} /> Georgia Hills</h1>
+        
+        <div style={{ flex: 1, overflowY: "auto", paddingRight: "0.5rem" }}>
+          {groups.map((group) => (
+            <div key={group.title}>
+              <div className="nav-section">{group.title}</div>
+              {group.items.map((item) => (
+                <NavLink key={item.to} to={item.to} className={({ isActive }) => `nav-item${isActive ? " active" : ""}`}>
+                  {item.icon}
+                  <span>{item.label}</span>
+                </NavLink>
+              ))}
+            </div>
+          ))}
         </div>
-        <Routes>
-          <Route path="/dashboard" element={<DashboardModule />} />
-          <Route path="/content/pages" element={<PagesModule />} />
-          <Route path="/content/destinations" element={<DestinationsModule />} />
-          <Route path="/content/articles" element={<ArticlesModule />} />
-          <Route path="/media" element={<MediaModule />} />
-          <Route path="/seo/markets" element={<SeoMarketsModule />} />
-          <Route path="/leads" element={<LeadsModule />} />
-          <Route path="/publishing" element={<PublishingModule />} />
-          <Route path="/integrations" element={<IntegrationsModule />} />
-          <Route path="/audit" element={<AuditModule />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
+
+        <div style={{ marginTop: "auto", paddingTop: "1rem", borderTop: "1px solid var(--border)" }}>
+           <div className="muted" style={{ marginBottom: "0.5rem", fontSize: "0.8rem", paddingLeft: "0.5rem", wordBreak: "break-all" }}>{email}</div>
+           <button className="btn" style={{ width: "100%", justifyContent: "flex-start" }} onClick={onLogout}>
+              <LogOut size={16} /> Logout
+           </button>
+        </div>
+      </aside>
+      
+      <main className="main">
+        <header className="topbar">
+          <div style={{ fontWeight: 600, fontSize: "1.1rem" }}>Management Console</div>
+          <div className="badge">Secured</div>
+        </header>
+        <div className="page-container">
+          <Routes>
+            <Route path="/dashboard" element={<DashboardModule />} />
+            <Route path="/content/pages" element={<PagesModule />} />
+            <Route path="/content/destinations" element={<DestinationsModule />} />
+            <Route path="/content/articles" element={<ArticlesModule />} />
+            <Route path="/media" element={<MediaModule />} />
+            <Route path="/seo/markets" element={<SeoMarketsModule />} />
+            <Route path="/leads" element={<LeadsModule />} />
+            <Route path="/leads/queue" element={<ReviewQueueModule />} />
+            <Route path="/publishing" element={<PublishingModule />} />
+            <Route path="/integrations" element={<IntegrationsModule />} />
+            <Route path="/audit" element={<AuditModule />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </div>
       </main>
     </div>
   );

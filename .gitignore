@@ -12,3 +12,4 @@ scripts/seo-report.json
 admin-v3/dist/
 admin-v3/assets/
 admin-v3/index.prod.html
+.env
