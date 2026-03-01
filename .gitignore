@@ -9,7 +9,11 @@ playwright-report/
 .lighthouseci/
 scripts/audit/perf/*.json
 scripts/seo-report.json
-admin-v3/dist/
-admin-v3/assets/
-admin-v3/index.prod.html
+apps/admin/dist/
+apps/admin/assets/
+apps/admin/index.prod.html
 .env
+.pnpm-store/
+**/.turbo/
+**/dist/
+**/.next/
