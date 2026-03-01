@@ -230,6 +230,12 @@ importers:
 
   packages/ui:
     dependencies:
+      '@types/react':
+        specifier: 18.3.18
+        version: 18.3.18
+      '@types/react-dom':
+        specifier: 18.3.5
+        version: 18.3.5(@types/react@18.3.18)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -252,12 +258,6 @@ importers:
       '@types/node':
         specifier: 20.17.19
         version: 20.17.19
-      '@types/react':
-        specifier: 18.3.18
-        version: 18.3.18
-      '@types/react-dom':
-        specifier: 18.3.5
-        version: 18.3.5(@types/react@18.3.18)
 
 packages:
 
