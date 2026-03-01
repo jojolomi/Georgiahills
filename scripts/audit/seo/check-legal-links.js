@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const distDir = path.resolve(process.argv[2] || "astro-site/dist");
+const distDir = path.resolve(process.argv[2] || "apps/web/dist");
 
 if (!fs.existsSync(distDir)) {
   process.stderr.write(`✖ dist directory not found: ${distDir}\n`);

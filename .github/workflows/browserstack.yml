@@ -23,13 +23,13 @@ jobs:
 
       - name: Install Astro dependencies
         run: npm ci
-        working-directory: astro-site
+        working-directory: apps/web
 
       - name: Build Astro site
         run: npm run build:astro
 
       - name: Serve built site
-        run: npx http-server astro-site/dist -p 4173 &
+        run: npx http-server apps/web/dist -p 4173 &
 
       - name: Run BrowserStack smoke tests (optional)
         shell: bash

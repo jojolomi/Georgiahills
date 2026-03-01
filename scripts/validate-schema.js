@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const distDir = path.resolve(process.argv[2] || "astro-site/dist");
+const distDir = path.resolve(process.argv[2] || "apps/web/dist");
 
 function collectHtml(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {

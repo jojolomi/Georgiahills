@@ -1,7 +1,7 @@
 {
   "ci": {
     "collect": {
-      "staticDistDir": "./astro-site/dist",
+      "staticDistDir": "./apps/web/dist",
       "url": [
         "http://localhost/index.html",
         "http://localhost/arabic.html",

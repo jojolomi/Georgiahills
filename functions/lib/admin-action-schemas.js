@@ -1,4 +1,8 @@
 const { z } = require("zod");
+const {
+  LEAD_STATUS_VALUES,
+  REVIEW_QUEUE_RESOLUTION_VALUES
+} = require("../../packages/shared/src/contracts/lead.cjs");
 
 const trimmedString = (max = 2000) => z.string().trim().min(1).max(max);
 const optionalTrimmedString = (max = 2000) => z.string().trim().max(max).optional();
@@ -24,13 +28,13 @@ const schemaByAction = {
 
   resolveReviewQueueItem: z.object({
     queueId: trimmedString(128),
-    resolution: z.enum(["approve", "reject"]),
+    resolution: z.enum(REVIEW_QUEUE_RESOLUTION_VALUES),
     rejectionReason: optionalTrimmedString(100)
   }).passthrough(),
 
   updateLeadStatus: z.object({
     bookingId: trimmedString(128),
-    status: z.enum(["new", "contacted", "quoted", "won", "lost"])
+    status: z.enum(LEAD_STATUS_VALUES)
   }).passthrough(),
 
   addLeadNote: z.object({

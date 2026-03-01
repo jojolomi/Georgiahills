@@ -15,7 +15,7 @@ export default defineConfig({
     { name: "chromium", use: { ...devices["Desktop Chrome"] } }
   ],
   webServer: {
-    command: "npx http-server astro-site/dist -p 4273",
+    command: "npx http-server apps/web/dist -p 4273",
     url: "http://127.0.0.1:4273/admin-v3/",
     reuseExistingServer: true,
     timeout: 120000

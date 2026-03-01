@@ -19,6 +19,15 @@ const {
   stableHash
 } = require("./lib/core-utils");
 const { validateAdminActionPayload } = require("./lib/admin-action-schemas");
+const {
+  LEAD_STATUS_VALUES,
+  REVIEW_QUEUE_RESOLUTION_VALUES
+} = require("../packages/shared/src/contracts/lead.cjs");
+const {
+  MARKET_CODES,
+  normalizeSourceLang,
+  isSupportedMarket
+} = require("../packages/shared/src/contracts/market.cjs");
 
 admin.initializeApp();
 
@@ -287,7 +296,7 @@ function timestampToMillis(value) {
 function normalizeLeadAttribution(lead = {}) {
   const attribution = sanitizeObject(lead.attribution || {}) || {};
   const sourcePage = sanitizeString(lead.sourcePage || "", 200);
-  const sourceLang = lead.sourceLang === "ar" ? "ar" : "en";
+  const sourceLang = normalizeSourceLang(lead.sourceLang);
   const utmSource = sanitizeString(
     attribution.utm_source || attribution.source || attribution.channel || "",
     80
@@ -311,7 +320,7 @@ function normalizeLeadAttribution(lead = {}) {
     utmSource,
     utmMedium,
     utmCampaign,
-    market: ["sa", "ae", "qa", "kw", "eg"].includes(market) ? market : ""
+    market: isSupportedMarket(market) ? market : ""
   };
 }
 
@@ -551,7 +560,7 @@ async function queueLeadForReview(reason, req, payload = {}, riskProfile = {}, e
   const phone = sanitizeString(safePayload.phone, 40);
   const notes = sanitizeString(safePayload.notes, 200);
   const sourcePage = sanitizeString(safePayload.sourcePage, 200);
-  const sourceLang = safePayload.sourceLang === "ar" ? "ar" : "en";
+  const sourceLang = normalizeSourceLang(safePayload.sourceLang);
   const leadPriority = sanitizeString(safePayload.leadPriority, 20);
 
   await admin.firestore().collection("lead_review_queue").add({
@@ -588,7 +597,7 @@ function buildBookingPayload(input = {}, req) {
   const price = sanitizeString(input.price, 60);
   const notes = sanitizeString(input.notes, 1500);
   const sourcePage = sanitizeString(input.sourcePage || req.path, 200);
-  const sourceLang = input.sourceLang === "ar" ? "ar" : "en";
+  const sourceLang = normalizeSourceLang(input.sourceLang);
   const consent = input.consent === true;
   const source = sanitizeObject(input.attribution || {});
   const experiment = sanitizeObject(input.experiment || {});
@@ -746,7 +755,7 @@ async function pushConversionEvent(eventName, bookingId, booking = {}) {
     eventTime: Date.now(),
     bookingId: sanitizeString(bookingId, 128),
     sourcePage: sanitizeString(booking.sourcePage, 200),
-    sourceLang: booking.sourceLang === "ar" ? "ar" : "en",
+    sourceLang: normalizeSourceLang(booking.sourceLang),
     leadScoreServer: Number(booking.leadScoreServer || 0),
     leadPriority: sanitizeString(booking.leadPriority, 20),
     segmentation: sanitizeObject(booking.segmentation || {}),
@@ -1241,7 +1250,7 @@ exports.adminApi = onRequest(
           const resolution = sanitizeString(payload.resolution, 20); // "approve", "reject"
           const rejectionReason = sanitizeString(payload.rejectionReason, 100);
 
-          if (!queueId || !["approve", "reject"].includes(resolution)) {
+          if (!queueId || !REVIEW_QUEUE_RESOLUTION_VALUES.includes(resolution)) {
             res.status(400).json({ ok: false, error: "invalid_resolution_payload" });
             return;
           }
@@ -1297,7 +1306,7 @@ exports.adminApi = onRequest(
         case "updateLeadStatus": {
           const bookingId = sanitizeString(payload.bookingId, 128);
           const status = sanitizeString(payload.status, 20);
-          if (!bookingId || !["new", "contacted", "quoted", "won", "lost"].includes(status)) {
+          if (!bookingId || !LEAD_STATUS_VALUES.includes(status)) {
             res.status(400).json({ ok: false, error: "invalid_lead_status_payload" });
             return;
           }
@@ -1344,11 +1353,7 @@ exports.adminApi = onRequest(
           };
 
           const marketPages = {
-            sa: { keywordCoverage: true, schemaCoverage: true },
-            ae: { keywordCoverage: true, schemaCoverage: true },
-            qa: { keywordCoverage: true, schemaCoverage: true },
-            kw: { keywordCoverage: true, schemaCoverage: true },
-            eg: { keywordCoverage: true, schemaCoverage: true }
+            ...Object.fromEntries(MARKET_CODES.map((code) => [code, { keywordCoverage: true, schemaCoverage: true }]))
           };
 
           res.json({ ok: true, data: { integrations, seo: { marketPages } } });
@@ -1792,7 +1797,7 @@ exports.notifyNewBooking = onDocumentCreated(
 
     const booking = snapshot.data() || {};
     const dateKey = nowIsoDate();
-    const lang = booking.sourceLang === "ar" ? "ar" : "en";
+    const lang = normalizeSourceLang(booking.sourceLang);
     const variant = sanitizeString(booking.experiment?.bookingFormVariant || "control", 40);
 
     try {

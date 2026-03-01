@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const distDir = path.resolve(process.argv[2] || 'astro-site/dist');
-const mappingPath = path.resolve('astro-site/src/data/schema/keyword-entities.ar.json');
+const distDir = path.resolve(process.argv[2] || 'apps/web/dist');
+const mappingPath = path.resolve('apps/web/src/data/schema/keyword-entities.ar.json');
 
 if (!fs.existsSync(distDir)) {
   console.error(`dist directory not found: ${distDir}`);

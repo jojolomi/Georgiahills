@@ -6,7 +6,12 @@ updates:
       interval: "weekly"
     open-pull-requests-limit: 10
   - package-ecosystem: "npm"
-    directory: "/astro-site"
+    directory: "/apps/web"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 10
+  - package-ecosystem: "npm"
+    directory: "/apps/admin"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10

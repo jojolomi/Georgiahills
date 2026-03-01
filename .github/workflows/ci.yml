@@ -24,11 +24,11 @@ jobs:
 
       - name: Install Astro dependencies
         run: npm ci
-        working-directory: astro-site
+        working-directory: apps/web
 
       - name: Install admin-v3 dependencies
         run: npm ci
-        working-directory: admin-v3
+        working-directory: apps/admin
 
       - name: Install functions dependencies
         run: npm ci

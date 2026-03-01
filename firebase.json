@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "astro-site/dist",
+    "public": "apps/web/dist",
     "ignore": [
       "firebase.json",
       "**/.*",

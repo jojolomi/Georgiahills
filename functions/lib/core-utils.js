@@ -1,4 +1,7 @@
 const crypto = require("crypto");
+const {
+  normalizeSourceLang
+} = require("../../packages/shared/src/contracts/market.cjs");
 
 function nowIsoDate() {
   return new Date().toISOString().slice(0, 10);
@@ -91,7 +94,7 @@ function buildBookingPayload(input = {}, req, options = {}) {
   const price = sanitizeString(input.price, 60);
   const notes = sanitizeString(input.notes, 1500);
   const sourcePage = sanitizeString(input.sourcePage || req.path, 200);
-  const sourceLang = input.sourceLang === "ar" ? "ar" : "en";
+  const sourceLang = normalizeSourceLang(input.sourceLang);
   const consent = input.consent === true;
   const source = sanitizeObject(input.attribution || {});
   const experiment = sanitizeObject(input.experiment || {});

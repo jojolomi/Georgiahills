@@ -17,7 +17,7 @@ export default defineConfig({
     { name: "webkit", use: { ...devices["Desktop Safari"] } }
   ],
   webServer: {
-    command: "npm run build:astro && npx http-server astro-site/dist -p 4173",
+    command: "npm run build:astro && npx http-server apps/web/dist -p 4173",
     url: "http://127.0.0.1:4173",
     reuseExistingServer: true,
     timeout: 120000

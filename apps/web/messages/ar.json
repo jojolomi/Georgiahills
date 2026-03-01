@@ -1,0 +1,8 @@
+{
+  "badge": "الهيكل الأساسي جاهز مع Tailwind و shadcn/ui",
+  "title": "Georgiahills Next.js 14",
+  "description": "هيكل App Router مع TypeScript جاهز. هذه البطاقة تستخدم تنسيقات Tailwind.",
+  "featuredLabel": "الوجهة المميزة",
+  "button": "اختبار زر Tailwind",
+  "imageAlt": "صورة سفر Georgia Hills"
+}

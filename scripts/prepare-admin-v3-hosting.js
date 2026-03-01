@@ -2,9 +2,9 @@ const fs = require("fs");
 const path = require("path");
 
 const rootDir = process.cwd();
-const distDir = path.join(rootDir, "admin-v3", "dist");
-const legacyPublishDir = path.join(rootDir, "admin-v3");
-const astroDistDir = path.join(rootDir, "astro-site", "dist");
+const distDir = path.join(rootDir, "apps", "admin", "dist");
+const legacyPublishDir = path.join(rootDir, "apps", "admin");
+const astroDistDir = path.join(rootDir, "apps", "web", "dist");
 const astroPublishDir = path.join(astroDistDir, "admin-v3");
 const distIndex = path.join(distDir, "index.html");
 const legacyProdIndex = path.join(legacyPublishDir, "index.prod.html");
@@ -45,9 +45,9 @@ if (fs.existsSync(astroDistDir)) {
 }
 
 console.log("Prepared admin-v3 hosting artifacts:", {
-  legacyIndex: "admin-v3/index.prod.html",
-  astroIndex: fs.existsSync(astroDistDir) ? "astro-site/dist/admin-v3/index.html" : "skipped (astro-site/dist not found)",
-  assetsFrom: "admin-v3/dist",
-  assetsToLegacy: "admin-v3/",
-  assetsToAstro: fs.existsSync(astroDistDir) ? "astro-site/dist/admin-v3/" : "skipped"
+  legacyIndex: "apps/admin/index.prod.html",
+  astroIndex: fs.existsSync(astroDistDir) ? "apps/web/dist/admin-v3/index.html" : "skipped (apps/web/dist not found)",
+  assetsFrom: "apps/admin/dist",
+  assetsToLegacy: "apps/admin/",
+  assetsToAstro: fs.existsSync(astroDistDir) ? "apps/web/dist/admin-v3/" : "skipped"
 });

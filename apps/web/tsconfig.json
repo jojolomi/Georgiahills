@@ -16,7 +16,13 @@
     "plugins": [{ "name": "next" }],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@gh/ui": ["../../packages/ui/src/index.ts"],
+      "@gh/ui/*": ["../../packages/ui/src/*"],
+      "@gh/lib": ["../../packages/lib/src/index.ts"],
+      "@gh/lib/*": ["../../packages/lib/src/*"],
+      "@gh/types": ["../../packages/types/src/index.ts"],
+      "@gh/types/*": ["../../packages/types/src/*"]
     }
   },
   "include": ["next-env.d.ts", "app/**/*.ts", "app/**/*.tsx", ".next/types/**/*.ts"],
