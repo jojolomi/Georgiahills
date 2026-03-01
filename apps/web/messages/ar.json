@@ -1,7 +1,7 @@
 {
-  "badge": "الهيكل الأساسي جاهز مع Tailwind و shadcn/ui",
-  "title": "Georgiahills Next.js 14",
-  "description": "هيكل App Router مع TypeScript جاهز. هذه البطاقة تستخدم تنسيقات Tailwind.",
+  "badge": "جولات خاصة وسائق",
+  "title": "جورجيا هيلز — جولات خاصة وخدمة سائق",
+  "description": "خدمات سائق خاص وجولات مميزة في جميع أنحاء جورجيا. من تبليسي إلى كازبيجي وباتومي وما بعدها.",
   "featuredLabel": "الوجهة المميزة",
   "button": "اختبار زر Tailwind",
   "imageAlt": "صورة سفر Georgia Hills"

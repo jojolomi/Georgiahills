@@ -2,9 +2,6 @@
   "ci": {
     "collect": {
       "staticDistDir": "./apps/web/dist",
-      "settings": {
-        "preset": "mobile"
-      },
       "url": [
         "http://localhost/en.html",
         "http://localhost/booking.html",
