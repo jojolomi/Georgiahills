@@ -19,3 +19,35 @@ This repository is organized as a pnpm workspace monorepo.
 pnpm install
 pnpm -w list
 ```
+
+## Production Caching Notes (Vercel / Cloudflare)
+
+The web app applies cache headers in two layers:
+- `apps/web/next.config.js`:
+  - `/_next/static/*` => `Cache-Control: public, max-age=31536000, immutable`
+  - common static assets/images/fonts => `Cache-Control: public, max-age=31536000, immutable`
+- `apps/web/src/middleware.js`:
+  - HTML/document responses => `Cache-Control: public, max-age=0, s-maxage=60, stale-while-revalidate=300`
+
+### Vercel
+- Keep the above app-level headers enabled.
+- If adding overrides in dashboard/project config, preserve:
+  - immutable caching for `/_next/static/*`
+  - short edge TTL + `stale-while-revalidate` for HTML routes.
+
+### Cloudflare (example rules)
+- Cache Rule 1 (`/_next/static/*`):
+  - Cache eligibility: On
+  - Edge Cache TTL: 1 year
+  - Browser Cache TTL: Respect Existing Headers (or 1 year)
+- Cache Rule 2 (HTML pages):
+  - Match: non-API routes, content-type text/html
+  - Edge Cache TTL: 60s
+  - Serve stale while revalidate: 300s
+  - Bypass for authenticated/admin paths if needed.
+
+### Header Verification Examples
+```bash
+curl -I https://<host>/_next/static/chunks/<file>.js
+curl -I https://<host>/en
+```

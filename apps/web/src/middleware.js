@@ -30,6 +30,28 @@ function applySecurityHeaders(response) {
   return response;
 }
 
+function applyCacheHeaders(response, pathname, method) {
+  const isGetOrHead = method === "GET" || method === "HEAD";
+  if (!isGetOrHead) return response;
+
+  if (pathname.startsWith("/_next/static/")) {
+    response.headers.set("Cache-Control", "public, max-age=31536000, immutable");
+    return response;
+  }
+
+  const immutableAssetRe = /\.(?:avif|webp|png|jpg|jpeg|gif|svg|ico|woff2?|css|js)$/i;
+  if (immutableAssetRe.test(pathname) && !pathname.startsWith("/api/")) {
+    response.headers.set("Cache-Control", "public, max-age=31536000, immutable");
+    return response;
+  }
+
+  if (!pathname.startsWith("/api/")) {
+    response.headers.set("Cache-Control", "public, max-age=0, s-maxage=60, stale-while-revalidate=300");
+  }
+
+  return response;
+}
+
 function getIp(request) {
   const forwarded = request.headers.get("x-forwarded-for");
   if (forwarded) {
@@ -87,8 +109,9 @@ function consumeRateToken(key, nowMs) {
 
 export async function middleware(request) {
   const pathname = request.nextUrl.pathname;
+  const method = request.method.toUpperCase();
 
-  if (pathname.startsWith("/api/") && ["POST", "PUT", "PATCH", "DELETE"].includes(request.method.toUpperCase())) {
+  if (pathname.startsWith("/api/") && ["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
     const nowMs = Date.now();
     const ip = getIp(request);
     const key = `${ip}:${pathname}`;
@@ -105,7 +128,7 @@ export async function middleware(request) {
       response.headers.set("Retry-After", String(rate.retryAfterSec));
       response.headers.set("X-RateLimit-Limit", String(RATE_BUCKET_CAPACITY));
       response.headers.set("X-RateLimit-Remaining", String(rate.remaining));
-      return applySecurityHeaders(response);
+      return applyCacheHeaders(applySecurityHeaders(response), pathname, method);
     }
   }
 
@@ -119,11 +142,11 @@ export async function middleware(request) {
     pathname === "/admin";
 
   if (!requiresSessionRefresh) {
-    return applySecurityHeaders(NextResponse.next({ request }));
+    return applyCacheHeaders(applySecurityHeaders(NextResponse.next({ request })), pathname, method);
   }
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    return applySecurityHeaders(NextResponse.next({ request }));
+    return applyCacheHeaders(applySecurityHeaders(NextResponse.next({ request })), pathname, method);
   }
 
   let response = NextResponse.next({ request });
@@ -143,7 +166,7 @@ export async function middleware(request) {
   });
 
   await supabase.auth.getUser();
-  return applySecurityHeaders(response);
+  return applyCacheHeaders(applySecurityHeaders(response), pathname, method);
 }
 
 export const config = {
