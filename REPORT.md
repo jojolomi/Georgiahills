@@ -156,3 +156,32 @@ From `test-results/lighthouse/booking-mobile.json`:
 - ✅ User-facing pages touched in this phase include metadata and language attributes.
 - ✅ No experimental APIs were introduced without standard/fallback behavior.
 - ✅ Changes were restricted to monorepo-tracked files and documented by commits.
+
+## 8) Block 24 failure objects (JSON)
+
+```json
+{
+  "block": 22,
+  "error": "GitHub CLI authentication missing; PR creation and reviewer request could not be executed via automation",
+  "attempts": 1,
+  "logs": "gh auth status -> You are not logged into any GitHub hosts. To log in, run: gh auth login"
+}
+```
+
+```json
+{
+  "block": 22,
+  "error": "Lighthouse mobile report generation partially failed on Windows due temp directory cleanup permissions",
+  "attempts": 3,
+  "logs": "Runtime error encountered: EPERM, Permission denied: \\?\\C:\\Users\\LEGION\\AppData\\Local\\Temp\\lighthouse.*"
+}
+```
+
+```json
+{
+  "block": 21,
+  "error": "Local production server verification path failed because Next.js build output lacked BUILD_ID, preventing next start",
+  "attempts": 2,
+  "logs": "Error: Could not find a production build in the '.next' directory. Try building your app with 'next build' before starting the production server."
+}
+```
