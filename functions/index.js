@@ -1,4 +1,3 @@
-const crypto = require("crypto");
 const os = require("os");
 const path = require("path");
 const fs = require("fs/promises");
@@ -8,6 +7,17 @@ const { onObjectFinalized } = require("firebase-functions/v2/storage");
 const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
 const sharp = require("sharp");
+const {
+  nowIsoDate,
+  sanitizeString,
+  sanitizeObject,
+  flattenStrings,
+  extractLikelyMediaUrls,
+  roleFromToken,
+  hasAnyRole,
+  clientIp,
+  stableHash
+} = require("./lib/core-utils");
 
 admin.initializeApp();
 
@@ -20,59 +30,6 @@ const DEFAULT_ALLOWED_ORIGINS = [
   "http://localhost:5000",
   "http://127.0.0.1:5000"
 ];
-
-function nowIsoDate() {
-  return new Date().toISOString().slice(0, 10);
-}
-
-function sanitizeString(value = "", max = 200) {
-  return String(value || "").trim().slice(0, max);
-}
-
-function sanitizeObject(input, maxDepth = 5, depth = 0) {
-  if (depth > maxDepth) return null;
-  if (input === null || input === undefined) return null;
-  if (typeof input === "string") return sanitizeString(input, 5000);
-  if (typeof input === "number" || typeof input === "boolean") return input;
-  if (Array.isArray(input)) {
-    return input.slice(0, 200).map((item) => sanitizeObject(item, maxDepth, depth + 1));
-  }
-  if (typeof input === "object") {
-    const out = {};
-    for (const [key, value] of Object.entries(input)) {
-      if (!/^[a-zA-Z0-9_.-]{1,80}$/.test(key)) continue;
-      out[key] = sanitizeObject(value, maxDepth, depth + 1);
-    }
-    return out;
-  }
-  return null;
-}
-
-function flattenStrings(input, out = []) {
-  if (typeof input === "string") {
-    out.push(input);
-    return out;
-  }
-  if (Array.isArray(input)) {
-    input.forEach((v) => flattenStrings(v, out));
-    return out;
-  }
-  if (input && typeof input === "object") {
-    Object.values(input).forEach((v) => flattenStrings(v, out));
-  }
-  return out;
-}
-
-function extractLikelyMediaUrls(input) {
-  const all = flattenStrings(input, []);
-  const found = new Set();
-  const regex = /(https?:\/\/[^\s"'<>]+\.(?:webp|png|jpe?g|gif|svg|avif)(?:\?[^\s"'<>]*)?)/gi;
-  all.forEach((str) => {
-    let m;
-    while ((m = regex.exec(str)) !== null) found.add(m[1]);
-  });
-  return Array.from(found);
-}
 
 async function upsertMediaUsage(url, usage) {
   if (!url) return;
@@ -210,18 +167,6 @@ function applyCors(req, res, methods = "POST, OPTIONS") {
   return originAllowed;
 }
 
-function roleFromToken(decoded) {
-  if (!decoded) return "viewer";
-  if (decoded.admin === true || decoded.role === "admin") return "admin";
-  if (decoded.role === "editor") return "editor";
-  return "viewer";
-}
-
-function hasAnyRole(decoded, roles = []) {
-  const role = roleFromToken(decoded);
-  return roles.includes(role);
-}
-
 async function decodeAuthToken(req) {
   const authHeader = req.get("authorization") || "";
   if (!authHeader.startsWith("Bearer ")) return null;
@@ -317,18 +262,6 @@ function requiresRecentAdminAuth(action) {
     "publishPage",
     "setUserRole"
   ]).has(action);
-}
-
-function clientIp(req) {
-  const forwarded = req.get("x-forwarded-for");
-  if (forwarded) {
-    return sanitizeString(forwarded.split(",")[0], 80);
-  }
-  return sanitizeString(req.ip || "unknown", 80);
-}
-
-function stableHash(input) {
-  return crypto.createHash("sha256").update(String(input)).digest("hex").slice(0, 40);
 }
 
 function timestampToMillis(value) {
