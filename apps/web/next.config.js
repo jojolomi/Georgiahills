@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  compress: true,
   transpilePackages: ["@gh/ui", "@gh/lib", "@gh/types"],
   pageExtensions: ["tsx", "jsx", "js"],
   images: {

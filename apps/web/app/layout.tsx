@@ -28,6 +28,11 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preload" as="image" href="/hero-home-640.avif" type="image/avif" />
+        <link rel="preload" as="image" href="/hero-home-1024.avif" type="image/avif" />
+        <link rel="preload" as="image" href="/hero-home-1600.avif" type="image/avif" />
+      </head>
       <body className={`${inter.variable} ${notoSansArabic.variable}`}>
         {children}
         <footer className="border-t border-slate-200 bg-slate-50 px-4 py-6 text-center text-xs text-slate-700">

@@ -88,7 +88,7 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
         <p className="mt-2 text-slate-600">{messages.description}</p>
         <div className="mt-4 overflow-hidden rounded-xl border border-slate-200">
           <OptimizedImage
-            src="/image-640.avif"
+            src="/hero-home-640.avif"
             alt={messages.imageAlt}
             width={640}
             height={360}
