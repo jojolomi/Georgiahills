@@ -34,12 +34,17 @@ jobs:
         run: corepack pnpm -w install --frozen-lockfile
 
       - name: Runtime parity assertion
+        if: ${{ vars.FIREBASE_PROJECT_ID_STAGING != '' }}
         run: npm run ops:runtime-parity
         env:
           GH_ENVIRONMENT: staging
           EXPECTED_NODE_MAJOR: "20"
           REQUIRED_ENV_KEYS: FIREBASE_PROJECT_ID
           FIREBASE_PROJECT_ID: ${{ vars['FIREBASE_PROJECT_ID_STAGING'] }}
+
+      - name: Runtime parity skipped
+        if: ${{ vars.FIREBASE_PROJECT_ID_STAGING == '' }}
+        run: echo "Skipping runtime parity in staging preview: vars.FIREBASE_PROJECT_ID_STAGING is not configured."
 
       - name: Build Astro site
         run: npm run build:astro
@@ -48,9 +53,14 @@ jobs:
         run: npm run build:admin-v3:hosting
 
       - name: Deploy to staging preview channel
+        if: ${{ vars.FIREBASE_PROJECT_ID_STAGING != '' && secrets.FIREBASE_SERVICE_ACCOUNT_STAGING != '' }}
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets['FIREBASE_SERVICE_ACCOUNT_STAGING'] }}"
           projectId: "${{ vars['FIREBASE_PROJECT_ID_STAGING'] }}"
           expires: 7d
+
+      - name: Deploy skipped
+        if: ${{ vars.FIREBASE_PROJECT_ID_STAGING == '' || secrets.FIREBASE_SERVICE_ACCOUNT_STAGING == '' }}
+        run: echo "Skipping staging preview deploy: missing FIREBASE_PROJECT_ID_STAGING var or FIREBASE_SERVICE_ACCOUNT_STAGING secret."
