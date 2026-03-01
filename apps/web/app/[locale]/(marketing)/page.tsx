@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Sparkles } from "lucide-react";
 import type { Destination } from "@gh/types";
@@ -10,7 +9,7 @@ import {
   buildHreflangAlternates,
   getMessages,
   isSupportedLocale,
-  resolveLocale,
+  locales,
   type Locale
 } from "../../../lib/i18n";
 
@@ -20,9 +19,12 @@ type LocalizedPageProps = {
   };
 };
 
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
 export async function generateMetadata({ params }: LocalizedPageProps): Promise<Metadata> {
-  const requestHeaders = headers();
-  const locale = resolveLocale(params.locale, requestHeaders.get("accept-language"));
+  const locale = isSupportedLocale(params.locale) ? params.locale : "en";
   const messages = getMessages(locale);
 
   return buildPageMetadata({

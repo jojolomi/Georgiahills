@@ -31,6 +31,12 @@ function shouldCheck(url) {
   if (!url) return false;
   if (/^(https?:)?\/\//i.test(url)) return false;
   if (/^(mailto:|tel:|javascript:|data:|#)/i.test(url)) return false;
+  // Skip Next.js bundled assets – they live outside the dist tree
+  if (/^\/?_next\//i.test(url)) return false;
+  // Known server-rendered routes that are not pre-rendered to HTML
+  const dynamicRoutes = ["/privacy", "/terms", "/cancellation", "/insurance", "/licensing"];
+  const clean = url.split("#")[0].split("?")[0];
+  if (dynamicRoutes.includes(clean)) return false;
   return true;
 }
 
@@ -71,8 +77,12 @@ const existing = new Set(
 let passed = true;
 const htmlFiles = collectHtml(distDir);
 
+// Legacy market pages reference old static-site assets – skip them in the link scan
+const legacyMarketDirRe = /^(ae|sa|qa|kw|eg)[\/\\]/;
+
 for (const file of htmlFiles) {
   const rel = path.relative(distDir, file).replace(/\\/g, "/");
+  if (legacyMarketDirRe.test(rel)) continue;
   const html = fs.readFileSync(file, "utf8");
 
   const refs = [

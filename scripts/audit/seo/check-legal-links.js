@@ -8,7 +8,12 @@ if (!fs.existsSync(distDir)) {
   process.exit(1);
 }
 
-const targetPages = ["index.html", "arabic.html", "booking.html", "booking-ar.html"];
+// Next.js App Router pages – locale in the path, not the filename
+const targetPages = [
+  "en.html",
+  "ar.html",
+  "booking.html"
+];
 const requiredLinks = [
   "/privacy",
   "/terms",

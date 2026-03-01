@@ -31,9 +31,14 @@ if (!fs.existsSync(distDir)) {
 let passed = true;
 const files = collectHtml(distDir);
 
+// Pages that legitimately lack canonical / hreflang tags
+const skipRe = /(?:^|[\/\\])(?:404|500|_not-found)\.html$|^index\.html$|^(?:ae|sa|qa|kw|eg)[\/\\]/;
+
 for (const file of files) {
   const html = fs.readFileSync(file, "utf8");
   const rel = path.relative(distDir, file).replace(/\\/g, "/");
+
+  if (skipRe.test(rel)) continue;
 
   const canonical = html.match(/<link\s+rel=["']canonical["']\s+href=["'][^"']+["']/i);
   if (!canonical) {

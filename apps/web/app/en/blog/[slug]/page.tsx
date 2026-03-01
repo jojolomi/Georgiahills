@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { StructuredData } from "../../../../components/StructuredData";
 import { getContentBySlug, getContentSlugs } from "../../../../lib/content";
 import { buildPageMetadata } from "../../../../lib/seo";
 
@@ -46,6 +47,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <main className="min-h-screen bg-slate-50 p-8">
+      <StructuredData
+        type="BlogPosting"
+        data={{
+          headline: entry.frontmatter.title,
+          description: entry.frontmatter.description,
+          datePublished: entry.frontmatter.date || undefined,
+          image: entry.frontmatter.image
+            ? `https://georgiahills.com${entry.frontmatter.image}`
+            : undefined,
+          author: { "@type": "Organization", name: "Georgia Hills" },
+          publisher: { "@type": "Organization", name: "Georgia Hills" }
+        }}
+      />
       <article className="prose prose-slate mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         <p className="text-sm text-slate-500">{entry.frontmatter.date || ""}</p>
         <h1>{entry.frontmatter.title}</h1>

@@ -6,12 +6,6 @@ import { buildDestinationMetadata } from "../../../../lib/seo";
 import { buildHreflangAlternates } from "../../../../lib/i18n";
 import destinationContent from "../../../../content/destinations.json";
 
-type DestinationPageProps = {
-  params: {
-    slug: string;
-  };
-};
-
 type DestinationRecord = {
   slug: string;
   title: string;
@@ -20,6 +14,16 @@ type DestinationRecord = {
   summary: string;
   image: string;
   updatedAt?: string;
+};
+
+export function generateStaticParams() {
+  return (destinationContent as DestinationRecord[]).map((d) => ({ slug: d.slug }));
+}
+
+type DestinationPageProps = {
+  params: {
+    slug: string;
+  };
 };
 
 function getDestination(slug: string) {
@@ -52,6 +56,17 @@ export default function DestinationPage({ params }: DestinationPageProps) {
 
   return (
     <main className="min-h-screen bg-slate-50 p-8">
+      <StructuredData
+        type="TouristAttraction"
+        data={{
+          name: destination.heading,
+          description: destination.description,
+          image: destination.image
+            ? `https://georgiahills.com${destination.image}`
+            : undefined,
+          address: { "@type": "PostalAddress", addressCountry: "GE" }
+        }}
+      />
       <StructuredData
         type="TouristTrip"
         data={{

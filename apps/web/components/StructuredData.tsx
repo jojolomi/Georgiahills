@@ -1,4 +1,4 @@
-type StructuredDataKind = "Organization" | "TravelAgency" | "TouristTrip" | "FAQ" | "Breadcrumb" | "Review";
+type StructuredDataKind = "Organization" | "TravelAgency" | "TouristTrip" | "TouristAttraction" | "BlogPosting" | "FAQ" | "Breadcrumb" | "Review";
 
 type StructuredDataProps = {
   type: StructuredDataKind;
@@ -33,6 +33,20 @@ function buildPayload(type: StructuredDataKind, data: Record<string, unknown>) {
           "@type": "Organization",
           name: "Georgia Hills"
         },
+        ...data
+      };
+
+    case "TouristAttraction":
+      return {
+        "@context": "https://schema.org",
+        "@type": "TouristAttraction",
+        ...data
+      };
+
+    case "BlogPosting":
+      return {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
         ...data
       };
 

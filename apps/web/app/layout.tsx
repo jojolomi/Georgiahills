@@ -13,7 +13,19 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {children}
+        <footer className="border-t border-slate-200 bg-slate-50 px-4 py-6 text-center text-xs text-slate-500">
+          <nav className="flex flex-wrap justify-center gap-4">
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/cancellation">Cancellation Policy</a>
+            <a href="/insurance">Travel Insurance</a>
+            <a href="/licensing">Licensing</a>
+          </nav>
+          <p className="mt-2">&copy; {new Date().getFullYear()} Georgia Hills</p>
+        </footer>
+      </body>
     </html>
   );
 }
