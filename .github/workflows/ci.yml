@@ -24,6 +24,15 @@ jobs:
       - name: Install dependencies
         run: corepack pnpm -w install --frozen-lockfile
 
+      - name: Ensure app dependencies are installed
+        run: |
+          corepack pnpm --filter ./apps/web install --frozen-lockfile
+          corepack pnpm --filter ./apps/admin install --frozen-lockfile
+
+      - name: Install functions dependencies
+        run: npm ci
+        working-directory: functions
+
       - name: Functions tests
         run: npm test
         working-directory: functions

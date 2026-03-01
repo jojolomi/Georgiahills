@@ -33,6 +33,11 @@ jobs:
       - name: Install dependencies
         run: corepack pnpm -w install --frozen-lockfile
 
+      - name: Ensure app dependencies are installed
+        run: |
+          corepack pnpm --filter ./apps/web install --frozen-lockfile
+          corepack pnpm --filter ./apps/admin install --frozen-lockfile
+
       - name: Runtime parity assertion
         if: ${{ vars.FIREBASE_PROJECT_ID_STAGING != '' }}
         run: npm run ops:runtime-parity
