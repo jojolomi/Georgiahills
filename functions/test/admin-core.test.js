@@ -1,6 +1,9 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
+process.env.FIREBASE_CONFIG = process.env.FIREBASE_CONFIG || '{"storageBucket":"ci-bucket.appspot.com"}';
+process.env.GCLOUD_PROJECT = process.env.GCLOUD_PROJECT || "ci-project";
+
 let __test;
 try {
   const mod = require("../index.js");
