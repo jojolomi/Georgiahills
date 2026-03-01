@@ -57,9 +57,9 @@ jobs:
         env:
           GH_ENVIRONMENT: production
           EXPECTED_NODE_MAJOR: "20"
-          REQUIRED_ENV_KEYS: FIREBASE_PROJECT_ID,FIREBASE_TOKEN_PRODUCTION
+          REQUIRED_ENV_KEYS: FIREBASE_PROJECT_ID,FIREBASE_SERVICE_ACCOUNT_PRODUCTION
           FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}
-          FIREBASE_TOKEN_PRODUCTION: ${{ secrets.FIREBASE_TOKEN_PRODUCTION }}
+          FIREBASE_SERVICE_ACCOUNT_PRODUCTION: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRODUCTION }}
 
       - name: Build Astro site
         run: npm run build:astro
@@ -77,30 +77,35 @@ jobs:
         shell: bash
         env:
           FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}
-          FIREBASE_TOKEN_PRODUCTION: ${{ secrets.FIREBASE_TOKEN_PRODUCTION }}
+          FIREBASE_SERVICE_ACCOUNT_PRODUCTION: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRODUCTION }}
         run: |
           if [ -z "$FIREBASE_PROJECT_ID_PRODUCTION" ]; then
             echo "Missing vars.FIREBASE_PROJECT_ID_PRODUCTION for environment 'production'."
             exit 1
           fi
-          if [ -z "$FIREBASE_TOKEN_PRODUCTION" ]; then
-            echo "Missing secrets.FIREBASE_TOKEN_PRODUCTION for environment 'production'."
-            echo "Generate one with: firebase login:ci"
+          if [ -z "$FIREBASE_SERVICE_ACCOUNT_PRODUCTION" ]; then
+            echo "Missing secrets.FIREBASE_SERVICE_ACCOUNT_PRODUCTION for environment 'production'."
+            echo "Add full JSON for a Firebase Admin service account key."
             exit 1
           fi
 
+      - name: Configure Firebase service-account auth
+        shell: bash
+        env:
+          FIREBASE_SERVICE_ACCOUNT_PRODUCTION: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRODUCTION }}
+        run: |
+          KEY_FILE="$RUNNER_TEMP/firebase-service-account-production.json"
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT_PRODUCTION" > "$KEY_FILE"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$KEY_FILE" >> "$GITHUB_ENV"
+
       - name: Deploy hosting and rules to production
         run: firebase deploy --project "${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}" --only "hosting,firestore:rules" --non-interactive
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN_PRODUCTION }}
 
       - name: Deploy functions to production
         id: deploy_functions
         if: ${{ false }}
         continue-on-error: true
         run: firebase deploy --project "${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}" --only "functions" --non-interactive
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN_PRODUCTION }}
 
       - name: Functions deploy status
         if: ${{ false }}
