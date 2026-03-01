@@ -27,7 +27,10 @@ jobs:
         run: npm run build:astro
 
       - name: Serve built site
-        run: npx http-server apps/web/dist -p 4173 &
+        shell: bash
+        run: |
+          npx http-server apps/web/dist -p 4173 >/tmp/http-server.log 2>&1 &
+          sleep 2
 
       - name: Run BrowserStack smoke tests (optional)
         shell: bash
