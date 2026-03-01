@@ -30,10 +30,11 @@ jobs:
         run: corepack enable
 
       - name: Install dependencies
-        run: corepack pnpm -w install --frozen-lockfile
+        run: corepack pnpm install --frozen-lockfile
 
-      - name: Ensure app dependencies are installed
+      - name: Ensure workspace dependencies are installed
         run: |
+          corepack pnpm --filter ./packages/ui install --frozen-lockfile
           corepack pnpm --filter ./apps/web install --frozen-lockfile
           corepack pnpm --filter ./apps/admin install --frozen-lockfile
 
