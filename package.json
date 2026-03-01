@@ -3,6 +3,7 @@
   "private": true,
   "packageManager": "pnpm@9.12.3",
   "scripts": {
+    "dev": "corepack pnpm --filter ./apps/web dev",
     "images:convert": "node infrastructure/convert-images.js",
     "check": "node scripts/site-check.js",
     "seo:engine": "node scripts/seo-engine.js",
