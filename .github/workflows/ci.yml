@@ -72,8 +72,13 @@ jobs:
         run: npm run test:admin-v3
 
       - name: Admin v3 authenticated smoke tests (optional)
-        if: ${{ secrets.ADMIN_V3_E2E_EMAIL != '' && secrets.ADMIN_V3_E2E_PASSWORD != '' }}
-        run: npm run test:admin-v3:auth
+        shell: bash
+        run: |
+          if [ -n "$ADMIN_V3_E2E_EMAIL" ] && [ -n "$ADMIN_V3_E2E_PASSWORD" ]; then
+            npm run test:admin-v3:auth
+          else
+            echo "Skipping admin-v3 authenticated smoke tests: optional secrets are not configured."
+          fi
         env:
           ADMIN_V3_E2E_EMAIL: ${{ secrets.ADMIN_V3_E2E_EMAIL }}
           ADMIN_V3_E2E_PASSWORD: ${{ secrets.ADMIN_V3_E2E_PASSWORD }}

@@ -7,7 +7,6 @@ on:
 
 jobs:
   browserstack:
-    if: ${{ secrets.BROWSERSTACK_USERNAME != '' && secrets.BROWSERSTACK_ACCESS_KEY != '' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -32,8 +31,14 @@ jobs:
       - name: Serve built site
         run: npx http-server astro-site/dist -p 4173 &
 
-      - name: Run BrowserStack smoke tests
-        run: npm run test:browserstack
+      - name: Run BrowserStack smoke tests (optional)
+        shell: bash
+        run: |
+          if [ -n "$BROWSERSTACK_USERNAME" ] && [ -n "$BROWSERSTACK_ACCESS_KEY" ]; then
+            npm run test:browserstack
+          else
+            echo "Skipping BrowserStack tests: optional secrets are not configured."
+          fi
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
