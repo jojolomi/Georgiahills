@@ -58,8 +58,8 @@ jobs:
           GH_ENVIRONMENT: production
           EXPECTED_NODE_MAJOR: "20"
           REQUIRED_ENV_KEYS: FIREBASE_PROJECT_ID,FIREBASE_SERVICE_ACCOUNT_PRODUCTION
-          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}
-          FIREBASE_SERVICE_ACCOUNT_PRODUCTION: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRODUCTION }}
+          FIREBASE_PROJECT_ID: ${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}
+          FIREBASE_SERVICE_ACCOUNT_PRODUCTION: ${{ secrets['FIREBASE_SERVICE_ACCOUNT_PRODUCTION'] }}
 
       - name: Build Astro site
         run: npm run build:astro
@@ -76,8 +76,8 @@ jobs:
       - name: Validate Firebase production config
         shell: bash
         env:
-          FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}
-          FIREBASE_SERVICE_ACCOUNT_PRODUCTION: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRODUCTION }}
+          FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}
+          FIREBASE_SERVICE_ACCOUNT_PRODUCTION: ${{ secrets['FIREBASE_SERVICE_ACCOUNT_PRODUCTION'] }}
         run: |
           if [ -z "$FIREBASE_PROJECT_ID_PRODUCTION" ]; then
             echo "Missing vars.FIREBASE_PROJECT_ID_PRODUCTION for environment 'production'."
@@ -92,20 +92,20 @@ jobs:
       - name: Configure Firebase service-account auth
         shell: bash
         env:
-          FIREBASE_SERVICE_ACCOUNT_PRODUCTION: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PRODUCTION }}
+          FIREBASE_SERVICE_ACCOUNT_PRODUCTION: ${{ secrets['FIREBASE_SERVICE_ACCOUNT_PRODUCTION'] }}
         run: |
           KEY_FILE="$RUNNER_TEMP/firebase-service-account-production.json"
           printf '%s' "$FIREBASE_SERVICE_ACCOUNT_PRODUCTION" > "$KEY_FILE"
           echo "GOOGLE_APPLICATION_CREDENTIALS=$KEY_FILE" >> "$GITHUB_ENV"
 
       - name: Deploy hosting and rules to production
-        run: firebase deploy --project "${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}" --only "hosting,firestore:rules" --non-interactive
+        run: firebase deploy --project "${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}" --only "hosting,firestore:rules" --non-interactive
 
       - name: Deploy functions to production
         id: deploy_functions
         if: ${{ false }}
         continue-on-error: true
-        run: firebase deploy --project "${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}" --only "functions" --non-interactive
+        run: firebase deploy --project "${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}" --only "functions" --non-interactive
 
       - name: Functions deploy status
         if: ${{ false }}
@@ -123,7 +123,7 @@ jobs:
       - name: Post-deploy smoke check
         shell: bash
         env:
-          FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars.FIREBASE_PROJECT_ID_PRODUCTION }}
+          FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}
         run: |
           set -e
           canonical_urls=(

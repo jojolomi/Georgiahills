@@ -1420,6 +1420,14 @@ const BookingManager = {
             consent: Boolean(document.getElementById('bookingConsent')?.checked),
             attribution: AttributionManager.current(),
             experiment: ExperimentManager.current(),
+            clientMeta: {
+                language: (navigator.language || '').slice(0, 20),
+                platform: (navigator.platform || '').slice(0, 40),
+                timezoneOffsetMinutes: new Date().getTimezoneOffset(),
+                viewportWidth: Math.max(0, Math.min(10000, window.innerWidth || 0)),
+                viewportHeight: Math.max(0, Math.min(10000, window.innerHeight || 0)),
+                maxTouchPoints: Math.max(0, Math.min(20, Number(navigator.maxTouchPoints || 0)))
+            },
             segmentation,
             leadScoreClient,
             funnel: {

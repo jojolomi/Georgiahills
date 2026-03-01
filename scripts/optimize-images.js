@@ -4,7 +4,7 @@ const path = require('path');
 
 const defaultBreakpoints = [480, 768, 1024, 1440, 1920];
 const jobs = [
-  { input: 'image.webp', base: 'image', widths: defaultBreakpoints },
+  { input: 'Batumi.webp', base: 'image', widths: defaultBreakpoints },
   { input: 'Tbilisi_old_Town.webp', base: 'tbilisi-old-town', widths: defaultBreakpoints },
   { input: 'Kazbegi.jpeg', base: 'kazbegi-hero', widths: defaultBreakpoints },
   { input: 'logo.jpeg', base: 'logo', widths: [256, 512] }

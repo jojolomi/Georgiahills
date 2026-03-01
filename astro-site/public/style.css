@@ -4690,6 +4690,12 @@ html.theme-dark .newsletter-card {
     opacity: 0.35;
 }
 
+@media (max-width: 768px) {
+    .hero-video {
+        display: none;
+    }
+}
+
 .media-grid {
     display: grid;
     grid-template-columns: 1fr;

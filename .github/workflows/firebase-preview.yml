@@ -40,7 +40,7 @@ jobs:
           GH_ENVIRONMENT: staging
           EXPECTED_NODE_MAJOR: "20"
           REQUIRED_ENV_KEYS: FIREBASE_PROJECT_ID
-          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID_STAGING }}
+          FIREBASE_PROJECT_ID: ${{ vars['FIREBASE_PROJECT_ID_STAGING'] }}
 
       - name: Build Astro site
         run: npm run build:astro
@@ -52,6 +52,6 @@ jobs:
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_STAGING }}"
-          projectId: "${{ vars.FIREBASE_PROJECT_ID_STAGING }}"
+          firebaseServiceAccount: "${{ secrets['FIREBASE_SERVICE_ACCOUNT_STAGING'] }}"
+          projectId: "${{ vars['FIREBASE_PROJECT_ID_STAGING'] }}"
           expires: 7d

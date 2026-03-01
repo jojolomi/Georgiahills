@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { AdminApi } from "../../shared/api/adminApiClient";
 import { Card, Table } from "../../shared/components/ui";
+import { DataTable } from "../../shared/components/DataTable";
 
 export function LeadsModule() {
   const [leads, setLeads] = useState([]);
@@ -9,15 +10,26 @@ export function LeadsModule() {
   const [slaOnly, setSlaOnly] = useState(false);
   const [noteDrafts, setNoteDrafts] = useState({});
   const [message, setMessage] = useState("");
+  const [cursor, setCursor] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const load = async () => {
-    const res = await AdminApi.listLeads(100);
-    const payload = res.data || res;
-    setLeads(payload.leads || []);
-    setSummary(payload.summary || { total: (payload.leads || []).length, newCount: 0, slaBreachCount: 0 });
+  const load = async (reset = false) => {
+    setLoading(true);
+    try {
+      const p = reset ? null : cursor;
+      const res = await AdminApi.listLeads(50, p?.lastId, p?.lastCreatedAt);
+      const payload = res.data || res;
+      setLeads(prev => reset ? (payload.leads || []) : [...prev, ...(payload.leads || [])]);
+      setSummary(payload.summary || { total: (payload.leads || []).length, newCount: 0, slaBreachCount: 0 });
+      setCursor(payload.nextCursor);
+    } catch (e) {
+      setMessage(e.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => { load().catch((e) => setMessage(e.message)); }, []);
+  useEffect(() => { load(true); }, []);
 
   async function update(id, status) {
     try {
@@ -49,55 +61,113 @@ export function LeadsModule() {
     return true;
   });
 
-  return <Card title="Booking Leads" actions={<>
-    <span className="badge">Total: {summary.total || leads.length}</span>
-    <span className="badge">New: {summary.newCount || 0}</span>
-    <span className="badge">SLA Breach: {summary.slaBreachCount || 0}</span>
-    <select className="select" style={{ width: 140 }} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-      <option value="all">All Status</option>
-      <option value="new">New</option>
-      <option value="contacted">Contacted</option>
-      <option value="quoted">Quoted</option>
-      <option value="won">Won</option>
-      <option value="lost">Lost</option>
-    </select>
-    <label className="stack" style={{ gap: ".35rem" }}>
-      <input type="checkbox" checked={slaOnly} onChange={(e) => setSlaOnly(e.target.checked)} />
-      <span className="muted">SLA only</span>
-    </label>
-  </>}>
-    <Table
-      columns={["Lead ID", "Name", "Phone", "Status", "Age", "SLA", "Market", "Campaign", "Source", "Actions"]}
-      rows={filteredLeads.map((l) => {
-        const attr = l.attributionNormalized || {};
-        return [
-          l.id,
-          l.name || "-",
-          l.phone || "-",
-          l.crmStatus || l.status || "new",
-          leadAgeLabel(l.leadAgeMinutes),
-          l.slaBreach ? <span className="badge" style={{ borderColor: "#b91c1c", color: "#b91c1c" }}>Overdue</span> : <span className="badge">On time</span>,
-          attr.market || "-",
-          attr.utmCampaign || "-",
-          attr.utmSource || "-",
-          <div className="stack">
-            <button className="btn" onClick={() => update(l.id, "contacted")}>Contacted</button>
-            <button className="btn" onClick={() => update(l.id, "quoted")}>Quoted</button>
-            <button className="btn btn-primary" onClick={() => update(l.id, "won")}>Won</button>
-            <input
-              className="input"
-              style={{ width: 180 }}
-              placeholder="Add note"
-              value={noteDrafts[l.id] || ""}
-              onChange={(e) => setNoteDrafts((prev) => ({ ...prev, [l.id]: e.target.value }))}
-            />
-            <button className="btn" onClick={() => addNote(l.id)}>Save note</button>
+  const columns = useMemo(() => [
+    {
+      header: "Lead ID",
+      accessorKey: "id",
+      cell: info => <span className="muted" style={{ fontSize: "0.85em", fontFamily: "monospace" }}>{info.getValue().slice(0, 8)}</span>
+    },
+    {
+      header: "Date",
+      accessorFn: row => row.createdAtMs || 0,
+      id: "date",
+      cell: info => {
+        const val = info.getValue();
+        if(!val) return "-";
+        return new Date(val).toLocaleDateString();
+      }
+    },
+    { header: "Name", accessorKey: "name" },
+    { header: "Phone", accessorKey: "phone" },
+    {
+      header: "Status",
+      accessorKey: "crmStatus",
+      accessorFn: row => row.crmStatus || row.status || "new",
+      cell: info => {
+        const val = info.getValue();
+        const colors = {
+           "new": "var(--primary-color)",
+           "contacted": "#eab308",
+           "quoted": "#3b82f6",
+           "won": "#10b981",
+           "lost": "#ef4444"
+        };
+        return <span className="badge" style={{ borderColor: colors[val] || "#ccc", color: colors[val] || "#333", backgroundColor: "transparent" }}>
+          {val.toUpperCase()}
+        </span>;
+      }
+    },
+    {
+      header: "SLA",
+      accessorKey: "slaBreach",
+      cell: info => info.getValue() 
+         ? <span className="badge" style={{ borderColor: "#b91c1c", color: "#b91c1c", backgroundColor: "#fef2f2" }}>Overdue</span> 
+         : <span className="badge" style={{ color: "var(--text-muted)", border: "none", backgroundColor: "#f3f4f6" }}>On time</span>
+    },
+    {
+      header: "Market",
+      accessorFn: row => row.attributionNormalized?.market || row.sourceLang,
+      id: "market",
+      cell: info => <span style={{ textTransform: "uppercase", fontSize: "0.9em", fontWeight: 600 }}>{info.getValue() || "-"}</span>
+    },
+    {
+      header: "Actions",
+      id: "actions",
+      cell: info => {
+         const l = info.row.original;
+         return (
+          <div className="stack" style={{ gap: "4px" }}>
+            <button className="btn" style={{ padding: "0.2rem 0.5rem", fontSize: "0.8rem" }} onClick={() => update(l.id, "contacted")}>Contact</button>
+            <button className="btn btn-primary" style={{ padding: "0.2rem 0.5rem", fontSize: "0.8rem" }} onClick={() => update(l.id, "won")}>Won</button>
           </div>
-        ];
-      })}
-    />
-    {message && <p className="muted">{message}</p>}
-  </Card>;
+         );
+      }
+    }
+  ], []);
+
+  return (
+    <>
+      <DataTable
+        title="Sales Leads"
+        data={filteredLeads}
+        columns={columns}
+        actions={
+          <>
+            <div className="stack" style={{ marginRight: "1rem" }}>
+               <div style={{ textAlign: "center", padding: "0 0.5rem" }}>
+                 <div className="muted" style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: 1 }}>Total</div>
+                 <strong style={{ fontSize: "1.1rem" }}>{summary.total || leads.length}</strong>
+               </div>
+               <div style={{ textAlign: "center", padding: "0 0.5rem", borderLeft: "1px solid var(--border-color)" }}>
+                 <div className="muted" style={{ fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: 1 }}>New</div>
+                 <strong style={{ fontSize: "1.1rem", color: "var(--primary-color)" }}>{summary.newCount || 0}</strong>
+               </div>
+            </div>
+            <select className="select" style={{ width: 140 }} value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+              <option value="all">All Status</option>
+              <option value="new">New</option>
+              <option value="contacted">Contacted</option>
+              <option value="quoted">Quoted</option>
+              <option value="won">Won</option>
+              <option value="lost">Lost</option>
+            </select>
+            <label className="stack" style={{ gap: ".35rem", cursor: "pointer" }}>
+              <input type="checkbox" checked={slaOnly} onChange={(e) => setSlaOnly(e.target.checked)} />
+              <span className="muted">SLA only</span>
+            </label>
+          </>
+        }
+      />
+      {message && <p className="muted" style={{ marginTop: "1rem" }}>{message}</p>}
+      {cursor && (
+        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+          <button className="btn" disabled={loading} onClick={() => load(false)}>
+             {loading ? 'Loading...' : 'Load More Leads'}
+          </button>
+        </div>
+      )}
+    </>
+  );
 }
 
 function leadAgeLabel(minutes) {

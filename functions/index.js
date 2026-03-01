@@ -18,6 +18,7 @@ const {
   clientIp,
   stableHash
 } = require("./lib/core-utils");
+const { validateAdminActionPayload } = require("./lib/admin-action-schemas");
 
 admin.initializeApp();
 
@@ -248,7 +249,9 @@ function normalizeAdminAction(action = "") {
     runScheduledPublishes: "runScheduledPublishes",
     getAuditLogs: "getAuditLogs",
     setUserRole: "setUserRole",
-    saveSettings: "saveSettings"
+    saveSettings: "saveSettings",
+    listReviewQueue: "listReviewQueue",
+    resolveReviewQueueItem: "resolveReviewQueueItem"
   };
   return normalized[String(action || "").trim()] || sanitizeString(action, 80);
 }
@@ -399,6 +402,181 @@ async function enforceRateLimit(key, maxHits, windowSeconds) {
   });
 }
 
+function normalizePhoneForRateLimit(phone = "") {
+  const digits = String(phone || "").replace(/\D+/g, "");
+  if (!digits) return "";
+  return digits.slice(-12);
+}
+
+function looksLikeBotUserAgent(userAgent = "") {
+  const ua = sanitizeString(userAgent, 300).toLowerCase();
+  if (!ua) return true;
+  const suspiciousSignals = [
+    "headless",
+    "selenium",
+    "puppeteer",
+    "playwright",
+    "phantomjs",
+    "python-requests",
+    "curl/",
+    "wget/",
+    "scrapy",
+    "bot/",
+    "spider"
+  ];
+  return suspiciousSignals.some((signal) => ua.includes(signal));
+}
+
+function hasSuspiciousLeadText(fields = []) {
+  const combined = fields
+    .map((value) => sanitizeString(value, 2000).toLowerCase())
+    .filter(Boolean)
+    .join(" ");
+  if (!combined) return false;
+
+  const urlMatches = combined.match(/https?:\/\//g) || [];
+  if (urlMatches.length >= 2) return true;
+
+  const spamTokens = [
+    "casino",
+    "crypto",
+    "forex",
+    "loan",
+    "viagra",
+    "porn",
+    "telegram.me",
+    "bit.ly",
+    "tinyurl",
+    "free money"
+  ];
+
+  return spamTokens.some((token) => combined.includes(token));
+}
+
+function buildDuplicateLeadKey(payload = {}) {
+  const normalizedName = sanitizeString(payload.name, 120).toLowerCase();
+  const normalizedPhone = normalizePhoneForRateLimit(payload.phone);
+  const normalizedDates = sanitizeString(payload.dates, 160).toLowerCase();
+  const normalizedSource = sanitizeString(payload.sourcePage, 200).toLowerCase();
+  return stableHash(`dup:${normalizedName}|${normalizedPhone}|${normalizedDates}|${normalizedSource}`);
+}
+
+function extractClientMetadata(input = {}, req) {
+  const raw = sanitizeObject(input.clientMeta || {}) || {};
+  const acceptLanguage = sanitizeString(req.get("accept-language") || "", 160);
+  const primaryLanguage = sanitizeString((acceptLanguage.split(",")[0] || "").toLowerCase(), 20);
+  const referer = sanitizeString(req.get("referer") || req.get("referrer") || "", 400);
+  let refererHost = "";
+  if (referer) {
+    try {
+      refererHost = sanitizeString(new URL(referer).hostname.toLowerCase(), 120);
+    } catch (_error) {
+      refererHost = "";
+    }
+  }
+
+  const timezoneOffsetMinutes = Number(raw.timezoneOffsetMinutes);
+  const viewportWidth = Number(raw.viewportWidth);
+  const viewportHeight = Number(raw.viewportHeight);
+  const maxTouchPoints = Number(raw.maxTouchPoints);
+
+  return {
+    language: primaryLanguage,
+    platform: sanitizeString(raw.platform, 40).toLowerCase(),
+    refererHost,
+    timezoneOffsetMinutes: Number.isFinite(timezoneOffsetMinutes)
+      ? Math.max(-840, Math.min(840, Math.trunc(timezoneOffsetMinutes)))
+      : 0,
+    viewportWidth: Number.isFinite(viewportWidth)
+      ? Math.max(0, Math.min(10000, Math.trunc(viewportWidth)))
+      : 0,
+    viewportHeight: Number.isFinite(viewportHeight)
+      ? Math.max(0, Math.min(10000, Math.trunc(viewportHeight)))
+      : 0,
+    maxTouchPoints: Number.isFinite(maxTouchPoints)
+      ? Math.max(0, Math.min(20, Math.trunc(maxTouchPoints)))
+      : 0
+  };
+}
+
+function computeLeadRiskProfile(payload = {}) {
+  let score = 0;
+  const reasons = [];
+
+  const userAgent = sanitizeString(payload.userAgent, 300);
+  const notes = sanitizeString(payload.notes, 1500);
+  const phone = normalizePhoneForRateLimit(payload.phone);
+
+  if (looksLikeBotUserAgent(userAgent)) {
+    score += 95;
+    reasons.push("bot_user_agent");
+  }
+
+  if (hasSuspiciousLeadText([payload.name, payload.service, notes])) {
+    score += 45;
+    reasons.push("suspicious_text");
+  }
+
+  const urlMatches = (notes.match(/https?:\/\//g) || []).length;
+  if (urlMatches >= 2) {
+    score += 20;
+    reasons.push("multi_url_notes");
+  }
+
+  if (notes.length >= 900) {
+    score += 10;
+    reasons.push("oversized_notes");
+  }
+
+  if (phone && phone.length < 8) {
+    score += 10;
+    reasons.push("short_phone");
+  }
+
+  const finalScore = Math.max(0, Math.min(100, score));
+  const level = finalScore >= 70 ? "high" : finalScore >= 40 ? "medium" : "low";
+  return {
+    score: finalScore,
+    level,
+    reasons,
+    reviewRequired: level === "medium" || level === "high",
+    hardBlock: reasons.includes("bot_user_agent")
+  };
+}
+
+async function queueLeadForReview(reason, req, payload = {}, riskProfile = {}, extra = {}) {
+  const normalizedReason = sanitizeString(reason, 80) || "review";
+  const normalizedExtra = sanitizeObject(extra || {}) || {};
+  const safePayload = sanitizeObject(payload || {}) || {};
+  const phone = sanitizeString(safePayload.phone, 40);
+  const notes = sanitizeString(safePayload.notes, 200);
+  const sourcePage = sanitizeString(safePayload.sourcePage, 200);
+  const sourceLang = safePayload.sourceLang === "ar" ? "ar" : "en";
+  const leadPriority = sanitizeString(safePayload.leadPriority, 20);
+
+  await admin.firestore().collection("lead_review_queue").add({
+    reason: normalizedReason,
+    status: "pending",
+    bookingId: sanitizeString(normalizedExtra.bookingId, 128),
+    ipHash: stableHash(clientIp(req)),
+    userAgentHash: stableHash(sanitizeString(req.get("user-agent") || "", 300)),
+    phoneHash: phone ? stableHash(phone) : "",
+    notesPreview: notes,
+    sourcePage,
+    sourceLang,
+    leadPriority,
+    spamRiskScore: Number(riskProfile.score || 0),
+    spamRiskLevel: sanitizeString(riskProfile.level, 12),
+    spamSignals: Array.isArray(riskProfile.reasons)
+      ? riskProfile.reasons.map((item) => sanitizeString(item, 40)).filter(Boolean)
+      : [],
+    reviewRequired: Boolean(riskProfile.reviewRequired),
+    meta: normalizedExtra,
+    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp()
+  });
+}
+
 function buildBookingPayload(input = {}, req) {
   const name = sanitizeString(input.name, 120);
   const phone = sanitizeString(input.phone, 40);
@@ -420,6 +598,7 @@ function buildBookingPayload(input = {}, req) {
   const leadScoreServer = calculateLeadScoreServer(input, segmentation);
   const leadPriority = leadPriorityFromScore(leadScoreServer);
   const userAgent = sanitizeString(req.get("user-agent") || "", 300);
+  const clientMeta = extractClientMetadata(input, req);
 
   if (!consent) return { valid: false, message: "Consent is required" };
   if (name.length < 2) return { valid: false, message: "Invalid name" };
@@ -448,6 +627,7 @@ function buildBookingPayload(input = {}, req) {
       leadScoreServer,
       leadPriority,
       userAgent,
+      clientMeta,
       ipHash: stableHash(clientIp(req)),
       status: "new",
       createdAt: admin.firestore.FieldValue.serverTimestamp()
@@ -608,6 +788,50 @@ async function sendEmailAlert(subject, text) {
   }
 }
 
+async function maybeSendOpsThresholdAlert(req, {
+  key,
+  threshold,
+  windowSeconds,
+  subject,
+  lines
+}) {
+  if (!key || !threshold || !windowSeconds || !subject) return;
+
+  try {
+    const eventKey = stableHash(`ops-threshold:${key}`);
+    const thresholdState = await enforceRateLimit(eventKey, threshold, windowSeconds);
+    if (thresholdState.allowed) return;
+
+    const alertKey = stableHash(`ops-threshold-alert:${key}`);
+    const alertThrottle = await enforceRateLimit(alertKey, 1, windowSeconds);
+    if (!alertThrottle.allowed) return;
+
+    const payloadLines = Array.isArray(lines) ? lines.filter(Boolean) : [];
+    const text = [
+      `Event: ${sanitizeString(key, 120)}`,
+      `Threshold: ${threshold} hits/${windowSeconds}s`,
+      `Path: ${sanitizeString(req?.path || "", 200)}`,
+      `Method: ${sanitizeString(req?.method || "", 20)}`,
+      `Origin: ${sanitizeString(req?.get?.("origin") || "", 300) || "(none)"}`,
+      ...payloadLines
+    ].join("\n");
+
+    await sendEmailAlert(subject, text);
+    logger.warn("Ops threshold alert", {
+      key,
+      threshold,
+      windowSeconds,
+      path: req?.path || "",
+      method: req?.method || ""
+    });
+  } catch (error) {
+    logger.warn("Failed to evaluate ops threshold alert", {
+      key,
+      error: error.message
+    });
+  }
+}
+
 exports.createBookingLead = onRequest(
   { region: REGION, timeoutSeconds: 30, memory: "256MiB" },
   async (req, res) => {
@@ -649,11 +873,123 @@ exports.createBookingLead = onRequest(
       return;
     }
 
+    const riskProfile = computeLeadRiskProfile(parsed.payload);
+    parsed.payload.spamRiskScore = riskProfile.score;
+    parsed.payload.spamRiskLevel = riskProfile.level;
+    parsed.payload.spamSignals = riskProfile.reasons;
+    parsed.payload.reviewRequired = riskProfile.reviewRequired;
+
+    if (riskProfile.hardBlock) {
+      try {
+        await queueLeadForReview("blocked_bot_client", req, parsed.payload, riskProfile, {
+          source: "createBookingLead"
+        });
+        await maybeSendOpsThresholdAlert(req, {
+          key: "lead_spam_blocked_bot",
+          threshold: 8,
+          windowSeconds: 10 * 60,
+          subject: "[Ops] Spike in blocked bot leads",
+          lines: [
+            `Reason: blocked_bot_client`,
+            `Source page: ${sanitizeString(parsed.payload.sourcePage, 200)}`
+          ]
+        });
+      } catch (error) {
+        logger.warn("Failed to queue blocked bot lead", { error: error.message });
+      }
+      res.status(202).json({ ok: true, trapped: true, reason: "blocked_bot_client" });
+      return;
+    }
+
+    const normalizedPhone = normalizePhoneForRateLimit(parsed.payload.phone);
+    if (normalizedPhone) {
+      const phoneKey = stableHash(`leadphone:${normalizedPhone}`);
+      const phoneLimit = await enforceRateLimit(phoneKey, 4, 60 * 60);
+      if (!phoneLimit.allowed) {
+        try {
+          await queueLeadForReview("phone_rate_limited", req, parsed.payload, riskProfile, {
+            source: "createBookingLead",
+            retryAfterSeconds: phoneLimit.retryAfterSeconds
+          });
+          await maybeSendOpsThresholdAlert(req, {
+            key: "lead_phone_rate_limited",
+            threshold: 10,
+            windowSeconds: 10 * 60,
+            subject: "[Ops] Spike in phone-rate-limited leads",
+            lines: [
+              `Retry after (sample): ${Number(phoneLimit.retryAfterSeconds || 0)}s`,
+              `Source page: ${sanitizeString(parsed.payload.sourcePage, 200)}`
+            ]
+          });
+        } catch (error) {
+          logger.warn("Failed to queue phone-rate-limited lead", { error: error.message });
+        }
+        res.status(429).json({
+          ok: false,
+          error: "phone_rate_limited",
+          retryAfterSeconds: phoneLimit.retryAfterSeconds
+        });
+        return;
+      }
+    }
+
+    const duplicateKey = buildDuplicateLeadKey(parsed.payload);
+    const duplicateLimit = await enforceRateLimit(duplicateKey, 1, 3 * 60);
+    if (!duplicateLimit.allowed) {
+      try {
+        await queueLeadForReview("duplicate_window", req, parsed.payload, riskProfile, {
+          source: "createBookingLead"
+        });
+        await maybeSendOpsThresholdAlert(req, {
+          key: "lead_duplicate_window_trapped",
+          threshold: 16,
+          windowSeconds: 10 * 60,
+          subject: "[Ops] Spike in duplicate-window trapped leads",
+          lines: [
+            `Source page: ${sanitizeString(parsed.payload.sourcePage, 200)}`
+          ]
+        });
+      } catch (error) {
+        logger.warn("Failed to queue duplicate lead", { error: error.message });
+      }
+      res.status(202).json({ ok: true, trapped: true, reason: "duplicate_window" });
+      return;
+    }
+
     try {
       const bookingRef = await admin.firestore().collection("bookings").add(parsed.payload);
+      if (riskProfile.reviewRequired) {
+        try {
+          await queueLeadForReview("risk_review", req, parsed.payload, riskProfile, {
+            source: "createBookingLead",
+            bookingId: bookingRef.id
+          });
+        } catch (error) {
+          logger.warn("Failed to queue risk-review lead", { error: error.message });
+        }
+      }
+      await maybeSendOpsThresholdAlert(req, {
+        key: "lead_creation_burst",
+        threshold: 120,
+        windowSeconds: 10 * 60,
+        subject: "[Ops] Unusual booking lead burst",
+        lines: [
+          `Latest bookingId: ${sanitizeString(bookingRef.id, 128)}`,
+          `Source page: ${sanitizeString(parsed.payload.sourcePage, 200)}`
+        ]
+      });
       res.status(201).json({ ok: true, id: bookingRef.id });
     } catch (error) {
       logger.error("Failed to create booking lead", { error: error.message });
+      await maybeSendOpsThresholdAlert(req, {
+        key: "create_booking_lead_5xx",
+        threshold: 3,
+        windowSeconds: 10 * 60,
+        subject: "[Ops] Elevated createBookingLead 5xx errors",
+        lines: [
+          `Error: ${sanitizeString(error.message, 300)}`
+        ]
+      });
       res.status(500).json({ ok: false, error: "server_error" });
     }
   }
@@ -718,7 +1054,26 @@ exports.adminApi = onRequest(
     }
 
     const action = normalizeAdminAction(req.body?.action);
-    const payload = sanitizeObject(req.body?.payload || {});
+    let payload = sanitizeObject(req.body?.payload || {});
+
+    const payloadValidation = validateAdminActionPayload(action, payload);
+    if (!payloadValidation.ok) {
+      await writeSecurityAlert("admin_invalid_payload_schema", req, {
+        severity: "warn",
+        action,
+        reason: payloadValidation.error,
+        path: payloadValidation.path
+      }, user);
+      res.status(400).json({
+        ok: false,
+        error: "invalid_payload_schema",
+        action,
+        reason: payloadValidation.error,
+        path: payloadValidation.path
+      });
+      return;
+    }
+    payload = payloadValidation.payload;
 
     if (requiresRecentAdminAuth(action)) {
       const authTimeMs = Number(user.auth_time || 0) * 1000;
@@ -746,12 +1101,24 @@ exports.adminApi = onRequest(
           ]);
 
           const totals = { bookings: 0, en: 0, ar: 0 };
-          snaps.forEach((snap) => {
-            if (!snap.exists) return;
+          const dailySeries = [];
+          
+          // Reversing array to be chronological (oldest to newest)
+          [...snaps].reverse().forEach((snap) => {
+            if (!snap.exists) {
+               dailySeries.push({ date: snap.id, bookings: 0, en: 0, ar: 0 });
+               return;
+            }
             const data = snap.data() || {};
-            totals.bookings += Number(data.total || 0);
-            totals.en += Number(data.byLang?.en || 0);
-            totals.ar += Number(data.byLang?.ar || 0);
+            const total = Number(data.total || 0);
+            const en = Number(data.byLang?.en || 0);
+            const ar = Number(data.byLang?.ar || 0);
+            
+            totals.bookings += total;
+            totals.en += en;
+            totals.ar += ar;
+            
+            dailySeries.push({ date: snap.id, bookings: total, en, ar });
           });
 
           let draftCount = 0;
@@ -766,6 +1133,7 @@ exports.adminApi = onRequest(
             ok: true,
             data: {
               totals,
+              dailySeries,
               publishing: {
                 scheduledQueue: queueSnap.size,
                 draftCount,
@@ -798,14 +1166,131 @@ exports.adminApi = onRequest(
 
         case "listLeads": {
           const limit = Math.min(300, Math.max(1, Number(payload.limit || 100)));
-          const snap = await admin.firestore().collection("bookings").orderBy("createdAt", "desc").limit(limit).get();
+          
+          let query = admin.firestore().collection("bookings").orderBy("createdAt", "desc");
+          
+          if (payload.lastCreatedAt && payload.lastId) {
+            try {
+              let cursorTimestamp;
+              if (typeof payload.lastCreatedAt === "string") {
+                cursorTimestamp = admin.firestore.Timestamp.fromDate(new Date(payload.lastCreatedAt));
+              } else if (typeof payload.lastCreatedAt === "object" && payload.lastCreatedAt.seconds) {
+                 cursorTimestamp = new admin.firestore.Timestamp(payload.lastCreatedAt.seconds, payload.lastCreatedAt.nanoseconds || 0);
+              } else {
+                 cursorTimestamp = admin.firestore.Timestamp.fromMillis(Number(payload.lastCreatedAt));
+              }
+              const docRef = await admin.firestore().collection("bookings").doc(payload.lastId).get();
+              if (docRef.exists) {
+                query = query.startAfter(docRef);
+              } else {
+                query = query.startAfter(cursorTimestamp);
+              }
+            } catch (e) {
+               logger.warn("Cursor pagination failed", { error: e.message });
+            }
+          }
+
+          const snap = await query.limit(limit).get();
+          
           const leads = snap.docs.map((d) => enrichLeadForAdmin(d));
           const summary = {
             total: leads.length,
             newCount: leads.filter((l) => sanitizeString(l.crmStatus || l.status || "new", 20) === "new").length,
             slaBreachCount: leads.filter((l) => l.slaBreach === true).length
           };
-          res.json({ ok: true, data: { leads, summary } });
+          
+          const lastVisible = snap.docs.length > 0 ? snap.docs[snap.docs.length - 1] : null;
+          const nextCursor = lastVisible ? {
+             lastId: lastVisible.id,
+             lastCreatedAt: lastVisible.data().createdAt
+          } : null;
+
+          res.json({ ok: true, data: { leads, summary, nextCursor } });
+          return;
+        }
+
+        case "listReviewQueue": {
+          const limit = Math.min(100, Math.max(1, Number(payload.limit || 50)));
+          let query = admin.firestore().collection("lead_review_queue")
+            .where("status", "==", "pending")
+            .orderBy("createdAt", "desc");
+
+          if (payload.lastId) {
+             const docRef = await admin.firestore().collection("lead_review_queue").doc(payload.lastId).get();
+             if (docRef.exists) {
+               query = query.startAfter(docRef);
+             }
+          }
+
+          const snap = await query.limit(limit).get();
+          const items = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          
+          const lastVisible = snap.docs.length > 0 ? snap.docs[snap.docs.length - 1] : null;
+          res.json({ 
+            ok: true, 
+            data: { 
+              items, 
+              nextCursor: lastVisible ? { lastId: lastVisible.id } : null 
+            } 
+          });
+          return;
+        }
+
+        case "resolveReviewQueueItem": {
+          const queueId = sanitizeString(payload.queueId, 128);
+          const resolution = sanitizeString(payload.resolution, 20); // "approve", "reject"
+          const rejectionReason = sanitizeString(payload.rejectionReason, 100);
+
+          if (!queueId || !["approve", "reject"].includes(resolution)) {
+            res.status(400).json({ ok: false, error: "invalid_resolution_payload" });
+            return;
+          }
+
+          const queueRef = admin.firestore().collection("lead_review_queue").doc(queueId);
+          const snap = await queueRef.get();
+          
+          if (!snap.exists) {
+            res.status(404).json({ ok: false, error: "queue_item_not_found" });
+            return;
+          }
+
+          const itemData = snap.data();
+          if (itemData.status !== "pending") {
+            res.status(400).json({ ok: false, error: "queue_item_already_resolved" });
+            return;
+          }
+
+          await admin.firestore().runTransaction(async (tx) => {
+             tx.update(queueRef, {
+               status: resolution,
+               rejectionReason: resolution === "reject" ? rejectionReason : null,
+               resolvedBy: sanitizeString(user.email || user.uid, 200),
+               resolvedAt: admin.firestore.FieldValue.serverTimestamp()
+             });
+             
+             // If approved and it wasn't already in bookings, we would insert it.
+             // But in our current flow, 'risk_review' leads are already in 'bookings', just tagged. 
+             // We just mark the queue item resolved. If it was blocked, we could move it to bookings here.
+             if (resolution === "approve" && !itemData.bookingId && itemData.meta?.source === "createBookingLead") {
+                 // Insert recovered lead into bookings
+                 const restoredLead = { ...itemData.meta.payload };
+                 // remove spam tag
+                 restoredLead.reviewRequired = false;
+                 restoredLead.status = "new";
+                 const bookingRef = admin.firestore().collection("bookings").doc();
+                 tx.set(bookingRef, restoredLead);
+                 tx.update(queueRef, { bookingId: bookingRef.id });
+             } 
+             // If it's already in bookings and we reject it, we should mask/delete it but let's just mark it 'spam'
+             if (resolution === "reject" && itemData.bookingId) {
+                 tx.update(admin.firestore().collection("bookings").doc(itemData.bookingId), {
+                    status: "spam"
+                 });
+             }
+          });
+
+          await writeAuditLog("resolve_review_queue", `Item ${queueId} resolved as ${resolution}`, user);
+          res.json({ ok: true, data: { queueId, resolution } });
           return;
         }
 
@@ -1283,6 +1768,16 @@ exports.adminApi = onRequest(
       }
     } catch (error) {
       logger.error("adminApi failed", { action, error: error.message });
+      await maybeSendOpsThresholdAlert(req, {
+        key: `admin_api_5xx:${sanitizeString(action, 80) || "unknown"}`,
+        threshold: 5,
+        windowSeconds: 10 * 60,
+        subject: "[Ops] Elevated adminApi 5xx errors",
+        lines: [
+          `Action: ${sanitizeString(action, 80) || "unknown"}`,
+          `Error: ${sanitizeString(error.message, 300)}`
+        ]
+      });
       res.status(500).json({ ok: false, error: "server_error", message: error.message });
     }
   }
@@ -1435,5 +1930,11 @@ exports.__test = {
   roleFromToken,
   hasAnyRole,
   stableHash,
-  buildBookingPayload
+  buildBookingPayload,
+  looksLikeBotUserAgent,
+  hasSuspiciousLeadText,
+  normalizePhoneForRateLimit,
+  buildDuplicateLeadKey,
+  extractClientMetadata,
+  computeLeadRiskProfile
 };

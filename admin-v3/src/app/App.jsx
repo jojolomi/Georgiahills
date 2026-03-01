@@ -1,17 +1,18 @@
-import React, { useMemo } from "react";
+import React, { lazy, Suspense } from "react";
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 import { useOwnerAuth } from "../shared/hooks/useOwnerAuth";
-import { DashboardModule } from "../modules/dashboard/DashboardModule";
-import { PagesModule } from "../modules/pages/PagesModule";
-import { DestinationsModule } from "../modules/destinations/DestinationsModule";
-import { ArticlesModule } from "../modules/articles/ArticlesModule";
-import { MediaModule } from "../modules/media/MediaModule";
-import { SeoMarketsModule } from "../modules/seo-markets/SeoMarketsModule";
-import { LeadsModule } from "../modules/leads/LeadsModule";
-import { ReviewQueueModule } from "../modules/leads/ReviewQueueModule";
-import { PublishingModule } from "../modules/publishing/PublishingModule";
-import { IntegrationsModule } from "../modules/integrations/IntegrationsModule";
-import { AuditModule } from "../modules/audit/AuditModule";
+
+const DashboardModule = lazy(() => import("../modules/dashboard/DashboardModule").then((m) => ({ default: m.DashboardModule })));
+const PagesModule = lazy(() => import("../modules/pages/PagesModule").then((m) => ({ default: m.PagesModule })));
+const DestinationsModule = lazy(() => import("../modules/destinations/DestinationsModule").then((m) => ({ default: m.DestinationsModule })));
+const ArticlesModule = lazy(() => import("../modules/articles/ArticlesModule").then((m) => ({ default: m.ArticlesModule })));
+const MediaModule = lazy(() => import("../modules/media/MediaModule").then((m) => ({ default: m.MediaModule })));
+const SeoMarketsModule = lazy(() => import("../modules/seo-markets/SeoMarketsModule").then((m) => ({ default: m.SeoMarketsModule })));
+const LeadsModule = lazy(() => import("../modules/leads/LeadsModule").then((m) => ({ default: m.LeadsModule })));
+const ReviewQueueModule = lazy(() => import("../modules/leads/ReviewQueueModule").then((m) => ({ default: m.ReviewQueueModule })));
+const PublishingModule = lazy(() => import("../modules/publishing/PublishingModule").then((m) => ({ default: m.PublishingModule })));
+const IntegrationsModule = lazy(() => import("../modules/integrations/IntegrationsModule").then((m) => ({ default: m.IntegrationsModule })));
+const AuditModule = lazy(() => import("../modules/audit/AuditModule").then((m) => ({ default: m.AuditModule })));
 
 import {
   LayoutDashboard,
@@ -111,20 +112,22 @@ function AppShell({ onLogout, email }) {
           <div className="badge">Secured</div>
         </header>
         <div className="page-container">
-          <Routes>
-            <Route path="/dashboard" element={<DashboardModule />} />
-            <Route path="/content/pages" element={<PagesModule />} />
-            <Route path="/content/destinations" element={<DestinationsModule />} />
-            <Route path="/content/articles" element={<ArticlesModule />} />
-            <Route path="/media" element={<MediaModule />} />
-            <Route path="/seo/markets" element={<SeoMarketsModule />} />
-            <Route path="/leads" element={<LeadsModule />} />
-            <Route path="/leads/queue" element={<ReviewQueueModule />} />
-            <Route path="/publishing" element={<PublishingModule />} />
-            <Route path="/integrations" element={<IntegrationsModule />} />
-            <Route path="/audit" element={<AuditModule />} />
-            <Route path="*" element={<Navigate to="/dashboard" replace />} />
-          </Routes>
+          <Suspense fallback={<div className="card" style={{ padding: "1.25rem" }}>Loading module...</div>}>
+            <Routes>
+              <Route path="/dashboard" element={<DashboardModule />} />
+              <Route path="/content/pages" element={<PagesModule />} />
+              <Route path="/content/destinations" element={<DestinationsModule />} />
+              <Route path="/content/articles" element={<ArticlesModule />} />
+              <Route path="/media" element={<MediaModule />} />
+              <Route path="/seo/markets" element={<SeoMarketsModule />} />
+              <Route path="/leads" element={<LeadsModule />} />
+              <Route path="/leads/queue" element={<ReviewQueueModule />} />
+              <Route path="/publishing" element={<PublishingModule />} />
+              <Route path="/integrations" element={<IntegrationsModule />} />
+              <Route path="/audit" element={<AuditModule />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Routes>
+          </Suspense>
         </div>
       </main>
     </div>
@@ -136,6 +139,7 @@ export function App() {
 
   if (loading) return <div style={{ padding: "2rem" }}>Loading...</div>;
   if (!user) return <LoginView onLogin={login} error={error} />;
+
   if (claims?.admin !== true && claims?.role !== "admin") {
     return <div style={{ padding: "2rem" }}><h2>Access denied</h2><p className="muted">Owner admin claim required.</p><button className="btn" onClick={logout}>Logout</button></div>;
   }

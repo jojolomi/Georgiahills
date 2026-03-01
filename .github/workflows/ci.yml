@@ -80,8 +80,8 @@ jobs:
             echo "Skipping admin-v3 authenticated smoke tests: optional secrets are not configured."
           fi
         env:
-          ADMIN_V3_E2E_EMAIL: ${{ secrets.ADMIN_V3_E2E_EMAIL }}
-          ADMIN_V3_E2E_PASSWORD: ${{ secrets.ADMIN_V3_E2E_PASSWORD }}
+          ADMIN_V3_E2E_EMAIL: ${{ secrets['ADMIN_V3_E2E_EMAIL'] }}
+          ADMIN_V3_E2E_PASSWORD: ${{ secrets['ADMIN_V3_E2E_PASSWORD'] }}
 
       - name: Lighthouse budgets
         run: npm run lighthouse:ci

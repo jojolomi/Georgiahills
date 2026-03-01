@@ -4,8 +4,8 @@ export function Card({ title, children, actions }) {
   return (
     <section className="card">
       {(title || actions) && (
-        <div className="topbar" style={{ marginBottom: "0.7rem" }}>
-          <h2 style={{ margin: 0, fontSize: "1rem" }}>{title}</h2>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.25rem", flexWrap: "wrap", gap: "1rem" }}>
+          <h2 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 600 }}>{title}</h2>
           <div className="stack">{actions}</div>
         </div>
       )}

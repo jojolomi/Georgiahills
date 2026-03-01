@@ -29,7 +29,8 @@
     "ops:firebase-cost": "node scripts/audit/ops/check-firebase-cost-threshold.js"
   },
   "dependencies": {
-    "firebase": "^12.9.0"
+    "firebase": "^12.9.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@lhci/cli": "^0.15.0",

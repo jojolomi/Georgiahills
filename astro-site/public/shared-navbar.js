@@ -121,9 +121,6 @@
   }
 
   function buildMarkup(cfg, filename) {
-    const homeDestinations = cfg.home + '#destinations';
-    const homeFleet = cfg.home + '#fleet';
-    const homeReviews = cfg.home + '#reviews';
     const desktopLinks = `
       <div id="desktop-links-container" style="display:contents">
         <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="nav-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
@@ -160,8 +157,8 @@
                 <a href="${cfg.langSwitch}" class="action-btn" aria-label="Language switch">
                   <i class="fa-solid fa-globe"></i><span class="lang-text">${cfg.texts.lang}</span>
                 </a>
-                <button type="button" class="action-btn" data-theme-toggle aria-label="${isArabic ? 'تبديل الوضع الليلي' : 'Toggle dark mode'}">
-                  <i class="fa-solid fa-moon"></i><span class="lang-text">${isArabic ? 'الوضع الليلي' : 'Dark mode'}</span>
+                <button type="button" class="action-btn" data-theme-toggle aria-label="${cfg.isArabic ? 'تبديل الوضع الليلي' : 'Toggle dark mode'}">
+                  <i class="fa-solid fa-moon"></i><span class="lang-text">${cfg.isArabic ? 'الوضع الليلي' : 'Dark mode'}</span>
                 </button>
               </div>
 
@@ -172,7 +169,7 @@
               <a href="${cfg.langSwitch}" class="action-btn" aria-label="Language switch" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
                 <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">${cfg.texts.lang}</span>
               </a>
-            <button type="button" class="action-btn" data-theme-toggle aria-label="${isArabic ? 'تبديل الوضع الليلي' : 'Toggle dark mode'}" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
+            <button type="button" class="action-btn" data-theme-toggle aria-label="${cfg.isArabic ? 'تبديل الوضع الليلي' : 'Toggle dark mode'}" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
               <i class="fa-solid fa-moon text-primary"></i>
             </button>
             <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="${cfg.texts.toggle}" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
@@ -208,6 +205,125 @@
     `;
   }
 
+  const currencyChoices = [
+    { code: 'GEL', flag: 'ge' },
+    { code: 'USD', flag: 'us' },
+    { code: 'EUR', flag: 'eu' },
+    { code: 'AED', flag: 'ae' },
+    { code: 'SAR', flag: 'sa' },
+    { code: 'KWD', flag: 'kw' },
+    { code: 'QAR', flag: 'qa' },
+    { code: 'OMR', flag: 'om' }
+  ];
+
+  function setTheme(isDark) {
+    document.documentElement.classList.toggle('theme-dark', isDark);
+  }
+
+  function initThemeToggle() {
+    const saved = localStorage.getItem('gh_theme');
+    if (saved === 'dark') setTheme(true);
+
+    document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const nextIsDark = !document.documentElement.classList.contains('theme-dark');
+        setTheme(nextIsDark);
+        localStorage.setItem('gh_theme', nextIsDark ? 'dark' : 'light');
+      });
+    });
+  }
+
+  function setMobileMenuState(open) {
+    const menu = document.getElementById('mobile-menu');
+    const toggle = document.getElementById('mobile-menu-btn');
+    if (!menu || !toggle) return;
+
+    menu.classList.toggle('open', open);
+    menu.setAttribute('aria-hidden', open ? 'false' : 'true');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+
+  function initMobileMenu() {
+    const toggle = document.getElementById('mobile-menu-btn');
+    const close = document.getElementById('close-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    if (!toggle || !close || !menu) return;
+
+    toggle.addEventListener('click', () => setMobileMenuState(true));
+    close.addEventListener('click', () => setMobileMenuState(false));
+
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setMobileMenuState(false));
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setMobileMenuState(false);
+    });
+  }
+
+  function updateCurrencyUi(type, code) {
+    const selected = currencyChoices.find((choice) => choice.code === code) || currencyChoices[0];
+    const codeEl = document.getElementById(`curr-code-${type}`);
+    const flagEl = document.getElementById(`curr-flag-${type}`);
+    if (codeEl) codeEl.textContent = selected.code;
+    if (flagEl) {
+      flagEl.src = `https://flagcdn.com/w40/${selected.flag}.png`;
+      flagEl.alt = selected.code;
+    }
+  }
+
+  function closeCurrencyDropdowns() {
+    document.querySelectorAll('.custom-select-wrapper').forEach((wrapper) => wrapper.classList.remove('open'));
+  }
+
+  function initCurrencyControls() {
+    const savedCurrency = localStorage.getItem('gh_currency') || 'GEL';
+    updateCurrencyUi('desktop', savedCurrency);
+    updateCurrencyUi('mobile', savedCurrency);
+
+    ['desktop', 'mobile'].forEach((type) => {
+      const wrapper = document.getElementById(`currency-${type}`);
+      const optionsContainer = document.getElementById(`curr-options-${type}`);
+      if (!wrapper || !optionsContainer) return;
+
+      optionsContainer.innerHTML = currencyChoices
+        .map((choice) => `
+          <button type="button" class="custom-option" data-currency="${choice.code}" data-type="${type}">
+            <img src="https://flagcdn.com/w40/${choice.flag}.png" alt="${choice.code}" class="currency-flag-sm">
+            <span>${choice.code}</span>
+          </button>
+        `)
+        .join('');
+    });
+
+    document.querySelectorAll('[data-currency-toggle]').forEach((button) => {
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const type = button.getAttribute('data-currency-toggle');
+        const wrapper = type ? document.getElementById(`currency-${type}`) : null;
+        if (!wrapper) return;
+        const isOpen = wrapper.classList.contains('open');
+        closeCurrencyDropdowns();
+        wrapper.classList.toggle('open', !isOpen);
+      });
+    });
+
+    document.querySelectorAll('.custom-option[data-currency]').forEach((option) => {
+      option.addEventListener('click', () => {
+        const code = option.getAttribute('data-currency');
+        if (!code) return;
+        localStorage.setItem('gh_currency', code);
+        updateCurrencyUi('desktop', code);
+        updateCurrencyUi('mobile', code);
+        closeCurrencyDropdowns();
+        window.dispatchEvent(new CustomEvent('gh:currency-change', { detail: { code } }));
+      });
+    });
+
+    document.addEventListener('click', closeCurrencyDropdowns);
+  }
+
   function renderSharedNavbar() {
     const nav = document.getElementById('navbar');
     if (!nav) return;
@@ -228,6 +344,10 @@
 
     nav.insertAdjacentHTML('beforebegin', buildMarkup(cfg, filename));
     nav.remove();
+
+    initThemeToggle();
+    initMobileMenu();
+    initCurrencyControls();
 
     window.__GH_SHARED_NAVBAR__ = true;
   }

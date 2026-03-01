@@ -6,15 +6,48 @@ export function useOwnerAuth() {
   const [state, setState] = useState({ loading: true, user: null, claims: null, error: "" });
 
   useEffect(() => {
+    let refreshTimer = null;
+
+    const hydrateUserClaims = async (user, forceRefresh = true) => {
+      const token = await getIdTokenResult(user, forceRefresh);
+      setState({ loading: false, user, claims: token.claims || {}, error: "" });
+    };
+
     const unsub = onAuthStateChanged(auth, async (user) => {
       if (!user) {
+        if (refreshTimer) {
+          clearInterval(refreshTimer);
+          refreshTimer = null;
+        }
         setState({ loading: false, user: null, claims: null, error: "" });
         return;
       }
-      const token = await getIdTokenResult(user, true);
-      setState({ loading: false, user, claims: token.claims || {}, error: "" });
+
+      try {
+        await hydrateUserClaims(user, true);
+      } catch (e) {
+        setState((prev) => ({
+          ...prev,
+          loading: false,
+          user,
+          error: e.message || "Failed to validate session claims"
+        }));
+      }
+
+      if (refreshTimer) clearInterval(refreshTimer);
+      refreshTimer = setInterval(async () => {
+        try {
+          if (auth.currentUser) {
+            await hydrateUserClaims(auth.currentUser, true);
+          }
+        } catch (_error) {}
+      }, 5 * 60 * 1000);
     });
-    return () => unsub();
+
+    return () => {
+      if (refreshTimer) clearInterval(refreshTimer);
+      unsub();
+    };
   }, []);
 
   return {
