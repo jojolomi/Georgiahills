@@ -48,6 +48,10 @@ const nextConfig = {
         source: "/_next/static/:path*",
         headers: [
           {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload"
+          },
+          {
             key: "Cache-Control",
             value: "public, max-age=31536000, immutable"
           }
@@ -56,6 +60,10 @@ const nextConfig = {
       {
         source: "/:path*.(avif|webp|png|jpg|jpeg|gif|svg|ico|woff|woff2)",
         headers: [
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload"
+          },
           {
             key: "Cache-Control",
             value: "public, max-age=31536000, immutable"
@@ -79,8 +87,12 @@ const nextConfig = {
         ],
         headers: [
           {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload"
+          },
+          {
             key: "Cache-Control",
-            value: "public, max-age=0, s-maxage=60, stale-while-revalidate=300"
+            value: "public, max-age=0, s-maxage=3600, stale-while-revalidate=604800"
           }
         ]
       }

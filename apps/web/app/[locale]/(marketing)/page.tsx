@@ -3,8 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sparkles } from "lucide-react";
 import type { Destination } from "@gh/types";
+import { GccApproxPrice } from "../../../components/GccApproxPrice.client";
 import { OptimizedImage } from "../../../components/OptimizedImage";
-import { StructuredData } from "../../../components/StructuredData";
+import { StructuredDataGraph } from "../../../components/StructuredData";
 import { buildPageMetadata } from "../../../lib/seo";
 import {
   buildHreflangAlternates,
@@ -43,6 +44,8 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
 
   const locale = params.locale as Locale;
   const messages = getMessages(locale);
+  const baseTourPriceGel = 120;
+  const conversionAsOf = "2026-03-03";
 
   const featuredDestination: Destination = {
     id: "tbilisi",
@@ -55,30 +58,68 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
 
   return (
     <main className="min-h-screen bg-slate-50 p-8">
-      <StructuredData
-        type="Organization"
-        data={{
-          sameAs: ["https://www.instagram.com", "https://www.tiktok.com"],
-          contactPoint: [{ "@type": "ContactPoint", telephone: "+995579088537", contactType: "customer service" }]
-        }}
-      />
-      <StructuredData
-        type="FAQ"
-        data={{
-          mainEntity: [
-            {
-              "@type": "Question",
-              name: locale === "ar" ? "هل تتوفر خدمة سائق خاص؟" : "Do you provide private driver service?",
-              acceptedAnswer: {
-                "@type": "Answer",
-                text:
-                  locale === "ar"
-                    ? "نعم، نقدم خدمة سائق خاص في مختلف وجهات جورجيا."
-                    : "Yes, we provide private driver service across key destinations in Georgia."
+      <StructuredDataGraph
+        nodes={[
+          {
+            type: "Breadcrumb",
+            data: {
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: locale === "ar" ? "الرئيسية" : "Home",
+                  item: `https://georgiahills.com/${locale}`
+                }
+              ]
+            }
+          },
+          {
+            type: "Organization",
+            data: {
+              sameAs: ["https://www.instagram.com", "https://www.tiktok.com"],
+              contactPoint: [{ "@type": "ContactPoint", telephone: "+995579088537", contactType: "customer service" }]
+            }
+          },
+          {
+            type: "Product",
+            data: {
+              inLanguage: locale,
+              name: locale === "ar" ? "جولة خاصة مع سائق في جورجيا" : "Private Georgia Tour With Driver",
+              description: messages.description,
+              brand: {
+                "@type": "Brand",
+                name: "Georgia Hills"
+              },
+              offers: {
+                "@type": "Offer",
+                priceCurrency: "GEL",
+                price: `${baseTourPriceGel.toFixed(2)}`,
+                priceValidUntil: "2026-12-31",
+                availability: "https://schema.org/InStock",
+                url: "https://georgiahills.com/booking"
               }
             }
-          ]
-        }}
+          },
+          {
+            type: "FAQ",
+            data: {
+              inLanguage: locale,
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: locale === "ar" ? "هل تتوفر خدمة سائق خاص؟" : "Do you provide private driver service?",
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text:
+                      locale === "ar"
+                        ? "نعم، نقدم خدمة سائق خاص في مختلف وجهات جورجيا."
+                        : "Yes, we provide private driver service across key destinations in Georgia."
+                  }
+                }
+              ]
+            }
+          }
+        ]}
       />
       <section className="mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
@@ -104,6 +145,12 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
         <p className="mt-2 text-sm text-slate-500">
           {messages.featuredLabel}: {featuredDestination.name}
         </p>
+        <GccApproxPrice
+          locale={locale}
+          baseGel={baseTourPriceGel}
+          rates={{ SAR: 1.38, AED: 1.35 }}
+          asOf={conversionAsOf}
+        />
         <Link
           href="/booking"
           className="mt-6 inline-flex rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"

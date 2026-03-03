@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { OptimizedImage } from "../../../../components/OptimizedImage";
-import { StructuredData } from "../../../../components/StructuredData";
+import { StructuredDataGraph } from "../../../../components/StructuredData";
 import { buildDestinationMetadata } from "../../../../lib/seo";
 import { buildHreflangAlternates } from "../../../../lib/i18n";
 import destinationContent from "../../../../content/destinations.json";
@@ -56,49 +56,56 @@ export default function DestinationPage({ params }: DestinationPageProps) {
 
   return (
     <main className="min-h-screen bg-slate-50 p-8">
-      <StructuredData
-        type="TouristAttraction"
-        data={{
-          name: destination.heading,
-          description: destination.description,
-          image: destination.image
-            ? `https://georgiahills.com${destination.image}`
-            : undefined,
-          address: { "@type": "PostalAddress", addressCountry: "GE" }
-        }}
-      />
-      <StructuredData
-        type="TouristTrip"
-        data={{
-          name: destination.heading,
-          description: destination.description,
-          itinerary: destination.summary,
-          touristType: "Families and GCC travelers"
-        }}
-      />
-      <StructuredData
-        type="Breadcrumb"
-        data={{
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: "https://georgiahills.com/en" },
-            { "@type": "ListItem", position: 2, name: "Destinations", item: "https://georgiahills.com/en/destinations" },
-            {
-              "@type": "ListItem",
-              position: 3,
+      <StructuredDataGraph
+        nodes={[
+          {
+            type: "TouristAttraction",
+            data: {
+              inLanguage: "en",
               name: destination.heading,
-              item: `https://georgiahills.com/en/destinations/${params.slug}`
+              description: destination.description,
+              image: destination.image
+                ? `https://georgiahills.com${destination.image}`
+                : undefined,
+              address: { "@type": "PostalAddress", addressCountry: "GE" }
             }
-          ]
-        }}
-      />
-      <StructuredData
-        type="Review"
-        data={{
-          reviewBody: "Excellent route planning and responsive support for family travel.",
-          reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-          author: { "@type": "Person", name: "Verified Traveler" },
-          itemReviewed: { "@type": "TouristTrip", name: destination.heading }
-        }}
+          },
+          {
+            type: "TouristTrip",
+            data: {
+              inLanguage: "en",
+              name: destination.heading,
+              description: destination.description,
+              itinerary: destination.summary,
+              touristType: "Families and GCC travelers"
+            }
+          },
+          {
+            type: "Breadcrumb",
+            data: {
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Home", item: "https://georgiahills.com/en" },
+                { "@type": "ListItem", position: 2, name: "Destinations", item: "https://georgiahills.com/en/destinations" },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: destination.heading,
+                  item: `https://georgiahills.com/en/destinations/${params.slug}`
+                }
+              ]
+            }
+          },
+          {
+            type: "Review",
+            data: {
+              inLanguage: "en",
+              reviewBody: "Excellent route planning and responsive support for family travel.",
+              reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+              author: { "@type": "Person", name: "Verified Traveler" },
+              itemReviewed: { "@type": "TouristTrip", name: destination.heading }
+            }
+          }
+        ]}
       />
 
       <section className="mx-auto max-w-3xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">

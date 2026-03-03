@@ -1,0 +1,23 @@
+[dir="rtl"] body,
+[dir="rtl"] main,
+[dir="rtl"] section,
+[dir="rtl"] article {
+  text-align: right;
+}
+
+[dir="rtl"] .prose {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="rtl"] .rtl-stack > * + * {
+  margin-right: 0;
+}
+
+[dir="rtl"] nav,
+[dir="rtl"] .nav,
+[dir="rtl"] .hero-content,
+[dir="rtl"] .cta,
+[dir="rtl"] .faq {
+  direction: rtl;
+}

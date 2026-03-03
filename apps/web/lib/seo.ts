@@ -12,6 +12,8 @@ type BuildPageMetadataInput = {
 
 const siteName = "Georgia Hills";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://georgiahills.com";
+const maxTitleLength = 60;
+const maxDescriptionLength = 155;
 
 function normalizePath(path: string) {
   if (!path.startsWith("/")) return `/${path}`;
@@ -20,6 +22,11 @@ function normalizePath(path: string) {
 
 function absolute(path: string) {
   return `${siteUrl}${normalizePath(path)}`;
+}
+
+function clampText(value: string, maxLength: number) {
+  if (value.length <= maxLength) return value;
+  return `${value.slice(0, maxLength - 1).trimEnd()}…`;
 }
 
 export function buildOpenGraphImages(input?: string[]) {
@@ -33,17 +40,19 @@ export function buildOpenGraphImages(input?: string[]) {
 export function buildPageMetadata(input: BuildPageMetadataInput): Metadata {
   const canonical = absolute(input.path);
   const images = buildOpenGraphImages(input.images);
+  const title = clampText(input.title, maxTitleLength);
+  const description = clampText(input.description, maxDescriptionLength);
 
   return {
-    title: input.title,
-    description: input.description,
+    title,
+    description,
     alternates: {
       canonical,
       languages: input.alternates
     },
     openGraph: {
-      title: input.title,
-      description: input.description,
+      title,
+      description,
       url: canonical,
       siteName,
       type: "website",
@@ -51,8 +60,8 @@ export function buildPageMetadata(input: BuildPageMetadataInput): Metadata {
     },
     twitter: {
       card: "summary_large_image",
-      title: input.title,
-      description: input.description,
+      title,
+      description,
       images
     }
   };

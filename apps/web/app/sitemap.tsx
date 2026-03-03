@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { getContentSlugs } from "../lib/content";
 
 type DestinationRecord = {
   slug: string;
@@ -29,6 +30,8 @@ async function readDestinationContent(): Promise<DestinationRecord[]> {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
   const destinations = await readDestinationContent();
+  const enBlogSlugs = await getContentSlugs("blog", "en");
+  const arBlogSlugs = await getContentSlugs("blog", "ar");
 
   const staticEntries: ExtendedSitemapEntry[] = [
     {
@@ -45,6 +48,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${siteUrl}/ar`,
       lastModified: now,
       images: [`${siteUrl}/image-1600.avif`]
+    },
+    {
+      url: `${siteUrl}/booking`,
+      lastModified: now,
+      images: [`${siteUrl}/image-1600.avif`]
     }
   ];
 
@@ -54,5 +62,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     images: [item.image ? `${siteUrl}${item.image}` : `${siteUrl}/image-1600.avif`]
   }));
 
-  return [...staticEntries, ...destinationEntries] as MetadataRoute.Sitemap;
+  const blogEntries: ExtendedSitemapEntry[] = [
+    ...enBlogSlugs.map((slug) => ({
+      url: `${siteUrl}/en/blog/${slug}`,
+      lastModified: now,
+      images: [`${siteUrl}/image-1024.avif`]
+    })),
+    ...arBlogSlugs.map((slug) => ({
+      url: `${siteUrl}/ar/blog/${slug}`,
+      lastModified: now,
+      images: [`${siteUrl}/image-1024.avif`]
+    }))
+  ];
+
+  return [...staticEntries, ...destinationEntries, ...blogEntries] as MetadataRoute.Sitemap;
 }

@@ -1,15 +1,31 @@
-type StructuredDataKind = "Organization" | "TravelAgency" | "TouristTrip" | "TouristAttraction" | "BlogPosting" | "FAQ" | "Breadcrumb" | "Review";
+type StructuredDataKind =
+  | "Organization"
+  | "TravelAgency"
+  | "TouristTrip"
+  | "TouristAttraction"
+  | "BlogPosting"
+  | "FAQ"
+  | "Breadcrumb"
+  | "Review"
+  | "Product"
+  | "Event";
 
 type StructuredDataProps = {
   type: StructuredDataKind;
   data: Record<string, unknown>;
 };
 
-function buildPayload(type: StructuredDataKind, data: Record<string, unknown>) {
+type StructuredDataGraphProps = {
+  nodes: Array<{
+    type: StructuredDataKind;
+    data: Record<string, unknown>;
+  }>;
+};
+
+export function createSchemaNode(type: StructuredDataKind, data: Record<string, unknown>) {
   switch (type) {
     case "Organization":
       return {
-        "@context": "https://schema.org",
         "@type": "Organization",
         name: "Georgia Hills",
         url: "https://georgiahills.com",
@@ -18,7 +34,6 @@ function buildPayload(type: StructuredDataKind, data: Record<string, unknown>) {
 
     case "TravelAgency":
       return {
-        "@context": "https://schema.org",
         "@type": "TravelAgency",
         name: "Georgia Hills",
         url: "https://georgiahills.com",
@@ -27,7 +42,6 @@ function buildPayload(type: StructuredDataKind, data: Record<string, unknown>) {
 
     case "TouristTrip":
       return {
-        "@context": "https://schema.org",
         "@type": "TouristTrip",
         provider: {
           "@type": "Organization",
@@ -38,49 +52,67 @@ function buildPayload(type: StructuredDataKind, data: Record<string, unknown>) {
 
     case "TouristAttraction":
       return {
-        "@context": "https://schema.org",
         "@type": "TouristAttraction",
         ...data
       };
 
     case "BlogPosting":
       return {
-        "@context": "https://schema.org",
         "@type": "BlogPosting",
         ...data
       };
 
     case "FAQ":
       return {
-        "@context": "https://schema.org",
         "@type": "FAQPage",
         ...data
       };
 
     case "Breadcrumb":
       return {
-        "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         ...data
       };
 
     case "Review":
       return {
-        "@context": "https://schema.org",
         "@type": "Review",
+        ...data
+      };
+
+    case "Product":
+      return {
+        "@type": "Product",
+        ...data
+      };
+
+    case "Event":
+      return {
+        "@type": "Event",
         ...data
       };
 
     default:
       return {
-        "@context": "https://schema.org",
         ...data
       };
   }
 }
 
 export function StructuredData({ type, data }: StructuredDataProps) {
-  const payload = buildPayload(type, data);
+  const payload = {
+    "@context": "https://schema.org",
+    ...createSchemaNode(type, data)
+  };
+
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }} />;
+}
+
+export function StructuredDataGraph({ nodes }: StructuredDataGraphProps) {
+  const payload = {
+    "@context": "https://schema.org",
+    "@graph": nodes.map((node) => createSchemaNode(node.type, node.data))
+  };
 
   return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(payload) }} />;
 }
