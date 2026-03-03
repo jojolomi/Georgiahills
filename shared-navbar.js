@@ -43,9 +43,15 @@
     return document.documentElement.lang === 'ar';
   }
 
-  function forceLtrLayout() {
-    document.documentElement.setAttribute('dir', 'ltr');
-    document.body && document.body.setAttribute('dir', 'ltr');
+  function applyNavbarOffset() {
+    const nav = document.getElementById('navbar');
+    if (!nav) return;
+    const offset = Math.ceil(nav.getBoundingClientRect().height || 0);
+    if (!offset) return;
+    document.documentElement.style.setProperty('--gh-navbar-offset', offset + 'px');
+    if (document.body) {
+      document.body.style.paddingTop = offset + 'px';
+    }
   }
 
   function getPagePairs() {
@@ -184,7 +190,7 @@
     `;
 
     return `
-      <nav id="navbar" class="navbar" dir="ltr" data-shared-navbar="true">
+      <nav id="navbar" class="navbar" dir="${cfg.isArabic ? 'rtl' : 'ltr'}" data-shared-navbar="true">
         <div class="container">
           <div class="navbar-inner">
             <a href="${cfg.home}" class="nav-logo">
@@ -257,10 +263,6 @@
     const filename = getFilename();
     const isArabic = detectArabic(filename);
 
-    if (isArabic) {
-      forceLtrLayout();
-    }
-
     const cfg = getConfig(filename, isArabic);
     const mobileMenu = document.getElementById('mobile-menu');
 
@@ -270,6 +272,8 @@
 
     nav.insertAdjacentHTML('beforebegin', toTrustedHTML(buildMarkup(cfg, filename)));
     nav.remove();
+
+    applyNavbarOffset();
 
     document.querySelectorAll('[data-currency-toggle]').forEach(function (button) {
       button.addEventListener('click', function () {
@@ -290,6 +294,8 @@
 
     window.__GH_SHARED_NAVBAR__ = true;
   }
+
+  window.addEventListener('resize', applyNavbarOffset, { passive: true });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', renderSharedNavbar);
