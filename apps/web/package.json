@@ -48,7 +48,7 @@
     "postcss": "^8.5.6",
     "prettier": "3.5.3",
     "shadcn": "^3.8.5",
-    "tailwindcss": "^3.4.17",
+    "tailwindcss": "^4.2.1",
     "typescript": "5.8.2"
   }
 }
