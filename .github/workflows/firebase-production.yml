@@ -162,3 +162,10 @@ jobs:
               echo "::warning::Custom domain check failed from GitHub runner for ${url}. Firebase hosting deploy is verified via web.app URL."
             fi
           done
+
+      - name: Post-deploy homepage regression guard
+        env:
+          FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}
+        run: |
+          node scripts/audit/ops/check-homepage-regression.js "https://${FIREBASE_PROJECT_ID_PRODUCTION}.web.app/" strict
+          node scripts/audit/ops/check-homepage-regression.js "https://georgiahills.com/" warn

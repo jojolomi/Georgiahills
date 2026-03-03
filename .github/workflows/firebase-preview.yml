@@ -97,6 +97,13 @@ jobs:
           projectId: "${{ vars['FIREBASE_PROJECT_ID_STAGING'] }}"
           expires: 7d
 
+      - name: Post-deploy homepage regression guard (staging)
+        if: ${{ steps.staging_precheck.outputs.ready == 'true' }}
+        env:
+          FIREBASE_PROJECT_ID_STAGING: ${{ vars['FIREBASE_PROJECT_ID_STAGING'] }}
+        run: |
+          node scripts/audit/ops/check-homepage-regression.js "https://${FIREBASE_PROJECT_ID_STAGING}.web.app/" strict
+
       - name: Deploy skipped
         if: ${{ steps.staging_precheck.outputs.ready != 'true' }}
         run: |
