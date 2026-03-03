@@ -1,4 +1,18 @@
 /** @type {import('next').NextConfig} */
+const withBundleAnalyzer = (() => {
+  if (process.env.ANALYZE !== "true") {
+    return (config) => config;
+  }
+
+  try {
+    return require("@next/bundle-analyzer")({
+      enabled: true
+    });
+  } catch {
+    return (config) => config;
+  }
+})();
+
 const nextConfig = {
   reactStrictMode: true,
   compress: true,
@@ -56,4 +70,4 @@ const nextConfig = {
   }
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

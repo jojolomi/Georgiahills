@@ -17,7 +17,7 @@ export function OptimizedImage({
   priority = false,
   withBlur = true,
   blurDataURL,
-  sizes = "(max-width: 768px) 100vw, 50vw",
+  sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 640px",
   fetchPriority,
   ...props
 }: OptimizedImageProps) {
@@ -32,6 +32,8 @@ export function OptimizedImage({
       placeholder={shouldUseBlur ? "blur" : "empty"}
       blurDataURL={shouldUseBlur ? (blurDataURL || defaultBlurDataURL) : undefined}
       fetchPriority={fetchPriority || (priority ? "high" : "auto")}
+      loading={priority ? undefined : "lazy"}
+      decoding="async"
     />
   );
 }

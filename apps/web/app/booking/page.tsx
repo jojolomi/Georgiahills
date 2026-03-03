@@ -15,7 +15,7 @@ export const metadata: Metadata = buildPageMetadata({
 const BookingWizard = dynamic(() => import("@/components/BookingWizard.client"), {
   ssr: false,
   loading: () => (
-    <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-6 text-sm text-slate-600">
+    <div className="booking-wizard-shell rounded-lg border border-dashed border-slate-300 bg-slate-50 p-6 text-sm text-slate-600">
       Loading booking wizard...
     </div>
   )

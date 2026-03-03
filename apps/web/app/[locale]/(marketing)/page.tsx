@@ -94,9 +94,10 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
             height={360}
             className="h-auto w-full"
             priority
-            withBlur
-            sizes="(max-width: 768px) 100vw, 640px"
+            withBlur={false}
+            sizes="(max-width: 768px) calc(100vw - 128px), 640px"
             fetchPriority="high"
+            quality={55}
           />
         </div>
         <p className="mt-2 text-sm text-slate-500">

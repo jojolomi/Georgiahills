@@ -7,9 +7,17 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { captureClientException, ensureClientSentryInitialized } from "../lib/client/sentry";
 
-const TravelerStep = dynamic(() => import("./booking-wizard/TravelerStep"));
-const TripStep = dynamic(() => import("./booking-wizard/TripStep"));
-const NotesStep = dynamic(() => import("./booking-wizard/NotesStep"));
+const stepLoadingPlaceholder = () => <div className="booking-step-placeholder" aria-hidden="true" />;
+
+const TravelerStep = dynamic(() => import("./booking-wizard/TravelerStep"), {
+  loading: stepLoadingPlaceholder
+});
+const TripStep = dynamic(() => import("./booking-wizard/TripStep"), {
+  loading: stepLoadingPlaceholder
+});
+const NotesStep = dynamic(() => import("./booking-wizard/NotesStep"), {
+  loading: stepLoadingPlaceholder
+});
 
 const bookingWizardSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name").max(120),
@@ -154,14 +162,14 @@ export default function BookingWizard() {
   };
 
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-      <div className="mb-6">
+    <div className="booking-wizard-shell rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="mb-6 min-h-16">
         <p className="text-sm text-slate-500">Step {currentStep + 1} of {stepConfig.length}</p>
         <h2 className="text-xl font-semibold text-slate-900">{stepConfig[currentStep].title}</h2>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {stepComponent}
+        <div className="booking-step-shell">{stepComponent}</div>
 
         <div className="flex items-center justify-between gap-3">
           <button
@@ -193,11 +201,13 @@ export default function BookingWizard() {
         </div>
       </form>
 
-      {submitMessage ? (
-        <p className={`mt-4 text-sm ${submitState === "success" ? "text-emerald-700" : "text-red-600"}`}>
-          {submitMessage}
-        </p>
-      ) : null}
+      <div className="booking-status-placeholder mt-4">
+        {submitMessage ? (
+          <p className={`text-sm ${submitState === "success" ? "text-emerald-700" : "text-red-600"}`}>
+            {submitMessage}
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

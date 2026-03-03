@@ -30,3 +30,22 @@ textarea:focus-visible,
   outline: 2px solid rgb(15 23 42 / 0.8);
   outline-offset: 2px;
 }
+
+.booking-wizard-shell {
+  min-height: 420px;
+}
+
+.booking-step-shell {
+  min-height: 280px;
+}
+
+.booking-step-placeholder {
+  min-height: 280px;
+  border-radius: 0.75rem;
+  background: rgb(248 250 252);
+  border: 1px solid rgb(226 232 240);
+}
+
+.booking-status-placeholder {
+  min-height: 48px;
+}
