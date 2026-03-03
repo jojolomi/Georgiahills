@@ -348,6 +348,20 @@ function renderSliderDestinations(dests) {
 
     const lang = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl' ? 'ar' : 'en';
 
+    const buildResponsiveTourImage = (source) => {
+        if (!source || !/\.(webp|avif|jpe?g|png)$/i.test(source)) {
+            return { src: source || '', srcset: '', sizes: '' };
+        }
+        const extIndex = source.lastIndexOf('.');
+        const base = source.slice(0, extIndex);
+        const ext = source.slice(extIndex);
+        return {
+            src: `${base}-480${ext}`,
+            srcset: `${base}-320${ext} 320w, ${base}-480${ext} 480w, ${base}-640${ext} 640w, ${base}-768${ext} 768w, ${base}-1024${ext} 1024w`,
+            sizes: '(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px'
+        };
+    };
+
     Object.keys(dests).forEach(id => {
         const d = dests[id];
         const title = lang === 'ar' ? (d.title_ar || d.title_en) : d.title_en;
@@ -373,7 +387,10 @@ function renderSliderDestinations(dests) {
         
         // Image
         const img = document.createElement('img');
-        img.src = d.img;
+        const responsiveImage = buildResponsiveTourImage(d.img);
+        img.src = responsiveImage.src || d.img;
+        if (responsiveImage.srcset) img.srcset = responsiveImage.srcset;
+        if (responsiveImage.sizes) img.sizes = responsiveImage.sizes;
         img.width = 380; // Standardize
         img.height = 475;
         img.loading = 'lazy';

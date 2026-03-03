@@ -19,8 +19,8 @@
         });
     </script>
 
-    <!-- 2. OPTIMIZATION: Deferred Google Tag Manager
-         Loads only after user interaction -->
+        <!-- 2. OPTIMIZATION: Deferred Google Tag Manager
+            Loads only after user interaction -->
     <script>
         function loadGTM() {
             if (window.gtmLoaded) return;
@@ -33,11 +33,10 @@
             gtag('js', new Date());
             gtag('config', 'G-6GT03GSW49');
         }
-        // Load on interaction or after 4 seconds
-        ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(evt => 
+        // Load on first interaction only
+        ['mousedown', 'keydown', 'scroll', 'touchstart', 'pointerdown'].forEach(evt => 
             window.addEventListener(evt, loadGTM, {once: true, passive: true})
         );
-        setTimeout(loadGTM, 4000);
     </script>
 
     <!-- SEO: Multilingual Support -->
@@ -169,7 +168,8 @@
             .hero-content{position:relative;z-index:10;text-align:center;color:#fff;padding:0 1rem;max-width:64rem;margin-top:2.5rem}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="stylesheet" href="style.css">
+        <link rel="preload" href="style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="style.min.css"></noscript>
 
     <!-- Inline Critical CSS for Icons (prevents flash) -->
     <style>
@@ -202,13 +202,32 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
     
-    <!-- Load FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <!-- Load FontAwesome lazily -->
+    <script>
+        (function () {
+            let iconsLoaded = false;
+            function loadIconStyles() {
+                if (iconsLoaded) return;
+                iconsLoaded = true;
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+                document.head.appendChild(link);
+            }
+            ['mousedown', 'keydown', 'touchstart', 'pointerdown', 'scroll'].forEach((evt) => {
+                window.addEventListener(evt, loadIconStyles, { once: true, passive: true });
+            });
+            window.addEventListener('load', () => {
+                if ('requestIdleCallback' in window) requestIdleCallback(loadIconStyles, { timeout: 3500 });
+                else setTimeout(loadIconStyles, 3500);
+            }, { once: true });
+        })();
+    </script>
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
     <!-- Main Script Deferred -->
     <script src="shared-navbar.js" defer></script>
-    <script src="script.js" defer></script>
+    <script src="script.min.js" defer></script>
     <script>
         window.addEventListener('DOMContentLoaded', function () {
             const hero = document.getElementById('home');
@@ -253,7 +272,7 @@
     <div id="preloader" style="display:none;">
         <div class="text-center">
             <div class="preloader-circle animate-bounce">
-                <img src="favicon.ico" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
+                <img src="favicon.webp" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
                 <i class="fa-solid fa-mountain-sun text-primary hidden" style="font-size:2.25rem;"></i>
             </div>
             <div class="preloader-text">جاري التحميل</div>
@@ -279,7 +298,7 @@
         <div class="hero-content">
             <div class="hero-logo-container">
                 <div class="hero-logo-circle">
-                    <img src="favicon.ico" width="96" height="96" style="width:100%; height:100%; object-fit:cover;" alt="شعار جورجيا هيلز">
+                    <img src="logo-256.avif" width="96" height="96" style="width:100%; height:100%; object-fit:cover;" alt="شعار جورجيا هيلز">
                 </div>
             </div>
             
@@ -361,7 +380,7 @@
                 <div class="about-img-container reveal">
                     <div class="about-blob"></div>
                     <!-- OPTIMIZATION: Added styles to constrain layout shift if image is large -->
-                    <img id="about-img" src="tbilisi-old-town-1024.webp" srcset="tbilisi-old-town-640.webp 640w, tbilisi-old-town-1024.webp 1024w, tbilisi-old-town-1600.webp 1600w" sizes="(max-width: 1024px) 100vw, 665px" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="تبليسي القديمة" style="max-width:100%; height:auto;">
+                    <img id="about-img" src="tbilisi-old-town-768.webp" srcset="tbilisi-old-town-480.webp 480w, tbilisi-old-town-640.webp 640w, tbilisi-old-town-768.webp 768w, tbilisi-old-town-1024.webp 1024w, tbilisi-old-town-1600.webp 1600w" sizes="(max-width: 768px) 100vw, 665px" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="تبليسي القديمة" style="max-width:100%; height:auto;">
                 </div>
                 <div id="about-content" class="about-content reveal">
                     <span class="section-label">لماذا جورجيا هيلز؟</span>
@@ -404,7 +423,7 @@
             <div id="tours-slider" class="tours-slider" tabindex="0" aria-label="Destinations Slider" dir="ltr">
                 <!-- Tbilisi -->
                 <div class="tour-card group" onclick="window.location.href='tbilisi-ar.html'">
-                    <img src="Tbilisi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="تبليسي - العاصمة">
+                    <img src="Tbilisi-480.webp" srcset="Tbilisi-320.webp 320w, Tbilisi-480.webp 480w, Tbilisi-640.webp 640w, Tbilisi-768.webp 768w, Tbilisi-1024.webp 1024w" sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="تبليسي - العاصمة">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">تبليسي</h3>
@@ -414,7 +433,7 @@
                 </div>
                 <!-- Kazbegi -->
                 <div class="tour-card group" onclick="window.location.href='kazbegi-ar.html'">
-                    <img src="Kazbegi.webp" width="669" height="669" loading="lazy" decoding="async" class="tour-img" alt="جبل كازبيجي">
+                    <img src="Kazbegi-480.webp" srcset="Kazbegi-320.webp 320w, Kazbegi-480.webp 480w, Kazbegi-640.webp 640w, Kazbegi-768.webp 768w, Kazbegi-1024.webp 1024w" sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px" width="669" height="669" loading="lazy" decoding="async" class="tour-img" alt="جبل كازبيجي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">كازبيجي</h3>
@@ -424,7 +443,7 @@
                 </div>
                 <!-- Martvili -->
                 <div class="tour-card group" onclick="window.location.href='martvili-ar.html'">
-                    <img src="Martvili.webp" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="وادي مارتفيلي">
+                    <img src="Martvili-480.webp" srcset="Martvili-320.webp 320w, Martvili-480.webp 480w, Martvili-640.webp 640w, Martvili-768.webp 768w, Martvili-1024.webp 1024w" sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="وادي مارتفيلي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">وادي مارتفيلي</h3>
@@ -434,7 +453,7 @@
                 </div>
                 <!-- Signagi -->
                 <div class="tour-card group" onclick="window.location.href='signagi-ar.html'">
-                    <img src="Signagi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="سغناغي - مدينة الحب">
+                    <img src="Signagi-480.webp" srcset="Signagi-320.webp 320w, Signagi-480.webp 480w, Signagi-640.webp 640w, Signagi-768.webp 768w, Signagi-1024.webp 1024w" sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="سغناغي - مدينة الحب">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">سغناغي</h3>
