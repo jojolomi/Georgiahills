@@ -21,7 +21,11 @@ const notoSansArabic = Noto_Sans_Arabic({
 
 export const metadata: Metadata = {
   title: "Georgiahills Web",
-  description: "Next.js 14 App Router scaffold"
+  description: "Next.js 14 App Router scaffold",
+  icons: {
+    icon: "/favicon.webp",
+    shortcut: "/favicon.webp"
+  }
 };
 
 type RootLayoutProps = {
@@ -37,23 +41,40 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <link
           rel="preload"
           as="image"
-          href="/hero-home-1024.avif"
+          href="/hero-home-640.avif"
           type="image/avif"
           fetchPriority="high"
-          imageSrcSet="/hero-home-640.avif 640w, /hero-home-1024.avif 1024w, /hero-home-1600.avif 1600w"
-          imageSizes="(max-width: 768px) calc(100vw - 128px), 640px"
+          imageSrcSet="/hero-home-640.avif 640w, /hero-home-1024.avif 1024w"
+          imageSizes="(max-width: 768px) calc(100vw - 128px), 512px"
         />
       </head>
       <body className={`${inter.variable} ${notoSansArabic.variable}`}>
         {children}
         {gtagId ? (
           <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${gtagId}`}
-              strategy="afterInteractive"
-            />
-            <Script id="gh-ga4-init" strategy="afterInteractive">
-              {`window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', '${gtagId}', { anonymize_ip: true });`}
+            <Script id="gh-ga4-on-interaction" strategy="afterInteractive">
+              {`(function(){
+  var loaded=false;
+  function loadGA(){
+    if(loaded) return;
+    loaded=true;
+    var script=document.createElement('script');
+    script.async=true;
+    script.src='https://www.googletagmanager.com/gtag/js?id=${gtagId}';
+    document.head.appendChild(script);
+    window.dataLayer=window.dataLayer||[];
+    function gtag(){window.dataLayer.push(arguments);} 
+    window.gtag=window.gtag||gtag;
+    window.gtag('js', new Date());
+    window.gtag('config', '${gtagId}', { anonymize_ip: true });
+    ['pointerdown','keydown','scroll','touchstart'].forEach(function(eventName){
+      window.removeEventListener(eventName, loadGA, {passive:true});
+    });
+  }
+  ['pointerdown','keydown','scroll','touchstart'].forEach(function(eventName){
+    window.addEventListener(eventName, loadGA, {once:true, passive:true});
+  });
+})();`}
             </Script>
           </>
         ) : null}

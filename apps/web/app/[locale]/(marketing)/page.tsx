@@ -132,12 +132,12 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
           <OptimizedImage
             src="/hero-home-640.avif"
             alt={messages.imageAlt}
-            width={640}
-            height={360}
+            width={512}
+            height={288}
             className="h-auto w-full"
             priority
             withBlur={false}
-            sizes="(max-width: 768px) calc(100vw - 128px), 640px"
+            sizes="(max-width: 768px) calc(100vw - 128px), 512px"
             fetchPriority="high"
             quality={55}
           />
