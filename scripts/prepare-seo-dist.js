@@ -153,6 +153,13 @@ if (process.env.GITHUB_PAGES === "true" && !fs.existsSync(indexHtmlPath)) {
   fs.writeFileSync(indexHtmlPath, safeIndex, "utf8");
 }
 
+/* ── 8. Force legacy main homepage at root ─────────────────────────── */
+
+const legacyRootIndexPath = path.join(repoRoot, "index.html");
+if (fs.existsSync(legacyRootIndexPath)) {
+  fs.copyFileSync(legacyRootIndexPath, indexHtmlPath);
+}
+
 /* ── report ────────────────────────────────────────────────────────── */
 
 function countFiles(dir, ext) {
