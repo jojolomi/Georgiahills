@@ -40,6 +40,18 @@ function shouldCheck(url) {
   return true;
 }
 
+function isOptionalRuntimeAsset(ref) {
+  const cleanRaw = ref.split("#")[0].split("?")[0].trim();
+  let clean = cleanRaw;
+  try {
+    clean = decodeURIComponent(cleanRaw);
+  } catch {
+    clean = cleanRaw;
+  }
+  const normalized = clean.startsWith("/") ? clean.slice(1) : clean;
+  return normalized === "firebase-config.js";
+}
+
 function resolveCandidates(ref) {
   const cleanRaw = ref.split("#")[0].split("?")[0].trim();
   let clean = cleanRaw;
@@ -117,6 +129,7 @@ for (const file of htmlFiles) {
 
   for (const ref of refs) {
     if (!shouldCheck(ref)) continue;
+    if (isOptionalRuntimeAsset(ref)) continue;
     const candidates = resolveCandidates(ref);
     if (!candidates.length) continue;
     const fallbackCandidates = stripBasePathCandidate(ref);

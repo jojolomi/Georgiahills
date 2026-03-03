@@ -86,6 +86,9 @@
   function getConfig(filename, isArabic) {
     const p = getBasePrefix();
     const home = p + (isArabic ? 'arabic.html' : 'index.html');
+    const langSwitchTarget = (p && filename === 'index.html' && isArabic)
+      ? 'index.html'
+      : buildLangSwitch(filename, isArabic);
     return {
       isArabic,
       prefix: p,
@@ -96,7 +99,7 @@
       blog: p + (isArabic ? 'blog-ar.html' : 'blog.html'),
       contact: p + (isArabic ? 'contact-ar.html' : 'contact.html'),
       booking: p + (isArabic ? 'booking-ar.html' : 'booking.html'),
-      langSwitch: p + buildLangSwitch(filename, isArabic),
+      langSwitch: p + langSwitchTarget,
       texts: {
         home: isArabic ? 'الرئيسية' : 'Home',
         about: isArabic ? 'من نحن' : 'About',
@@ -170,7 +173,7 @@
 
               <div style="display:flex; gap:0.75rem;">
                 <div class="custom-select-wrapper" id="currency-desktop">
-                  <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('desktop')" aria-haspopup="true">
+                  <button class="action-btn custom-select-trigger" data-currency-toggle="desktop" aria-haspopup="true">
                     <span class="currency-flag-sm currency-flag-emoji" id="curr-flag-desktop" aria-hidden="true">🇬🇪</span>
                     <span id="curr-code-desktop">GEL</span>
                     <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
@@ -209,7 +212,7 @@
 
         <div class="mobile-settings">
           <div class="custom-select-wrapper" id="currency-mobile">
-            <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('mobile')" aria-haspopup="true">
+            <button class="action-btn custom-select-trigger" data-currency-toggle="mobile" aria-haspopup="true">
               <span class="currency-flag-sm currency-flag-emoji" id="curr-flag-mobile" aria-hidden="true">🇬🇪</span>
               <span id="curr-code-mobile">GEL</span>
               <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
@@ -243,6 +246,23 @@
 
     nav.insertAdjacentHTML('beforebegin', buildMarkup(cfg, filename));
     nav.remove();
+
+    document.querySelectorAll('[data-currency-toggle]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        const type = button.getAttribute('data-currency-toggle');
+        if (!type) return;
+        if (window.GHCoreUI && typeof window.GHCoreUI.toggleCurrencyDropdown === 'function') {
+          window.GHCoreUI.toggleCurrencyDropdown(type);
+          return;
+        }
+        if (window.UIManager && typeof window.UIManager.toggleCurrencyDropdown === 'function') {
+          window.UIManager.toggleCurrencyDropdown(type);
+          return;
+        }
+        const wrapper = document.getElementById('currency-' + type);
+        if (wrapper) wrapper.classList.toggle('open');
+      });
+    });
 
     window.__GH_SHARED_NAVBAR__ = true;
   }
