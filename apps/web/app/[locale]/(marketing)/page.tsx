@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Sparkles } from "lucide-react";
 import type { Destination } from "@gh/types";
@@ -103,9 +104,12 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
         <p className="mt-2 text-sm text-slate-500">
           {messages.featuredLabel}: {featuredDestination.name}
         </p>
-        <button className="mt-6 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700">
+        <Link
+          href="/booking"
+          className="mt-6 inline-flex rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-slate-700"
+        >
           {messages.button}
-        </button>
+        </Link>
       </section>
     </main>
   );

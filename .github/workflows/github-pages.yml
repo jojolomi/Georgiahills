@@ -41,6 +41,10 @@ jobs:
         run: npm run build:astro
 
       - name: Prepare static dist for Pages
+        env:
+          GITHUB_PAGES: "true"
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
         run: npm run seo:prepare
 
       - name: Setup Pages

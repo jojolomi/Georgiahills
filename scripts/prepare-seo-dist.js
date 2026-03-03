@@ -114,6 +114,45 @@ if (fs.existsSync(indexHtmlPath) && fs.existsSync(enHtmlPath)) {
   }
 }
 
+/* ── 7. GitHub Pages fail-safe root homepage ──────────────────────── */
+
+if (process.env.GITHUB_PAGES === "true") {
+  const owner = (process.env.GITHUB_REPOSITORY_OWNER || "").toLowerCase();
+  const repository = process.env.GITHUB_REPOSITORY || "";
+  const repoName = repository.split("/")[1] || "";
+  const isUserSite = repoName && repoName.toLowerCase() === `${owner}.github.io`;
+  const base = !repoName || isUserSite ? "" : `/${repoName}`;
+
+  const safeIndex = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Georgia Hills</title>
+  <meta name="description" content="Georgia Hills private tours and driver service." />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #f8fafc; color: #0f172a; }
+    main { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+    section { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 24px; max-width: 560px; width: 100%; box-sizing: border-box; }
+    h1 { margin: 0 0 8px; font-size: 28px; }
+    p { margin: 0 0 16px; line-height: 1.5; color: #334155; }
+    a { display: inline-block; text-decoration: none; background: #0f172a; color: #fff; padding: 10px 14px; border-radius: 10px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <main>
+    <section>
+      <h1>Georgia Hills</h1>
+      <p>Private tours and driver service in Georgia.</p>
+      <a href="${base}/en">Enter Website</a>
+    </section>
+  </main>
+</body>
+</html>`;
+
+  fs.writeFileSync(indexHtmlPath, safeIndex, "utf8");
+}
+
 /* ── report ────────────────────────────────────────────────────────── */
 
 function countFiles(dir, ext) {
