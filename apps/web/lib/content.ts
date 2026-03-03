@@ -9,11 +9,16 @@ export type ContentFrontmatter = {
   title: string;
   slug: string;
   description: string;
+  lang?: ContentLocale;
+  author?: string;
+  reviewerName?: string;
+  reviewedDate?: string;
   metaTitle?: string;
   metaDescription?: string;
   date?: string;
   locale: ContentLocale;
   image?: string;
+  faq?: Array<{ question: string; answer: string }>;
 };
 
 export type ContentEntry = {
@@ -29,15 +34,37 @@ function getCollectionDir(collection: ContentCollection, locale: ContentLocale) 
 }
 
 function normalizeFrontmatter(data: Record<string, unknown>, fallbackSlug: string, locale: ContentLocale): ContentFrontmatter {
+  const faqRaw = Array.isArray(data.faq) ? data.faq : undefined;
+  const faq = faqRaw
+    ?.map((item) => {
+      const record = item as Record<string, unknown>;
+      const question = typeof record.question === "string" ? record.question : "";
+      const answer = typeof record.answer === "string" ? record.answer : "";
+      if (!question || !answer) return null;
+      return { question, answer };
+    })
+    .filter((item): item is { question: string; answer: string } => item !== null);
+
+  const metaTitle = data.metaTitle ?? data.meta_title;
+  const metaDescription = data.metaDescription ?? data.meta_description;
+  const date = data.date ?? data.publish_date;
+  const reviewerName = data.reviewerName ?? data.reviewer_name ?? data.author;
+  const reviewedDate = data.reviewedDate ?? data.reviewed_date;
+
   return {
     title: String(data.title || fallbackSlug),
     slug: String(data.slug || fallbackSlug),
     description: String(data.description || ""),
-    metaTitle: data.metaTitle ? String(data.metaTitle) : undefined,
-    metaDescription: data.metaDescription ? String(data.metaDescription) : undefined,
-    date: data.date ? String(data.date) : undefined,
+    lang: data.lang ? String(data.lang) as ContentLocale : undefined,
+    author: data.author ? String(data.author) : undefined,
+    reviewerName: reviewerName ? String(reviewerName) : undefined,
+    reviewedDate: reviewedDate ? String(reviewedDate) : undefined,
+    metaTitle: metaTitle ? String(metaTitle) : undefined,
+    metaDescription: metaDescription ? String(metaDescription) : undefined,
+    date: date ? String(date) : undefined,
     locale,
-    image: data.image ? String(data.image) : undefined
+    image: data.image ? String(data.image) : undefined,
+    faq
   };
 }
 

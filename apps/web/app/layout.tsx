@@ -32,7 +32,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const gtagId = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_GTAG_ID : undefined;
 
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
         <link
           rel="preload"

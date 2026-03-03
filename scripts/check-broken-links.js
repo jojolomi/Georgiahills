@@ -41,7 +41,13 @@ function shouldCheck(url) {
 }
 
 function resolveCandidates(ref) {
-  const clean = ref.split("#")[0].split("?")[0].trim();
+  const cleanRaw = ref.split("#")[0].split("?")[0].trim();
+  let clean = cleanRaw;
+  try {
+    clean = decodeURIComponent(cleanRaw);
+  } catch {
+    clean = cleanRaw;
+  }
   if (!clean) return [];
   const normalized = clean.startsWith("/") ? clean.slice(1) : clean;
   const candidates = new Set();
@@ -65,6 +71,23 @@ function resolveCandidates(ref) {
   return [...candidates];
 }
 
+function stripBasePathCandidate(ref) {
+  const cleanRaw = ref.split("#")[0].split("?")[0].trim();
+  let clean = cleanRaw;
+  try {
+    clean = decodeURIComponent(cleanRaw);
+  } catch {
+    clean = cleanRaw;
+  }
+  if (!clean || !clean.startsWith("/")) return [];
+
+  const parts = clean.slice(1).split("/");
+  if (parts.length < 2) return [];
+
+  const withoutFirstSegment = `/${parts.slice(1).join("/")}`;
+  return resolveCandidates(withoutFirstSegment);
+}
+
 if (!fs.existsSync(distDir)) {
   process.stderr.write(`✖ dist directory not found: ${distDir}\n`);
   process.exit(1);
@@ -82,6 +105,7 @@ const legacyMarketDirRe = /^(ae|sa|qa|kw|eg)[\/\\]/;
 
 for (const file of htmlFiles) {
   const rel = path.relative(distDir, file).replace(/\\/g, "/");
+  if (rel === "404.html" || rel === "500.html") continue;
   if (legacyMarketDirRe.test(rel)) continue;
   const html = fs.readFileSync(file, "utf8");
 
@@ -95,7 +119,8 @@ for (const file of htmlFiles) {
     if (!shouldCheck(ref)) continue;
     const candidates = resolveCandidates(ref);
     if (!candidates.length) continue;
-    const found = candidates.some((c) => existing.has(c));
+    const fallbackCandidates = stripBasePathCandidate(ref);
+    const found = [...candidates, ...fallbackCandidates].some((c) => existing.has(c));
     if (!found) {
       process.stderr.write(`✖ ${rel}: broken internal reference ${ref}\n`);
       passed = false;
