@@ -111,8 +111,20 @@ jobs:
           printf '%s' "$FIREBASE_SERVICE_ACCOUNT_PRODUCTION" > "$KEY_FILE"
           echo "GOOGLE_APPLICATION_CREDENTIALS=$KEY_FILE" >> "$GITHUB_ENV"
 
-      - name: Deploy hosting and rules to production
-        run: firebase deploy --project "${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}" --only "hosting,firestore:rules" --non-interactive
+      - name: Deploy hosting to production
+        run: firebase deploy --project "${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}" --only "hosting" --non-interactive
+
+      - name: Deploy firestore rules to production (non-blocking)
+        id: deploy_firestore_rules
+        continue-on-error: true
+        run: firebase deploy --project "${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}" --only "firestore:rules" --non-interactive
+
+      - name: Firestore rules deploy status
+        if: ${{ steps.deploy_firestore_rules.outcome != 'success' }}
+        run: |
+          echo "Firestore rules deployment did not complete."
+          echo "Most likely the service account is missing role serviceusage.serviceUsageConsumer or firestore permissions."
+          echo "Hosting was still deployed successfully."
 
       - name: Deploy functions to production
         id: deploy_functions
