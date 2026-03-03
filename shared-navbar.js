@@ -150,7 +150,7 @@
               <div style="display:flex; gap:0.75rem;">
                 <div class="custom-select-wrapper" id="currency-desktop">
                   <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('desktop')" aria-haspopup="true">
-                    <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-desktop">
+                    <span class="currency-flag-sm currency-flag-emoji" id="curr-flag-desktop" aria-hidden="true">🇬🇪</span>
                     <span id="curr-code-desktop">GEL</span>
                     <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
                   </button>
@@ -175,7 +175,7 @@
         </div>
       </nav>
 
-      <div id="mobile-menu" aria-hidden="true">
+      <div id="mobile-menu" aria-hidden="true" style="position:fixed;inset:0;transform:translateX(100%);width:100%;height:100vh;height:100svh;overflow-y:auto;z-index:60;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1.5rem;padding:2rem 0;text-align:center;background:#fff;">
         <button id="close-menu-btn" class="close-menu-btn" aria-label="${cfg.texts.close}"><i class="fa-solid fa-xmark"></i></button>
         <div id="mobile-links-container">
           <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="mobile-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
@@ -189,7 +189,7 @@
         <div class="mobile-settings">
           <div class="custom-select-wrapper" id="currency-mobile">
             <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('mobile')" aria-haspopup="true">
-              <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-mobile">
+              <span class="currency-flag-sm currency-flag-emoji" id="curr-flag-mobile" aria-hidden="true">🇬🇪</span>
               <span id="curr-code-mobile">GEL</span>
               <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
             </button>

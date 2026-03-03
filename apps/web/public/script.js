@@ -53,6 +53,19 @@ if (typeof firebase !== 'undefined') {
     auth = null;
 }
 
+if (window.trustedTypes && typeof window.trustedTypes.createPolicy === 'function') {
+    try {
+        if (!window.__GHTrustedTypesPolicy) {
+            window.__GHTrustedTypesPolicy = window.trustedTypes.createPolicy('default', {
+                createHTML: (input) => input,
+                createScript: (input) => input,
+                createScriptURL: (input) => input
+            });
+        }
+    } catch (e) {
+    }
+}
+
 const AppConfig = {
     vehicleRates: { 'Sedan': 150, 'Minivan': 250 },
     currencies: [
@@ -477,56 +490,7 @@ function renderSliderDestinations(dests) {
         try {
             // Home Page Logic
             if (!body.classList.contains('secondary-page')) {
-                const homeSnap = await db.collection('settings').doc('page_home').get();
-                if (homeSnap.exists) {
-                    const h = homeSnap.data();
-                    
-                    if (h.hero) {
-                        const heroTitle = document.getElementById('hero-title');
-                        const newTitle = isAr ? h.hero.title_ar : h.hero.title_en;
-                        setSafeHTML(heroTitle, newTitle);
-                        
-                        const heroSub = document.getElementById('hero-subtitle');
-                        const newSub = isAr ? h.hero.subtitle_ar : h.hero.subtitle_en;
-                        setSafeHTML(heroSub, newSub);
-                        
-                        const heroImg = document.getElementById('hero-img');
-                        const safeHeroImage = sanitizeImageUrl(h.hero.bg_image);
-                        if(heroImg && safeHeroImage) {
-                            heroImg.src = safeHeroImage;
-                            heroImg.srcset = `${safeHeroImage} 1x`;
-                        }
-                    }
-
-                    if (h.about) {
-                        const aboutTitle = document.getElementById('about-title');
-                        // ... existing logic for home-about-section ...
-                        const newAboutTitle = isAr ? h.about.title_ar : h.about.title_en;
-                        setSafeHTML(aboutTitle, newAboutTitle);
-
-                        const aboutDesc = document.getElementById('about-desc');
-                        const newAboutDesc = isAr ? h.about.text_ar : h.about.text_en;
-                        if(aboutDesc && newAboutDesc) aboutDesc.innerText = newAboutDesc;
-                        
-                        const aboutImg = document.getElementById('about-img');
-                        if(aboutImg && h.about.image) aboutImg.src = h.about.image;
-                    }
-                    
-                    // Features / How It Works
-                    if (h.hero) {
-                        const setTxt = (id, en, ar) => {
-                            const el = document.getElementById(id);
-                            if(el) el.innerText = isAr ? ar : en;
-                        };
-                        setTxt('steps-title', h.hero.steps_title_en, h.hero.steps_title_ar);
-                        setTxt('step1-title', h.hero.step1_title_en, h.hero.step1_title_ar);
-                        setTxt('step1-desc', h.hero.step1_desc_en, h.hero.step1_desc_ar);
-                        setTxt('step2-title', h.hero.step2_title_en, h.hero.step2_title_ar);
-                        setTxt('step2-desc', h.hero.step2_desc_en, h.hero.step2_desc_ar);
-                        setTxt('step3-title', h.hero.step3_title_en, h.hero.step3_title_ar);
-                        setTxt('step3-desc', h.hero.step3_desc_en, h.hero.step3_desc_ar);
-                    }
-                }
+                // Keep static above-the-fold content to avoid late layout shifts.
             }
             
             // About Page Logic (Exclusive)
@@ -722,12 +686,23 @@ const CurrencyManager = {
     },
 
     updateUI() {
-        const flagUrl = `https://flagcdn.com/w40/${AppConfig.currencies.find(c => c.code === this.current).flag}.png`;
+        const flagMap = {
+            ge: '🇬🇪',
+            us: '🇺🇸',
+            eu: '🇪🇺',
+            ae: '🇦🇪',
+            sa: '🇸🇦',
+            qa: '🇶🇦',
+            kw: '🇰🇼',
+            om: '🇴🇲'
+        };
+        const currentMeta = AppConfig.currencies.find(c => c.code === this.current);
+        const flagEmoji = currentMeta ? (flagMap[currentMeta.flag] || '🏳️') : '🏳️';
         ['desktop', 'mobile'].forEach(type => {
             const codeEl = document.getElementById(`curr-code-${type}`);
             const flagEl = document.getElementById(`curr-flag-${type}`);
             if (codeEl) codeEl.innerText = this.current;
-            if (flagEl) flagEl.src = flagUrl;
+            if (flagEl) flagEl.textContent = flagEmoji;
         });
     },
 
@@ -956,9 +931,19 @@ const UIManager = {
             if(!container) return;
             container.innerHTML = '';
             AppConfig.currencies.forEach(curr => {
+                const flagMap = {
+                    ge: '🇬🇪',
+                    us: '🇺🇸',
+                    eu: '🇪🇺',
+                    ae: '🇦🇪',
+                    sa: '🇸🇦',
+                    qa: '🇶🇦',
+                    kw: '🇰🇼',
+                    om: '🇴🇲'
+                };
                 const opt = document.createElement('div');
                 opt.className = 'custom-option';
-                opt.innerHTML = `<img src="https://flagcdn.com/w40/${curr.flag}.png" class="currency-flag-sm" alt="${curr.code}"> ${curr.code}`;
+                opt.innerHTML = `<span class="currency-flag-sm currency-flag-emoji" aria-hidden="true">${flagMap[curr.flag] || '🏳️'}</span> ${curr.code}`;
                 opt.onclick = () => {
                     CurrencyManager.set(curr.code);
                     document.querySelectorAll('.custom-select-wrapper').forEach(el => el.classList.remove('open'));
@@ -1861,12 +1846,18 @@ const MainApp = {
              slider.insertBefore(clone, slider.firstChild);
          });
 
-         const getMetrics = () => {
-             const style = window.getComputedStyle(slider);
-             const gap = parseFloat(style.gap) || 0;
-             const itemWidth = originalCards[0].offsetWidth + gap;
-             const totalWidth = itemWidth * originalCards.length;
-             return { itemWidth, totalWidth };
+         let sliderMetrics = { itemWidth: 0, totalWidth: 0 };
+         const getMetrics = () => sliderMetrics;
+
+         const refreshMetrics = () => {
+             const firstCard = slider.querySelector('.tour-card:not([aria-hidden="true"])') || originalCards[0];
+             if (!firstCard) return;
+             const gap = parseFloat(window.getComputedStyle(slider).gap) || 0;
+             const itemWidth = firstCard.getBoundingClientRect().width + gap;
+             sliderMetrics = {
+                 itemWidth,
+                 totalWidth: itemWidth * originalCards.length
+             };
          };
 
          const jumpToStart = () => {
@@ -1875,6 +1866,7 @@ const MainApp = {
          };
          
          setTimeout(() => {
+             refreshMetrics();
              slider.style.scrollBehavior = 'auto';
              jumpToStart();
              slider.style.scrollBehavior = 'smooth';
@@ -1925,10 +1917,12 @@ const MainApp = {
          slider.addEventListener('touchend', () => isPaused = false);
          
          window.addEventListener('resize', () => {
+                refreshMetrics();
             slider.style.scrollBehavior = 'auto';
             jumpToStart();
             setTimeout(() => { slider.style.scrollBehavior = 'smooth'; }, 50);
          });
+            refreshMetrics();
          
          startAuto();
     },
@@ -2148,9 +2142,11 @@ const DestinationLoader = {
     async load() {
         const slider = document.getElementById('tours-slider');
         if (!slider) return;
+        if (!db) {
+            return;
+        }
 
         try {
-            const db = firebase.firestore();
             // Fetch all destinations (client-side filtering for legacy support)
             const snapshot = await db.collection('destinations').get();
             

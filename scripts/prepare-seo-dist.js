@@ -33,6 +33,16 @@ function copyRecursive(src, dest, filter) {
   }
 }
 
+function isExternalLink(target) {
+  return /^(https?:|mailto:|tel:|#)/i.test(target);
+}
+
+function normalizeLocalTarget(target) {
+  if (!target) return "";
+  const withoutQuery = target.split("?")[0].split("#")[0];
+  return withoutQuery.replace(/^\/+/, "");
+}
+
 /* ── guard ─────────────────────────────────────────────────────────── */
 
 if (!fs.existsSync(nextDir)) {
@@ -158,6 +168,55 @@ if (process.env.GITHUB_PAGES === "true" && !fs.existsSync(indexHtmlPath)) {
 const legacyRootIndexPath = path.join(repoRoot, "index.html");
 if (fs.existsSync(legacyRootIndexPath)) {
   fs.copyFileSync(legacyRootIndexPath, indexHtmlPath);
+
+  const legacyIndex = fs.readFileSync(legacyRootIndexPath, "utf8");
+  const localTargets = new Set();
+  const attrRegex = /(href|src)="([^"]+)"/gi;
+  let match = null;
+
+  while ((match = attrRegex.exec(legacyIndex)) !== null) {
+    const rawTarget = match[2].trim();
+    if (isExternalLink(rawTarget)) continue;
+    const normalized = normalizeLocalTarget(rawTarget);
+    if (!normalized) continue;
+    localTargets.add(normalized);
+  }
+
+  for (const target of localTargets) {
+    const srcPath = path.join(repoRoot, target);
+    const destPath = path.join(distDir, target);
+    if (!fs.existsSync(srcPath)) continue;
+
+    if (fs.statSync(srcPath).isDirectory()) {
+      copyRecursive(srcPath, destPath);
+    } else {
+      fs.mkdirSync(path.dirname(destPath), { recursive: true });
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+
+  const legacyTopLevelExtensions = new Set([
+    ".html",
+    ".js",
+    ".css",
+    ".webp",
+    ".avif",
+    ".ico",
+    ".xml",
+    ".txt",
+    ".json"
+  ]);
+
+  for (const entry of fs.readdirSync(repoRoot, { withFileTypes: true })) {
+    if (!entry.isFile()) continue;
+    const ext = path.extname(entry.name).toLowerCase();
+    if (!legacyTopLevelExtensions.has(ext)) continue;
+
+    const srcPath = path.join(repoRoot, entry.name);
+    const destPath = path.join(distDir, entry.name);
+    if (fs.existsSync(destPath)) continue;
+    fs.copyFileSync(srcPath, destPath);
+  }
 }
 
 /* ── report ────────────────────────────────────────────────────────── */

@@ -145,12 +145,11 @@
     <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     
     <!-- OPTIMIZATION: Preload Hero Image BEFORE CSS -->
         <link rel="preload" as="image" 
             href="image-1600.avif" 
-            imagesrcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" 
+            imagesrcset="image-320.avif 320w, image-640.avif 640w, image-1024-lite.avif 1024w, image-1600.avif 1600w" 
           imagesizes="100vw"
           fetchpriority="high">
 
@@ -161,7 +160,7 @@
             .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
             .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
             .navbar{position:relative;z-index:50;background:transparent}
-            .hero{position:relative;height:90vh;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#0F172A}
+            .hero{position:relative;height:90vh;height:90svh;min-height:36rem;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#0F172A}
             .hero-bg-container{position:absolute;inset:0;z-index:0}
             .hero-img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
             .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,.7), rgba(0,0,0,.4), transparent)}
@@ -214,12 +213,12 @@
                 link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
                 document.head.appendChild(link);
             }
-            ['mousedown', 'keydown', 'touchstart', 'pointerdown', 'scroll'].forEach((evt) => {
+            ['mousedown', 'keydown', 'touchstart', 'pointerdown'].forEach((evt) => {
                 window.addEventListener(evt, loadIconStyles, { once: true, passive: true });
             });
             window.addEventListener('load', () => {
-                if ('requestIdleCallback' in window) requestIdleCallback(loadIconStyles, { timeout: 3500 });
-                else setTimeout(loadIconStyles, 3500);
+                if ('requestIdleCallback' in window) requestIdleCallback(loadIconStyles, { timeout: 6000 });
+                else setTimeout(loadIconStyles, 6000);
             }, { once: true });
         })();
     </script>
@@ -237,7 +236,7 @@
                 hero.style.display = 'flex';
                 hero.style.visibility = 'visible';
                 hero.style.opacity = '1';
-                hero.style.minHeight = '90vh';
+                hero.style.minHeight = '90svh';
             }
 
             if (heroImg) {
@@ -290,7 +289,7 @@
     <section id="home" class="hero" aria-label="مرحباً بكم في جورجيا هيلز">
         <div class="hero-bg-container">
              <picture>
-                <source type="image/avif" srcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" sizes="100vw">
+                <source type="image/avif" srcset="image-320.avif 320w, image-640.avif 640w, image-1024-lite.avif 1024w, image-1600.avif 1600w" sizes="100vw">
                 <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="جبال جورجيا الخلابة" fetchpriority="high" decoding="async" loading="eager">
              </picture>
             <div class="hero-overlay"></div>
@@ -423,7 +422,7 @@
             <div id="tours-slider" class="tours-slider" tabindex="0" aria-label="Destinations Slider" dir="ltr">
                 <!-- Tbilisi -->
                 <div class="tour-card group" onclick="window.location.href='tbilisi-ar.html'">
-                    <img src="Tbilisi-480.webp" srcset="Tbilisi-320.webp 320w, Tbilisi-480.webp 480w, Tbilisi-640.webp 640w, Tbilisi-768.webp 768w, Tbilisi-1024.webp 1024w" sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="تبليسي - العاصمة">
+                    <img src="Tbilisi-480.webp" srcset="Tbilisi-320.webp 320w, Tbilisi-480.webp 480w, Tbilisi-640-lite.webp 640w, Tbilisi-768.webp 768w, Tbilisi-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="تبليسي - العاصمة">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">تبليسي</h3>
@@ -443,7 +442,7 @@
                 </div>
                 <!-- Martvili -->
                 <div class="tour-card group" onclick="window.location.href='martvili-ar.html'">
-                    <img src="Martvili-480.webp" srcset="Martvili-320.webp 320w, Martvili-480.webp 480w, Martvili-640.webp 640w, Martvili-768.webp 768w, Martvili-1024.webp 1024w" sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="وادي مارتفيلي">
+                    <img src="Martvili-480.webp" srcset="Martvili-320.webp 320w, Martvili-480.webp 480w, Martvili-640-lite.webp 640w, Martvili-768.webp 768w, Martvili-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="وادي مارتفيلي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">وادي مارتفيلي</h3>
@@ -453,7 +452,7 @@
                 </div>
                 <!-- Signagi -->
                 <div class="tour-card group" onclick="window.location.href='signagi-ar.html'">
-                    <img src="Signagi-480.webp" srcset="Signagi-320.webp 320w, Signagi-480.webp 480w, Signagi-640.webp 640w, Signagi-768.webp 768w, Signagi-1024.webp 1024w" sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="سغناغي - مدينة الحب">
+                    <img src="Signagi-480.webp" srcset="Signagi-320.webp 320w, Signagi-480.webp 480w, Signagi-640-lite.webp 640w, Signagi-768.webp 768w, Signagi-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="سغناغي - مدينة الحب">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">سغناغي</h3>

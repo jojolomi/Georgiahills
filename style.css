@@ -365,6 +365,7 @@ html[lang="ar"] .custom-options { right: auto; left: 0; }
 .custom-option:hover { background: var(--color-gray-50); }
 .custom-option.selected { background: var(--color-success-bg); color: var(--color-success); }
 .currency-flag-sm { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; box-shadow: 0 1px 2px rgba(0,0,0,0.1); }
+.currency-flag-emoji { display: inline-flex; align-items: center; justify-content: center; font-size: 12px; line-height: 1; box-shadow: none; }
 
 /* Mobile Menu Toggle */
 .mobile-controls { display: flex; align-items: center; gap: 0.75rem; }
@@ -386,7 +387,7 @@ html[lang="ar"] .custom-options { right: auto; left: 0; }
     backdrop-filter: none;
     border-color: transparent;
 }
-#mobile-menu { position: fixed; inset: 0; z-index: var(--z-mobile-menu); background-color: white; width: 100%; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.5rem; transition: transform 0.3s; transform: translateX(100%); overflow-y: auto; padding: 2rem 0; text-align: center; }
+#mobile-menu { position: fixed; inset: 0; z-index: var(--z-mobile-menu); background-color: white; width: 100%; height: 100vh; height: 100svh; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 1.5rem; transition: transform 0.3s; transform: translateX(100%); overflow-y: auto; padding: 2rem 0; text-align: center; contain: layout paint; }
 html[lang="ar"] #mobile-menu { transform: translateX(-100%); direction: rtl; }
 #mobile-menu.open, html[lang="ar"] #mobile-menu.open { transform: translateX(0) !important; }
 .close-menu-btn { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.875rem; color: var(--color-gray-400); }
@@ -426,7 +427,7 @@ html[lang="ar"] .close-menu-btn { right: auto; left: 1.5rem; }
 }
 
 /* Hero */
-.hero { position: relative; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: var(--color-dark); }
+.hero { position: relative; height: 90vh; height: 90svh; min-height: 36rem; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: var(--color-dark); }
 .hero-bg-container { position: absolute; inset: 0; z-index: var(--z-negative); }
 .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.4), transparent); }
