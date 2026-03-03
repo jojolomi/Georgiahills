@@ -50,7 +50,12 @@
     if (!offset) return;
     document.documentElement.style.setProperty('--gh-navbar-offset', offset + 'px');
     if (document.body) {
-      document.body.style.paddingTop = offset + 'px';
+      document.body.style.setProperty('padding-top', offset + 'px', 'important');
+      document.body.style.setProperty('scroll-padding-top', offset + 'px');
+    }
+    const firstBlock = document.querySelector('main, section.hero, section#home, section.about-premium-hero, #main-content');
+    if (firstBlock && firstBlock instanceof HTMLElement) {
+      firstBlock.style.setProperty('scroll-margin-top', offset + 'px');
     }
   }
 
@@ -190,11 +195,11 @@
     `;
 
     return `
-      <nav id="navbar" class="navbar" dir="${cfg.isArabic ? 'rtl' : 'ltr'}" data-shared-navbar="true">
+      <nav id="navbar" class="navbar" dir="ltr" data-shared-navbar="true">
         <div class="container">
           <div class="navbar-inner">
             <a href="${cfg.home}" class="nav-logo">
-              <div><img src="${p}favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
+              <div><img src="${p}logo-256.avif" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img" onerror="this.onerror=null;this.src='${p}favicon.ico';"></div>
               <span data-nav-brand="text">Georgia Hills</span>
             </a>
 
@@ -296,6 +301,7 @@
   }
 
   window.addEventListener('resize', applyNavbarOffset, { passive: true });
+  window.addEventListener('load', applyNavbarOffset);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', renderSharedNavbar);
