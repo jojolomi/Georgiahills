@@ -43,6 +43,22 @@ function normalizeLocalTarget(target) {
   return withoutQuery.replace(/^\/+/, "");
 }
 
+function extractLocalTargetsFromHtml(html) {
+  const localTargets = new Set();
+  const attrRegex = /(href|src)="([^"]+)"/gi;
+  let match = null;
+
+  while ((match = attrRegex.exec(html)) !== null) {
+    const rawTarget = match[2].trim();
+    if (isExternalLink(rawTarget)) continue;
+    const normalized = normalizeLocalTarget(rawTarget);
+    if (!normalized) continue;
+    localTargets.add(normalized);
+  }
+
+  return localTargets;
+}
+
 /* ── guard ─────────────────────────────────────────────────────────── */
 
 if (!fs.existsSync(nextDir)) {
@@ -170,17 +186,7 @@ if (fs.existsSync(legacyRootIndexPath)) {
   fs.copyFileSync(legacyRootIndexPath, indexHtmlPath);
 
   const legacyIndex = fs.readFileSync(legacyRootIndexPath, "utf8");
-  const localTargets = new Set();
-  const attrRegex = /(href|src)="([^"]+)"/gi;
-  let match = null;
-
-  while ((match = attrRegex.exec(legacyIndex)) !== null) {
-    const rawTarget = match[2].trim();
-    if (isExternalLink(rawTarget)) continue;
-    const normalized = normalizeLocalTarget(rawTarget);
-    if (!normalized) continue;
-    localTargets.add(normalized);
-  }
+  const localTargets = extractLocalTargetsFromHtml(legacyIndex);
 
   for (const target of localTargets) {
     const srcPath = path.join(repoRoot, target);
@@ -216,6 +222,49 @@ if (fs.existsSync(legacyRootIndexPath)) {
     if (fs.existsSync(destPath)) continue;
     fs.copyFileSync(srcPath, destPath);
   }
+
+  // Recursively copy only linked legacy HTML pages so internal links resolve
+  // without reintroducing unrelated root artifacts (reports, temp files, admin).
+  const htmlQueue = [indexHtmlPath];
+  const seenHtml = new Set();
+
+  while (htmlQueue.length > 0) {
+    const currentPath = htmlQueue.shift();
+    if (!currentPath || seenHtml.has(currentPath) || !fs.existsSync(currentPath)) continue;
+    seenHtml.add(currentPath);
+
+    const currentHtml = fs.readFileSync(currentPath, "utf8");
+    const targets = extractLocalTargetsFromHtml(currentHtml);
+
+    for (const target of targets) {
+      if (!target.toLowerCase().endsWith(".html")) continue;
+
+      const sourceHtml = path.join(repoRoot, target);
+      const destHtml = path.join(distDir, target);
+      if (!fs.existsSync(sourceHtml)) continue;
+
+      if (!fs.existsSync(destHtml)) {
+        fs.mkdirSync(path.dirname(destHtml), { recursive: true });
+        fs.copyFileSync(sourceHtml, destHtml);
+      }
+
+      if (!seenHtml.has(destHtml)) {
+        htmlQueue.push(destHtml);
+      }
+    }
+  }
+}
+
+/* ── 9. Copy all root-level public HTML pages (incl. Arabic variants) ─ */
+
+const excludeHtmlPatterns = [/^admin/i, /\.report\.html$/i, /^tmp_/i, /^lhr/i];
+for (const entry of fs.readdirSync(repoRoot, { withFileTypes: true })) {
+  if (!entry.isFile() || !entry.name.endsWith('.html')) continue;
+  if (excludeHtmlPatterns.some(re => re.test(entry.name))) continue;
+  const srcPath = path.join(repoRoot, entry.name);
+  const destPath = path.join(distDir, entry.name);
+  if (fs.existsSync(destPath)) continue;
+  fs.copyFileSync(srcPath, destPath);
 }
 
 /* ── report ────────────────────────────────────────────────────────── */

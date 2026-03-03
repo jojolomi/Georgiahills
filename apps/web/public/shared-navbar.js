@@ -4,6 +4,12 @@
     return path || 'index.html';
   }
 
+  function getBasePrefix() {
+    const segs = (window.location.pathname || '').replace(/^\//, '').split('/');
+    if (segs.length > 1 && segs[0]) return '../';
+    return '';
+  }
+
   function detectArabic(filename) {
     const params = new URLSearchParams(window.location.search);
     const queryLang = params.get('lang');
@@ -49,7 +55,19 @@
       'article-7-days-georgia.html': 'article-7-days-georgia-ar.html',
       'article-7-days-georgia-ar.html': 'article-7-days-georgia.html',
       'article-georgian-food.html': 'article-georgian-food-ar.html',
-      'article-georgian-food-ar.html': 'article-georgian-food.html'
+      'article-georgian-food-ar.html': 'article-georgian-food.html',
+      'article-is-georgia-safe.html': 'article-is-georgia-safe-ar.html',
+      'article-is-georgia-safe-ar.html': 'article-is-georgia-safe.html',
+      'destinations-hub.html': 'destinations-hub-ar.html',
+      'destinations-hub-ar.html': 'destinations-hub.html',
+      'family-travel-hub.html': 'family-travel-hub-ar.html',
+      'family-travel-hub-ar.html': 'family-travel-hub.html',
+      'halal-travel-hub.html': 'halal-travel-hub-ar.html',
+      'halal-travel-hub-ar.html': 'halal-travel-hub.html',
+      'itineraries-hub.html': 'itineraries-hub-ar.html',
+      'itineraries-hub-ar.html': 'itineraries-hub.html',
+      'safety-hub.html': 'safety-hub-ar.html',
+      'safety-hub-ar.html': 'safety-hub.html'
     };
   }
 
@@ -66,17 +84,19 @@
   }
 
   function getConfig(filename, isArabic) {
-    const home = isArabic ? 'arabic.html' : 'index.html';
+    const p = getBasePrefix();
+    const home = p + (isArabic ? 'arabic.html' : 'index.html');
     return {
       isArabic,
+      prefix: p,
       home,
-      about: isArabic ? 'about-ar.html' : 'about.html',
-      services: isArabic ? 'services-ar.html' : 'services.html',
-      guide: isArabic ? 'guide-ar.html' : 'guide.html',
-      blog: isArabic ? 'blog-ar.html' : 'blog.html',
-      contact: isArabic ? 'contact-ar.html' : 'contact.html',
-      booking: isArabic ? 'booking-ar.html' : 'booking.html',
-      langSwitch: buildLangSwitch(filename, isArabic),
+      about: p + (isArabic ? 'about-ar.html' : 'about.html'),
+      services: p + (isArabic ? 'services-ar.html' : 'services.html'),
+      guide: p + (isArabic ? 'guide-ar.html' : 'guide.html'),
+      blog: p + (isArabic ? 'blog-ar.html' : 'blog.html'),
+      contact: p + (isArabic ? 'contact-ar.html' : 'contact.html'),
+      booking: p + (isArabic ? 'booking-ar.html' : 'booking.html'),
+      langSwitch: p + buildLangSwitch(filename, isArabic),
       texts: {
         home: isArabic ? 'الرئيسية' : 'Home',
         about: isArabic ? 'من نحن' : 'About',
@@ -121,6 +141,10 @@
   }
 
   function buildMarkup(cfg, filename) {
+    const p = cfg.prefix;
+    const homeDestinations = cfg.home + '#destinations';
+    const homeFleet = cfg.home + '#fleet';
+    const homeReviews = cfg.home + '#reviews';
     const desktopLinks = `
       <div id="desktop-links-container" style="display:contents">
         <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="nav-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
@@ -137,7 +161,7 @@
         <div class="container">
           <div class="navbar-inner">
             <a href="${cfg.home}" class="nav-logo">
-              <div><img src="favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
+              <div><img src="${p}favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
               <span data-nav-brand="text">Georgia Hills</span>
             </a>
 
@@ -146,8 +170,8 @@
 
               <div style="display:flex; gap:0.75rem;">
                 <div class="custom-select-wrapper" id="currency-desktop">
-                  <button class="action-btn custom-select-trigger" data-currency-toggle="desktop" aria-haspopup="true">
-                    <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-desktop">
+                  <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('desktop')" aria-haspopup="true">
+                    <span class="currency-flag-sm currency-flag-emoji" id="curr-flag-desktop" aria-hidden="true">🇬🇪</span>
                     <span id="curr-code-desktop">GEL</span>
                     <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
                   </button>
@@ -157,9 +181,6 @@
                 <a href="${cfg.langSwitch}" class="action-btn" aria-label="Language switch">
                   <i class="fa-solid fa-globe"></i><span class="lang-text">${cfg.texts.lang}</span>
                 </a>
-                <button type="button" class="action-btn" data-theme-toggle aria-label="${cfg.isArabic ? 'تبديل الوضع الليلي' : 'Toggle dark mode'}">
-                  <i class="fa-solid fa-moon"></i><span class="lang-text">${cfg.isArabic ? 'الوضع الليلي' : 'Dark mode'}</span>
-                </button>
               </div>
 
               <a href="${cfg.booking}" data-nav-link="booking" data-nav-text="book" class="btn-book-nav${activeClass(filename, 'booking')}">${cfg.texts.book}</a>
@@ -169,16 +190,13 @@
               <a href="${cfg.langSwitch}" class="action-btn" aria-label="Language switch" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
                 <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">${cfg.texts.lang}</span>
               </a>
-            <button type="button" class="action-btn" data-theme-toggle aria-label="${cfg.isArabic ? 'تبديل الوضع الليلي' : 'Toggle dark mode'}" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
-              <i class="fa-solid fa-moon text-primary"></i>
-            </button>
-            <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="${cfg.texts.toggle}" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
-          </div>
+              <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="${cfg.texts.toggle}" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
+            </div>
           </div>
         </div>
       </nav>
 
-      <div id="mobile-menu" aria-hidden="true">
+      <div id="mobile-menu" aria-hidden="true" style="position:fixed;inset:0;transform:translateX(100%);width:100%;height:100vh;height:100svh;overflow-y:auto;z-index:60;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1.5rem;padding:2rem 0;text-align:center;background:#fff;">
         <button id="close-menu-btn" class="close-menu-btn" aria-label="${cfg.texts.close}"><i class="fa-solid fa-xmark"></i></button>
         <div id="mobile-links-container">
           <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="mobile-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
@@ -191,8 +209,8 @@
 
         <div class="mobile-settings">
           <div class="custom-select-wrapper" id="currency-mobile">
-            <button class="action-btn custom-select-trigger" data-currency-toggle="mobile" aria-haspopup="true">
-              <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-mobile">
+            <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('mobile')" aria-haspopup="true">
+              <span class="currency-flag-sm currency-flag-emoji" id="curr-flag-mobile" aria-hidden="true">🇬🇪</span>
               <span id="curr-code-mobile">GEL</span>
               <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
             </button>
@@ -203,125 +221,6 @@
         <a href="${cfg.booking}" data-nav-link="booking" data-nav-text="book" class="mobile-btn-book${activeClass(filename, 'booking')}">${cfg.texts.book}</a>
       </div>
     `;
-  }
-
-  const currencyChoices = [
-    { code: 'GEL', flag: 'ge' },
-    { code: 'USD', flag: 'us' },
-    { code: 'EUR', flag: 'eu' },
-    { code: 'AED', flag: 'ae' },
-    { code: 'SAR', flag: 'sa' },
-    { code: 'KWD', flag: 'kw' },
-    { code: 'QAR', flag: 'qa' },
-    { code: 'OMR', flag: 'om' }
-  ];
-
-  function setTheme(isDark) {
-    document.documentElement.classList.toggle('theme-dark', isDark);
-  }
-
-  function initThemeToggle() {
-    const saved = localStorage.getItem('gh_theme');
-    if (saved === 'dark') setTheme(true);
-
-    document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const nextIsDark = !document.documentElement.classList.contains('theme-dark');
-        setTheme(nextIsDark);
-        localStorage.setItem('gh_theme', nextIsDark ? 'dark' : 'light');
-      });
-    });
-  }
-
-  function setMobileMenuState(open) {
-    const menu = document.getElementById('mobile-menu');
-    const toggle = document.getElementById('mobile-menu-btn');
-    if (!menu || !toggle) return;
-
-    menu.classList.toggle('open', open);
-    menu.setAttribute('aria-hidden', open ? 'false' : 'true');
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    document.body.style.overflow = open ? 'hidden' : '';
-  }
-
-  function initMobileMenu() {
-    const toggle = document.getElementById('mobile-menu-btn');
-    const close = document.getElementById('close-menu-btn');
-    const menu = document.getElementById('mobile-menu');
-    if (!toggle || !close || !menu) return;
-
-    toggle.addEventListener('click', () => setMobileMenuState(true));
-    close.addEventListener('click', () => setMobileMenuState(false));
-
-    menu.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => setMobileMenuState(false));
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') setMobileMenuState(false);
-    });
-  }
-
-  function updateCurrencyUi(type, code) {
-    const selected = currencyChoices.find((choice) => choice.code === code) || currencyChoices[0];
-    const codeEl = document.getElementById(`curr-code-${type}`);
-    const flagEl = document.getElementById(`curr-flag-${type}`);
-    if (codeEl) codeEl.textContent = selected.code;
-    if (flagEl) {
-      flagEl.src = `https://flagcdn.com/w40/${selected.flag}.png`;
-      flagEl.alt = selected.code;
-    }
-  }
-
-  function closeCurrencyDropdowns() {
-    document.querySelectorAll('.custom-select-wrapper').forEach((wrapper) => wrapper.classList.remove('open'));
-  }
-
-  function initCurrencyControls() {
-    const savedCurrency = localStorage.getItem('gh_currency') || 'GEL';
-    updateCurrencyUi('desktop', savedCurrency);
-    updateCurrencyUi('mobile', savedCurrency);
-
-    ['desktop', 'mobile'].forEach((type) => {
-      const wrapper = document.getElementById(`currency-${type}`);
-      const optionsContainer = document.getElementById(`curr-options-${type}`);
-      if (!wrapper || !optionsContainer) return;
-
-      optionsContainer.innerHTML = currencyChoices
-        .map((choice) => `
-          <button type="button" class="custom-option" data-currency="${choice.code}" data-type="${type}">
-            <img src="https://flagcdn.com/w40/${choice.flag}.png" alt="${choice.code}" class="currency-flag-sm">
-            <span>${choice.code}</span>
-          </button>
-        `)
-        .join('');
-    });
-
-    document.querySelectorAll('[data-currency-toggle]').forEach((button) => {
-      button.addEventListener('click', (event) => {
-        event.stopPropagation();
-        const type = button.getAttribute('data-currency-toggle');
-        const wrapper = type ? document.getElementById(`currency-${type}`) : null;
-        if (!wrapper) return;
-        const isOpen = wrapper.classList.contains('open');
-        closeCurrencyDropdowns();
-        wrapper.classList.toggle('open', !isOpen);
-      });
-    });
-
-    document.querySelectorAll('.custom-option[data-currency]').forEach((option) => {
-      option.addEventListener('click', () => {
-        const code = option.getAttribute('data-currency');
-        if (!code) return;
-        localStorage.setItem('gh_currency', code);
-        updateCurrencyUi('desktop', code);
-        updateCurrencyUi('mobile', code);
-        closeCurrencyDropdowns();
-        window.dispatchEvent(new CustomEvent('gh:currency-change', { detail: { code } }));
-      });
-    });
-
-    document.addEventListener('click', closeCurrencyDropdowns);
   }
 
   function renderSharedNavbar() {
@@ -344,10 +243,6 @@
 
     nav.insertAdjacentHTML('beforebegin', buildMarkup(cfg, filename));
     nav.remove();
-
-    initThemeToggle();
-    initMobileMenu();
-    initCurrencyControls();
 
     window.__GH_SHARED_NAVBAR__ = true;
   }

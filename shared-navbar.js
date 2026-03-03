@@ -4,6 +4,12 @@
     return path || 'index.html';
   }
 
+  function getBasePrefix() {
+    const segs = (window.location.pathname || '').replace(/^\//, '').split('/');
+    if (segs.length > 1 && segs[0]) return '../';
+    return '';
+  }
+
   function detectArabic(filename) {
     const params = new URLSearchParams(window.location.search);
     const queryLang = params.get('lang');
@@ -49,7 +55,19 @@
       'article-7-days-georgia.html': 'article-7-days-georgia-ar.html',
       'article-7-days-georgia-ar.html': 'article-7-days-georgia.html',
       'article-georgian-food.html': 'article-georgian-food-ar.html',
-      'article-georgian-food-ar.html': 'article-georgian-food.html'
+      'article-georgian-food-ar.html': 'article-georgian-food.html',
+      'article-is-georgia-safe.html': 'article-is-georgia-safe-ar.html',
+      'article-is-georgia-safe-ar.html': 'article-is-georgia-safe.html',
+      'destinations-hub.html': 'destinations-hub-ar.html',
+      'destinations-hub-ar.html': 'destinations-hub.html',
+      'family-travel-hub.html': 'family-travel-hub-ar.html',
+      'family-travel-hub-ar.html': 'family-travel-hub.html',
+      'halal-travel-hub.html': 'halal-travel-hub-ar.html',
+      'halal-travel-hub-ar.html': 'halal-travel-hub.html',
+      'itineraries-hub.html': 'itineraries-hub-ar.html',
+      'itineraries-hub-ar.html': 'itineraries-hub.html',
+      'safety-hub.html': 'safety-hub-ar.html',
+      'safety-hub-ar.html': 'safety-hub.html'
     };
   }
 
@@ -66,17 +84,19 @@
   }
 
   function getConfig(filename, isArabic) {
-    const home = isArabic ? 'arabic.html' : 'index.html';
+    const p = getBasePrefix();
+    const home = p + (isArabic ? 'arabic.html' : 'index.html');
     return {
       isArabic,
+      prefix: p,
       home,
-      about: isArabic ? 'about-ar.html' : 'about.html',
-      services: isArabic ? 'services-ar.html' : 'services.html',
-      guide: isArabic ? 'guide-ar.html' : 'guide.html',
-      blog: isArabic ? 'blog-ar.html' : 'blog.html',
-      contact: isArabic ? 'contact-ar.html' : 'contact.html',
-      booking: isArabic ? 'booking-ar.html' : 'booking.html',
-      langSwitch: buildLangSwitch(filename, isArabic),
+      about: p + (isArabic ? 'about-ar.html' : 'about.html'),
+      services: p + (isArabic ? 'services-ar.html' : 'services.html'),
+      guide: p + (isArabic ? 'guide-ar.html' : 'guide.html'),
+      blog: p + (isArabic ? 'blog-ar.html' : 'blog.html'),
+      contact: p + (isArabic ? 'contact-ar.html' : 'contact.html'),
+      booking: p + (isArabic ? 'booking-ar.html' : 'booking.html'),
+      langSwitch: p + buildLangSwitch(filename, isArabic),
       texts: {
         home: isArabic ? 'الرئيسية' : 'Home',
         about: isArabic ? 'من نحن' : 'About',
@@ -121,6 +141,7 @@
   }
 
   function buildMarkup(cfg, filename) {
+    const p = cfg.prefix;
     const homeDestinations = cfg.home + '#destinations';
     const homeFleet = cfg.home + '#fleet';
     const homeReviews = cfg.home + '#reviews';
@@ -140,7 +161,7 @@
         <div class="container">
           <div class="navbar-inner">
             <a href="${cfg.home}" class="nav-logo">
-              <div><img src="favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
+              <div><img src="${p}favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
               <span data-nav-brand="text">Georgia Hills</span>
             </a>
 
