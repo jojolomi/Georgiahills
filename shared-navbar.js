@@ -28,12 +28,6 @@
     return path || 'index.html';
   }
 
-  function getBasePrefix() {
-    const segs = (window.location.pathname || '').replace(/^\//, '').split('/');
-    if (segs.length > 1 && segs[0]) return '../';
-    return '';
-  }
-
   function detectArabic(filename) {
     const params = new URLSearchParams(window.location.search);
     const queryLang = params.get('lang');
@@ -43,20 +37,9 @@
     return document.documentElement.lang === 'ar';
   }
 
-  function applyNavbarOffset() {
-    const nav = document.getElementById('navbar');
-    if (!nav) return;
-    const offset = Math.ceil(nav.getBoundingClientRect().height || 0);
-    if (!offset) return;
-    document.documentElement.style.setProperty('--gh-navbar-offset', offset + 'px');
-    if (document.body) {
-      document.body.style.setProperty('scroll-padding-top', offset + 'px');
-    }
-    const firstBlock = document.querySelector('#mobile-menu + *') || document.querySelector('main, section.hero, section#home, section.about-premium-hero, #main-content');
-    if (firstBlock && firstBlock instanceof HTMLElement) {
-      firstBlock.style.setProperty('margin-top', offset + 'px');
-      firstBlock.style.setProperty('scroll-margin-top', offset + 'px');
-    }
+  function forceLtrLayout() {
+    document.documentElement.setAttribute('dir', 'ltr');
+    document.body && document.body.setAttribute('dir', 'ltr');
   }
 
   function getPagePairs() {
@@ -90,19 +73,7 @@
       'article-7-days-georgia.html': 'article-7-days-georgia-ar.html',
       'article-7-days-georgia-ar.html': 'article-7-days-georgia.html',
       'article-georgian-food.html': 'article-georgian-food-ar.html',
-      'article-georgian-food-ar.html': 'article-georgian-food.html',
-      'article-is-georgia-safe.html': 'article-is-georgia-safe-ar.html',
-      'article-is-georgia-safe-ar.html': 'article-is-georgia-safe.html',
-      'destinations-hub.html': 'destinations-hub-ar.html',
-      'destinations-hub-ar.html': 'destinations-hub.html',
-      'family-travel-hub.html': 'family-travel-hub-ar.html',
-      'family-travel-hub-ar.html': 'family-travel-hub.html',
-      'halal-travel-hub.html': 'halal-travel-hub-ar.html',
-      'halal-travel-hub-ar.html': 'halal-travel-hub.html',
-      'itineraries-hub.html': 'itineraries-hub-ar.html',
-      'itineraries-hub-ar.html': 'itineraries-hub.html',
-      'safety-hub.html': 'safety-hub-ar.html',
-      'safety-hub-ar.html': 'safety-hub.html'
+      'article-georgian-food-ar.html': 'article-georgian-food.html'
     };
   }
 
@@ -119,22 +90,17 @@
   }
 
   function getConfig(filename, isArabic) {
-    const p = getBasePrefix();
-    const home = p + (isArabic ? 'arabic.html' : 'index.html');
-    const langSwitchTarget = (p && filename === 'index.html' && isArabic)
-      ? 'index.html'
-      : buildLangSwitch(filename, isArabic);
+    const home = isArabic ? 'arabic.html' : 'index.html';
     return {
       isArabic,
-      prefix: p,
       home,
-      about: p + (isArabic ? 'about-ar.html' : 'about.html'),
-      services: p + (isArabic ? 'services-ar.html' : 'services.html'),
-      guide: p + (isArabic ? 'guide-ar.html' : 'guide.html'),
-      blog: p + (isArabic ? 'blog-ar.html' : 'blog.html'),
-      contact: p + (isArabic ? 'contact-ar.html' : 'contact.html'),
-      booking: p + (isArabic ? 'booking-ar.html' : 'booking.html'),
-      langSwitch: p + langSwitchTarget,
+      about: isArabic ? 'about-ar.html' : 'about.html',
+      services: isArabic ? 'services-ar.html' : 'services.html',
+      guide: isArabic ? 'guide-ar.html' : 'guide.html',
+      blog: isArabic ? 'blog-ar.html' : 'blog.html',
+      contact: isArabic ? 'contact-ar.html' : 'contact.html',
+      booking: isArabic ? 'booking-ar.html' : 'booking.html',
+      langSwitch: buildLangSwitch(filename, isArabic),
       texts: {
         home: isArabic ? 'الرئيسية' : 'Home',
         about: isArabic ? 'من نحن' : 'About',
@@ -179,7 +145,6 @@
   }
 
   function buildMarkup(cfg, filename) {
-    const p = cfg.prefix;
     const homeDestinations = cfg.home + '#destinations';
     const homeFleet = cfg.home + '#fleet';
     const homeReviews = cfg.home + '#reviews';
@@ -199,7 +164,7 @@
         <div class="container">
           <div class="navbar-inner">
             <a href="${cfg.home}" class="nav-logo">
-              <div><img src="${p}logo-256.avif" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img" onerror="this.onerror=null;this.src='${p}favicon.ico';"></div>
+              <div><img src="favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
               <span data-nav-brand="text">Georgia Hills</span>
             </a>
 
@@ -208,8 +173,8 @@
 
               <div style="display:flex; gap:0.75rem;">
                 <div class="custom-select-wrapper" id="currency-desktop">
-                  <button class="action-btn custom-select-trigger" data-currency-toggle="desktop" aria-haspopup="true">
-                    <span class="currency-flag-sm currency-flag-emoji" id="curr-flag-desktop" aria-hidden="true">🇬🇪</span>
+                  <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('desktop')" aria-haspopup="true">
+                    <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-desktop">
                     <span id="curr-code-desktop">GEL</span>
                     <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
                   </button>
@@ -234,7 +199,7 @@
         </div>
       </nav>
 
-      <div id="mobile-menu" aria-hidden="true" style="position:fixed;inset:0;transform:translateX(100%);width:100%;height:100vh;height:100svh;overflow-y:auto;z-index:60;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1.5rem;padding:2rem 0;text-align:center;background:#fff;">
+      <div id="mobile-menu" aria-hidden="true">
         <button id="close-menu-btn" class="close-menu-btn" aria-label="${cfg.texts.close}"><i class="fa-solid fa-xmark"></i></button>
         <div id="mobile-links-container">
           <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="mobile-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
@@ -247,8 +212,8 @@
 
         <div class="mobile-settings">
           <div class="custom-select-wrapper" id="currency-mobile">
-            <button class="action-btn custom-select-trigger" data-currency-toggle="mobile" aria-haspopup="true">
-              <span class="currency-flag-sm currency-flag-emoji" id="curr-flag-mobile" aria-hidden="true">🇬🇪</span>
+            <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('mobile')" aria-haspopup="true">
+              <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-mobile">
               <span id="curr-code-mobile">GEL</span>
               <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
             </button>
@@ -268,6 +233,10 @@
     const filename = getFilename();
     const isArabic = detectArabic(filename);
 
+    if (isArabic) {
+      forceLtrLayout();
+    }
+
     const cfg = getConfig(filename, isArabic);
     const mobileMenu = document.getElementById('mobile-menu');
 
@@ -278,30 +247,8 @@
     nav.insertAdjacentHTML('beforebegin', toTrustedHTML(buildMarkup(cfg, filename)));
     nav.remove();
 
-    applyNavbarOffset();
-
-    document.querySelectorAll('[data-currency-toggle]').forEach(function (button) {
-      button.addEventListener('click', function () {
-        const type = button.getAttribute('data-currency-toggle');
-        if (!type) return;
-        if (window.GHCoreUI && typeof window.GHCoreUI.toggleCurrencyDropdown === 'function') {
-          window.GHCoreUI.toggleCurrencyDropdown(type);
-          return;
-        }
-        if (window.UIManager && typeof window.UIManager.toggleCurrencyDropdown === 'function') {
-          window.UIManager.toggleCurrencyDropdown(type);
-          return;
-        }
-        const wrapper = document.getElementById('currency-' + type);
-        if (wrapper) wrapper.classList.toggle('open');
-      });
-    });
-
     window.__GH_SHARED_NAVBAR__ = true;
   }
-
-  window.addEventListener('resize', applyNavbarOffset, { passive: true });
-  window.addEventListener('load', applyNavbarOffset);
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', renderSharedNavbar);
