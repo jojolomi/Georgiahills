@@ -172,6 +172,12 @@
               ${desktopLinks}
 
               <div style="display:flex; gap:0.75rem;">
+                <a href="https://wa.me/995579088537?text=Hello%20Georgia%20Hills%2C%20I%20want%20to%20book%20a%20tour" class="action-btn" aria-label="WhatsApp">
+                  <i class="fa-brands fa-whatsapp"></i><span>WhatsApp</span>
+                </a>
+                <a href="tel:+995579088537" class="action-btn" aria-label="Call">
+                  <i class="fa-solid fa-phone"></i><span>Call</span>
+                </a>
                 <div class="custom-select-wrapper" id="currency-desktop">
                   <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('desktop')" aria-haspopup="true">
                     <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-desktop">
@@ -190,6 +196,12 @@
             </div>
 
             <div class="mobile-controls">
+              <a href="https://wa.me/995579088537?text=Hello%20Georgia%20Hills%2C%20I%20want%20to%20book%20a%20tour" class="action-btn" aria-label="WhatsApp" style="padding: 0.375rem 0.6rem; font-size: 0.75rem;">
+                <i class="fa-brands fa-whatsapp"></i>
+              </a>
+              <a href="tel:+995579088537" class="action-btn" aria-label="Call" style="padding: 0.375rem 0.6rem; font-size: 0.75rem;">
+                <i class="fa-solid fa-phone"></i>
+              </a>
               <a href="${cfg.langSwitch}" class="action-btn" aria-label="Language switch" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
                 <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">${cfg.texts.lang}</span>
               </a>

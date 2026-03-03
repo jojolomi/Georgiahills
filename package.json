@@ -21,6 +21,7 @@
     "seo:validate:ar-content": "node scripts/validate-ar-content-frontmatter.js apps/web/content/blog/ar",
     "seo:validate:keyword-map": "node scripts/validate-keyword-mapping-format.js seo/keyword-mapping.csv",
     "seo:validate:links": "node scripts/check-broken-links.js apps/web/dist",
+    "seo:validate:server-visible": "node scripts/audit/seo/check-server-visible.js apps/web/dist",
     "seo:validate:keywords": "node scripts/audit/seo/check-keyword-entities.js apps/web/dist",
     "seo:validate:legal": "node scripts/audit/seo/check-legal-links.js apps/web/dist",
     "seo:prepare": "node scripts/prepare-seo-dist.js",

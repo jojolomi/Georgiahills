@@ -616,7 +616,29 @@ body.secondary-page .dest-hero,
 .booking-hero {
     height: 92svh !important;
     min-height: 46rem !important;
-    padding-top: clamp(8rem, 12vh, 10rem) !important;
+    padding-top: clamp(9rem, 13vh, 11rem) !important;
+}
+
+body.secondary-page .hero-content-container,
+body.secondary-page .hero-text-content {
+    max-width: 68rem !important;
+}
+
+body.secondary-page .about-premium-title {
+    font-size: clamp(2.4rem, 5.8vw, 4.2rem) !important;
+    line-height: 1.2 !important;
+    margin-bottom: 1.2rem !important;
+}
+
+body.secondary-page .about-premium-title .text-gradient-gold {
+    display: inline-block;
+    line-height: 1.2;
+}
+
+body.secondary-page .about-premium-subtitle {
+    line-height: 1.7 !important;
+    max-width: 60ch !important;
+    margin-bottom: 2rem !important;
 }
 
 @media (max-width: 768px) {
@@ -626,7 +648,12 @@ body.secondary-page .dest-hero,
     .booking-hero {
         height: 80svh !important;
         min-height: 38rem !important;
-        padding-top: 7rem !important;
+        padding-top: 8.5rem !important;
+    }
+
+    body.secondary-page .about-premium-title {
+        font-size: clamp(2rem, 8vw, 2.8rem) !important;
+        line-height: 1.24 !important;
     }
 }
 
@@ -657,10 +684,6 @@ body.secondary-page .section-py::before {
 }
 
 /* Page-Type Density Polish */
-body.page-blog .hero {
-    height: 48vh !important;
-    min-height: 340px !important;
-}
 body.page-blog .blog-grid {
     gap: 2.2rem;
 }
@@ -702,7 +725,6 @@ body.page-article .section-heading {
 
 @media (max-width: 768px) {
     body.page-article .content-card { padding: 1.4rem !important; }
-    body.page-blog .hero { height: 42vh !important; min-height: 300px !important; }
 }
 
 /* PERFORMANCE: Skip rendering off-screen content */

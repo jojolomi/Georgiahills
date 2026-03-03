@@ -8,6 +8,66 @@
     ],
     "redirects": [
       {
+        "source": "/services",
+        "destination": "/services.html",
+        "type": 301
+      },
+      {
+        "source": "/ar/services",
+        "destination": "/services-ar.html",
+        "type": 301
+      },
+      {
+        "source": "/tours/tbilisi",
+        "destination": "/tbilisi.html",
+        "type": 301
+      },
+      {
+        "source": "/ar/tours/tbilisi",
+        "destination": "/tbilisi-ar.html",
+        "type": 301
+      },
+      {
+        "source": "/tours/batumi",
+        "destination": "/batumi.html",
+        "type": 301
+      },
+      {
+        "source": "/ar/tours/batumi",
+        "destination": "/batumi-ar.html",
+        "type": 301
+      },
+      {
+        "source": "/tours/kazbegi",
+        "destination": "/kazbegi.html",
+        "type": 301
+      },
+      {
+        "source": "/ar/tours/kazbegi",
+        "destination": "/kazbegi-ar.html",
+        "type": 301
+      },
+      {
+        "source": "/tours/martvili",
+        "destination": "/martvili.html",
+        "type": 301
+      },
+      {
+        "source": "/ar/tours/martvili",
+        "destination": "/martvili-ar.html",
+        "type": 301
+      },
+      {
+        "source": "/tours/signagi",
+        "destination": "/signagi.html",
+        "type": 301
+      },
+      {
+        "source": "/ar/tours/signagi",
+        "destination": "/signagi-ar.html",
+        "type": 301
+      },
+      {
         "source": "/admin",
         "destination": "/admin-v3/",
         "type": 302
