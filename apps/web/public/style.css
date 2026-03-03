@@ -609,6 +609,27 @@ html[lang="ar"] .next-card:hover { transform: translateX(-5px); }
 .section-py { padding-top: 4rem; padding-bottom: 4rem; }
 @media (min-width: 768px) { .section-py { padding-top: 6rem; padding-bottom: 6rem; } }
 
+/* Hero Size Normalization (all non-index pages) */
+body.secondary-page .hero,
+body.secondary-page .about-premium-hero,
+body.secondary-page .dest-hero,
+.booking-hero {
+    height: 92svh !important;
+    min-height: 46rem !important;
+    padding-top: clamp(8rem, 12vh, 10rem) !important;
+}
+
+@media (max-width: 768px) {
+    body.secondary-page .hero,
+    body.secondary-page .about-premium-hero,
+    body.secondary-page .dest-hero,
+    .booking-hero {
+        height: 80svh !important;
+        min-height: 38rem !important;
+        padding-top: 7rem !important;
+    }
+}
+
 /* Secondary Pages: Premium Visual Layer */
 body.secondary-page {
     background:
