@@ -32,10 +32,11 @@ jobs:
         run: |
           set -euo pipefail
           TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
-          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o repo.tar.gz || curl -fsSL "$TAR_URL" -o repo.tar.gz
+          TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
+          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
           find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-          tar -xzf repo.tar.gz --strip-components=1
-          rm -f repo.tar.gz
+          tar -xzf "$TMP_TAR" --strip-components=1
+          rm -f "$TMP_TAR"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
