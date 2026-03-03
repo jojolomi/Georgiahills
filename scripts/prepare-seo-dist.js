@@ -68,6 +68,21 @@ const staticSrc = path.join(nextDir, "static");
 const staticDest = path.join(distDir, "_next", "static");
 copyRecursive(staticSrc, staticDest);
 
+/* ── 3b. Copy metadata route bodies (favicon, robots, sitemap) ─────── */
+
+const metadataBodies = [
+  { src: path.join(appDir, "favicon.ico.body"), dest: path.join(distDir, "favicon.ico") },
+  { src: path.join(appDir, "robots.txt.body"), dest: path.join(distDir, "robots.txt") },
+  { src: path.join(appDir, "sitemap.xml.body"), dest: path.join(distDir, "sitemap.xml") }
+];
+
+for (const file of metadataBodies) {
+  if (fs.existsSync(file.src)) {
+    fs.mkdirSync(path.dirname(file.dest), { recursive: true });
+    fs.copyFileSync(file.src, file.dest);
+  }
+}
+
 /* ── 4. Copy public/ files so that image / manifest references resolve */
 
 const publicDir = path.join(webRoot, "public");
