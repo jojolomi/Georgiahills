@@ -102,6 +102,18 @@ for (const market of markets) {
   }
 }
 
+/* ── 6. Resolve root redirect shell for static hosting (GitHub Pages) ─ */
+
+const indexHtmlPath = path.join(distDir, "index.html");
+const enHtmlPath = path.join(distDir, "en.html");
+
+if (fs.existsSync(indexHtmlPath) && fs.existsSync(enHtmlPath)) {
+  const indexHtml = fs.readFileSync(indexHtmlPath, "utf8");
+  if (indexHtml.includes("NEXT_REDIRECT")) {
+    fs.copyFileSync(enHtmlPath, indexHtmlPath);
+  }
+}
+
 /* ── report ────────────────────────────────────────────────────────── */
 
 function countFiles(dir, ext) {

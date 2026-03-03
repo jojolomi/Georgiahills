@@ -16,6 +16,24 @@ const withBundleAnalyzer = (() => {
 const nextConfig = {
   reactStrictMode: true,
   compress: true,
+  basePath: (() => {
+    if (process.env.GITHUB_PAGES !== "true") return "";
+    const repository = process.env.GITHUB_REPOSITORY || "";
+    const owner = (process.env.GITHUB_REPOSITORY_OWNER || "").toLowerCase();
+    const repoName = repository.split("/")[1] || "";
+    if (!repoName) return "";
+    if (repoName.toLowerCase() === `${owner}.github.io`) return "";
+    return `/${repoName}`;
+  })(),
+  assetPrefix: (() => {
+    if (process.env.GITHUB_PAGES !== "true") return undefined;
+    const repository = process.env.GITHUB_REPOSITORY || "";
+    const owner = (process.env.GITHUB_REPOSITORY_OWNER || "").toLowerCase();
+    const repoName = repository.split("/")[1] || "";
+    if (!repoName) return undefined;
+    if (repoName.toLowerCase() === `${owner}.github.io`) return undefined;
+    return `/${repoName}`;
+  })(),
   transpilePackages: ["@gh/ui", "@gh/lib", "@gh/types"],
   pageExtensions: ["tsx", "jsx", "js"],
   images: {
