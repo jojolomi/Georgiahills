@@ -196,7 +196,6 @@ if (fs.existsSync(legacyRootIndexPath)) {
   }
 
   const legacyTopLevelExtensions = new Set([
-    ".html",
     ".js",
     ".css",
     ".webp",
