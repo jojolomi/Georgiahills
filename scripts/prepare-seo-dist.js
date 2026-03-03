@@ -116,7 +116,7 @@ if (fs.existsSync(indexHtmlPath) && fs.existsSync(enHtmlPath)) {
 
 /* ── 7. GitHub Pages fail-safe root homepage ──────────────────────── */
 
-if (process.env.GITHUB_PAGES === "true") {
+if (process.env.GITHUB_PAGES === "true" && !fs.existsSync(indexHtmlPath)) {
   const owner = (process.env.GITHUB_REPOSITORY_OWNER || "").toLowerCase();
   const repository = process.env.GITHUB_REPOSITORY || "";
   const repoName = repository.split("/")[1] || "";
