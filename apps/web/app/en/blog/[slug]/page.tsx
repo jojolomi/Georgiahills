@@ -52,6 +52,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         data={{
           headline: entry.frontmatter.title,
           description: entry.frontmatter.description,
+          inLanguage: "en",
           datePublished: entry.frontmatter.date || undefined,
           image: entry.frontmatter.image
             ? `https://georgiahills.com${entry.frontmatter.image}`
@@ -64,7 +65,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <p className="text-sm text-slate-500">{entry.frontmatter.date || ""}</p>
         <h1>{entry.frontmatter.title}</h1>
         <p>{entry.frontmatter.description}</p>
-        <MDXRemote source={entry.content} />
+        <MDXRemote
+          source={entry.content}
+          components={{
+            h1: ({ children }) => (
+              <h2 className="mt-8 text-3xl font-semibold tracking-tight text-slate-900">{children}</h2>
+            )
+          }}
+        />
       </article>
     </main>
   );

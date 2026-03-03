@@ -246,12 +246,34 @@
     <!-- OPTIMIZATION: Defer Main Script -->
     <script src="shared-navbar.js" defer></script>
     <script src="script.min.js" defer></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            const hero = document.getElementById('home');
+            const heroImg = document.getElementById('hero-img');
+
+            if (hero) {
+                hero.style.display = 'flex';
+                hero.style.visibility = 'visible';
+                hero.style.opacity = '1';
+                hero.style.minHeight = '90svh';
+            }
+
+            if (heroImg) {
+                heroImg.style.display = 'block';
+                heroImg.style.visibility = 'visible';
+                heroImg.style.opacity = '1';
+                if (!heroImg.getAttribute('src')) {
+                    heroImg.setAttribute('src', 'image-1024.webp');
+                }
+            }
+
+            if (!window.location.hash) {
+                window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+            }
+        });
+    </script>
 </head>
 <body dir="ltr">
-
-    <!-- Accessibility Skip Link -->
-    <a href="#main-content" class="skip-link">Skip to content</a>
-
     <!-- Accessibility & Network -->
     <noscript>
         <div class="no-js-overlay">
@@ -263,8 +285,8 @@
 
     <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>You are offline</span></div>
 
-    <!-- Preloader -->
-    <div id="preloader">
+    <!-- Preloader (disabled to avoid blocking hero/LCP) -->
+    <div id="preloader" style="display:none;">
         <div class="text-center">
             <div class="preloader-circle animate-bounce">
                 <img src="favicon.webp" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
@@ -277,6 +299,8 @@
     <!-- Navbar -->
     <nav id="navbar" class="navbar"></nav>
 
+    <!-- Accessibility Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to content</a>
 
     <!-- Hero -->
     <section id="home" class="hero" aria-label="Welcome to Georgia Hills">
@@ -284,11 +308,11 @@
              <!-- Replaced Unsplash with local placeholder -->
              <picture>
                 <source type="image/avif" srcset="image-320.avif 320w, image-640.avif 640w, image-1024-lite.avif 1024w, image-1600.avif 1600w" sizes="100vw">
-                <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="Scenic Georgia Mountains" fetchpriority="high">
+                <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="Scenic Georgia Mountains" fetchpriority="high" decoding="async" loading="eager">
              </picture>
             <div class="hero-overlay"></div>
         </div>
-        <div class="hero-content reveal">
+            <div class="hero-content">
             <div class="hero-logo-container">
                 <div class="hero-logo-circle">
                     <img src="logo-256.avif" width="96" height="96" style="width:100%; height:100%; object-fit:cover;" alt="Georgia Hills Logo">
