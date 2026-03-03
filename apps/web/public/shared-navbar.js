@@ -1,4 +1,28 @@
 (function () {
+  function toTrustedHTML(html) {
+    if (window.trustedTypes && typeof window.trustedTypes.createPolicy === 'function') {
+      if (!window.__GH_TRUSTED_TYPES_DEFAULT__) {
+        try {
+          window.__GH_TRUSTED_TYPES_DEFAULT__ = window.trustedTypes.createPolicy('default', {
+            createHTML: (input) => input,
+            createScript: (input) => input,
+            createScriptURL: (input) => input
+          });
+        } catch (error) {
+          if (!window.__GH_TRUSTED_TYPES_DEFAULT__) {
+            return html;
+          }
+        }
+      }
+
+      if (window.__GH_TRUSTED_TYPES_DEFAULT__ && typeof window.__GH_TRUSTED_TYPES_DEFAULT__.createHTML === 'function') {
+        return window.__GH_TRUSTED_TYPES_DEFAULT__.createHTML(html);
+      }
+    }
+
+    return html;
+  }
+
   function getFilename() {
     const path = (window.location.pathname || '').split('/').pop();
     return path || 'index.html';
@@ -244,7 +268,7 @@
       mobileMenu.remove();
     }
 
-    nav.insertAdjacentHTML('beforebegin', buildMarkup(cfg, filename));
+    nav.insertAdjacentHTML('beforebegin', toTrustedHTML(buildMarkup(cfg, filename)));
     nav.remove();
 
     document.querySelectorAll('[data-currency-toggle]').forEach(function (button) {
