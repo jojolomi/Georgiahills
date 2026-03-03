@@ -50,11 +50,11 @@
     if (!offset) return;
     document.documentElement.style.setProperty('--gh-navbar-offset', offset + 'px');
     if (document.body) {
-      document.body.style.setProperty('padding-top', offset + 'px', 'important');
       document.body.style.setProperty('scroll-padding-top', offset + 'px');
     }
-    const firstBlock = document.querySelector('main, section.hero, section#home, section.about-premium-hero, #main-content');
+    const firstBlock = document.querySelector('#mobile-menu + *') || document.querySelector('main, section.hero, section#home, section.about-premium-hero, #main-content');
     if (firstBlock && firstBlock instanceof HTMLElement) {
+      firstBlock.style.setProperty('margin-top', offset + 'px');
       firstBlock.style.setProperty('scroll-margin-top', offset + 'px');
     }
   }
