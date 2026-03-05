@@ -173,9 +173,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- OPTIMIZATION: Preload Hero Image BEFORE CSS to boost LCP -->
-    <!-- Updated srcset for larger screens -->
-    <link rel="preload" as="image" href="image-1600.avif" imagesrcset="image-320.avif 320w, image-640.avif 640w, image-1024-lite.avif 1024w, image-1600.avif 1600w" imagesizes="100vw" fetchpriority="high">
+    <!-- Preload the hero image with a mobile-safe fallback and responsive candidates -->
+    <link rel="preload" as="image" href="image-1024-lite.avif" imagesrcset="image-320.avif 320w, image-640.avif 640w, image-1024-lite.avif 1024w, image-1600.avif 1600w" imagesizes="100vw" fetchpriority="high">
 
     <!-- Critical Above-the-Fold CSS -->
     <style>
@@ -223,8 +222,8 @@
                 window.addEventListener(evt, loadIconStyles, { once: true, passive: true });
             });
             window.addEventListener('load', () => {
-                if ('requestIdleCallback' in window) requestIdleCallback(loadIconStyles, { timeout: 6000 });
-                else setTimeout(loadIconStyles, 6000);
+                // Avoid pulling icon webfonts into the LCP critical path on mobile.
+                setTimeout(loadIconStyles, 8000);
             }, { once: true });
         })();
     </script>
@@ -251,8 +250,8 @@
     <link rel="apple-touch-icon" href="favicon.ico">
 
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=optional"></noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
     
     <!-- OPTIMIZATION: Defer Main Script -->
     <script src="shared-navbar.js" defer></script>

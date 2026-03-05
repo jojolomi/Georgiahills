@@ -227,6 +227,8 @@
   }
 
   function renderSharedNavbar() {
+    if (window.__GH_SHARED_NAVBAR__) return;
+
     const nav = document.getElementById('navbar');
     if (!nav) return;
 
@@ -250,9 +252,18 @@
     window.__GH_SHARED_NAVBAR__ = true;
   }
 
+  function renderSharedNavbarDeferred() {
+    const run = () => renderSharedNavbar();
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(run, { timeout: 1200 });
+    } else {
+      setTimeout(run, 180);
+    }
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderSharedNavbar);
+    document.addEventListener('DOMContentLoaded', renderSharedNavbarDeferred, { once: true });
   } else {
-    renderSharedNavbar();
+    renderSharedNavbarDeferred();
   }
 })();

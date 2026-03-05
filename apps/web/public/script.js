@@ -1878,23 +1878,39 @@ const MainApp = {
             slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
          };
 
+         let resetPending = false;
+         let resetRaf = null;
+
+         const queueInfiniteReset = () => {
+            if (resetPending) return;
+            resetPending = true;
+            if (resetRaf) cancelAnimationFrame(resetRaf);
+
+            resetRaf = requestAnimationFrame(() => {
+                const { totalWidth } = getMetrics();
+                slider.style.scrollBehavior = 'auto';
+                slider.scrollLeft = totalWidth;
+                requestAnimationFrame(() => {
+                    slider.style.scrollBehavior = 'smooth';
+                    resetPending = false;
+                });
+            });
+         };
+
          const checkScroll = () => {
             const { totalWidth } = getMetrics();
             const tolerance = 10;
+            const currentScroll = slider.scrollLeft;
             
-            if (slider.scrollLeft >= (totalWidth * 2) - tolerance) {
-                slider.style.scrollBehavior = 'auto';
-                slider.scrollLeft = totalWidth;
-                slider.style.scrollBehavior = 'smooth';
+            if (currentScroll >= (totalWidth * 2) - tolerance) {
+                queueInfiniteReset();
             }
-            else if (slider.scrollLeft <= tolerance) {
-                slider.style.scrollBehavior = 'auto';
-                slider.scrollLeft = totalWidth;
-                slider.style.scrollBehavior = 'smooth';
+            else if (currentScroll <= tolerance) {
+                queueInfiniteReset();
             }
          };
 
-         slider.addEventListener('scroll', checkScroll);
+         slider.addEventListener('scroll', checkScroll, { passive: true });
 
          const startAuto = () => {
              clearInterval(autoScrollInterval);
