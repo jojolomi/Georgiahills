@@ -44,13 +44,27 @@
   <script src="shared-navbar.js" defer></script>
     <script src="script.js" defer></script>
 </head>
-<body>
+<body class="secondary-page page-about page-booking">
+  <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>لا يوجد اتصال بالانترنت</span></div>
   <a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
   <nav id="navbar" class="navbar"></nav>
   <main id="main-content">
-<section class="hero" style="height:45vh; min-height:320px;">
-    <div class="hero-bg-container"><img src="image-1024.webp" class="hero-img" alt="احجز في جورجيا" loading="eager" decoding="async"><div class="hero-overlay"></div></div>
-    <div class="hero-content"><h1 class="hero-title">احجز رحلتك</h1><p class="hero-subtitle">عرض سريع وسعر واضح وتأكيد عبر واتساب.</p></div>
+  
+  <section class="about-premium-hero" aria-labelledby="booking-hero-title">
+      <div class="about-premium-hero-bg" aria-hidden="true"></div>
+      <div class="hero-overlay-gradient"></div>
+      <div class="container hero-content-container">
+          <div class="hero-text-content fade-in-up">
+              <span class="hero-badge"><i class="fa-solid fa-check-circle"></i> نقل متميز</span>
+              <h1 class="section-title about-premium-title" id="booking-hero-title">
+                  احجز<br>
+                  <span class="text-gradient-gold">رحلتك.</span>
+              </h1>
+              <p class="section-desc about-premium-subtitle">
+                  سائقون محترفون، أسعار شفافة وتأكيد فوري عبر واتساب.
+              </p>
+          </div>
+      </div>
   </section>
 
   <section class="section-py" style="padding-bottom:0;">

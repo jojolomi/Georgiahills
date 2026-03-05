@@ -44,20 +44,28 @@
   <script src="shared-navbar.js" defer></script>
     <script src="script.js" defer></script>
 </head>
-<body>
+<body class="secondary-page page-about page-booking">
+  <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>You are offline</span></div>
   <a href="#main-content" class="skip-link">Skip to content</a>
   <nav id="navbar" class="navbar"></nav>
   <main id="main-content">
   
   <!-- Premium Hero Section -->
-  <section class="booking-hero">
-    <div class="booking-hero-bg"></div>
-    <div class="booking-hero-overlay"></div>
-    <div class="booking-hero-content">
-      <div class="hero-badge"><i class="fa-solid fa-check-circle"></i> Premium Transport</div>
-      <h1 class="booking-hero-title">Secure Your Journey</h1>
-      <p class="booking-hero-subtitle">Professional drivers, transparent pricing, and instant confirmation via WhatsApp.</p>
-    </div>
+  <section class="about-premium-hero" aria-labelledby="booking-hero-title">
+      <div class="about-premium-hero-bg" aria-hidden="true"></div>
+      <div class="hero-overlay-gradient"></div>
+      <div class="container hero-content-container">
+          <div class="hero-text-content fade-in-up">
+              <span class="hero-badge"><i class="fa-solid fa-check-circle"></i> Premium Transport</span>
+              <h1 class="section-title about-premium-title" id="booking-hero-title">
+                  Secure Your<br>
+                  <span class="text-gradient-gold">Journey.</span>
+              </h1>
+              <p class="section-desc about-premium-subtitle">
+                  Professional drivers, transparent pricing, and instant confirmation via WhatsApp.
+              </p>
+          </div>
+      </div>
   </section>
 
   <!-- Main Content Area -->
