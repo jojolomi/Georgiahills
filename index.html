@@ -197,6 +197,8 @@
         .btn-hero{padding:1rem 2rem;border-radius:9999px;font-weight:700;font-size:1.125rem;text-decoration:none;display:inline-flex;justify-content:center;align-items:center}
         .btn-hero-primary{background:var(--color-accent);color:#fff}
         .btn-hero-secondary{background:var(--color-white-10);border:1px solid var(--color-white-20);color:#fff}
+        .status-icon-svg{width:1rem;height:1rem;display:inline-block;vertical-align:-.125em}
+        .hero-badge svg{width:.75rem;height:.75rem}
         .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         @media (min-width:640px){.hero-buttons{flex-direction:row}}
         @media (min-width:768px){.hero-title{font-size:3.75rem}.hero-subtitle{font-size:1.25rem}}
@@ -274,14 +276,14 @@
         </div>
     </noscript>
 
-    <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>You are offline</span></div>
+    <div id="network-toast"><svg class="status-icon-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM2 8.82A16.92 16.92 0 0 1 12 6c3.7 0 7.12 1.2 9.9 3.24l-1.42 1.42A14.92 14.92 0 0 0 12 8c-3.31 0-6.36 1.08-8.83 2.9L2 8.82Zm4.24 4.24A10.95 10.95 0 0 1 12 11c1.9 0 3.68.48 5.24 1.34l-1.52 1.52A8.94 8.94 0 0 0 12 13c-1.58 0-3.06.41-4.35 1.12l-1.41-1.06Zm2.83 2.83A4.98 4.98 0 0 1 12 15c.64 0 1.24.12 1.79.33l-1.54 1.54a2.94 2.94 0 0 0-1.76.36l-1.42-1.34ZM23 3.27 4.27 22 3 20.73 21.73 2 23 3.27Z"/></svg> <span>You are offline</span></div>
 
     <!-- Preloader (disabled to avoid blocking hero/LCP) -->
     <div id="preloader" style="display:none;">
         <div class="text-center">
             <div class="preloader-circle animate-bounce">
                 <img src="favicon.webp" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
-                <i class="fa-solid fa-mountain-sun text-primary hidden" style="font-size:2.25rem;"></i>
+                <svg class="text-primary hidden" width="36" height="36" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="m3 20 6-8 4 5 3-4 5 7H3Zm13-9a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></svg>
             </div>
             <div class="preloader-text">Loading</div>
         </div>
@@ -311,7 +313,7 @@
             </div>
             
             <div class="hero-badge">
-                <i class="fa-solid fa-star" style="color:#facc15; font-size:0.75rem;"></i> #1 FOR FAMILIES
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27Z"/></svg> #1 FOR FAMILIES
             </div>
             <h1 id="hero-title" class="hero-title">Discover Georgia <br><span class="text-accent-light italic font-serif">Without Limits</span></h1>
             <p id="hero-subtitle" class="hero-subtitle">Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.</p>

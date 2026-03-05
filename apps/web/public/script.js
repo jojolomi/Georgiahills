@@ -6,9 +6,20 @@
 // 1. SERVICE WORKER REGISTRATION (PWA)
 // ==========================================
 if ('serviceWorker' in navigator) {
+    const scriptBaseDir = (() => {
+        try {
+            const src = document.currentScript && document.currentScript.src;
+            if (src) {
+                const scriptUrl = new URL(src, window.location.href);
+                return scriptUrl.pathname.replace(/[^/]+$/, '');
+            }
+        } catch (e) {}
+        return '/';
+    })();
+
   window.addEventListener('load', () => {
     try {
-        navigator.serviceWorker.register('/service-worker.js')
+                navigator.serviceWorker.register(`${scriptBaseDir}service-worker.js`)
           .then(reg => {})
           .catch(err => {});
     } catch(e) {}
@@ -645,7 +656,11 @@ const CurrencyManager = {
             }
         } catch (e) {}
         this.updateUI();
-        this.fetchRates();
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => this.fetchRates(), { timeout: 2000 });
+        } else {
+            setTimeout(() => this.fetchRates(), 1200);
+        }
     },
 
     set(code) {
@@ -1014,12 +1029,18 @@ const UIManager = {
 
     setupScrollListener() {
         let lastScroll = 0;
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.scrollY;
-            const nav = document.getElementById('navbar');
-            const sticky = document.querySelector('.sticky-bar');
-            const backBtn = document.getElementById('backToTop');
-            
+        let lastKnownScrollY = window.scrollY || 0;
+        let isTicking = false;
+
+        const nav = document.getElementById('navbar');
+        const sticky = document.querySelector('.sticky-bar');
+        const backBtn = document.getElementById('backToTop');
+        const hero = document.getElementById('hero-img');
+        const hasDestHero = !!document.querySelector('.dest-hero');
+
+        const flushScrollUpdates = () => {
+            const currentScroll = lastKnownScrollY;
+
             if (nav) {
                 nav.classList.toggle('shadow-md', currentScroll > 20);
                 nav.classList.toggle('scrolled', currentScroll > 20);
@@ -1027,23 +1048,32 @@ const UIManager = {
             if (backBtn) backBtn.classList.toggle('show', currentScroll > 500);
 
             if (sticky) {
-                 if (currentScroll > lastScroll && currentScroll > 100) {
-                     sticky.classList.add('hide-bar');
-                     if(nav && window.innerWidth < 1024) nav.classList.add('nav-hidden');
-                 } else {
-                     sticky.classList.remove('hide-bar');
-                     if(nav) nav.classList.remove('nav-hidden');
-                 }
+                if (currentScroll > lastScroll && currentScroll > 100) {
+                    sticky.classList.add('hide-bar');
+                    if (nav && window.innerWidth < 1024) nav.classList.add('nav-hidden');
+                } else {
+                    sticky.classList.remove('hide-bar');
+                    if (nav) nav.classList.remove('nav-hidden');
+                }
             }
+
+            if (hero && hasDestHero) {
+                hero.style.transform = `translate3d(0, ${Math.round(currentScroll * 0.4)}px, 0)`;
+            }
+
             lastScroll = currentScroll;
-            
-            const hero = document.getElementById('hero-img');
-            if(hero && document.querySelector('.dest-hero')) {
-                hero.style.transform = `translateY(${window.scrollY * 0.4}px)`;
-            }
-            
             this.updateActiveNavLink();
+            isTicking = false;
+        };
+
+        window.addEventListener('scroll', () => {
+            lastKnownScrollY = window.scrollY || 0;
+            if (isTicking) return;
+            isTicking = true;
+            window.requestAnimationFrame(flushScrollUpdates);
         }, { passive: true });
+
+        flushScrollUpdates();
     },
 
     updateActiveNavLink() {
@@ -1065,7 +1095,7 @@ const UIManager = {
     showToast(msg) {
          const toast = document.getElementById('network-toast');
         if (toast) {
-            toast.innerHTML = `<i class="fa-solid fa-check"></i> <span>${msg}</span>`;
+            toast.innerHTML = `<svg class="status-icon-svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> <span>${msg}</span>`;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
@@ -1702,7 +1732,12 @@ const MainApp = {
             observer.observe(bookingSection);
         }
         
-        this.initSlider();
+        const scheduleSliderInit = () => this.initSlider();
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(scheduleSliderInit, { timeout: 1500 });
+        } else {
+            setTimeout(scheduleSliderInit, 400);
+        }
         this.initAnimations(); 
         
         const preloader = document.getElementById('preloader');

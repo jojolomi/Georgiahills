@@ -1,4 +1,37 @@
 (function () {
+  const PAGE_PAIRS = Object.freeze({
+    'index.html': 'arabic.html',
+    'arabic.html': 'index.html',
+    'about.html': 'about-ar.html',
+    'about-ar.html': 'about.html',
+    'services.html': 'services-ar.html',
+    'services-ar.html': 'services.html',
+    'guide.html': 'guide-ar.html',
+    'guide-ar.html': 'guide.html',
+    'blog.html': 'blog-ar.html',
+    'blog-ar.html': 'blog.html',
+    'booking.html': 'booking-ar.html',
+    'booking-ar.html': 'booking.html',
+    'contact.html': 'contact-ar.html',
+    'contact-ar.html': 'contact.html',
+    'batumi.html': 'batumi-ar.html',
+    'batumi-ar.html': 'batumi.html',
+    'kazbegi.html': 'kazbegi-ar.html',
+    'kazbegi-ar.html': 'kazbegi.html',
+    'martvili.html': 'martvili-ar.html',
+    'martvili-ar.html': 'martvili.html',
+    'signagi.html': 'signagi-ar.html',
+    'signagi-ar.html': 'signagi.html',
+    'tbilisi.html': 'tbilisi-ar.html',
+    'tbilisi-ar.html': 'tbilisi.html',
+    'honeymoon.html': 'honeymoon-ar.html',
+    'honeymoon-ar.html': 'honeymoon.html',
+    'article-7-days-georgia.html': 'article-7-days-georgia-ar.html',
+    'article-7-days-georgia-ar.html': 'article-7-days-georgia.html',
+    'article-georgian-food.html': 'article-georgian-food-ar.html',
+    'article-georgian-food-ar.html': 'article-georgian-food.html'
+  });
+
   function toTrustedHTML(html) {
     if (window.trustedTypes && typeof window.trustedTypes.createPolicy === 'function') {
       if (!window.__GH_TRUSTED_TYPES_DEFAULT__) {
@@ -42,41 +75,6 @@
     document.body && document.body.setAttribute('dir', 'ltr');
   }
 
-  function getPagePairs() {
-    return {
-      'index.html': 'arabic.html',
-      'arabic.html': 'index.html',
-      'about.html': 'about-ar.html',
-      'about-ar.html': 'about.html',
-      'services.html': 'services-ar.html',
-      'services-ar.html': 'services.html',
-      'guide.html': 'guide-ar.html',
-      'guide-ar.html': 'guide.html',
-      'blog.html': 'blog-ar.html',
-      'blog-ar.html': 'blog.html',
-      'booking.html': 'booking-ar.html',
-      'booking-ar.html': 'booking.html',
-      'contact.html': 'contact-ar.html',
-      'contact-ar.html': 'contact.html',
-      'batumi.html': 'batumi-ar.html',
-      'batumi-ar.html': 'batumi.html',
-      'kazbegi.html': 'kazbegi-ar.html',
-      'kazbegi-ar.html': 'kazbegi.html',
-      'martvili.html': 'martvili-ar.html',
-      'martvili-ar.html': 'martvili.html',
-      'signagi.html': 'signagi-ar.html',
-      'signagi-ar.html': 'signagi.html',
-      'tbilisi.html': 'tbilisi-ar.html',
-      'tbilisi-ar.html': 'tbilisi.html',
-      'honeymoon.html': 'honeymoon-ar.html',
-      'honeymoon-ar.html': 'honeymoon.html',
-      'article-7-days-georgia.html': 'article-7-days-georgia-ar.html',
-      'article-7-days-georgia-ar.html': 'article-7-days-georgia.html',
-      'article-georgian-food.html': 'article-georgian-food-ar.html',
-      'article-georgian-food-ar.html': 'article-georgian-food.html'
-    };
-  }
-
   function buildLangSwitch(filename, isArabic) {
     if (filename === 'destination.html') {
       const params = new URLSearchParams(window.location.search);
@@ -85,8 +83,7 @@
       return 'destination.html' + (query ? ('?' + query) : '');
     }
 
-    const pairs = getPagePairs();
-    return pairs[filename] || (isArabic ? 'index.html' : 'arabic.html');
+    return PAGE_PAIRS[filename] || (isArabic ? 'index.html' : 'arabic.html');
   }
 
   function getConfig(filename, isArabic) {
@@ -253,11 +250,14 @@
   }
 
   function renderSharedNavbarDeferred() {
-    const run = () => renderSharedNavbar();
+    const runAfterPaint = () => {
+      window.requestAnimationFrame(() => renderSharedNavbar());
+    };
+
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(run, { timeout: 1200 });
+      requestIdleCallback(runAfterPaint, { timeout: 800 });
     } else {
-      setTimeout(run, 180);
+      setTimeout(runAfterPaint, 120);
     }
   }
 
