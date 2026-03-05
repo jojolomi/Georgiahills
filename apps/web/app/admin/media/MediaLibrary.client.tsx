@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 
 type MediaVariant = {
   width: number;
@@ -162,11 +163,12 @@ export function MediaLibraryClient({ initialItems, contentTargets }: MediaLibrar
 
           return (
             <article key={item.id} className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
-              <img
+              <Image
                 src={preview}
                 alt={item.fileName}
                 width={320}
                 height={160}
+                unoptimized={true}
                 className="h-40 w-full rounded-md border border-slate-200 object-cover"
               />
 
