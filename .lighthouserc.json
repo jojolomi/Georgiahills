@@ -1,12 +1,12 @@
 {
   "ci": {
     "collect": {
-      "staticDistDir": "./apps/web/dist",
+      "startServerCommand": "cd apps/web && pnpm run start",
       "url": [
-        "http://localhost/index.html",
-        "http://localhost/booking.html",
-        "http://localhost/article-is-georgia-safe.html",
-        "http://localhost/tbilisi.html"
+        "http://127.0.0.1:3000/en",
+        "http://127.0.0.1:3000/booking",
+        "http://127.0.0.1:3000/en/blog/is-georgia-safe",
+        "http://127.0.0.1:3000/en/destinations/tbilisi"
       ],
       "numberOfRuns": 1
     },

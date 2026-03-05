@@ -56,15 +56,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang={locale} dir={direction} suppressHydrationWarning>
       <head>
-        <link
-          rel="preload"
-          as="image"
-          href="/hero-home-640.avif"
-          type="image/avif"
-          fetchPriority="high"
-          imageSrcSet="/hero-home-640.avif 640w, /hero-home-1024.avif 1024w"
-          imageSizes="(max-width: 768px) calc(100vw - 128px), 512px"
-        />
       </head>
       <body className={`${inter.variable} ${notoSansArabic.variable}`}>
         {children}
