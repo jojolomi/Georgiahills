@@ -181,7 +181,7 @@
                   <div class="custom-options" id="curr-options-desktop"></div>
                 </div>
 
-                <a href="${cfg.langSwitch}" class="action-btn" aria-label="Language switch">
+                <a href="${cfg.langSwitch}" class="action-btn">
                   <i class="fa-solid fa-globe"></i><span class="lang-text">${cfg.texts.lang}</span>
                 </a>
               </div>
@@ -190,7 +190,7 @@
             </div>
 
             <div class="mobile-controls">
-              <a href="${cfg.langSwitch}" class="action-btn" aria-label="Language switch" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
+              <a href="${cfg.langSwitch}" class="action-btn" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
                 <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">${cfg.texts.lang}</span>
               </a>
               <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="${cfg.texts.toggle}" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>

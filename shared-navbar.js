@@ -164,7 +164,7 @@
         <div class="container">
           <div class="navbar-inner">
             <a href="${cfg.home}" class="nav-logo">
-              <div><img src="favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
+              <div><img src="logo-256.avif" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
               <span data-nav-brand="text">Georgia Hills</span>
             </a>
 
@@ -181,7 +181,7 @@
                   <div class="custom-options" id="curr-options-desktop"></div>
                 </div>
 
-                <a href="${cfg.langSwitch}" class="action-btn" aria-label="Language switch">
+                <a href="${cfg.langSwitch}" class="action-btn">
                   <i class="fa-solid fa-globe"></i><span class="lang-text">${cfg.texts.lang}</span>
                 </a>
               </div>
@@ -190,7 +190,7 @@
             </div>
 
             <div class="mobile-controls">
-              <a href="${cfg.langSwitch}" class="action-btn" aria-label="Language switch" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
+              <a href="${cfg.langSwitch}" class="action-btn" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
                 <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">${cfg.texts.lang}</span>
               </a>
               <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="${cfg.texts.toggle}" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
@@ -199,7 +199,7 @@
         </div>
       </nav>
 
-      <div id="mobile-menu" aria-hidden="true">
+      <div id="mobile-menu" aria-hidden="true" inert>
         <button id="close-menu-btn" class="close-menu-btn" aria-label="${cfg.texts.close}"><i class="fa-solid fa-xmark"></i></button>
         <div id="mobile-links-container">
           <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="mobile-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>

@@ -966,6 +966,24 @@ const UIManager = {
     },
 
     setupMobileMenu() {
+        const setMenuState = (menu, toggleBtn, newState) => {
+            menu.classList.toggle('open', newState);
+            menu.setAttribute('aria-hidden', newState ? 'false' : 'true');
+            if (newState) {
+                menu.removeAttribute('inert');
+            } else {
+                menu.setAttribute('inert', '');
+            }
+            if (toggleBtn) toggleBtn.setAttribute('aria-expanded', newState ? 'true' : 'false');
+            document.body.classList.toggle('overflow-hidden', newState);
+        };
+
+        const initialMenu = document.getElementById('mobile-menu');
+        const initialToggleBtn = document.getElementById('mobile-menu-btn');
+        if (initialMenu) {
+            setMenuState(initialMenu, initialToggleBtn, false);
+        }
+
         // Use Event Delegation to handle dynamically injected elements (like shared-navbar)
         document.addEventListener('click', (e) => {
             const menuBtn = e.target.closest('#mobile-menu-btn');
@@ -985,11 +1003,7 @@ const UIManager = {
             // Toggle function
             const toggle = (forceState) => {
                 const newState = (forceState !== undefined) ? forceState : !isOpen;
-                menu.classList.toggle('open', newState);
-                
-                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', newState);
-                menu.setAttribute('aria-hidden', newState ? 'false' : 'true');
-                document.body.classList.toggle('overflow-hidden', newState);
+                setMenuState(menu, toggleBtn, newState);
             };
 
             if (menuBtn) {
@@ -1005,10 +1019,7 @@ const UIManager = {
             const menu = document.getElementById('mobile-menu');
             if (event.key === 'Escape' && menu && menu.classList.contains('open')) {
                 const toggleBtn = document.getElementById('mobile-menu-btn');
-                menu.classList.remove('open');
-                if(toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
-                menu.setAttribute('aria-hidden', 'true');
-                document.body.classList.remove('overflow-hidden');
+                setMenuState(menu, toggleBtn, false);
             }
         });
     },
@@ -1826,6 +1837,8 @@ const MainApp = {
          originalCards.forEach(card => {
              const clone = card.cloneNode(true);
              clone.setAttribute('aria-hidden', 'true');
+             clone.setAttribute('tabindex', '-1');
+             clone.setAttribute('inert', '');
              const originalOnClick = card.getAttribute('onclick');
              if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
              slider.appendChild(clone);
@@ -1834,6 +1847,8 @@ const MainApp = {
          originalCards.slice().reverse().forEach(card => {
              const clone = card.cloneNode(true);
              clone.setAttribute('aria-hidden', 'true');
+             clone.setAttribute('tabindex', '-1');
+             clone.setAttribute('inert', '');
              const originalOnClick = card.getAttribute('onclick');
              if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
              slider.insertBefore(clone, slider.firstChild);
@@ -1909,13 +1924,16 @@ const MainApp = {
          slider.addEventListener('mouseleave', () => isPaused = false);
          slider.addEventListener('touchend', () => isPaused = false);
          
-         window.addEventListener('resize', () => {
-                refreshMetrics();
-            slider.style.scrollBehavior = 'auto';
-            jumpToStart();
-            setTimeout(() => { slider.style.scrollBehavior = 'smooth'; }, 50);
-         });
-            refreshMetrics();
+            let resizeRaf = null;
+            window.addEventListener('resize', () => {
+                if (resizeRaf) cancelAnimationFrame(resizeRaf);
+                resizeRaf = requestAnimationFrame(() => {
+                     refreshMetrics();
+                     slider.style.scrollBehavior = 'auto';
+                     jumpToStart();
+                     setTimeout(() => { slider.style.scrollBehavior = 'smooth'; }, 50);
+                });
+            });
          
          startAuto();
     },
