@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
+import { MessageCircle, Phone, Zap } from "lucide-react";
 import { QuickBookingModal } from "./QuickBookingModal.client";
-import { useState } from "react";
 
 const phoneNumber = "+995579088537";
 const whatsappNumber = "995579088537";
@@ -53,27 +53,36 @@ export function FloatingContactCta() {
             setShowModal(true);
             track("booking_modal_open", { page_path: pathname, lang: isArabic ? "ar" : "en" });
           }}
-          className="inline-flex h-11 items-center rounded-full border border-emerald-200 bg-emerald-50 px-4 text-sm font-semibold text-emerald-700 shadow-sm"
+          className="group flex h-12 w-12 sm:h-auto sm:w-auto items-center justify-center sm:px-4 rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700 shadow-sm hover:bg-emerald-100 transition-colors"
           aria-label={isArabic ? "حجز سريع" : "Quick booking"}
         >
-          {isArabic ? "حجز سريع" : "Quick Book"}
+          <Zap className="h-5 w-5 sm:mr-2 sm:rtl:ml-2 sm:rtl:mr-0" />
+          <span className="hidden sm:inline font-semibold text-sm">
+            {isArabic ? "حجز سريع" : "Quick Book"}
+          </span>
         </button>
-      <a
-        href={`tel:${phoneNumber}`}
-        onClick={() => track("call_click", { page_path: pathname, lang: isArabic ? "ar" : "en" })}
-        className="inline-flex h-11 items-center rounded-full border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-800 shadow-sm"
-        aria-label={isArabic ? "اتصال مباشر" : "Call now"}
-      >
-        {isArabic ? "اتصال" : "Call"}
-      </a>
-      <a
-        href={whatsappHref}
-        onClick={() => track("whatsapp_click", { page_path: pathname, lang: isArabic ? "ar" : "en" })}
-        className="inline-flex h-11 items-center rounded-full bg-emerald-600 px-4 text-sm font-semibold text-white shadow-sm"
-        aria-label={isArabic ? "تواصل عبر واتساب" : "Contact on WhatsApp"}
-      >
-        WhatsApp
-      </a>
+        <a
+          href={`tel:${phoneNumber}`}
+          onClick={() => track("call_click", { page_path: pathname, lang: isArabic ? "ar" : "en" })}
+          className="group flex h-12 w-12 sm:h-auto sm:w-auto items-center justify-center sm:px-4 rounded-full border border-slate-300 bg-white text-slate-800 shadow-sm hover:bg-slate-50 transition-colors"
+          aria-label={isArabic ? "اتصال مباشر" : "Call now"}
+        >
+          <Phone className="h-5 w-5 sm:mr-2 sm:rtl:ml-2 sm:rtl:mr-0" />
+          <span className="hidden sm:inline font-semibold text-sm">
+            {isArabic ? "اتصال" : "Call"}
+          </span>
+        </a>
+        <a
+          href={whatsappHref}
+          onClick={() => track("whatsapp_click", { page_path: pathname, lang: isArabic ? "ar" : "en" })}
+          className="group flex h-12 w-12 sm:h-auto sm:w-auto items-center justify-center sm:px-4 rounded-full bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 transition-colors"
+          aria-label={isArabic ? "تواصل عبر واتساب" : "Contact on WhatsApp"}
+        >
+          <MessageCircle className="h-5 w-5 sm:mr-2 sm:rtl:ml-2 sm:rtl:mr-0" />
+          <span className="hidden sm:inline font-semibold text-sm">
+            WhatsApp
+          </span>
+        </a>
       </div>
       {showModal ? (
         <QuickBookingModal

@@ -57,7 +57,7 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 p-8">
+    <main className="min-h-screen bg-slate-50 p-4 sm:p-8">
       <StructuredDataGraph
         nodes={[
           {
@@ -121,7 +121,7 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
           }
         ]}
       />
-      <section className="mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+      <section className="mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-4 sm:p-8 shadow-sm">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
           <Sparkles className="h-4 w-4" />
           {messages.badge}
