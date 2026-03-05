@@ -98,10 +98,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               headline: entry.frontmatter.title,
               description: entry.frontmatter.description,
               datePublished: entry.frontmatter.date || undefined,
+              dateModified: entry.frontmatter.reviewedDate || entry.frontmatter.date || undefined,
               image: entry.frontmatter.image ? `https://georgiahills.com${entry.frontmatter.image}` : undefined,
               inLanguage: locale,
-              author: { "@type": "Organization", name: "Georgia Hills" },
-              publisher: { "@type": "Organization", name: "Georgia Hills" }
+              author: {
+                "@type": "Organization",
+                name: entry.frontmatter.author || "Georgia Hills",
+                sameAs: ["https://www.linkedin.com/company/georgia-hills"]
+              },
+              publisher: {
+                "@type": "Organization",
+                name: "Georgia Hills",
+                sameAs: ["https://georgiahills.com", "https://www.instagram.com/georgiahills"]
+              }
             }
           },
           ...(entry.frontmatter.faq?.length

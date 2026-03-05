@@ -42,6 +42,36 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60 * 60 * 24 * 7
   },
+  async redirects() {
+    const mapping = [
+      ["tbilisi", "tbilisi-day-tour"],
+      ["batumi", "batumi-tour"],
+      ["kazbegi", "kazbegi-tour"],
+      ["gudauri", "gudauri-tour"],
+      ["svaneti", "svaneti-tour"],
+      ["kakheti", "kakheti-tour"]
+    ];
+
+    return [
+      ...mapping.flatMap(([legacy, canonical]) => [
+        {
+          source: `/tours/${legacy}`,
+          destination: `/en/tours/${canonical}`,
+          permanent: true
+        },
+        {
+          source: `/ar/tours/${legacy}`,
+          destination: `/ar/tours/${canonical}`,
+          permanent: true
+        },
+        {
+          source: `/en/destinations/${legacy}`,
+          destination: `/en/tours/${canonical}`,
+          permanent: true
+        }
+      ])
+    ];
+  },
   async headers() {
     return [
       {

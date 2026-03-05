@@ -92,6 +92,11 @@ function consumeRateToken(key: string, nowMs: number) {
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  const requestHeaders = new Headers(request.headers);
+  const segment = pathname.split("/").filter(Boolean)[0] || "en";
+  const locale = segment === "ar" ? "ar" : "en";
+  requestHeaders.set("x-pathname", pathname);
+  requestHeaders.set("x-locale", locale);
 
   if (pathname.startsWith("/api/") && ["POST", "PUT", "PATCH", "DELETE"].includes(request.method.toUpperCase())) {
     const nowMs = Date.now();
@@ -124,14 +129,14 @@ export async function middleware(request: NextRequest) {
     pathname === "/admin";
 
   if (!requiresSessionRefresh) {
-    return applySecurityHeaders(NextResponse.next({ request }));
+    return applySecurityHeaders(NextResponse.next({ request: { headers: requestHeaders } }));
   }
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    return applySecurityHeaders(NextResponse.next({ request }));
+    return applySecurityHeaders(NextResponse.next({ request: { headers: requestHeaders } }));
   }
 
-  let response = NextResponse.next({ request });
+  let response = NextResponse.next({ request: { headers: requestHeaders } });
 
   const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Script from "next/script";
 import { Inter, Noto_Sans_Arabic } from "next/font/google";
+import { FooterLinks } from "../components/FooterLinks.client";
+import { FloatingContactCta } from "../components/FloatingContactCta.client";
 import "./globals.css";
 
 const inter = Inter({
@@ -22,6 +25,12 @@ const notoSansArabic = Noto_Sans_Arabic({
 export const metadata: Metadata = {
   title: "Georgiahills Web",
   description: "Next.js 14 App Router scaffold",
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    other: {
+      "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION || ""
+    }
+  },
   icons: {
     icon: "/favicon.webp",
     shortcut: "/favicon.webp"
@@ -34,9 +43,18 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   const gtagId = process.env.NODE_ENV === "production" ? process.env.NEXT_PUBLIC_GTAG_ID : undefined;
+  const requestHeaders = headers();
+  const headerPath =
+    requestHeaders.get("x-pathname") ||
+    requestHeaders.get("next-url") ||
+    requestHeaders.get("x-invoke-path") ||
+    "";
+  const localeFromPath = headerPath.startsWith("/ar") ? "ar" : "en";
+  const locale = requestHeaders.get("x-locale") === "ar" ? "ar" : localeFromPath;
+  const direction = locale === "ar" ? "rtl" : "ltr";
 
   return (
-    <html lang="en" dir="ltr" suppressHydrationWarning>
+    <html lang={locale} dir={direction} suppressHydrationWarning>
       <head>
         <link
           rel="preload"
@@ -50,6 +68,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className={`${inter.variable} ${notoSansArabic.variable}`}>
         {children}
+        <FloatingContactCta />
         {gtagId ? (
           <>
             <Script id="gh-ga4-on-interaction" strategy="afterInteractive">
@@ -79,13 +98,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </>
         ) : null}
         <footer className="border-t border-slate-200 bg-slate-50 px-4 py-6 text-center text-xs text-slate-700">
-          <nav className="flex flex-wrap justify-center gap-4">
-            <a className="underline-offset-2 hover:underline focus-visible:underline" href="/privacy">Privacy Policy</a>
-            <a className="underline-offset-2 hover:underline focus-visible:underline" href="/terms">Terms of Service</a>
-            <a className="underline-offset-2 hover:underline focus-visible:underline" href="/cancellation">Cancellation Policy</a>
-            <a className="underline-offset-2 hover:underline focus-visible:underline" href="/insurance">Travel Insurance</a>
-            <a className="underline-offset-2 hover:underline focus-visible:underline" href="/licensing">Licensing</a>
-          </nav>
+          <FooterLinks />
           <p className="mt-2">&copy; {new Date().getFullYear()} Georgia Hills</p>
         </footer>
       </body>

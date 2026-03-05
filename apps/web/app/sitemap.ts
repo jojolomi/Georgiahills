@@ -1,12 +1,7 @@
 import type { MetadataRoute } from "next";
-import fs from "node:fs/promises";
-import path from "node:path";
-
-type DestinationRecord = {
-  slug: string;
-  image?: string;
-  updatedAt?: string;
-};
+import { getContentSlugs } from "../lib/content";
+import { getFleetSlugs } from "../lib/fleet";
+import { getTourSlugs } from "../lib/tours";
 
 type ExtendedSitemapEntry = MetadataRoute.Sitemap[number] & {
   images?: string[];
@@ -14,21 +9,12 @@ type ExtendedSitemapEntry = MetadataRoute.Sitemap[number] & {
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://georgiahills.com";
 
-async function readDestinationContent(): Promise<DestinationRecord[]> {
-  const filePath = path.join(process.cwd(), "content", "destinations.json");
-
-  try {
-    const raw = await fs.readFile(filePath, "utf8");
-    const parsed = JSON.parse(raw) as DestinationRecord[];
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
-  const destinations = await readDestinationContent();
+  const enBlogSlugs = await getContentSlugs("blog", "en");
+  const arBlogSlugs = await getContentSlugs("blog", "ar");
+  const tourSlugs = getTourSlugs();
+  const fleetSlugs = getFleetSlugs();
 
   const staticEntries: ExtendedSitemapEntry[] = [
     {
@@ -45,14 +31,64 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${siteUrl}/ar`,
       lastModified: now,
       images: [`${siteUrl}/image-1600.avif`]
+    },
+    {
+      url: `${siteUrl}/booking`,
+      lastModified: now,
+      images: [`${siteUrl}/image-1600.avif`]
     }
   ];
 
-  const destinationEntries: ExtendedSitemapEntry[] = destinations.map((item) => ({
-    url: `${siteUrl}/en/destinations/${item.slug}`,
-    lastModified: item.updatedAt ? new Date(item.updatedAt) : now,
-    images: [item.image ? `${siteUrl}${item.image}` : `${siteUrl}/image-1600.avif`]
-  }));
+  const tourEntries: ExtendedSitemapEntry[] = tourSlugs.flatMap((slug) => [
+    {
+      url: `${siteUrl}/en/tours/${slug}`,
+      lastModified: now,
+      images: [`${siteUrl}/image-1024.avif`]
+    },
+    {
+      url: `${siteUrl}/ar/tours/${slug}`,
+      lastModified: now,
+      images: [`${siteUrl}/image-1024.avif`]
+    }
+  ]);
 
-  return [...staticEntries, ...destinationEntries] as MetadataRoute.Sitemap;
+  const fleetEntries: ExtendedSitemapEntry[] = [
+    {
+      url: `${siteUrl}/en/fleet`,
+      lastModified: now,
+      images: [`${siteUrl}/image-1024.avif`]
+    },
+    {
+      url: `${siteUrl}/ar/fleet`,
+      lastModified: now,
+      images: [`${siteUrl}/image-1024.avif`]
+    },
+    ...fleetSlugs.flatMap((slug) => [
+      {
+        url: `${siteUrl}/en/fleet/${slug}`,
+        lastModified: now,
+        images: [`${siteUrl}/image-1024.avif`]
+      },
+      {
+        url: `${siteUrl}/ar/fleet/${slug}`,
+        lastModified: now,
+        images: [`${siteUrl}/image-1024.avif`]
+      }
+    ])
+  ];
+
+  const blogEntries: ExtendedSitemapEntry[] = [
+    ...enBlogSlugs.map((slug) => ({
+      url: `${siteUrl}/en/blog/${slug}`,
+      lastModified: now,
+      images: [`${siteUrl}/image-1024.avif`]
+    })),
+    ...arBlogSlugs.map((slug) => ({
+      url: `${siteUrl}/ar/blog/${slug}`,
+      lastModified: now,
+      images: [`${siteUrl}/image-1024.avif`]
+    }))
+  ];
+
+  return [...staticEntries, ...tourEntries, ...fleetEntries, ...blogEntries] as MetadataRoute.Sitemap;
 }

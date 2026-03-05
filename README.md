@@ -51,3 +51,14 @@ The web app applies cache headers in two layers:
 curl -I https://<host>/_next/static/chunks/<file>.js
 curl -I https://<host>/en
 ```
+
+## SEO/GEO Program Artifacts
+- `docs/seo-geo-program/12-week-gantt.md`
+- `docs/seo-geo-program/outreach-targets.csv`
+- `docs/seo-geo-program/outreach-email-template.md`
+- `docs/seo-geo-program/influencer-shortlist.md`
+- `docs/seo-geo-program/kpi-dashboard-access.md`
+- `docs/seo-geo-program/performance-remediation-log.md`
+- `docs/seo-geo-program/firebase-next-cutover.md`
+- `docs/seo-geo-program/executive-summary-en.md`
+- `docs/seo-geo-program/executive-summary-ar.md`

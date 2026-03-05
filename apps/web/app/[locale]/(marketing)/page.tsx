@@ -145,6 +145,14 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
         <p className="mt-2 text-sm text-slate-500">
           {messages.featuredLabel}: {featuredDestination.name}
         </p>
+        <h2 className="mt-6 text-lg font-semibold text-slate-900">
+          {locale === "ar" ? "لماذا يختار المسافرون العرب جورجيا هيلز؟" : "Why GCC travelers choose Georgia Hills"}
+        </h2>
+        <p className="mt-2 text-slate-600">
+          {locale === "ar"
+            ? "خطط مرنة، دعم عربي، وخدمة سائق خاص تناسب العائلات والرحلات الفاخرة في تبليسي وباتومي وكازبيجي وما بعدها."
+            : "Flexible planning, Arabic support, and private driver service built for families and VIP travel across Tbilisi, Batumi, Kazbegi, and beyond."}
+        </p>
         <GccApproxPrice
           locale={locale}
           baseGel={baseTourPriceGel}

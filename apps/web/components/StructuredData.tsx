@@ -8,6 +8,7 @@ type StructuredDataKind =
   | "Breadcrumb"
   | "Review"
   | "Product"
+  | "Service"
   | "Event";
 
 type StructuredDataProps = {
@@ -83,6 +84,12 @@ export function createSchemaNode(type: StructuredDataKind, data: Record<string, 
     case "Product":
       return {
         "@type": "Product",
+        ...data
+      };
+
+    case "Service":
+      return {
+        "@type": "Service",
         ...data
       };
 

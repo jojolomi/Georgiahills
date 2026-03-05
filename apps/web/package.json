@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "verify:rendered-html": "node scripts/verify-rendered-html.mjs",
     "format": "prettier --write .",
     "images:generate": "node scripts/generate-responsive-images.mjs"
   },

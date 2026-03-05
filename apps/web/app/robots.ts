@@ -13,12 +13,31 @@ function isStagingEnvironment() {
 export default function robots(): MetadataRoute.Robots {
   const disallowAll = isStagingEnvironment();
 
+  if (disallowAll) {
+    return {
+      rules: [
+        {
+          userAgent: "*",
+          disallow: "/"
+        }
+      ],
+      sitemap: `${siteUrl}/sitemap.xml`
+    };
+  }
+
   return {
     rules: [
       {
         userAgent: "*",
-        allow: disallowAll ? undefined : "/",
-        disallow: disallowAll ? "/" : undefined
+        allow: "/"
+      },
+      {
+        userAgent: "GPTBot",
+        allow: "/"
+      },
+      {
+        userAgent: "Google-Extended",
+        allow: "/"
       }
     ],
     sitemap: `${siteUrl}/sitemap.xml`
