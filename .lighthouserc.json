@@ -3,10 +3,10 @@
     "collect": {
       "staticDistDir": "./apps/web/dist",
       "url": [
-        "http://localhost/en.html",
+        "http://localhost/index.html",
         "http://localhost/booking.html",
-        "http://localhost/en/blog/is-georgia-safe.html",
-        "http://localhost/en/destinations/tbilisi.html"
+        "http://localhost/article-is-georgia-safe.html",
+        "http://localhost/tbilisi.html"
       ],
       "numberOfRuns": 1
     },
