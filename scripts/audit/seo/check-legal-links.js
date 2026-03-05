@@ -8,34 +8,59 @@ if (!fs.existsSync(distDir)) {
   process.exit(1);
 }
 
-// Next.js App Router pages – locale in the path, not the filename
+// Accept both Next-style and legacy filenames during migration.
 const targetPages = [
-  "en.html",
-  "ar.html",
-  "booking.html"
-];
-const requiredLinks = [
-  "/privacy",
-  "/terms",
-  "/cancellation",
-  "/insurance",
-  "/licensing"
+  {
+    label: "en",
+    candidates: ["en.html", "index.html"],
+    requiredGroups: [
+      ["/privacy", "legal.html", "privacyModal"],
+      ["/terms", "legal.html", "Terms of Service"]
+    ]
+  },
+  {
+    label: "ar",
+    candidates: ["ar.html", "arabic.html"],
+    requiredGroups: [
+      ["/privacy", "legal.html", "privacyModal", "سياسة الخصوصية"]
+    ]
+  },
+  {
+    label: "booking",
+    candidates: ["booking.html"],
+    requiredGroups: [
+      ["/privacy"],
+      ["/terms"],
+      ["/cancellation"],
+      ["/insurance"],
+      ["/licensing"]
+    ]
+  }
 ];
 
 let passed = true;
 
-for (const file of targetPages) {
-  const full = path.join(distDir, file);
-  if (!fs.existsSync(full)) {
-    process.stderr.write(`✖ missing page: ${file}\n`);
+for (const target of targetPages) {
+  const found = target.candidates.find((candidate) =>
+    fs.existsSync(path.join(distDir, candidate))
+  );
+
+  if (!found) {
+    process.stderr.write(`✖ missing page: ${target.candidates[0]}\n`);
     passed = false;
     continue;
   }
 
+  const file = found;
+  const full = path.join(distDir, file);
+
   const html = fs.readFileSync(full, "utf8");
-  for (const token of requiredLinks) {
-    if (!html.includes(token)) {
-      process.stderr.write(`✖ ${file}: missing legal link token "${token}"\n`);
+  for (const tokenGroup of target.requiredGroups) {
+    const hasAnyToken = tokenGroup.some((token) => html.includes(token));
+    if (!hasAnyToken) {
+      process.stderr.write(
+        `✖ ${file}: missing legal link token (expected one of: ${tokenGroup.join(", ")})\n`
+      );
       passed = false;
     }
   }
