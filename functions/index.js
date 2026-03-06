@@ -714,7 +714,7 @@ async function writeSecurityAlert(eventType, req, details = {}, user = null) {
 }
 
 async function verifyAdminAppCheck(req) {
-  const required = parseBoolEnv(process.env.ADMIN_REQUIRE_APP_CHECK, false);
+  const required = parseBoolEnv(process.env.ADMIN_REQUIRE_APP_CHECK, true);
   if (!required) {
     return { ok: true, required: false, appId: null };
   }
