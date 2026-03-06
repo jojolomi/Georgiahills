@@ -196,7 +196,7 @@
         </div>
       </nav>
 
-      <div id="mobile-menu" aria-hidden="true" inert>
+      <div id="mobile-menu" aria-hidden="true">
         <button id="close-menu-btn" class="close-menu-btn" aria-label="${cfg.texts.close}"><i class="fa-solid fa-xmark"></i></button>
         <div id="mobile-links-container">
           <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="mobile-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>

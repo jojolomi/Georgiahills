@@ -984,11 +984,6 @@ const UIManager = {
         const setMenuState = (menu, toggleBtn, newState) => {
             menu.classList.toggle('open', newState);
             menu.setAttribute('aria-hidden', newState ? 'false' : 'true');
-            if (newState) {
-                menu.removeAttribute('inert');
-            } else {
-                menu.setAttribute('inert', '');
-            }
             if (toggleBtn) toggleBtn.setAttribute('aria-expanded', newState ? 'true' : 'false');
             document.body.classList.toggle('overflow-hidden', newState);
         };
