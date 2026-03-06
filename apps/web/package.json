@@ -8,10 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "test": "tsx --test $(find lib -name \"*.test.ts\")",
     "verify:rendered-html": "node scripts/verify-rendered-html.mjs",
     "format": "prettier --write .",
-    "images:generate": "node scripts/generate-responsive-images.mjs",
-    "test:unit": "node --import tsx --test \"**/*.test.ts\""
+    "images:generate": "node scripts/generate-responsive-images.mjs"
   },
   "dependencies": {
     "@gh/lib": "workspace:*",

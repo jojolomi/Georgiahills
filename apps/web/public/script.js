@@ -748,6 +748,17 @@ const UIManager = {
         this.initDropdowns();
         this.updateCopyright();
         this.updateActiveNavLink();
+
+        // Handle empty links (delegated to support dynamic elements)
+        document.body.addEventListener('click', (e) => {
+            const link = e.target.closest('a[href="#"]');
+            if (link) {
+                e.preventDefault();
+                const isAr = document.documentElement.lang === 'ar';
+                const msg = isAr ? 'هذه الميزة قادمة قريباً!' : 'This feature is coming soon!';
+                this.showToast(msg);
+            }
+        });
     },
 
     applyPageVisualContext() {
@@ -1749,17 +1760,6 @@ const MainApp = {
             preloader.style.opacity = '0';
             setTimeout(() => { preloader.style.display = 'none'; }, 500); // Wait for CSS transition only
         }
-
-        // Handle empty links (delegated to support dynamic elements)
-        document.body.addEventListener('click', (e) => {
-            const link = e.target.closest('a[href="#"]');
-            if (link) {
-                e.preventDefault();
-                const isAr = document.documentElement.lang === 'ar';
-                const msg = isAr ? 'هذه الميزة قادمة قريباً!' : 'This feature is coming soon!';
-                UIManager.showToast(msg);
-            }
-        });
     },
     
     initAnimations() {
