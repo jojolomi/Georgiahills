@@ -66,18 +66,32 @@ async function processScheduledPublishes() {
 
   if (queueSnap.empty) return { processed: 0 };
 
-  let processed = 0;
-  for (const docSnap of queueSnap.docs) {
+  const validDocs = queueSnap.docs.map(docSnap => {
     const item = docSnap.data() || {};
     const pageId = sanitizeString(item.pageId, 80);
-    if (!pageId) continue;
+    return { docSnap, item, pageId };
+  }).filter(v => v.pageId);
 
+  if (validDocs.length === 0) return { processed: 0 };
+
+  const pageRefs = validDocs.map(v => admin.firestore().collection("cms_pages").doc(v.pageId));
+  const pageSnaps = await admin.firestore().getAll(...pageRefs);
+
+  const pageSnapsById = new Map();
+  for (const snap of pageSnaps) {
+    if (snap.exists) {
+      pageSnapsById.set(snap.id, snap);
+    }
+  }
+
+  let processed = 0;
+  for (const { docSnap, item, pageId } of validDocs) {
     const pageRef = admin.firestore().collection("cms_pages").doc(pageId);
     const settingsRef = admin.firestore().collection("settings").doc(`page_${pageId}`);
     const revisionRef = pageRef.collection("revisions").doc();
 
-    const pageSnap = await pageRef.get();
-    const draft = sanitizeObject(pageSnap.data()?.draft || {});
+    const pageSnap = pageSnapsById.get(pageId);
+    const draft = pageSnap ? sanitizeObject(pageSnap.data()?.draft || {}) : {};
     if (!draft || Object.keys(draft).length === 0) {
       await docSnap.ref.set({ status: "failed", error: "no_draft_found", updatedAt: admin.firestore.FieldValue.serverTimestamp() }, { merge: true });
       continue;
