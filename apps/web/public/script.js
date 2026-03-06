@@ -322,6 +322,21 @@ function applyNavbarSettings(data = {}) {
     if (!data.items || !Array.isArray(data.items)) return;
     
     const isAr = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
+    const createNavLink = (item, className) => {
+        const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
+        const link = item.link;
+
+        const anchor = document.createElement('a');
+        anchor.href = link;
+        anchor.className = className;
+
+        if (window.location.href.includes(link) && link !== '/' && link !== '#') {
+            anchor.classList.add('active');
+        }
+
+        anchor.textContent = label;
+        return anchor;
+    };
     
     // Desktop Nav
     const desktopNav = document.getElementById('desktop-links-container');
@@ -330,16 +345,7 @@ function applyNavbarSettings(data = {}) {
         if(data.items.length > 0) desktopNav.innerHTML = '';
         
         data.items.forEach(item => {
-            const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
-            const link = item.link;
-            
-            const a = document.createElement('a');
-            a.href = link;
-            a.className = 'nav-link';
-            // Simple active check heuristic
-            if(window.location.href.includes(link) && link !== '/' && link !== '#') a.classList.add('active');
-            a.textContent = label;
-            desktopNav.appendChild(a);
+            desktopNav.appendChild(createNavLink(item, 'nav-link'));
         });
     }
 
@@ -349,15 +355,7 @@ function applyNavbarSettings(data = {}) {
         if(data.items.length > 0) mobileNav.innerHTML = '';
         
         data.items.forEach(item => {
-             const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
-             const link = item.link;
-
-             const a = document.createElement('a');
-             a.href = link;
-             a.className = 'mobile-link'; 
-             if(window.location.href.includes(link) && link !== '/' && link !== '#') a.classList.add('active');
-             a.textContent = label;
-             mobileNav.appendChild(a);
+             mobileNav.appendChild(createNavLink(item, 'mobile-link'));
         });
     }
 }
