@@ -10,7 +10,7 @@
 
     const setOffset = () => {
       const navHeight = Math.max(80, Math.ceil(sharedNav.getBoundingClientRect().height || 88));
-      document.documentElement.style.setProperty('--gh-nav-height', \\px\);
+      document.documentElement.style.setProperty('--gh-nav-height', navHeight + 'px');
     };
 
     setOffset();
