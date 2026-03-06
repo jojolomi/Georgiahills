@@ -1,3 +1,6 @@
+const mock = require("./mock-firebase.js");
+mock.setup();
+
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
@@ -35,7 +38,7 @@ test("sanitizeObject drops invalid keys and deeply sanitizes", () => {
     "bad key": "nope",
     nested: {
       ok: "yes",
-      "$bad": "nope"
+      "": "nope"
     }
   };
   const sanitized = __test.sanitizeObject(input);
