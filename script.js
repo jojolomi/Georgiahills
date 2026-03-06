@@ -2028,6 +2028,39 @@ const MainApp = {
             });
         }
 
+        // Market/country segmentation from URL path (e.g. /ae/, /sa/, /kw/)
+        const marketMatch = window.location.pathname.match(/^\/(ae|sa|kw|qa|eg|bh|om)\//i);
+        const marketCode = marketMatch ? marketMatch[1].toLowerCase() : 'organic';
+        const pageLang = document.documentElement.lang || 'en';
+        AnalyticsTracker.event('market_segment_view', {
+            page_path: window.location.pathname,
+            market: marketCode,
+            lang: pageLang
+        });
+
+        // WhatsApp click tracking (FAB + inline CTAs)
+        document.querySelectorAll('a[href*="wa.me"], a.fab-whatsapp').forEach((el) => {
+            el.addEventListener('click', () => {
+                AnalyticsTracker.event('whatsapp_click', {
+                    page_path: window.location.pathname,
+                    cta_location: el.classList.contains('fab-whatsapp') ? 'fab' : 'inline',
+                    market: marketCode,
+                    lang: pageLang
+                });
+            });
+        });
+
+        // Phone/call link tracking
+        document.querySelectorAll('a[href^="tel:"]').forEach((el) => {
+            el.addEventListener('click', () => {
+                AnalyticsTracker.event('call_click', {
+                    page_path: window.location.pathname,
+                    market: marketCode,
+                    lang: pageLang
+                });
+            });
+        });
+
         document.querySelectorAll('a.btn-book-nav, a.mobile-btn-book, .btn-submit').forEach((el) => {
             el.addEventListener('click', () => {
                 AnalyticsTracker.event('cta_click', {
