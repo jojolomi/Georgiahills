@@ -323,6 +323,19 @@ function applyNavbarSettings(data = {}) {
     
     const isAr = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
     
+    const createNavLink = (item, className) => {
+        const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
+        const link = item.link;
+
+        const a = document.createElement('a');
+        a.href = link;
+        a.className = className;
+        // Simple active check heuristic
+        if(window.location.href.includes(link) && link !== '/' && link !== '#') a.classList.add('active');
+        a.textContent = label;
+        return a;
+    };
+
     // Desktop Nav
     const desktopNav = document.getElementById('desktop-links-container');
     if (desktopNav) {
@@ -330,16 +343,7 @@ function applyNavbarSettings(data = {}) {
         if(data.items.length > 0) desktopNav.innerHTML = '';
         
         data.items.forEach(item => {
-            const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
-            const link = item.link;
-            
-            const a = document.createElement('a');
-            a.href = link;
-            a.className = 'nav-link';
-            // Simple active check heuristic
-            if(window.location.href.includes(link) && link !== '/' && link !== '#') a.classList.add('active');
-            a.textContent = label;
-            desktopNav.appendChild(a);
+            desktopNav.appendChild(createNavLink(item, 'nav-link'));
         });
     }
 
@@ -349,15 +353,7 @@ function applyNavbarSettings(data = {}) {
         if(data.items.length > 0) mobileNav.innerHTML = '';
         
         data.items.forEach(item => {
-             const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
-             const link = item.link;
-
-             const a = document.createElement('a');
-             a.href = link;
-             a.className = 'mobile-link'; 
-             if(window.location.href.includes(link) && link !== '/' && link !== '#') a.classList.add('active');
-             a.textContent = label;
-             mobileNav.appendChild(a);
+             mobileNav.appendChild(createNavLink(item, 'mobile-link'));
         });
     }
 }
@@ -472,16 +468,17 @@ function renderSliderDestinations(dests) {
                 
                 // Update global data
                 window.DestData = { ...window.DestData, ...newDests };
+                window.DestKeys = Object.keys(window.DestData);
                 
                 // Re-render slider
                 renderSliderDestinations(window.DestData);
                 
-                // Re-initialize slider logic if module API is ready
-                if (window.GHCoreUI && window.GHCoreUI.initSlider) {
+                // Re-initialize slider logic if App is ready
+                if (window.App && window.App.initSlider) {
                      const slider = document.getElementById('tours-slider');
                      if (slider && slider.dataset.initialized) {
                          slider.removeAttribute('data-initialized');
-                         window.GHCoreUI.initSlider();
+                         window.App.initSlider();
                      }
                 }
             }
@@ -728,7 +725,7 @@ const CurrencyManager = {
                 el.innerText = `${this.convert(base)} ${this.current}`;
             }
         });
-        if (BookingManager.updateEstimate) {
+        if(typeof BookingManager !== 'undefined' && BookingManager.updateEstimate) {
             BookingManager.updateEstimate();
         }
     }
@@ -980,6 +977,19 @@ const UIManager = {
     },
 
     setupMobileMenu() {
+        const setMenuState = (menu, toggleBtn, newState) => {
+            menu.classList.toggle('open', newState);
+            menu.setAttribute('aria-hidden', newState ? 'false' : 'true');
+            if (toggleBtn) toggleBtn.setAttribute('aria-expanded', newState ? 'true' : 'false');
+            document.body.classList.toggle('overflow-hidden', newState);
+        };
+
+        const initialMenu = document.getElementById('mobile-menu');
+        const initialToggleBtn = document.getElementById('mobile-menu-btn');
+        if (initialMenu) {
+            setMenuState(initialMenu, initialToggleBtn, false);
+        }
+
         // Use Event Delegation to handle dynamically injected elements (like shared-navbar)
         document.addEventListener('click', (e) => {
             const menuBtn = e.target.closest('#mobile-menu-btn');
@@ -999,11 +1009,7 @@ const UIManager = {
             // Toggle function
             const toggle = (forceState) => {
                 const newState = (forceState !== undefined) ? forceState : !isOpen;
-                menu.classList.toggle('open', newState);
-                
-                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', newState);
-                menu.setAttribute('aria-hidden', newState ? 'false' : 'true');
-                document.body.classList.toggle('overflow-hidden', newState);
+                setMenuState(menu, toggleBtn, newState);
             };
 
             if (menuBtn) {
@@ -1019,10 +1025,7 @@ const UIManager = {
             const menu = document.getElementById('mobile-menu');
             if (event.key === 'Escape' && menu && menu.classList.contains('open')) {
                 const toggleBtn = document.getElementById('mobile-menu-btn');
-                menu.classList.remove('open');
-                if(toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
-                menu.setAttribute('aria-hidden', 'true');
-                document.body.classList.remove('overflow-hidden');
+                setMenuState(menu, toggleBtn, false);
             }
         });
     },
@@ -1452,14 +1455,6 @@ const BookingManager = {
             consent: Boolean(document.getElementById('bookingConsent')?.checked),
             attribution: AttributionManager.current(),
             experiment: ExperimentManager.current(),
-            clientMeta: {
-                language: (navigator.language || '').slice(0, 20),
-                platform: (navigator.platform || '').slice(0, 40),
-                timezoneOffsetMinutes: new Date().getTimezoneOffset(),
-                viewportWidth: Math.max(0, Math.min(10000, window.innerWidth || 0)),
-                viewportHeight: Math.max(0, Math.min(10000, window.innerHeight || 0)),
-                maxTouchPoints: Math.max(0, Math.min(20, Number(navigator.maxTouchPoints || 0)))
-            },
             segmentation,
             leadScoreClient,
             funnel: {
@@ -1868,6 +1863,8 @@ const MainApp = {
          originalCards.forEach(card => {
              const clone = card.cloneNode(true);
              clone.setAttribute('aria-hidden', 'true');
+             clone.setAttribute('tabindex', '-1');
+             clone.setAttribute('inert', '');
              const originalOnClick = card.getAttribute('onclick');
              if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
              slider.appendChild(clone);
@@ -1876,6 +1873,8 @@ const MainApp = {
          originalCards.slice().reverse().forEach(card => {
              const clone = card.cloneNode(true);
              clone.setAttribute('aria-hidden', 'true');
+             clone.setAttribute('tabindex', '-1');
+             clone.setAttribute('inert', '');
              const originalOnClick = card.getAttribute('onclick');
              if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
              slider.insertBefore(clone, slider.firstChild);
@@ -1977,13 +1976,16 @@ const MainApp = {
          slider.addEventListener('mouseleave', () => isPaused = false);
          slider.addEventListener('touchend', () => isPaused = false);
          
-         window.addEventListener('resize', () => {
-                refreshMetrics();
-            slider.style.scrollBehavior = 'auto';
-            jumpToStart();
-            setTimeout(() => { slider.style.scrollBehavior = 'smooth'; }, 50);
-         });
-            refreshMetrics();
+            let resizeRaf = null;
+            window.addEventListener('resize', () => {
+                if (resizeRaf) cancelAnimationFrame(resizeRaf);
+                resizeRaf = requestAnimationFrame(() => {
+                     refreshMetrics();
+                     slider.style.scrollBehavior = 'auto';
+                     jumpToStart();
+                     setTimeout(() => { slider.style.scrollBehavior = 'smooth'; }, 50);
+                });
+            });
          
          startAuto();
     },
@@ -2248,10 +2250,10 @@ const DestinationLoader = {
             slider.innerHTML = html;
             
             // Re-init slider logic because we replaced DOM elements
-            if(window.GHCoreUI && window.GHCoreUI.initSlider) {
+            if(window.App && App.initSlider) {
                 // Reset initialized flag to force re-bind
                 slider.dataset.initialized = 'false';
-                window.GHCoreUI.initSlider();
+                App.initSlider();
             }
         } catch (e) {
             console.error("Failed to load destinations", e);
@@ -2314,50 +2316,17 @@ const BlogManager = {
 // 5. GLOBAL EXPORTS
 // ==========================================
 
-const previousGHCoreUI = window.GHCoreUI || {};
-const previousGHBooking = window.GHBooking || {};
-const previousGHLocalization = window.GHLocalization || {};
-const previousGHDestination = window.GHDestination || {};
+// Expose objects to window for inline HTML event handlers (onclick="...")
+window.UIManager = UIManager;
+window.CurrencyManager = CurrencyManager;
+window.BookingManager = BookingManager;
+window.LangManager = LangManager;
+window.BlogManager = BlogManager;
+// Expose Loader
+window.DestinationLoader = DestinationLoader;
 
-window.GHCoreUI = {
-    ...previousGHCoreUI,
-    init: () => {
-        if (typeof previousGHCoreUI.init === "function") previousGHCoreUI.init();
-        UIManager.init();
-    },
-    closeModal: (modalId) => UIManager.closeModal(modalId),
-    toggleCurrencyDropdown: (type) => UIManager.toggleCurrencyDropdown(type),
-    initSlider: () => MainApp.initSlider(),
-    prefillVehicle: (type) => MainApp.prefillVehicle(type)
-};
-
-window.GHBooking = {
-    ...previousGHBooking,
-    init: () => {
-        if (typeof previousGHBooking.init === "function") previousGHBooking.init();
-        BookingManager.init();
-    },
-    updateEstimate: () => BookingManager.updateEstimate(),
-    handleSubmit: (event) => BookingManager.handleSubmit(event)
-};
-
-window.GHLocalization = {
-    ...previousGHLocalization,
-    init: () => {
-        if (typeof previousGHLocalization.init === "function") previousGHLocalization.init();
-        LangManager.apply();
-    },
-    sync: () => LangManager.sync()
-};
-
-window.GHDestination = {
-    ...previousGHDestination,
-    init: () => {
-        if (typeof previousGHDestination.init === "function") previousGHDestination.init();
-        DestinationApp.init();
-    },
-    refreshSlider: () => DestinationLoader.load()
-};
+// Expose MainApp as 'App' because the main page HTML calls 'App.prefillVehicle' etc.
+window.App = MainApp;
 
 function hidePreloaderSafely() {
     const preloader = document.getElementById('preloader');
