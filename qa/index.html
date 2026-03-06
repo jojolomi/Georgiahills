@@ -16,8 +16,11 @@
   <link rel="alternate" hreflang="en" href="https://georgiahills.com/index.html">
   <link rel="alternate" hreflang="x-default" href="https://georgiahills.com/index.html">
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   <link rel="icon" type="image/png" href="../favicon.ico">
   <script src="../shared-navbar.js" defer></script>
+  <script src="../shared-footer.js" defer></script>
   <script src="../script.js" defer></script>
   <script type="application/ld+json">
   {
@@ -45,16 +48,122 @@
   }
   </script>
 </head>
-<body class="secondary-page page-about">
+<body class="secondary-page country-landing-page">
   <a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
-  <nav id="navbar" class="navbar"></nav>
-  <main id="main-content" class="container" style="padding-top:8rem; padding-bottom:4rem;">
-    <h1 class="section-title">السفر من قطر إلى جورجيا</h1>
-    <p class="section-desc">نقدم خطط سياحية مخصصة للمسافرين من قطر مع دعم عربي كامل وخيارات عائلية فاخرة.</p>
-    <div class="hero-buttons" style="margin-top:2rem;">
-      <a href="../booking-ar.html" class="btn-hero btn-hero-primary">احجز الآن</a>
-      <a href="https://wa.me/995579088537" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener noreferrer">تواصل واتساب</a>
+  <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>أنت غير متصل بالإنترنت</span></div>
+  <div id="preloader">
+    <div class="text-center">
+      <div class="preloader-circle animate-bounce">
+        <img src="../favicon.ico" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo">
+      </div>
+      <div class="preloader-text">Loading</div>
     </div>
+  </div>
+  <nav id="navbar" class="navbar"></nav>
+  <main id="main-content">
+    <section class="country-landing-hero">
+      <div class="country-landing-bg">
+        <img src="../image-1600.webp" alt="السفر من قطر إلى جورجيا">
+      </div>
+      <div class="container country-landing-hero-inner">
+        <div class="country-hero-copy">
+          <span class="country-kicker"><i class="fa-solid fa-earth-asia"></i> رحلات جورجيا للمسافرين من قطر</span>
+          <h1 class="hero-title">رحلة جورجيا من قطر بخطة سهلة التنفيذ</h1>
+          <p class="hero-subtitle">إذا كنت قادماً من الدوحة وتبحث عن رحلة مرتبة للعائلة أو الأزواج، فهذه الصفحة تساعدك على تصور الرحلة قبل الحجز: المدن الأنسب، مدة الإقامة، شكل التنقل، وما الذي نرتبه لك من أول يوم.</p>
+          <div class="hero-buttons">
+            <a href="../booking-ar.html" class="btn-hero btn-hero-primary">اطلب خطة وسعر</a>
+            <a href="https://wa.me/995579088537" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener noreferrer">تواصل واتساب</a>
+          </div>
+        </div>
+        <aside class="country-hero-card">
+          <h2>مختصر سريع</h2>
+          <ul class="country-hero-points">
+            <li><i class="fa-solid fa-circle-check"></i><span>التركيز على الراحة وسهولة التنقل أكثر من كثرة التوقفات.</span></li>
+            <li><i class="fa-solid fa-circle-check"></i><span>خدمة عربية سريعة إذا احتجت تغييراً فورياً في الجدول.</span></li>
+            <li><i class="fa-solid fa-circle-check"></i><span>برنامج مرن يناسب الرحلات القصيرة والمتوسطة.</span></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="country-landing-main">
+      <div class="container country-page-grid">
+        <div class="country-info-grid">
+          <div class="country-stat"><span class="country-stat-label">أفضل مدة</span><span class="country-stat-value">4 إلى 6 أيام</span></div>
+          <div class="country-stat"><span class="country-stat-label">مناسبة لـ</span><span class="country-stat-value">عائلة أو زوجين</span></div>
+          <div class="country-stat"><span class="country-stat-label">التنقل</span><span class="country-stat-value">سيارة خاصة</span></div>
+          <div class="country-stat"><span class="country-stat-label">البداية</span><span class="country-stat-value">مطار تبليسي</span></div>
+        </div>
+
+        <div class="country-page-grid country-page-grid--two">
+          <article class="country-panel">
+            <span class="country-panel-eyebrow">ما الذي تستفيده</span>
+            <h2>صفحة عملية لمن يريد قراراً واضحاً</h2>
+            <p>الهدف هنا ليس فقط إقناعك بالحجز، بل مساعدتك على فهم كيف تكون الرحلة مناسبة لوقتك وميزانيتك وطريقتك في السفر. لهذا نرتب المحتوى حول الأسئلة التي تتكرر من الضيوف القادمين من قطر.</p>
+            <ul class="country-checklist">
+              <li><i class="fa-solid fa-check"></i><span>ما المدن التي تستحق فعلاً خلال المدة المتاحة.</span></li>
+              <li><i class="fa-solid fa-check"></i><span>هل الأفضل الإقامة في تبليسي فقط أم إضافة الجبال.</span></li>
+              <li><i class="fa-solid fa-check"></i><span>كيف تحصل على رحلة مريحة بدون ازدحام في الجدول.</span></li>
+            </ul>
+          </article>
+
+          <article class="country-panel country-panel--dark">
+            <span class="country-panel-eyebrow">برنامج مقترح</span>
+            <h2>رحلة قصيرة محسوبة</h2>
+            <div class="country-route-grid">
+              <div class="country-route-card">
+                <h3>الوصول</h3>
+                <p>استقبال من المطار وجولة خفيفة مساءً حسب وقت الوصول.</p>
+              </div>
+              <div class="country-route-card">
+                <h3>تبليسي + جبل</h3>
+                <p>مزيج بين المدينة والطبيعة حتى لا تكون الرحلة متشابهة كل يوم.</p>
+              </div>
+              <div class="country-route-card">
+                <h3>العودة</h3>
+                <p>تنسيق العودة للمطار بوقت مريح مع يوم أخير خفيف إذا رغبت.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="country-page-grid country-page-grid--two">
+          <article class="country-panel">
+            <span class="country-panel-eyebrow">تنسيق ما قبل الرحلة</span>
+            <h2>ما الذي نجهزه لك؟</h2>
+            <ul class="country-support-list">
+              <li><i class="fa-solid fa-calendar-check"></i><span>تثبيت جدول أولي مناسب لعدد الأيام الحقيقي.</span></li>
+              <li><i class="fa-solid fa-car"></i><span>اختيار السيارة حسب العائلة أو المجموعة.</span></li>
+              <li><i class="fa-solid fa-route"></i><span>تنظيم الطريق بحيث تبقى الرحلة مريحة.</span></li>
+              <li><i class="fa-solid fa-headset"></i><span>رد عربي سريع إذا احتجت تعديل أو استفسار.</span></li>
+            </ul>
+          </article>
+
+          <article class="country-panel">
+            <span class="country-panel-eyebrow">أسئلة متكررة</span>
+            <div class="country-faq-grid">
+              <div class="country-faq-item">
+                <h3>هل تناسب جورجيا رحلة قصيرة من قطر؟</h3>
+                <p>نعم، خصوصاً إذا تم اختيار المدن بشكل صحيح وعدم حشو الجدول.</p>
+              </div>
+              <div class="country-faq-item">
+                <h3>هل يمكن جعل الرحلة عائلية بالكامل؟</h3>
+                <p>نعم، مع توقفات مناسبة وخيارات مريحة للأطفال.</p>
+              </div>
+              <div class="country-faq-item">
+                <h3>هل يمكن أن تبدأ الخدمة من المطار مباشرة؟</h3>
+                <p>نعم، وهذا هو الخيار الأكثر شيوعاً.</p>
+              </div>
+              <div class="country-faq-item">
+                <h3>كيف يتم تأكيد الحجز؟</h3>
+                <p>عبر واتساب بعد الاتفاق على الخطة والسيارة والمدة.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
   </main>
+  <footer class="footer" id="footer"></footer>
 </body>
 </html>

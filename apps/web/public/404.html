@@ -11,7 +11,7 @@
             html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;background:#fff}
             .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
             .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
-            .navbar{position:relative;z-index:50;background:transparent}
+            .navbar{position:fixed;top:0;left:0;width:100%;z-index:50;background:transparent;border-bottom:1px solid rgba(255,255,255,.1);padding:1.25rem 0}
             .hero-img{width:100%;height:auto;display:block;object-fit:cover}
             .hero{position:relative;overflow:hidden}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
@@ -19,6 +19,7 @@
         <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="favicon.ico">
     <script src="shared-navbar.js" defer></script>
+    <script src="shared-footer.js" defer></script>
 </head>
 <body class="page-404 page-about secondary-page">
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -48,16 +49,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                &copy; <span id="year">2026</span> Georgia Hills. All rights reserved.
-            </div>
-        </div>
-    </footer>
+    <footer class="footer" id="footer"></footer>
 
     <script src="script.js" defer></script>
 </body>
 </html>
+
+
 
 
