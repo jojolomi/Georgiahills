@@ -1933,16 +1933,26 @@ const MainApp = {
          };
 
          const checkScroll = () => {
+            // Simplified scroll reset logic for mobile reliability
             const { totalWidth } = getMetrics();
-            const tolerance = 10;
+            if (!totalWidth) return;
             const currentScroll = slider.scrollLeft;
+            const maxScroll = slider.scrollWidth - slider.clientWidth;
             
-            if (currentScroll >= (totalWidth * 2) - tolerance) {
-                queueInfiniteReset();
-            }
-            else if (currentScroll <= tolerance) {
-                queueInfiniteReset();
-            }
+            // Allow native scroll-snap to finish before jumping
+            clearTimeout(slider.scrollEndTimer);
+            slider.scrollEndTimer = setTimeout(() => {
+                if (currentScroll >= maxScroll - 50) {
+                    slider.style.scrollBehavior = 'auto';
+                    slider.scrollLeft = totalWidth;
+                    slider.style.scrollBehavior = 'smooth';
+                }
+                else if (currentScroll <= 50) {
+                    slider.style.scrollBehavior = 'auto';
+                    slider.scrollLeft = totalWidth;
+                    slider.style.scrollBehavior = 'smooth';
+                }
+            }, 100);
          };
 
          slider.addEventListener('scroll', checkScroll, { passive: true });
