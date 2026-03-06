@@ -2121,7 +2121,6 @@ const DestinationApp = {
             const heroImg = document.getElementById('hero-img');
             if(heroImg) {
                 heroImg.alt = title; // Accessibility Fix
-                // FIX: Set handlers before src to catch cached loads
                 heroImg.onload = function() { this.classList.remove('skeleton'); };
                 heroImg.onerror = function() { this.src = 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80'; }; // Fallback
                 document.getElementById('hero-bg').style.backgroundImage = 'url(' + (data.img.startsWith('http') ? data.img : data.img) + ')'; heroImg.src = data.img;
