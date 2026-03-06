@@ -11,7 +11,7 @@ const isAr = lang === "ar";
     <article class="content-card">
       <h2 class="section-title">{isAr ? "تواصل سريع للحجز" : "Fast Booking Contact"}</h2>
       <p class="section-desc">{isAr ? "واتساب مباشر أو نموذج ثنائي اللغة مع طلب اتصال." : "Direct WhatsApp or bilingual form with callback request."}</p>
-      <a href="https://wa.me/995579088537" class="btn-hero btn-hero-primary" target="_blank" rel="noopener noreferrer">
+      <a href="https://wa.me/995579088537" class="btn-hero btn-hero-primary" target="_blank" rel="noopener noreferrer" data-ga4-event="whatsapp_click" data-ga4-label="contact-module">
         <i class="fa-brands fa-whatsapp"></i> {isAr ? "احجز عبر واتساب" : "Book via WhatsApp"}
       </a>
     </article>

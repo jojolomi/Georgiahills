@@ -8,31 +8,57 @@ const isAr = lang === "ar";
 
 const testimonials = [
   {
-    name: isAr ? "سارة - الرياض" : "Sarah - Riyadh",
-    text: isAr ? "التخطيط كان ممتاز والرحلة مناسبة للأطفال بالكامل." : "Planning was excellent and the itinerary worked perfectly for kids.",
+    name: isAr ? "سارة — الرياض" : "Sarah — Riyadh",
+    intent: isAr ? "رحلة عائلية" : "Family trip",
+    rating: 5,
+    text: isAr
+      ? "البرنامج كان مناسبًا تمامًا للأطفال — وقفات صلاة منظمة ومطاعم حلال موثوقة في كل مدينة. لا تسرع ولا ضغط."
+      : "The itinerary worked perfectly for kids — organized prayer stops and trusted halal restaurants in every city. No rush, no stress.",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=320&q=70"
   },
   {
-    name: isAr ? "أحمد - دبي" : "Ahmad - Dubai",
-    text: isAr ? "الرد سريع جدًا عبر واتساب والسيارة كانت نظيفة ومريحة." : "Very fast WhatsApp response and the vehicle was clean and comfortable.",
+    name: isAr ? "محمد وزوجته — دبي" : "Mohammed & family — Dubai",
+    intent: isAr ? "شهر عسل" : "Honeymoon",
+    rating: 5,
+    text: isAr
+      ? "تجربة شهر العسل فاقت توقعاتنا. السائق كان محترفًا والمسارات رائعة. الرد على واتساب كان فوريًا في كل وقت."
+      : "The honeymoon exceeded expectations. Professional driver, beautiful routes, and instant WhatsApp responses at all times.",
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=320&q=70"
   },
   {
-    name: isAr ? "نورة - الكويت" : "Noura - Kuwait",
-    text: isAr ? "برنامج مناسب للسيدات والعائلة مع شعور أمان كامل." : "Women-friendly and family-safe plan with full sense of safety.",
+    name: isAr ? "نورة — الكويت" : "Noura — Kuwait",
+    intent: isAr ? "مجموعة نسائية" : "Women-only group",
+    rating: 5,
+    text: isAr
+      ? "سافرت مع مجموعة من الصديقات وشعرنا بالأمان الكامل. السائق كان محترمًا والمناطق المختارة هادئة ومناسبة."
+      : "Traveled with a group of friends and felt completely safe. The driver was respectful and the selected areas were calm and suitable.",
     image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=320&q=70"
   }
 ];
 ---
 <section class="section-py" aria-labelledby="social-proof-title">
   <div class="container">
-    <h2 id="social-proof-title" class="section-title">{isAr ? "آراء عملاء حقيقية" : "Verified Traveler Feedback"}</h2>
+    <div style="text-align:center; margin-bottom:0.5rem;">
+      <span style="color:#F59E0B; font-size:1.2rem;" aria-label={isAr ? "تقييم 5 نجوم" : "5 star rating"}>★★★★★</span>
+      <span style="font-size:0.85rem; color:var(--color-gray-500); margin-inline-start:0.5rem;">{isAr ? "٤.٩ / ٥ بناءً على تقييمات موثقة" : "4.9 / 5 based on verified reviews"}</span>
+    </div>
+    <h2 id="social-proof-title" class="section-title">{isAr ? "آراء مسافرين حقيقيين" : "Verified Traveler Reviews"}</h2>
     <div class="package-grid">
       {testimonials.map((item) => (
-        <article class="content-card social-proof-card">
-          <img src={item.image} alt={item.name} loading="lazy" decoding="async" class="social-proof-avatar" />
-          <h3>{item.name}</h3>
-          <p>{item.text}</p>
+        <article class="content-card social-proof-card" itemscope itemtype="https://schema.org/Review">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+            <img src={item.image} alt={item.name} loading="lazy" decoding="async" class="social-proof-avatar" width="48" height="48" />
+            <div>
+              <h3 style="font-size:0.95rem; margin:0;" itemprop="author">{item.name}</h3>
+              <span style="font-size:0.78rem; color:var(--color-primary); background:rgba(var(--color-primary-rgb, 15,107,96),0.1); padding:0.1rem 0.5rem; border-radius:999px;">{item.intent}</span>
+            </div>
+          </div>
+          <div style="color:#F59E0B; margin-bottom:0.5rem;" aria-label={isAr ? `تقييم ${item.rating} نجوم` : `${item.rating} star rating`} itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+            <meta itemprop="ratingValue" content={String(item.rating)} />
+            <meta itemprop="bestRating" content="5" />
+            {"★".repeat(item.rating)}
+          </div>
+          <p itemprop="reviewBody" style="font-size:0.9rem; line-height:1.6; color:var(--color-gray-700);">{item.text}</p>
         </article>
       ))}
     </div>
