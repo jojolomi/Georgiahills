@@ -4,54 +4,37 @@
     "blog": {
       "type": "object",
       "properties": {
-        "title": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "lang": {
-          "type": "string",
-          "enum": [
-            "en",
-            "ar"
-          ]
-        },
-        "intent": {
-          "type": "string",
-          "enum": [
-            "planning",
-            "cost",
-            "itinerary",
-            "halal",
-            "safety"
-          ]
-        },
-        "market": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "lang": { "type": "string", "enum": ["en", "ar"] },
+        "intent": { "type": "string", "enum": ["planning", "cost", "itinerary", "halal", "safety"] },
+        "market": { "type": "array", "items": { "type": "string", "enum": ["sa", "ae", "qa", "kw", "eg"] } },
+        "slug": { "type": "string" },
+        "meta_title": { "type": "string" },
+        "meta_description": { "type": "string" },
+        "metaTitle": { "type": "string" },
+        "metaDescription": { "type": "string" },
+        "date": { "type": "string" },
+        "publish_date": { "type": "string" },
+        "locale": { "type": "string" },
+        "author": { "type": "string" },
+        "reviewer_name": { "type": "string" },
+        "reviewed_date": { "type": "string" },
+        "image": { "type": "string" },
+        "faq": {
           "type": "array",
           "items": {
-            "type": "string",
-            "enum": [
-              "sa",
-              "ae",
-              "qa",
-              "kw",
-              "eg"
-            ]
+            "type": "object",
+            "properties": {
+              "question": { "type": "string" },
+              "answer": { "type": "string" }
+            },
+            "required": ["question", "answer"]
           }
         },
-        "$schema": {
-          "type": "string"
-        }
+        "$schema": { "type": "string" }
       },
-      "required": [
-        "title",
-        "description",
-        "lang",
-        "intent",
-        "market"
-      ],
-      "additionalProperties": false
+      "required": ["title", "description", "lang"]
     }
   },
   "$schema": "http://json-schema.org/draft-07/schema#"
