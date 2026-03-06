@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        window.gtag = function() {
+            throw new Error("Simulated gtag error inside AnalyticsTracker");
+        };
+    </script>
+    <script src="script.js"></script>
+</head>
+<body>
+    <button id="test-btn" class="btn-submit">Test CTA</button>
+    <script>
+        // Manually hook up click
+        document.getElementById('test-btn').addEventListener('click', () => {
+            // How do we call AnalyticsTracker? It's captured inside App.initTracking()
+            if (window.App && window.App.initTracking) {
+                window.App.initTracking();
+                document.getElementById('test-btn').click(); // re-click after binding
+            } else {
+                console.error("App.initTracking not found");
+            }
+        });
+
+        setTimeout(() => {
+            if (window.App && window.App.initTracking) {
+                window.App.initTracking();
+                document.getElementById('test-btn').click();
+            }
+        }, 500);
+    </script>
+</body>
+</html>

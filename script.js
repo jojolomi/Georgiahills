@@ -170,7 +170,9 @@ const AnalyticsTracker = {
             if (typeof gtag === 'function') {
                 gtag('event', name, payload);
             }
-        } catch (e) {}
+        } catch (e) {
+            console.error('Analytics tracking error:', e);
+        }
     }
 };
 
