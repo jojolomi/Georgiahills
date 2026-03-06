@@ -23,8 +23,8 @@ const notoSansArabic = Noto_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
-  title: "Georgiahills Web",
-  description: "Next.js 14 App Router scaffold",
+  title: "Georgia Hills",
+  description: "Premium private driver and tour services across Georgia. From Tbilisi to Kazbegi, Batumi, and beyond.",
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     other: {
@@ -39,6 +39,12 @@ export const metadata: Metadata = {
 
 type RootLayoutProps = {
   children: React.ReactNode;
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({ children }: RootLayoutProps) {
