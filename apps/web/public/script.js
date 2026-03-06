@@ -412,15 +412,16 @@ function renderSliderDestinations(dests) {
         // Image
         const img = document.createElement('img');
         const responsiveImage = buildResponsiveTourImage(d.img);
-        img.src = responsiveImage.src || d.img;
-        if (responsiveImage.srcset) img.srcset = responsiveImage.srcset;
-        if (responsiveImage.sizes) img.sizes = responsiveImage.sizes;
         img.width = 380; // Standardize
         img.height = 475;
         img.loading = 'lazy';
         img.decoding = 'async';
         img.className = 'tour-card-img'; // Use consistent class
         img.alt = title;
+        // Set properties before src to catch cached loads correctly for responsive images
+        if (responsiveImage.srcset) img.srcset = responsiveImage.srcset;
+        if (responsiveImage.sizes) img.sizes = responsiveImage.sizes;
+        img.src = responsiveImage.src || d.img;
         
         const overlay = document.createElement('div');
         overlay.className = 'tour-overlay';
@@ -1602,11 +1603,13 @@ const LibraryLoader = {
         if (this.loaded[url]) return Promise.resolve();
         return new Promise((resolve, reject) => {
             const el = type === 'css' ? document.createElement('link') : document.createElement('script');
-            if (type === 'css') { el.rel = 'stylesheet'; el.href = url; }
-            else { el.src = url; el.defer = true; }
             
             el.onload = () => { this.loaded[url] = true; resolve(); };
             el.onerror = reject;
+
+            if (type === 'css') { el.rel = 'stylesheet'; el.href = url; }
+            else { el.src = url; el.defer = true; }
+
             document.head.appendChild(el);
         });
     }
@@ -2169,11 +2172,11 @@ const DestinationApp = {
                     const safeUrl = sanitizeImageUrl(url);
                     if (!safeUrl) return;
                     const img = document.createElement('img');
-                    img.src = safeUrl;
                     img.className = 'gallery-img skeleton';
                     img.loading = 'lazy';
                     img.addEventListener('load', () => img.classList.remove('skeleton'));
                     img.addEventListener('error', () => { img.style.display = 'none'; });
+                    img.src = safeUrl;
                     galleryEl.appendChild(img);
                 });
             }
