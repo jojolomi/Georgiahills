@@ -747,6 +747,16 @@ const UIManager = {
         this.initDropdowns();
         this.updateCopyright();
         this.updateActiveNavLink();
+
+        // PROFESSIONALISM FIX: Handle empty links
+        document.querySelectorAll('a[href="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const isAr = document.documentElement.lang === 'ar';
+                const msg = isAr ? 'هذه الميزة قادمة قريباً!' : 'This feature is coming soon!';
+                this.showToast(msg);
+            });
+        });
     },
 
     applyPageVisualContext() {
@@ -1746,16 +1756,6 @@ const MainApp = {
             preloader.style.opacity = '0';
             setTimeout(() => { preloader.style.display = 'none'; }, 500); // Wait for CSS transition only
         }
-
-        // PROFESSIONALISM FIX: Handle empty links
-        document.querySelectorAll('a[href="#"]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const isAr = document.documentElement.lang === 'ar';
-                const msg = isAr ? 'هذه الميزة قادمة قريباً!' : 'This feature is coming soon!';
-                UIManager.showToast(msg);
-            });
-        });
     },
     
     initAnimations() {
