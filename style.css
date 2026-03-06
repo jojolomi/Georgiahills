@@ -4935,3 +4935,151 @@ html[lang="ar"] {
 }
 
 #mobile-links-container { display: flex; flex-direction: column; gap: 1rem; width: 100%; align-items: center; }
+
+
+/* Visually Impressive Mobile Redesign */
+@media (max-width: 768px) {
+    /* Global Typography & Spacing */
+    body {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    /* Premium Hero Mobile Styling */
+    .hero {
+        min-height: 85svh !important;
+        border-bottom-left-radius: 2rem;
+        border-bottom-right-radius: 2rem;
+        padding-top: 5rem;
+    }
+    .hero-content {
+        padding: 2rem 1.5rem !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .hero-title {
+        font-size: 2.75rem !important;
+        line-height: 1.15 !important;
+        text-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
+        margin-bottom: 1.25rem !important;
+    }
+    .hero-subtitle {
+        font-size: 1.15rem !important;
+        text-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+        margin-bottom: 2rem !important;
+    }
+    .hero-buttons {
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 1rem !important;
+    }
+    .btn-hero {
+        width: 100% !important;
+        padding: 1.1rem 2rem !important;
+        border-radius: 1rem !important;
+        font-size: 1.1rem !important;
+        justify-content: center !important;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15) !important;
+    }
+    .btn-hero-secondary {
+        backdrop-filter: blur(8px) !important;
+        background: rgba(255,255,255,0.1) !important;
+    }
+
+    /* About Page Mobile */
+    body.page-about .about-premium-hero {
+        padding-top: 6rem;
+    }
+    body.page-about .story-columns {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+    }
+    body.page-about .about-feature-grid,
+    body.page-about .values-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+    }
+    body.page-about .feature-card,
+    body.page-about .value-item {
+        padding: 1.75rem !important;
+        border-radius: 1.25rem !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05) !important;
+        background: white;
+    }
+
+    /* Contact Page Mobile */
+    .contact-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2rem !important;
+    }
+    .contact-info-card, .contact-form-card {
+        padding: 2rem 1.5rem !important;
+        border-radius: 1.5rem !important;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+        padding: 1.1rem !important;
+        border-radius: 1rem !important;
+        font-size: 1rem !important;
+    }
+
+    /* Services & Booking Mobile Layout Fixes */
+    .routes-container {
+        padding: 1.5rem !important;
+        border-radius: 1.25rem !important;
+    }
+    .route-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1rem !important;
+        padding: 1.25rem 0 !important;
+    }
+    .compare-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.5rem !important;
+    }
+    .booking-grid-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2rem !important;
+    }
+    .form-grid-premium {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1.25rem !important;
+    }
+    .radio-group-premium {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+    .price-estimate-premium {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1rem !important;
+    }
+
+    /* Navbar Mobile Tweaks */
+    .navbar {
+        padding: 1rem !important;
+        background: rgba(15, 23, 42, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+    }
+    #mobile-menu {
+        border-radius: 0 0 1.5rem 1.5rem !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2) !important;
+    }
+    #mobile-links-container {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 1rem !important;
+    }
+}
