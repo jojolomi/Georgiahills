@@ -13,7 +13,9 @@ if ('serviceWorker' in navigator) {
                 const scriptUrl = new URL(src, window.location.href);
                 return scriptUrl.pathname.replace(/[^/]+$/, '');
             }
-        } catch (e) {}
+        } catch (e) {
+            console.debug('Failed to determine scriptBaseDir:', e);
+        }
         return '/';
     })();
 
@@ -21,8 +23,12 @@ if ('serviceWorker' in navigator) {
     try {
                 navigator.serviceWorker.register(`${scriptBaseDir}service-worker.js`)
           .then(reg => {})
-          .catch(err => {});
-    } catch(e) {}
+          .catch(err => {
+              console.debug('Service Worker registration failed:', err);
+          });
+    } catch(e) {
+        console.debug('Service Worker registration error:', e);
+    }
   });
 }
 
@@ -116,7 +122,9 @@ const AttributionManager = {
                 utm_content: params.get('utm_content') || existing.utm_content || ''
             };
             localStorage.setItem(this.storageKey, JSON.stringify(next));
-        } catch (e) {}
+        } catch (e) {
+            console.warn('Attribution capture failed:', e);
+        }
     },
     current() {
         try { return JSON.parse(localStorage.getItem(this.storageKey) || '{}'); }
@@ -170,7 +178,9 @@ const AnalyticsTracker = {
             if (typeof gtag === 'function') {
                 gtag('event', name, payload);
             }
-        } catch (e) {}
+        } catch (e) {
+            console.debug('Analytics event failed:', e);
+        }
     }
 };
 
@@ -655,7 +665,9 @@ const CurrencyManager = {
             if (saved && AppConfig.currencies.find(c => c.code === saved)) {
                 this.current = saved;
             }
-        } catch (e) {}
+        } catch (e) {
+            console.debug('Storage operation failed:', e);
+        }
         this.updateUI();
         if ('requestIdleCallback' in window) {
             requestIdleCallback(() => this.fetchRates(), { timeout: 2000 });
@@ -666,7 +678,9 @@ const CurrencyManager = {
 
     set(code) {
         this.current = code;
-        try { localStorage.setItem('userCurrency', code); } catch (e) {}
+        try { localStorage.setItem('userCurrency', code); } catch (e) {
+            console.debug('Storage operation failed:', e);
+        }
         this.updateUI();
         this.updatePrices();
     },
@@ -1325,7 +1339,9 @@ const BookingManager = {
             step: this.currentStep,
             maxStepReached: this.maxStepReached
         };
-        try { sessionStorage.setItem('booking_draft', JSON.stringify(data)); } catch(e){}
+        try { sessionStorage.setItem('booking_draft', JSON.stringify(data)); } catch (e) {
+            console.debug('Storage operation failed:', e);
+        }
     },
 
     loadDraft() {
@@ -1351,7 +1367,9 @@ const BookingManager = {
                 this.goToStep(this.currentStep, true);
                 this.updateIntentCta();
             }
-        } catch(e){}
+        } catch (e) {
+            console.debug('Storage operation failed:', e);
+        }
     },
 
     updateEstimate() {
@@ -1590,7 +1608,9 @@ const BookingManager = {
         document.getElementById('btnSpinner').classList.add('hidden');
         document.getElementById('btnText').classList.remove('opacity-0');
         UIManager.openModal('successModal');
-        try { sessionStorage.removeItem('booking_draft'); } catch(e){}
+        try { sessionStorage.removeItem('booking_draft'); } catch (e) {
+            console.debug('Storage operation failed:', e);
+        }
     }
 };
 
@@ -1794,7 +1814,9 @@ const MainApp = {
     },
     
     acceptCookies() {
-        try { localStorage.setItem('cookieConsent', 'true'); } catch(e){}
+        try { localStorage.setItem('cookieConsent', 'true'); } catch (e) {
+            console.debug('Storage operation failed:', e);
+        }
         if(typeof gtag === 'function') {
             gtag('consent', 'update', { 'ad_storage': 'granted', 'ad_user_data': 'granted', 'ad_personalization': 'granted', 'analytics_storage': 'granted' });
         }
@@ -1802,7 +1824,9 @@ const MainApp = {
     },
     
     declineCookies() {
-        try { localStorage.setItem('cookieConsent', 'false'); } catch(e){}
+        try { localStorage.setItem('cookieConsent', 'false'); } catch (e) {
+            console.debug('Storage operation failed:', e);
+        }
         if(typeof gtag === 'function') {
             gtag('consent', 'update', { 'ad_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied', 'analytics_storage': 'denied' });
         }
