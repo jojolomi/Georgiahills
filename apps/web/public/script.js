@@ -170,7 +170,9 @@ const AnalyticsTracker = {
             if (typeof gtag === 'function') {
                 gtag('event', name, payload);
             }
-        } catch (e) {}
+        } catch (e) {
+            console.error('Analytics tracking error:', e);
+        }
     }
 };
 
@@ -1049,10 +1051,8 @@ const UIManager = {
             if (sticky) {
                 if (currentScroll > lastScroll && currentScroll > 100) {
                     sticky.classList.add('hide-bar');
-                    if (nav && window.innerWidth < 1024) nav.classList.add('nav-hidden');
                 } else {
                     sticky.classList.remove('hide-bar');
-                    if (nav) nav.classList.remove('nav-hidden');
                 }
             }
 

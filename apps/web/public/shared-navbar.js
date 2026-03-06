@@ -29,7 +29,19 @@
     'article-7-days-georgia.html': 'article-7-days-georgia-ar.html',
     'article-7-days-georgia-ar.html': 'article-7-days-georgia.html',
     'article-georgian-food.html': 'article-georgian-food-ar.html',
-    'article-georgian-food-ar.html': 'article-georgian-food.html'
+    'article-georgian-food-ar.html': 'article-georgian-food.html',
+    'article-is-georgia-safe.html': 'article-is-georgia-safe-ar.html',
+    'article-is-georgia-safe-ar.html': 'article-is-georgia-safe.html',
+    'destinations-hub.html': 'destinations-hub-ar.html',
+    'destinations-hub-ar.html': 'destinations-hub.html',
+    'family-travel-hub.html': 'family-travel-hub-ar.html',
+    'family-travel-hub-ar.html': 'family-travel-hub.html',
+    'halal-travel-hub.html': 'halal-travel-hub-ar.html',
+    'halal-travel-hub-ar.html': 'halal-travel-hub.html',
+    'itineraries-hub.html': 'itineraries-hub-ar.html',
+    'itineraries-hub-ar.html': 'itineraries-hub.html',
+    'safety-hub.html': 'safety-hub-ar.html',
+    'safety-hub-ar.html': 'safety-hub.html'
   });
 
   function toTrustedHTML(html) {
@@ -70,9 +82,16 @@
     return document.documentElement.lang === 'ar';
   }
 
-  function forceLtrLayout() {
-    document.documentElement.setAttribute('dir', 'ltr');
-    document.body && document.body.setAttribute('dir', 'ltr');
+  function toRootPath(path) {
+    if (!path || path.startsWith('/') || path.startsWith('#') || path.startsWith('javascript:')) {
+      return path;
+    }
+
+    if (/^https?:\/\//i.test(path)) {
+      return path;
+    }
+
+    return `/${path}`;
   }
 
   function buildLangSwitch(filename, isArabic) {
@@ -80,23 +99,23 @@
       const params = new URLSearchParams(window.location.search);
       params.set('lang', isArabic ? 'en' : 'ar');
       const query = params.toString();
-      return 'destination.html' + (query ? ('?' + query) : '');
+      return toRootPath('destination.html' + (query ? ('?' + query) : ''));
     }
 
-    return PAGE_PAIRS[filename] || (isArabic ? 'index.html' : 'arabic.html');
+    return toRootPath(PAGE_PAIRS[filename] || (isArabic ? 'index.html' : 'arabic.html'));
   }
 
   function getConfig(filename, isArabic) {
-    const home = isArabic ? 'arabic.html' : 'index.html';
+    const home = toRootPath(isArabic ? 'arabic.html' : 'index.html');
     return {
       isArabic,
       home,
-      about: isArabic ? 'about-ar.html' : 'about.html',
-      services: isArabic ? 'services-ar.html' : 'services.html',
-      guide: isArabic ? 'guide-ar.html' : 'guide.html',
-      blog: isArabic ? 'blog-ar.html' : 'blog.html',
-      contact: isArabic ? 'contact-ar.html' : 'contact.html',
-      booking: isArabic ? 'booking-ar.html' : 'booking.html',
+      about: toRootPath(isArabic ? 'about-ar.html' : 'about.html'),
+      services: toRootPath(isArabic ? 'services-ar.html' : 'services.html'),
+      guide: toRootPath(isArabic ? 'guide-ar.html' : 'guide.html'),
+      blog: toRootPath(isArabic ? 'blog-ar.html' : 'blog.html'),
+      contact: toRootPath(isArabic ? 'contact-ar.html' : 'contact.html'),
+      booking: toRootPath(isArabic ? 'booking-ar.html' : 'booking.html'),
       langSwitch: buildLangSwitch(filename, isArabic),
       texts: {
         home: isArabic ? 'الرئيسية' : 'Home',
@@ -142,9 +161,6 @@
   }
 
   function buildMarkup(cfg, filename) {
-    const homeDestinations = cfg.home + '#destinations';
-    const homeFleet = cfg.home + '#fleet';
-    const homeReviews = cfg.home + '#reviews';
     const desktopLinks = `
       <div id="desktop-links-container" style="display:contents">
         <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="nav-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
@@ -161,7 +177,7 @@
         <div class="container">
           <div class="navbar-inner">
             <a href="${cfg.home}" class="nav-logo">
-              <div><img src="favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
+              <div><img src="/logo-256.avif" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
               <span data-nav-brand="text">Georgia Hills</span>
             </a>
 
@@ -232,10 +248,6 @@
     const filename = getFilename();
     const isArabic = detectArabic(filename);
 
-    if (isArabic) {
-      forceLtrLayout();
-    }
-
     const cfg = getConfig(filename, isArabic);
     const mobileMenu = document.getElementById('mobile-menu');
 
@@ -249,21 +261,9 @@
     window.__GH_SHARED_NAVBAR__ = true;
   }
 
-  function renderSharedNavbarDeferred() {
-    const runAfterPaint = () => {
-      window.requestAnimationFrame(() => renderSharedNavbar());
-    };
-
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(runAfterPaint, { timeout: 800 });
-    } else {
-      setTimeout(runAfterPaint, 120);
-    }
-  }
-
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderSharedNavbarDeferred, { once: true });
+    document.addEventListener('DOMContentLoaded', renderSharedNavbar, { once: true });
   } else {
-    renderSharedNavbarDeferred();
+    renderSharedNavbar();
   }
 })();

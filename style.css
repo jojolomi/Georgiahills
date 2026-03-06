@@ -12,7 +12,7 @@
     --color-white-05: rgba(255, 255, 255, 0.05);
     --color-white-10: rgba(255, 255, 255, 0.1);
     --color-white-20: rgba(255, 255, 255, 0.2);
-    --color-white-90: rgba(255, 255, 255, 0-.9);
+    --color-white-90: rgba(255, 255, 255, 0.9);
     --color-gray-50: #f9fafb;
     --color-gray-100: #f3f4f6;
     --color-gray-200: #e5e7eb;
@@ -80,6 +80,10 @@ body {
     direction: ltr;
     display: flex;
     flex-direction: column;
+}
+
+body.overflow-hidden {
+    overflow: hidden;
 }
 
 /* Skip Link for Accessibility */
