@@ -1729,17 +1729,36 @@ exports.adminApi = onRequest(
 
           let updatedDocs = 0;
           const collectionsToScan = ["settings", "destinations", "articles", "cms_pages"];
+          const db = admin.firestore();
+          let batch = db.batch();
+          let batchCount = 0;
+          const commitPromises = [];
+
           for (const col of collectionsToScan) {
-            const snap = await admin.firestore().collection(col).get();
+            const snap = await db.collection(col).get();
             for (const docSnap of snap.docs) {
               const raw = docSnap.data() || {};
               const asText = JSON.stringify(raw);
               if (!asText.includes(oldUrl)) continue;
               const replaced = JSON.parse(asText.split(oldUrl).join(newUrl));
-              await docSnap.ref.set(replaced, { merge: true });
-              updatedDocs += 1;
+
+              batch.set(docSnap.ref, replaced, { merge: true });
+              batchCount++;
+              updatedDocs++;
+
+              if (batchCount === 500) {
+                commitPromises.push(batch.commit());
+                batch = db.batch();
+                batchCount = 0;
+              }
             }
           }
+
+          if (batchCount > 0) {
+            commitPromises.push(batch.commit());
+          }
+
+          await Promise.all(commitPromises);
 
           await writeAuditLog("replace_media_asset", `Replaced ${oldUrl} with ${newUrl} in ${updatedDocs} docs`, user);
           res.json({ ok: true, updatedDocs });
