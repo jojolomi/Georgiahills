@@ -16,8 +16,11 @@
   <link rel="alternate" hreflang="en" href="https://georgiahills.com/index.html">
   <link rel="alternate" hreflang="x-default" href="https://georgiahills.com/index.html">
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   <link rel="icon" type="image/png" href="../favicon.ico">
   <script src="../shared-navbar.js" defer></script>
+  <script src="../shared-footer.js" defer></script>
   <script src="../script.js" defer></script>
   <script type="application/ld+json">
   {
@@ -45,16 +48,122 @@
   }
   </script>
 </head>
-<body class="secondary-page page-about">
+<body class="secondary-page country-landing-page">
   <a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
-  <nav id="navbar" class="navbar"></nav>
-  <main id="main-content" class="container" style="padding-top:8rem; padding-bottom:4rem;">
-    <h1 class="section-title">السفر من مصر إلى جورجيا</h1>
-    <p class="section-desc">نقدم خطط سياحية مخصصة للمسافرين من مصر مع دعم عربي كامل وخيارات عائلية فاخرة.</p>
-    <div class="hero-buttons" style="margin-top:2rem;">
-      <a href="../booking-ar.html" class="btn-hero btn-hero-primary">احجز الآن</a>
-      <a href="https://wa.me/995579088537" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener noreferrer">تواصل واتساب</a>
+  <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>أنت غير متصل بالإنترنت</span></div>
+  <div id="preloader">
+    <div class="text-center">
+      <div class="preloader-circle animate-bounce">
+        <img src="../favicon.ico" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo">
+      </div>
+      <div class="preloader-text">Loading</div>
     </div>
+  </div>
+  <nav id="navbar" class="navbar"></nav>
+  <main id="main-content">
+    <section class="country-landing-hero">
+      <div class="country-landing-bg">
+        <img src="../image-1600.webp" alt="السفر من مصر إلى جورجيا">
+      </div>
+      <div class="container country-landing-hero-inner">
+        <div class="country-hero-copy">
+          <span class="country-kicker"><i class="fa-solid fa-earth-africa"></i> رحلات جورجيا للمسافرين من مصر</span>
+          <h1 class="hero-title">خطة أوضح لرحلتك من مصر إلى جورجيا</h1>
+          <p class="hero-subtitle">إذا كنت تسافر من القاهرة أو الإسكندرية وتريد رحلة مريحة بدون تعقيد، فهذه الصفحة تجمع لك ما تحتاجه فعلاً: سائق خاص، استقبال من المطار، برنامج عائلي مرن، ودعم عربي سريع على واتساب.</p>
+          <div class="hero-buttons">
+            <a href="../booking-ar.html" class="btn-hero btn-hero-primary">اطلب خطة وسعر</a>
+            <a href="https://wa.me/995579088537" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener noreferrer">تواصل واتساب</a>
+          </div>
+        </div>
+        <aside class="country-hero-card">
+          <h2>قبل أن تحجز</h2>
+          <ul class="country-hero-points">
+            <li><i class="fa-solid fa-circle-check"></i><span>نرتب استقبال المطار والخط الأول من الرحلة قبل وصولك.</span></li>
+            <li><i class="fa-solid fa-circle-check"></i><span>يمكنك اختيار برنامج هادئ للعائلات أو برنامج يومي أكثر نشاطاً.</span></li>
+            <li><i class="fa-solid fa-circle-check"></i><span>الرد العربي على واتساب يختصر عليك الأسئلة والتنظيم.</span></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="country-landing-main">
+      <div class="container country-page-grid">
+        <div class="country-info-grid">
+          <div class="country-stat"><span class="country-stat-label">أفضل مدة</span><span class="country-stat-value">5 إلى 7 أيام</span></div>
+          <div class="country-stat"><span class="country-stat-label">مناسبة لـ</span><span class="country-stat-value">العائلات والأزواج</span></div>
+          <div class="country-stat"><span class="country-stat-label">الدعم</span><span class="country-stat-value">عربي + واتساب</span></div>
+          <div class="country-stat"><span class="country-stat-label">البداية</span><span class="country-stat-value">استقبال من المطار</span></div>
+        </div>
+
+        <div class="country-page-grid country-page-grid--two">
+          <article class="country-panel">
+            <span class="country-panel-eyebrow">لماذا هذه الصفحة مهمة</span>
+            <h2>ماذا يحتاج المسافر من مصر عادة؟</h2>
+            <p>أغلب الضيوف من مصر يريدون برنامجاً واضحاً من البداية: كم يوم مناسب، ما المدن التي تستحق، وهل الأفضل التنقل اليومي أو المبيت بين المدن. لهذا نعطيك خطة عملية وليست مجرد عرض عام.</p>
+            <ul class="country-checklist">
+              <li><i class="fa-solid fa-check"></i><span>ترتيب مريح للعائلات مع فترات توقف مناسبة للأطفال.</span></li>
+              <li><i class="fa-solid fa-check"></i><span>اختيار السكن أو المدينة بناءً على طبيعة الرحلة وليس بشكل عشوائي.</span></li>
+              <li><i class="fa-solid fa-check"></i><span>تنسيق السيارة والسائق حسب عدد الأشخاص والشنط.</span></li>
+            </ul>
+          </article>
+
+          <article class="country-panel country-panel--dark">
+            <span class="country-panel-eyebrow">برنامج مقترح</span>
+            <h2>نموذج رحلة متوازن</h2>
+            <div class="country-route-grid">
+              <div class="country-route-card">
+                <h3>اليوم 1-2</h3>
+                <p>تبليسي القديمة، جلسات هادئة، مطاعم مناسبة للعائلة، وجدول خفيف بعد الوصول.</p>
+              </div>
+              <div class="country-route-card">
+                <h3>اليوم 3-4</h3>
+                <p>كازبيجي أو جبال قريبة مع مناظر قوية وتوقفات سهلة على الطريق.</p>
+              </div>
+              <div class="country-route-card">
+                <h3>اليوم 5-7</h3>
+                <p>يوم تسوق أو يوم منتجع، ثم عودة مرنة للمطار بدون استعجال.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="country-page-grid country-page-grid--two">
+          <article class="country-panel">
+            <span class="country-panel-eyebrow">ما الذي نرتبه لك</span>
+            <h2>خدمة عملية من أول رسالة</h2>
+            <ul class="country-support-list">
+              <li><i class="fa-solid fa-car-side"></i><span>استقبال من المطار مع سيارة نظيفة وسائق خاص.</span></li>
+              <li><i class="fa-solid fa-hotel"></i><span>اقتراح توزيع المدن بحيث لا تتعب الرحلة في التنقلات الطويلة.</span></li>
+              <li><i class="fa-solid fa-route"></i><span>تعديل البرنامج حسب وقت الوصول والمغادرة الحقيقي.</span></li>
+              <li><i class="fa-solid fa-language"></i><span>دعم عربي للتأكيد والمتابعة والتعديلات السريعة.</span></li>
+            </ul>
+          </article>
+
+          <article class="country-panel">
+            <span class="country-panel-eyebrow">أسئلة متكررة</span>
+            <div class="country-faq-grid">
+              <div class="country-faq-item">
+                <h3>هل تناسب الخدمة العائلات الكبيرة؟</h3>
+                <p>نعم، ويمكن ترتيب فان أو أكثر من سيارة حسب العدد والشنط.</p>
+              </div>
+              <div class="country-faq-item">
+                <h3>هل أحتاج برنامج ثابت من البداية؟</h3>
+                <p>لا، يمكننا إرسال خطة أولية ثم تعديلها معك قبل التأكيد.</p>
+              </div>
+              <div class="country-faq-item">
+                <h3>هل هناك دعم عربي؟</h3>
+                <p>نعم، التواصل والمتابعة على واتساب متاحان بالعربية.</p>
+              </div>
+              <div class="country-faq-item">
+                <h3>هل أستطيع حجز الاستقبال فقط؟</h3>
+                <p>نعم، يمكنك البدء بنقل المطار فقط ثم إضافة الأيام لاحقاً.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
   </main>
+  <footer class="footer" id="footer"></footer>
 </body>
 </html>

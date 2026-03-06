@@ -16,8 +16,11 @@
   <link rel="alternate" hreflang="en" href="https://georgiahills.com/index.html">
   <link rel="alternate" hreflang="x-default" href="https://georgiahills.com/index.html">
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   <link rel="icon" type="image/png" href="../favicon.ico">
   <script src="../shared-navbar.js" defer></script>
+  <script src="../shared-footer.js" defer></script>
   <script src="../script.js" defer></script>
   <script type="application/ld+json">
   {
@@ -45,16 +48,122 @@
   }
   </script>
 </head>
-<body class="secondary-page page-about">
+<body class="secondary-page country-landing-page">
   <a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
-  <nav id="navbar" class="navbar"></nav>
-  <main id="main-content" class="container" style="padding-top:8rem; padding-bottom:4rem;">
-    <h1 class="section-title">السفر من السعودية إلى جورجيا</h1>
-    <p class="section-desc">نقدم خطط سياحية مخصصة للمسافرين من السعودية مع دعم عربي كامل وخيارات عائلية فاخرة.</p>
-    <div class="hero-buttons" style="margin-top:2rem;">
-      <a href="../booking-ar.html" class="btn-hero btn-hero-primary">احجز الآن</a>
-      <a href="https://wa.me/995579088537" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener noreferrer">تواصل واتساب</a>
+  <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>أنت غير متصل بالإنترنت</span></div>
+  <div id="preloader">
+    <div class="text-center">
+      <div class="preloader-circle animate-bounce">
+        <img src="../favicon.ico" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo">
+      </div>
+      <div class="preloader-text">Loading</div>
     </div>
+  </div>
+  <nav id="navbar" class="navbar"></nav>
+  <main id="main-content">
+    <section class="country-landing-hero">
+      <div class="country-landing-bg">
+        <img src="../image-1600.webp" alt="السفر من السعودية إلى جورجيا">
+      </div>
+      <div class="container country-landing-hero-inner">
+        <div class="country-hero-copy">
+          <span class="country-kicker"><i class="fa-solid fa-earth-asia"></i> رحلات جورجيا للمسافرين من السعودية</span>
+          <h1 class="hero-title">من السعودية إلى جورجيا مع ترتيب يناسب العائلة</h1>
+          <p class="hero-subtitle">سواء كانت رحلتك من الرياض أو جدة أو الدمام، نساعدك في بناء برنامج واضح ومريح: استقبال مطار، سيارة خاصة، جولات يومية مرنة، ودعم عربي مباشر حتى نهاية الرحلة.</p>
+          <div class="hero-buttons">
+            <a href="../booking-ar.html" class="btn-hero btn-hero-primary">اطلب خطة وسعر</a>
+            <a href="https://wa.me/995579088537" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener noreferrer">تواصل واتساب</a>
+          </div>
+        </div>
+        <aside class="country-hero-card">
+          <h2>أكثر ما يطلبه ضيوف السعودية</h2>
+          <ul class="country-hero-points">
+            <li><i class="fa-solid fa-circle-check"></i><span>خدمة خاصة بالكامل مع تركيز على الخصوصية والراحة.</span></li>
+            <li><i class="fa-solid fa-circle-check"></i><span>برنامج عائلي مرتب يجمع تبليسي والطبيعة والأنشطة المناسبة.</span></li>
+            <li><i class="fa-solid fa-circle-check"></i><span>تعديل مرن حسب مدة الرحلة وعدد الأطفال أو أفراد العائلة.</span></li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="country-landing-main">
+      <div class="container country-page-grid">
+        <div class="country-info-grid">
+          <div class="country-stat"><span class="country-stat-label">أفضل مدة</span><span class="country-stat-value">5 إلى 8 أيام</span></div>
+          <div class="country-stat"><span class="country-stat-label">الأكثر طلباً</span><span class="country-stat-value">تبليسي + الجبال</span></div>
+          <div class="country-stat"><span class="country-stat-label">الخدمة</span><span class="country-stat-value">خاصة بالكامل</span></div>
+          <div class="country-stat"><span class="country-stat-label">المتابعة</span><span class="country-stat-value">واتساب بالعربية</span></div>
+        </div>
+
+        <div class="country-page-grid country-page-grid--two">
+          <article class="country-panel">
+            <span class="country-panel-eyebrow">ماذا تحتاج قبل القرار</span>
+            <h2>رحلة منظمة بدل اجتهادات متفرقة</h2>
+            <p>كثير من المسافرين من السعودية يريدون معرفة الشكل الصحيح للرحلة قبل الحجز: ما المدن الأفضل؟ هل نختار تبليسي فقط أم نضيف الجبال؟ كيف نجعل الرحلة مناسبة للكبار والأطفال؟ هنا نرتب لك هذه الصورة بشكل واضح.</p>
+            <ul class="country-checklist">
+              <li><i class="fa-solid fa-check"></i><span>اختيار مسار يناسب العائلة ويقلل الإرهاق.</span></li>
+              <li><i class="fa-solid fa-check"></i><span>ترتيب سيارة مناسبة للعدد الحقيقي وليس بشكل عشوائي.</span></li>
+              <li><i class="fa-solid fa-check"></i><span>تنظيم الأيام بحسب الطقس والطريق ونقاط الراحة.</span></li>
+            </ul>
+          </article>
+
+          <article class="country-panel country-panel--dark">
+            <span class="country-panel-eyebrow">برنامج مقترح</span>
+            <h2>رحلة عائلية متوازنة</h2>
+            <div class="country-route-grid">
+              <div class="country-route-card">
+                <h3>الوصول إلى تبليسي</h3>
+                <p>استقبال، استراحة، وجولة هادئة تناسب أول يوم.</p>
+              </div>
+              <div class="country-route-card">
+                <h3>الطبيعة والجبال</h3>
+                <p>أيام مميزة في كازبيجي أو مناطق قريبة مع سائق خاص.</p>
+              </div>
+              <div class="country-route-card">
+                <h3>يوم مرن أخير</h3>
+                <p>تسوق أو مطاعم أو جلسات خفيفة قبل العودة للمطار.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="country-page-grid country-page-grid--two">
+          <article class="country-panel">
+            <span class="country-panel-eyebrow">ما الذي نرتبه لك</span>
+            <h2>خدمة واضحة من البداية</h2>
+            <ul class="country-support-list">
+              <li><i class="fa-solid fa-plane-circle-check"></i><span>استقبال المطار وتأكيد كل التفاصيل قبل الوصول.</span></li>
+              <li><i class="fa-solid fa-children"></i><span>تنسيق الرحلة للعائلات الكبيرة أو الصغيرة.</span></li>
+              <li><i class="fa-solid fa-mountain-city"></i><span>اقتراح المدن بناءً على عدد الأيام وطبيعة الرحلة.</span></li>
+              <li><i class="fa-solid fa-headset"></i><span>دعم عربي سريع إذا احتجت تعديلاً أو استفساراً.</span></li>
+            </ul>
+          </article>
+
+          <article class="country-panel">
+            <span class="country-panel-eyebrow">أسئلة متكررة</span>
+            <div class="country-faq-grid">
+              <div class="country-faq-item">
+                <h3>هل الرحلة مناسبة للأطفال؟</h3>
+                <p>نعم، ونرتب الأيام بحيث تكون مريحة للعائلة كلها.</p>
+              </div>
+              <div class="country-faq-item">
+                <h3>هل الحجز يشمل الاستقبال والجولات؟</h3>
+                <p>يمكنك حجز الاستقبال فقط أو الرحلة الكاملة حسب حاجتك.</p>
+              </div>
+              <div class="country-faq-item">
+                <h3>هل أستطيع تعديل الخطة بعد إرسالها؟</h3>
+                <p>نعم، الهدف أن تصل إلى برنامج يناسبك قبل التأكيد.</p>
+              </div>
+              <div class="country-faq-item">
+                <h3>هل التواصل كله بالعربية؟</h3>
+                <p>نعم، الترتيب والمتابعة كلها متاحة بالعربية على واتساب.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
   </main>
+  <footer class="footer" id="footer"></footer>
 </body>
 </html>

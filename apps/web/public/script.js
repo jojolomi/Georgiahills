@@ -981,6 +981,19 @@ const UIManager = {
     },
 
     setupMobileMenu() {
+        const setMenuState = (menu, toggleBtn, newState) => {
+            menu.classList.toggle('open', newState);
+            menu.setAttribute('aria-hidden', newState ? 'false' : 'true');
+            if (toggleBtn) toggleBtn.setAttribute('aria-expanded', newState ? 'true' : 'false');
+            document.body.classList.toggle('overflow-hidden', newState);
+        };
+
+        const initialMenu = document.getElementById('mobile-menu');
+        const initialToggleBtn = document.getElementById('mobile-menu-btn');
+        if (initialMenu) {
+            setMenuState(initialMenu, initialToggleBtn, false);
+        }
+
         // Use Event Delegation to handle dynamically injected elements (like shared-navbar)
         document.addEventListener('click', (e) => {
             const menuBtn = e.target.closest('#mobile-menu-btn');
@@ -1000,11 +1013,7 @@ const UIManager = {
             // Toggle function
             const toggle = (forceState) => {
                 const newState = (forceState !== undefined) ? forceState : !isOpen;
-                menu.classList.toggle('open', newState);
-                
-                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', newState);
-                menu.setAttribute('aria-hidden', newState ? 'false' : 'true');
-                document.body.classList.toggle('overflow-hidden', newState);
+                setMenuState(menu, toggleBtn, newState);
             };
 
             if (menuBtn) {
@@ -1020,10 +1029,7 @@ const UIManager = {
             const menu = document.getElementById('mobile-menu');
             if (event.key === 'Escape' && menu && menu.classList.contains('open')) {
                 const toggleBtn = document.getElementById('mobile-menu-btn');
-                menu.classList.remove('open');
-                if(toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
-                menu.setAttribute('aria-hidden', 'true');
-                document.body.classList.remove('overflow-hidden');
+                setMenuState(menu, toggleBtn, false);
             }
         });
     },
@@ -2022,6 +2028,39 @@ const MainApp = {
             });
         }
 
+        // Market/country segmentation from URL path (e.g. /ae/, /sa/, /kw/)
+        const marketMatch = window.location.pathname.match(/^\/(ae|sa|kw|qa|eg|bh|om)\//i);
+        const marketCode = marketMatch ? marketMatch[1].toLowerCase() : 'organic';
+        const pageLang = document.documentElement.lang || 'en';
+        AnalyticsTracker.event('market_segment_view', {
+            page_path: window.location.pathname,
+            market: marketCode,
+            lang: pageLang
+        });
+
+        // WhatsApp click tracking (FAB + inline CTAs)
+        document.querySelectorAll('a[href*="wa.me"], a.fab-whatsapp').forEach((el) => {
+            el.addEventListener('click', () => {
+                AnalyticsTracker.event('whatsapp_click', {
+                    page_path: window.location.pathname,
+                    cta_location: el.classList.contains('fab-whatsapp') ? 'fab' : 'inline',
+                    market: marketCode,
+                    lang: pageLang
+                });
+            });
+        });
+
+        // Phone/call link tracking
+        document.querySelectorAll('a[href^="tel:"]').forEach((el) => {
+            el.addEventListener('click', () => {
+                AnalyticsTracker.event('call_click', {
+                    page_path: window.location.pathname,
+                    market: marketCode,
+                    lang: pageLang
+                });
+            });
+        });
+
         document.querySelectorAll('a.btn-book-nav, a.mobile-btn-book, .btn-submit').forEach((el) => {
             el.addEventListener('click', () => {
                 AnalyticsTracker.event('cta_click', {
@@ -2359,6 +2398,15 @@ window.GHDestination = {
     },
     refreshSlider: () => DestinationLoader.load()
 };
+
+// Preserve legacy globals while the root HTML layer still exists.
+window.UIManager = UIManager;
+window.CurrencyManager = CurrencyManager;
+window.BookingManager = BookingManager;
+window.LangManager = LangManager;
+window.BlogManager = BlogManager;
+window.DestinationLoader = DestinationLoader;
+window.App = MainApp;
 
 function hidePreloaderSafely() {
     const preloader = document.getElementById('preloader');

@@ -31,8 +31,20 @@ if (!fs.existsSync(distDir)) {
 let passed = true;
 const files = collectHtml(distDir);
 
-// Pages that legitimately lack canonical / hreflang tags
-const skipRe = /(?:^|[\/\\])(?:404|500|_not-found)\.html$|^index\.html$|^(?:ae|sa|qa|kw|eg)[\/\\]/;
+// Pages that legitimately lack canonical / hreflang tags:
+// - standard error/redirect pages (404, 500, _not-found, root index)
+// - per-market legacy subdirectories (ae/, sa/, qa/, kw/, eg/)
+// - utility/admin pages that are not SEO targets (admin, lhr *.report.html, tmp_*)
+const skipRe = new RegExp(
+  [
+    String.raw`(?:^|[\/\\])(?:404|500|_not-found)\.html$`,  // error pages
+    String.raw`^index\.html$`,                               // root redirect
+    String.raw`^(?:ae|sa|qa|kw|eg)[\/\\]`,                  // market subdirs
+    String.raw`^admin\.html$`,                               // admin page
+    String.raw`[^\/\\]*\.report\.html$`,                     // Lighthouse report files
+    String.raw`^tmp_[^\/\\]*\.html$`,                        // temporary files
+  ].join("|")
+);
 
 for (const file of files) {
   const html = fs.readFileSync(file, "utf8");

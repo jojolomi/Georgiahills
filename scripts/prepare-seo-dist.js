@@ -122,9 +122,14 @@ copyRecursive(publicDir, distDir, (name) => {
 const repoRoot = path.resolve(__dirname, "..");
 const markets = ["ae", "sa", "qa", "kw", "eg"];
 for (const market of markets) {
+  const distMarketPath = path.join(distDir, market);
+  if (fs.existsSync(distMarketPath)) {
+    continue;
+  }
+
   const src = path.join(repoRoot, market);
   if (fs.existsSync(src)) {
-    copyRecursive(src, path.join(distDir, market), (name) => name.endsWith(".html"));
+    copyRecursive(src, distMarketPath, (name) => name.endsWith(".html"));
   }
 }
 
@@ -179,10 +184,10 @@ if (process.env.GITHUB_PAGES === "true" && !fs.existsSync(indexHtmlPath)) {
   fs.writeFileSync(indexHtmlPath, safeIndex, "utf8");
 }
 
-/* ── 8. Force legacy main homepage at root ─────────────────────────── */
+/* ── 8. Fallback to legacy root homepage only if dist still lacks one ─ */
 
 const legacyRootIndexPath = path.join(repoRoot, "index.html");
-if (fs.existsSync(legacyRootIndexPath)) {
+if (!fs.existsSync(indexHtmlPath) && fs.existsSync(legacyRootIndexPath)) {
   fs.copyFileSync(legacyRootIndexPath, indexHtmlPath);
 
   const legacyIndex = fs.readFileSync(legacyRootIndexPath, "utf8");
@@ -253,18 +258,6 @@ if (fs.existsSync(legacyRootIndexPath)) {
       }
     }
   }
-}
-
-/* ── 9. Copy all root-level public HTML pages (incl. Arabic variants) ─ */
-
-const excludeHtmlPatterns = [/^admin/i, /\.report\.html$/i, /^tmp_/i, /^lhr/i];
-for (const entry of fs.readdirSync(repoRoot, { withFileTypes: true })) {
-  if (!entry.isFile() || !entry.name.endsWith('.html')) continue;
-  if (excludeHtmlPatterns.some(re => re.test(entry.name))) continue;
-  const srcPath = path.join(repoRoot, entry.name);
-  const destPath = path.join(distDir, entry.name);
-  if (fs.existsSync(destPath)) continue;
-  fs.copyFileSync(srcPath, destPath);
 }
 
 /* ── report ────────────────────────────────────────────────────────── */
