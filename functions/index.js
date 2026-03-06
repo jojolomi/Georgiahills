@@ -136,7 +136,7 @@ function parseBoolEnv(value, defaultValue = false) {
 }
 
 function getAdminAllowedOrigins() {
-  const env = process.env.ADMIN_ALLOWED_ORIGINS || process.env.ALLOWED_ORIGINS || "";
+  const env = process.env.ADMIN_ALLOWED_ORIGINS || "";
   const extra = env
     .split(",")
     .map((v) => v.trim())
@@ -162,9 +162,8 @@ function validateAdminOrigin(req) {
   return { allowed: true, reason: "ok", origin, allowedOrigins };
 }
 
-function applyCors(req, res, methods = "POST, OPTIONS") {
+function applyCors(req, res, methods = "POST, OPTIONS", allowedOrigins = getAllowedOrigins()) {
   const origin = req.get("origin") || "";
-  const allowedOrigins = getAllowedOrigins();
   const originAllowed = !origin || allowedOrigins.includes(origin);
 
   if (originAllowed && origin) {
@@ -844,7 +843,7 @@ async function maybeSendOpsThresholdAlert(req, {
 exports.createBookingLead = onRequest(
   { region: REGION, timeoutSeconds: 30, memory: "256MiB" },
   async (req, res) => {
-    const originAllowed = applyCors(req, res, "POST, OPTIONS");
+    const originAllowed = applyCors(req, res, "POST, OPTIONS", getAllowedOrigins());
 
     if (req.method === "OPTIONS") {
       res.status(originAllowed ? 204 : 403).send("");
@@ -1007,7 +1006,7 @@ exports.createBookingLead = onRequest(
 exports.adminApi = onRequest(
   { region: REGION, timeoutSeconds: 60, memory: "512MiB" },
   async (req, res) => {
-    const originAllowed = applyCors(req, res, "POST, OPTIONS");
+    const originAllowed = applyCors(req, res, "POST, OPTIONS", getAdminAllowedOrigins());
 
     if (req.method === "OPTIONS") {
       res.status(originAllowed ? 204 : 403).send("");
@@ -1941,5 +1940,8 @@ exports.__test = {
   normalizePhoneForRateLimit,
   buildDuplicateLeadKey,
   extractClientMetadata,
-  computeLeadRiskProfile
+  computeLeadRiskProfile,
+  getAdminAllowedOrigins,
+  getAllowedOrigins,
+  applyCors
 };
