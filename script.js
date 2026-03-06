@@ -1414,65 +1414,57 @@ const BookingManager = {
         }
     },
 
-    async handleSubmit(e) {
-        e.preventDefault();
-        if (!this.validate()) return;
-
-        const honeypot = document.getElementById('companyWebsite');
-        if (honeypot && honeypot.value.trim()) {
-            return;
-        }
-
-        // Basic client-side bot friction before backend checks.
-        if (Date.now() - this.startedAt < 2500) {
-            UIManager.showToast(document.documentElement.lang === 'ar' ? 'يرجى المحاولة بعد ثانيتين' : 'Please wait a moment before submitting.');
-            return;
-        }
-        
+    _setLoadingState(isLoading) {
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        document.getElementById('btnSpinner').classList.remove('hidden');
-        document.getElementById('btnText').classList.add('opacity-0');
+        const spinner = document.getElementById('btnSpinner');
+        const btnText = document.getElementById('btnText');
 
+        if (btn) btn.disabled = isLoading;
+        if (spinner) spinner.classList.toggle('hidden', !isLoading);
+        if (btnText) btnText.classList.toggle('opacity-0', isLoading);
+    },
+
+    _getFormData(segmentation) {
         const dateInput = document.getElementById('dateRange');
         const dates = this.fpInstance ? this.fpInstance.selectedDates : [];
         const dString = this.fpInstance && dates.length === 2
             ? `${this.fpInstance.formatDate(dates[0], "Y-m-d")} to ${this.fpInstance.formatDate(dates[1], "Y-m-d")}`
             : (dateInput?.value?.trim() || "No dates selected");
         
-        const priceText = document.getElementById('total-price-display').innerText;
-        const durationText = document.getElementById('trip-duration').innerText;
-        const serviceEl = document.querySelector('input[name="driver"]:checked').nextElementSibling;
+        const priceText = document.getElementById('total-price-display')?.innerText || '';
+        const durationText = document.getElementById('trip-duration')?.innerText || '';
+        const serviceEl = document.querySelector('input[name="driver"]:checked')?.nextElementSibling;
         const serviceText = serviceEl ? serviceEl.innerText.trim() : "";
 
-        const segmentation = this.getSegmentation();
-        const data = {
-            name: document.getElementById('name').value,
-            phone: document.getElementById('phone').value,
-            passengers: document.getElementById('passengers').value,
-            vehicle: document.getElementById('vehicle').value,
+        return {
+            name: document.getElementById('name')?.value || '',
+            phone: document.getElementById('phone')?.value || '',
+            passengers: document.getElementById('passengers')?.value || '',
+            vehicle: document.getElementById('vehicle')?.value || '',
             service: serviceText,
             dates: dString,
             duration: durationText,
             price: priceText,
-            notes: document.getElementById('notes').value,
+            notes: document.getElementById('notes')?.value || '',
             intent: segmentation.intent
         };
-        const leadScoreClient = this.calculateLeadScore(data, segmentation);
+    },
 
+    _updateWhatsAppLink(data) {
         const isArabic = document.documentElement.lang === 'ar';
         const header = isArabic ? "السلام عليكم، أريد الاستفسار عن" : "New Booking Request";
 
         const text = `${header}:\n👤 ${data.name}\n📱 ${data.phone}\n🎯 Intent: ${data.intent}\n🚗 ${data.vehicle} (${data.passengers} pax)\n📅 ${data.dates} (${data.duration})\n💰 Estimate: ${data.price}\n📝 ${data.notes}`;
         const waUrl = `https://wa.me/995579088537?text=${encodeURIComponent(text)}`;
-        document.getElementById('whatsappLink').href = waUrl;
-        AnalyticsTracker.event('booking_submit_attempt', { page_path: window.location.pathname, vehicle: data.vehicle, intent: segmentation.intent, lead_score_client: leadScoreClient });
+        const waLink = document.getElementById('whatsappLink');
+        if (waLink) waLink.href = waUrl;
+    },
 
-        const endpoint = getBookingEndpoint();
-        const payload = {
+    _buildPayload(data, segmentation, leadScoreClient, honeypot) {
+        return {
             ...data,
             sourcePage: window.location.pathname,
-            sourceLang: isArabic ? 'ar' : 'en',
+            sourceLang: document.documentElement.lang === 'ar' ? 'ar' : 'en',
             companyWebsite: honeypot ? honeypot.value : '',
             consent: Boolean(document.getElementById('bookingConsent')?.checked),
             attribution: AttributionManager.current(),
@@ -1486,7 +1478,10 @@ const BookingManager = {
                 completionPercent: Math.round((this.maxStepReached / this.totalSteps) * 100)
             }
         };
+    },
 
+    async _submitToApi(payload, data, segmentation, leadScoreClient) {
+        const endpoint = getBookingEndpoint();
         try {
             if (!endpoint) throw new Error('booking_endpoint_missing');
             const response = await fetch(endpoint, {
@@ -1507,15 +1502,43 @@ const BookingManager = {
                 lead_score_client: leadScoreClient,
                 variant: (ExperimentManager.current() || {}).bookingFormVariant || 'control'
             });
-            this.finishSubmit();
         } catch (apiError) {
             // Fallback to WhatsApp intent so leads are not lost.
             AnalyticsTracker.event('booking_submit_fallback_whatsapp', {
                 page_path: window.location.pathname,
                 reason: (apiError && apiError.message) || 'unknown'
             });
+        } finally {
             this.finishSubmit();
         }
+    },
+
+    async handleSubmit(e) {
+        e.preventDefault();
+        if (!this.validate()) return;
+
+        const honeypot = document.getElementById('companyWebsite');
+        if (honeypot && honeypot.value.trim()) {
+            return;
+        }
+
+        // Basic client-side bot friction before backend checks.
+        if (Date.now() - this.startedAt < 2500) {
+            UIManager.showToast(document.documentElement.lang === 'ar' ? 'يرجى المحاولة بعد ثانيتين' : 'Please wait a moment before submitting.');
+            return;
+        }
+
+        this._setLoadingState(true);
+
+        const segmentation = this.getSegmentation();
+        const data = this._getFormData(segmentation);
+        const leadScoreClient = this.calculateLeadScore(data, segmentation);
+
+        this._updateWhatsAppLink(data);
+        AnalyticsTracker.event('booking_submit_attempt', { page_path: window.location.pathname, vehicle: data.vehicle, intent: segmentation.intent, lead_score_client: leadScoreClient });
+
+        const payload = this._buildPayload(data, segmentation, leadScoreClient, honeypot);
+        await this._submitToApi(payload, data, segmentation, leadScoreClient);
     },
 
     validate() {
@@ -1603,10 +1626,7 @@ const BookingManager = {
     },
 
     finishSubmit() {
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = false;
-        document.getElementById('btnSpinner').classList.add('hidden');
-        document.getElementById('btnText').classList.remove('opacity-0');
+        this._setLoadingState(false);
         UIManager.openModal('successModal');
         try { sessionStorage.removeItem('booking_draft'); } catch (e) {
             console.debug('Storage operation failed:', e);
