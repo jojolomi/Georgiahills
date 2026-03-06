@@ -1766,14 +1766,15 @@ const MainApp = {
             setTimeout(() => { preloader.style.display = 'none'; }, 500); // Wait for CSS transition only
         }
 
-        // PROFESSIONALISM FIX: Handle empty links
-        document.querySelectorAll('a[href="#"]').forEach(link => {
-            link.addEventListener('click', (e) => {
+        // Handle empty links (delegated to support dynamic elements)
+        document.body.addEventListener('click', (e) => {
+            const link = e.target.closest('a[href="#"]');
+            if (link) {
                 e.preventDefault();
                 const isAr = document.documentElement.lang === 'ar';
                 const msg = isAr ? 'هذه الميزة قادمة قريباً!' : 'This feature is coming soon!';
                 UIManager.showToast(msg);
-            });
+            }
         });
     },
     
