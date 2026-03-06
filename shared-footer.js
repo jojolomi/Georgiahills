@@ -47,6 +47,9 @@
           : 'Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.',
         privacy: isArabic ? 'سياسة الخصوصية' : 'Privacy Policy',
         terms: isArabic ? 'شروط الخدمة' : 'Terms of Service',
+        cancellation: isArabic ? 'سياسة الإلغاء' : 'Cancellation Policy',
+        insurance: isArabic ? 'تأمين السفر' : 'Travel Insurance',
+        licensing: isArabic ? 'الترخيص' : 'Licensing',
         quickLinks: isArabic ? 'روابط سريعة' : 'Quick Links',
         home: isArabic ? 'الرئيسية' : 'Home',
         fleet: isArabic ? 'السيارات' : 'Our Fleet',
@@ -58,6 +61,11 @@
         homeLink: isArabic ? 'arabic.html' : 'index.html',
         bookLink: isArabic ? 'booking-ar.html' : 'booking.html',
         legalLink: 'legal.html',
+        privacyLink: '/privacy',
+        termsLink: '/terms',
+        cancellationLink: '/cancellation',
+        insuranceLink: '/insurance',
+        licensingLink: '/licensing',
       }
     };
   }
@@ -78,9 +86,12 @@
                     <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
                     <button onclick="App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
                 </div>
-                <div style="margin-top:1.5rem; display:flex; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
-                    <a href="${cfg.texts.legalLink}" style="color:inherit;">${cfg.texts.privacy}</a>
-                    <a href="${cfg.texts.legalLink}" style="color:inherit;">${cfg.texts.terms}</a>
+                <div style="margin-top:1.5rem; display:flex; flex-wrap:wrap; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
+                    <a href="${cfg.texts.privacyLink}" style="color:inherit;text-decoration:none;">${cfg.texts.privacy}</a>
+                    <a href="${cfg.texts.termsLink}" style="color:inherit;text-decoration:none;">${cfg.texts.terms}</a>
+                    <a href="${cfg.texts.cancellationLink}" style="color:inherit;text-decoration:none;">${cfg.texts.cancellation}</a>
+                    <a href="${cfg.texts.insuranceLink}" style="color:inherit;text-decoration:none;">${cfg.texts.insurance}</a>
+                    <a href="${cfg.texts.licensingLink}" style="color:inherit;text-decoration:none;">${cfg.texts.licensing}</a>
                 </div>
             </div>
             <!-- Links -->
