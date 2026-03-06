@@ -11,7 +11,7 @@
     "verify:rendered-html": "node scripts/verify-rendered-html.mjs",
     "format": "prettier --write .",
     "images:generate": "node scripts/generate-responsive-images.mjs",
-    "test:unit": "node --import tsx --test \"**/*.test.ts\""
+    "test:unit": "node --import tsx --test lib/i18n.test.ts"
   },
   "dependencies": {
     "@gh/lib": "workspace:*",

@@ -61,12 +61,12 @@
         rights: isArabic ? 'جميع الحقوق محفوظة.' : 'All rights reserved.',
         homeLink: toRootPath(isArabic ? 'arabic.html' : 'index.html'),
         bookLink: toRootPath(isArabic ? 'booking-ar.html' : 'booking.html'),
-        legalLink: toRootPath('legal.html'),
-        privacyLink: '/privacy',
-        termsLink: '/terms',
-        cancellationLink: '/cancellation',
-        insuranceLink: '/insurance',
-        licensingLink: '/licensing',
+        legalLink: toRootPath(isArabic ? 'legal-ar.html' : 'legal.html'),
+        privacyLink: toRootPath(isArabic ? 'legal-ar.html#privacy' : 'legal.html#privacy'),
+        termsLink: toRootPath(isArabic ? 'legal-ar.html#terms' : 'legal.html#terms'),
+        cancellationLink: toRootPath(isArabic ? 'legal-ar.html#cancellation' : 'legal.html#cancellation'),
+        insuranceLink: toRootPath(isArabic ? 'legal-ar.html#insurance' : 'legal.html#insurance'),
+        licensingLink: toRootPath(isArabic ? 'legal-ar.html#licensing' : 'legal.html#licensing'),
       }
     };
   }
@@ -85,7 +85,7 @@
                 <div class="footer-social">
                     <a href="https://instagram.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                     <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                    <button onclick="App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
+                    <button onclick="window.App && typeof App.share === 'function' && App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
                 </div>
                 <div style="margin-top:1.5rem; display:flex; flex-wrap:wrap; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
                     <a href="${cfg.texts.privacyLink}" style="color:inherit;text-decoration:none;">${cfg.texts.privacy}</a>
