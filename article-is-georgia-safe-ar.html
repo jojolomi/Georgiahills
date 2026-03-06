@@ -37,6 +37,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
     <script src="shared-navbar.js" defer></script>
+    <script src="shared-footer.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body class="secondary-page page-about page-article">
@@ -161,51 +162,6 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <div class="footer-brand">
-                        <div class="footer-brand-icon"><i class="fa-solid fa-mountain"></i></div>
-                        <span class="footer-brand-text">Georgia Hills</span>
-                    </div>
-                    <p style="color:var(--color-gray-300); font-size:0.875rem; line-height:1.6; margin-bottom:1.5rem;">حلول نقل فاخرة في جورجيا. أمان وراحة وخبرة محلية في كل ميل.</p>
-                    <div class="footer-social">
-                        <a href="https://instagram.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                        <button onclick="App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
-                    </div>
-                    <div style="margin-top:1.5rem; display:flex; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
-                        <a href="legal.html" style="color:inherit;">سياسة الخصوصية</a>
-                    </div>
-                </div>
-                <div>
-                    <h3>روابط سريعة</h3>
-                    <ul>
-                        <li><a href="arabic.html">الرئيسية</a></li>
-                        <li><a href="arabic.html#fleet">السيارات</a></li>
-                        <li><a href="arabic.html#reviews">الآراء</a></li>
-                        <li><a href="booking-ar.html">احجز الآن</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3>اتصل بنا</h3>
-                    <ul style="color:var(--color-gray-400);">
-                        <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
-                        <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
-                        <li class="footer-contact-item"><i class="fa-solid fa-envelope text-accent"></i> info@georgiahills.com</li>
-                    </ul>
-                </div>
-                <div>
-                    <div class="footer-map-container">
-                        <span class="footer-map-overlay"><i class="fa-solid fa-map-location-dot"></i> <span>موقعنا</span></span>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                &copy; <span id="year">2026</span> Georgia Hills. جميع الحقوق محفوظة.
-            </div>
-        </div>
-    </footer>
+    <footer class="footer" id="footer"></footer>
 </body>
 </html>

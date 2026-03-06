@@ -257,6 +257,7 @@
     
     <!-- OPTIMIZATION: Defer Main Script -->
     <script src="shared-navbar.js" defer></script>
+    <script src="shared-footer.js" defer></script>
     <script src="script.min.js" defer></script>
     <script>
         window.addEventListener('DOMContentLoaded', function () {
@@ -870,58 +871,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div id="footer-content" class="footer-grid">
-                <!-- Brand -->
-                <div>
-                    <div class="footer-brand">
-                        <div class="footer-brand-icon"><i class="fa-solid fa-mountain"></i></div>
-                        <span class="footer-brand-text">Georgia Hills</span>
-                    </div>
-                    <p style="color:var(--color-gray-300); font-size:0.875rem; line-height:1.6; margin-bottom:1.5rem;">Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.</p>
-                    <div class="footer-social">
-                        <a href="https://instagram.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-                        <button onclick="App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
-                    </div>
-                    <div style="margin-top:1.5rem; display:flex; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
-                        <a href="legal.html" style="color:inherit;">Privacy Policy</a>
-                        <a href="legal.html" style="color:inherit;">Terms of Service</a>
-                    </div>
-                </div>
-                <!-- Links -->
-                <div>
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#fleet">Our Fleet</a></li>
-                        <li><a href="#reviews">Reviews</a></li>
-                        <li><a href="booking.html">Book Now</a></li>
-                    </ul>
-                </div>
-                <!-- Contact -->
-                <div>
-                    <h3>Contact Us</h3>
-                    <ul style="color:var(--color-gray-400);">
-                        <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <a href="tel:+995579088537" dir="ltr">+995 579 08 85 37</a></li>
-                        <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" dir="ltr">+995 579 08 85 37</a></li>
-                        <li class="footer-contact-item"><i class="fa-solid fa-envelope text-accent"></i> <a href="mailto:info@georgiahills.com">info@georgiahills.com</a></li>
-                        <li class="footer-contact-item"><i class="fa-solid fa-location-dot text-accent"></i> <span>123 Rustaveli Ave, Tbilisi, GE</span></li>
-                    </ul>
-                </div>
-                <!-- Map -->
-                <div>
-                    <div class="footer-map-container">
-                        <span class="footer-map-overlay"><i class="fa-solid fa-map-location-dot"></i> <span>Load Map</span></span>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                &copy; <span id="year">2026</span> Georgia Hills. All rights reserved.
-            </div>
-        </div>
-    </footer>
+    <footer class="footer" id="footer"></footer>
 
     <!-- Floating Action Buttons -->
     <div class="fab-container">

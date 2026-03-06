@@ -55,8 +55,24 @@ for (const target of targetPages) {
   const full = path.join(distDir, file);
 
   const html = fs.readFileSync(full, "utf8");
+
+  // Since we inject the footer dynamically via shared-footer.js, we also check that file
+  // if the script is included in the html.
+  let contentToCheck = html;
+  if (html.includes("shared-footer.js")) {
+    const sharedFooterPath = path.join(distDir, "shared-footer.js");
+    if (fs.existsSync(sharedFooterPath)) {
+      contentToCheck += fs.readFileSync(sharedFooterPath, "utf8");
+    } else {
+      const rootSharedFooterPath = path.join(path.dirname(distDir), "..", "..", "shared-footer.js");
+      if(fs.existsSync(rootSharedFooterPath)){
+        contentToCheck += fs.readFileSync(rootSharedFooterPath, "utf8");
+      }
+    }
+  }
+
   for (const tokenGroup of target.requiredGroups) {
-    const hasAnyToken = tokenGroup.some((token) => html.includes(token));
+    const hasAnyToken = tokenGroup.some((token) => contentToCheck.includes(token));
     if (!hasAnyToken) {
       process.stderr.write(
         `✖ ${file}: missing legal link token (expected one of: ${tokenGroup.join(", ")})\n`
