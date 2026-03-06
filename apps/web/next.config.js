@@ -35,7 +35,7 @@ const nextConfig = {
     return `/${repoName}`;
   })(),
   transpilePackages: ["@gh/ui", "@gh/lib", "@gh/types"],
-  pageExtensions: ["tsx", "jsx", "js"],
+  pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [320, 420, 640, 768, 1024, 1280, 1600, 1920],
