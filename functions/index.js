@@ -1880,10 +1880,9 @@ exports.optimizeUploadedImage = onObjectFinalized(
       { format: "webp", width: 640, quality: 70 }
     ];
 
-    const variants = [];
     try {
       const meta = await sharp(tempInput).metadata();
-      for (const cfg of optimizeConfigs) {
+      const variants = await Promise.all(optimizeConfigs.map(async (cfg) => {
         const outName = `${baseName}_${cfg.width}.${cfg.format}`;
         const outPath = path.join(os.tmpdir(), outName);
         const storageOutPath = `${parentDir}/optimized/${outName}`;
@@ -1901,13 +1900,14 @@ exports.optimizeUploadedImage = onObjectFinalized(
           }
         });
         const encoded = storageOutPath.split("/").map(encodeURIComponent).join("/");
-        variants.push({
+        const variant = {
           format: cfg.format,
           width: cfg.width,
           url: `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encoded}?alt=media`
-        });
+        };
         await fs.unlink(outPath).catch(() => {});
-      }
+        return variant;
+      }));
 
       const encodedOriginal = filePath.split("/").map(encodeURIComponent).join("/");
       const originalUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodedOriginal}?alt=media`;
