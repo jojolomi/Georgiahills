@@ -15,6 +15,10 @@
             .hero-img{width:100%;height:auto;display:block;object-fit:cover}
             .hero{position:relative;overflow:hidden}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
+            .quick-links-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;max-width:720px;margin:2.5rem auto 0}
+            .quick-link-card{display:flex;flex-direction:column;align-items:center;gap:.6rem;padding:1.25rem 1rem;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:1rem;color:rgba(255,255,255,.92);font-size:.875rem;font-weight:600;backdrop-filter:blur(6px);transition:background .2s,transform .2s,border-color .2s;text-decoration:none}
+            .quick-link-card:hover{background:rgba(255,255,255,.22);border-color:rgba(255,255,255,.5);transform:translateY(-3px)}
+            .quick-link-card i{font-size:1.4rem;color:#E6CCAA}
         </style>
         <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="favicon.ico">
@@ -39,9 +43,19 @@
                 <p class="section-desc about-premium-subtitle">
                     The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
                 </p>
-                <div style="margin-top:2.5rem;">
+                <div style="margin-top:2.5rem; display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
                     <a href="index.html" class="action-btn" style="padding: 1rem 2.5rem; font-size:1.1rem;">Return Home</a>
+                    <a href="booking.html" class="btn-book-nav" style="padding: 1rem 2.5rem; font-size:1.1rem;">Book Now</a>
                 </div>
+
+                <nav class="quick-links-grid" aria-label="Suggested pages">
+                    <a href="tbilisi.html" class="quick-link-card"><i class="fa-solid fa-city"></i> Tbilisi</a>
+                    <a href="kazbegi.html" class="quick-link-card"><i class="fa-solid fa-mountain"></i> Kazbegi</a>
+                    <a href="batumi.html" class="quick-link-card"><i class="fa-solid fa-umbrella-beach"></i> Batumi</a>
+                    <a href="martvili.html" class="quick-link-card"><i class="fa-solid fa-water"></i> Martvili</a>
+                    <a href="signagi.html" class="quick-link-card"><i class="fa-solid fa-wine-glass"></i> Signagi</a>
+                    <a href="guide.html" class="quick-link-card"><i class="fa-solid fa-compass"></i> Travel Guide</a>
+                </nav>
             </div>
         </div>
     </section>
