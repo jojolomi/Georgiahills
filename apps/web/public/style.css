@@ -463,14 +463,17 @@ html[lang="ar"] .close-menu-btn { right: auto; left: 1.5rem; }
     content: "";
     position: absolute;
     top: -14%;
-    left: auto;
-    right: -8%;
+    left: -8%;
     width: 36rem;
     height: 36rem;
     border-radius: 9999px;
     background: radial-gradient(circle, rgba(176, 141, 85, 0.26), rgba(176, 141, 85, 0));
     z-index: 0;
     pointer-events: none;
+}
+html[lang="ar"] .hero::before {
+    left: auto;
+    right: -8%;
 }
 .hero-logo-container { display: flex; justify-content: center; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.8s ease-out forwards; }
 .hero-logo-circle { width: 6rem; height: 6rem; border-radius: 50%; overflow: hidden; box-shadow: var(--shadow-xl); }
