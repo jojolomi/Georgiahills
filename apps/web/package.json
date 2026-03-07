@@ -18,7 +18,7 @@
     "@gh/types": "workspace:*",
     "@gh/ui": "workspace:*",
     "@hookform/resolvers": "^5.2.2",
-    "@sentry/nextjs": "^9.17.0",
+    "@sentry/nextjs": "^10.42.0",
     "@supabase/ssr": "^0.8.0",
     "@supabase/supabase-js": "^2.98.0",
     "@tanstack/react-table": "^8.21.3",
