@@ -117,10 +117,29 @@
       contact: toRootPath(isArabic ? 'contact-ar.html' : 'contact.html'),
       booking: toRootPath(isArabic ? 'booking-ar.html' : 'booking.html'),
       langSwitch: buildLangSwitch(filename, isArabic),
+      destinations: {
+        hub: toRootPath(isArabic ? 'destinations-hub-ar.html' : 'destinations-hub.html'),
+        tbilisi: toRootPath(isArabic ? 'tbilisi-ar.html' : 'tbilisi.html'),
+        batumi: toRootPath(isArabic ? 'batumi-ar.html' : 'batumi.html'),
+        kazbegi: toRootPath(isArabic ? 'kazbegi-ar.html' : 'kazbegi.html'),
+        martvili: toRootPath(isArabic ? 'martvili-ar.html' : 'martvili.html'),
+        signagi: toRootPath(isArabic ? 'signagi-ar.html' : 'signagi.html')
+      },
       texts: {
         home: isArabic ? 'الرئيسية' : 'Home',
         about: isArabic ? 'من نحن' : 'About',
         destinations: isArabic ? 'الوجهات' : 'Destinations',
+        allDestinations: isArabic ? 'كل الوجهات' : 'All Destinations',
+        tbilisi: isArabic ? 'تبليسي' : 'Tbilisi',
+        tbilisiDesc: isArabic ? 'العاصمة' : 'Capital city',
+        batumi: isArabic ? 'باتومي' : 'Batumi',
+        batumiDesc: isArabic ? 'جوهرة البحر الأسود' : 'Black Sea gem',
+        kazbegi: isArabic ? 'كازبيغي' : 'Kazbegi',
+        kazbegiDesc: isArabic ? 'مغامرة الجبال' : 'Mountain adventure',
+        martvili: isArabic ? 'مارتفيلي' : 'Martvili',
+        martviliDesc: isArabic ? 'الشلالات والكهوف' : 'Canyons & caves',
+        signagi: isArabic ? 'سيغناغي' : 'Signagi',
+        signagiDesc: isArabic ? 'مدينة الحب' : 'City of love',
         services: isArabic ? 'الخدمات' : 'Services',
         fleet: isArabic ? 'السيارات' : 'Fleet',
         reviews: isArabic ? 'الآراء' : 'Reviews',
@@ -130,7 +149,8 @@
         book: isArabic ? 'احجز الآن' : 'Book Now',
         lang: isArabic ? 'English' : 'العربية',
         close: isArabic ? 'إغلاق القائمة' : 'Close Navigation Menu',
-        toggle: isArabic ? 'فتح القائمة' : 'Toggle Navigation Menu'
+        toggle: isArabic ? 'فتح القائمة' : 'Toggle Navigation Menu',
+        showDestinations: isArabic ? 'عرض الوجهات' : 'Show destinations'
       }
     };
   }
@@ -161,10 +181,41 @@
   }
 
   function buildMarkup(cfg, filename) {
+    const isDestActive = activeClass(filename, 'destinations');
     const desktopLinks = `
       <div id="desktop-links-container" style="display:contents">
         <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="nav-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
         <a href="${cfg.about}" data-nav-link="about" data-nav-text="about" class="nav-link${activeClass(filename, 'about')}">${cfg.texts.about}</a>
+        <div class="nav-dropdown-wrapper${isDestActive}" id="destinations-dropdown-wrapper">
+          <button class="nav-link nav-dropdown-trigger${isDestActive}" aria-haspopup="true" aria-expanded="false" aria-controls="destinations-dropdown-menu" aria-label="${cfg.texts.showDestinations}">
+            ${cfg.texts.destinations}<i class="fa-solid fa-chevron-down nav-dropdown-chevron" aria-hidden="true"></i>
+          </button>
+          <div class="nav-dropdown-menu" id="destinations-dropdown-menu" role="menu">
+            <a href="${cfg.destinations.hub}" class="nav-dropdown-item nav-dropdown-view-all" role="menuitem">
+              <span>${cfg.texts.allDestinations}</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </a>
+            <a href="${cfg.destinations.tbilisi}" class="nav-dropdown-item" role="menuitem">
+              <span class="nav-dropdown-icon" aria-hidden="true">🏛️</span>
+              <span class="nav-dropdown-details"><span class="nav-dropdown-name">${cfg.texts.tbilisi}</span><span class="nav-dropdown-desc">${cfg.texts.tbilisiDesc}</span></span>
+            </a>
+            <a href="${cfg.destinations.batumi}" class="nav-dropdown-item" role="menuitem">
+              <span class="nav-dropdown-icon" aria-hidden="true">🌊</span>
+              <span class="nav-dropdown-details"><span class="nav-dropdown-name">${cfg.texts.batumi}</span><span class="nav-dropdown-desc">${cfg.texts.batumiDesc}</span></span>
+            </a>
+            <a href="${cfg.destinations.kazbegi}" class="nav-dropdown-item" role="menuitem">
+              <span class="nav-dropdown-icon" aria-hidden="true">⛰️</span>
+              <span class="nav-dropdown-details"><span class="nav-dropdown-name">${cfg.texts.kazbegi}</span><span class="nav-dropdown-desc">${cfg.texts.kazbegiDesc}</span></span>
+            </a>
+            <a href="${cfg.destinations.martvili}" class="nav-dropdown-item" role="menuitem">
+              <span class="nav-dropdown-icon" aria-hidden="true">🏞️</span>
+              <span class="nav-dropdown-details"><span class="nav-dropdown-name">${cfg.texts.martvili}</span><span class="nav-dropdown-desc">${cfg.texts.martviliDesc}</span></span>
+            </a>
+            <a href="${cfg.destinations.signagi}" class="nav-dropdown-item" role="menuitem">
+              <span class="nav-dropdown-icon" aria-hidden="true">🍷</span>
+              <span class="nav-dropdown-details"><span class="nav-dropdown-name">${cfg.texts.signagi}</span><span class="nav-dropdown-desc">${cfg.texts.signagiDesc}</span></span>
+            </a>
+          </div>
+        </div>
         <a href="${cfg.services}" data-nav-link="services" data-nav-text="services" class="nav-link${activeClass(filename, 'services')}">${cfg.texts.services}</a>
         <a href="${cfg.guide}" data-nav-link="guide" data-nav-text="guide" class="nav-link${activeClass(filename, 'guide')}">${cfg.texts.guide}</a>
         <a href="${cfg.blog}" data-nav-link="blog" data-nav-text="blog" class="nav-link${activeClass(filename, 'blog')}">${cfg.texts.blog}</a>
@@ -173,6 +224,7 @@
     `;
 
     return `
+      <div id="scroll-progress-bar" aria-hidden="true"></div>
       <nav id="navbar" class="navbar" dir="ltr" data-shared-navbar="true">
         <div class="container">
           <div class="navbar-inner">
@@ -217,6 +269,19 @@
         <div id="mobile-links-container">
           <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="mobile-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
           <a href="${cfg.about}" data-nav-link="about" data-nav-text="about" class="mobile-link${activeClass(filename, 'about')}">${cfg.texts.about}</a>
+          <div class="mobile-dest-section">
+            <button class="mobile-link mobile-dest-toggle${isDestActive}" aria-expanded="false" aria-controls="mobile-dest-list">
+              ${cfg.texts.destinations}<i class="fa-solid fa-chevron-down mobile-dest-chevron" aria-hidden="true"></i>
+            </button>
+            <div id="mobile-dest-list" class="mobile-dest-list" aria-hidden="true">
+              <a href="${cfg.destinations.tbilisi}" class="mobile-dest-link">${cfg.texts.tbilisi}</a>
+              <a href="${cfg.destinations.batumi}" class="mobile-dest-link">${cfg.texts.batumi}</a>
+              <a href="${cfg.destinations.kazbegi}" class="mobile-dest-link">${cfg.texts.kazbegi}</a>
+              <a href="${cfg.destinations.martvili}" class="mobile-dest-link">${cfg.texts.martvili}</a>
+              <a href="${cfg.destinations.signagi}" class="mobile-dest-link">${cfg.texts.signagi}</a>
+              <a href="${cfg.destinations.hub}" class="mobile-dest-link mobile-dest-link-all">${cfg.texts.allDestinations} →</a>
+            </div>
+          </div>
           <a href="${cfg.services}" data-nav-link="services" data-nav-text="services" class="mobile-link${activeClass(filename, 'services')}">${cfg.texts.services}</a>
           <a href="${cfg.guide}" data-nav-link="guide" data-nav-text="guide" class="mobile-link${activeClass(filename, 'guide')}">${cfg.texts.guide}</a>
           <a href="${cfg.blog}" data-nav-link="blog" data-nav-text="blog" class="mobile-link${activeClass(filename, 'blog')}">${cfg.texts.blog}</a>
@@ -239,6 +304,65 @@
     `;
   }
 
+  function initDropdowns() {
+    // Desktop destinations dropdown: open on hover, close on mouse leave / Escape
+    const wrapper = document.getElementById('destinations-dropdown-wrapper');
+    const trigger = wrapper && wrapper.querySelector('.nav-dropdown-trigger');
+    const menu = document.getElementById('destinations-dropdown-menu');
+
+    function openDropdown() {
+      if (!wrapper || !trigger || !menu) return;
+      wrapper.classList.add('open');
+      trigger.setAttribute('aria-expanded', 'true');
+      menu.removeAttribute('aria-hidden');
+    }
+
+    function closeDropdown() {
+      if (!wrapper || !trigger || !menu) return;
+      wrapper.classList.remove('open');
+      trigger.setAttribute('aria-expanded', 'false');
+      menu.setAttribute('aria-hidden', 'true');
+    }
+
+    if (wrapper) {
+      wrapper.addEventListener('mouseenter', openDropdown);
+      wrapper.addEventListener('mouseleave', closeDropdown);
+      trigger.addEventListener('click', function (e) {
+        e.preventDefault();
+        wrapper.classList.contains('open') ? closeDropdown() : openDropdown();
+      });
+      trigger.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          wrapper.classList.contains('open') ? closeDropdown() : openDropdown();
+        }
+        if (e.key === 'Escape') closeDropdown();
+      });
+      // Single click-outside handler; safe because initDropdowns() is guarded by __GH_SHARED_NAVBAR__
+      const outsideHandler = function (e) {
+        if (!wrapper.contains(e.target)) closeDropdown();
+      };
+      document.addEventListener('click', outsideHandler);
+    }
+
+    // Mobile destinations collapsible toggle
+    const mobileToggle = document.querySelector('.mobile-dest-toggle');
+    const mobileList = document.getElementById('mobile-dest-list');
+    if (mobileToggle && mobileList) {
+      const isActive = mobileToggle.classList.contains('active');
+      if (isActive) {
+        mobileList.classList.add('open');
+        mobileToggle.setAttribute('aria-expanded', 'true');
+        mobileList.removeAttribute('aria-hidden');
+      }
+      mobileToggle.addEventListener('click', function () {
+        const expanded = mobileList.classList.toggle('open');
+        mobileToggle.setAttribute('aria-expanded', String(expanded));
+        mobileList.setAttribute('aria-hidden', String(!expanded));
+      });
+    }
+  }
+
   function renderSharedNavbar() {
     if (window.__GH_SHARED_NAVBAR__) return;
 
@@ -259,6 +383,7 @@
     nav.remove();
 
     window.__GH_SHARED_NAVBAR__ = true;
+    initDropdowns();
   }
 
   if (document.readyState === 'loading') {

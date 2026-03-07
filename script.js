@@ -1056,6 +1056,7 @@ const UIManager = {
         const backBtn = document.getElementById('backToTop');
         const hero = document.getElementById('hero-img');
         const hasDestHero = !!document.querySelector('.dest-hero');
+        const progressBar = document.getElementById('scroll-progress-bar');
 
         const flushScrollUpdates = () => {
             const currentScroll = lastKnownScrollY;
@@ -1065,6 +1066,12 @@ const UIManager = {
                 nav.classList.toggle('scrolled', currentScroll > 20);
             }
             if (backBtn) backBtn.classList.toggle('show', currentScroll > 500);
+
+            if (progressBar) {
+                const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const pct = docHeight > 0 ? Math.min(100, (currentScroll / docHeight) * 100) : 0;
+                progressBar.style.width = pct + '%';
+            }
 
             if (sticky) {
                 if (currentScroll > lastScroll && currentScroll > 100) {
