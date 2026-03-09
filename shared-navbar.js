@@ -105,6 +105,14 @@
     return toRootPath(PAGE_PAIRS[filename] || (isArabic ? 'index.html' : 'arabic.html'));
   }
 
+  const DESTINATION_ITEMS = [
+    { key: 'tbilisi', en: 'Tbilisi', ar: 'تبليسي', en_href: 'tbilisi.html', ar_href: 'tbilisi-ar.html', icon: '🏙️' },
+    { key: 'kazbegi', en: 'Kazbegi', ar: 'كازبيجي', en_href: 'kazbegi.html', ar_href: 'kazbegi-ar.html', icon: '⛰️' },
+    { key: 'batumi', en: 'Batumi', ar: 'باتومي', en_href: 'batumi.html', ar_href: 'batumi-ar.html', icon: '🌊' },
+    { key: 'martvili', en: 'Martvili', ar: 'مارتفيلي', en_href: 'martvili.html', ar_href: 'martvili-ar.html', icon: '🌿' },
+    { key: 'signagi', en: 'Signagi', ar: 'سغناغي', en_href: 'signagi.html', ar_href: 'signagi-ar.html', icon: '🍷' }
+  ];
+
   function getConfig(filename, isArabic) {
     const home = toRootPath(isArabic ? 'arabic.html' : 'index.html');
     return {
@@ -116,11 +124,13 @@
       blog: toRootPath(isArabic ? 'blog-ar.html' : 'blog.html'),
       contact: toRootPath(isArabic ? 'contact-ar.html' : 'contact.html'),
       booking: toRootPath(isArabic ? 'booking-ar.html' : 'booking.html'),
+      destinationsHub: toRootPath(isArabic ? 'destinations-hub-ar.html' : 'destinations-hub.html'),
       langSwitch: buildLangSwitch(filename, isArabic),
       texts: {
         home: isArabic ? 'الرئيسية' : 'Home',
         about: isArabic ? 'من نحن' : 'About',
         destinations: isArabic ? 'الوجهات' : 'Destinations',
+        destAll: isArabic ? 'جميع الوجهات' : 'All Destinations',
         services: isArabic ? 'الخدمات' : 'Services',
         fleet: isArabic ? 'السيارات' : 'Fleet',
         reviews: isArabic ? 'الآراء' : 'Reviews',
@@ -160,11 +170,31 @@
     return '';
   }
 
+  function buildDestDropdownItems(isArabic) {
+    return DESTINATION_ITEMS.map(d => {
+      const label = isArabic ? d.ar : d.en;
+      const href = toRootPath(isArabic ? d.ar_href : d.en_href);
+      return `<a href="${href}" class="nav-dest-item"><span class="nav-dest-icon" aria-hidden="true">${d.icon}</span>${label}</a>`;
+    }).join('');
+  }
+
   function buildMarkup(cfg, filename) {
+    const destDropdownItems = buildDestDropdownItems(cfg.isArabic);
     const desktopLinks = `
       <div id="desktop-links-container" style="display:contents">
         <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="nav-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
         <a href="${cfg.about}" data-nav-link="about" data-nav-text="about" class="nav-link${activeClass(filename, 'about')}">${cfg.texts.about}</a>
+        <div class="nav-dropdown-wrapper" id="dest-dropdown-desktop">
+          <button class="nav-link nav-dropdown-trigger${activeClass(filename, 'destinations')}" aria-haspopup="true" aria-expanded="false" aria-controls="dest-dropdown-panel-desktop">
+            ${cfg.texts.destinations}<i class="fa-solid fa-chevron-down nav-dropdown-chevron" aria-hidden="true"></i>
+          </button>
+          <div class="nav-dropdown-panel" id="dest-dropdown-panel-desktop" role="region">
+            <div class="nav-dropdown-grid">
+              ${destDropdownItems}
+            </div>
+            <a href="${cfg.destinationsHub}" class="nav-dest-all">${cfg.texts.destAll} <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          </div>
+        </div>
         <a href="${cfg.services}" data-nav-link="services" data-nav-text="services" class="nav-link${activeClass(filename, 'services')}">${cfg.texts.services}</a>
         <a href="${cfg.guide}" data-nav-link="guide" data-nav-text="guide" class="nav-link${activeClass(filename, 'guide')}">${cfg.texts.guide}</a>
         <a href="${cfg.blog}" data-nav-link="blog" data-nav-text="blog" class="nav-link${activeClass(filename, 'blog')}">${cfg.texts.blog}</a>
@@ -217,6 +247,19 @@
         <div id="mobile-links-container">
           <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="mobile-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
           <a href="${cfg.about}" data-nav-link="about" data-nav-text="about" class="mobile-link${activeClass(filename, 'about')}">${cfg.texts.about}</a>
+          <details class="mobile-dest-details">
+            <summary class="mobile-link mobile-dest-summary${activeClass(filename, 'destinations')}" aria-haspopup="true">
+              ${cfg.texts.destinations}<i class="fa-solid fa-chevron-down mobile-dest-chevron" aria-hidden="true"></i>
+            </summary>
+            <div class="mobile-dest-links">
+              ${DESTINATION_ITEMS.map(d => {
+                const label = cfg.isArabic ? d.ar : d.en;
+                const href = toRootPath(cfg.isArabic ? d.ar_href : d.en_href);
+                return `<a href="${href}" class="mobile-dest-link">${d.icon} ${label}</a>`;
+              }).join('')}
+              <a href="${cfg.destinationsHub}" class="mobile-dest-link mobile-dest-all-link">${cfg.texts.destAll}</a>
+            </div>
+          </details>
           <a href="${cfg.services}" data-nav-link="services" data-nav-text="services" class="mobile-link${activeClass(filename, 'services')}">${cfg.texts.services}</a>
           <a href="${cfg.guide}" data-nav-link="guide" data-nav-text="guide" class="mobile-link${activeClass(filename, 'guide')}">${cfg.texts.guide}</a>
           <a href="${cfg.blog}" data-nav-link="blog" data-nav-text="blog" class="mobile-link${activeClass(filename, 'blog')}">${cfg.texts.blog}</a>
@@ -239,6 +282,36 @@
     `;
   }
 
+  function initDestDropdown() {
+    const wrapper = document.getElementById('dest-dropdown-desktop');
+    const trigger = wrapper && wrapper.querySelector('.nav-dropdown-trigger');
+    const panel = wrapper && document.getElementById('dest-dropdown-panel-desktop');
+    if (!wrapper || !trigger || !panel) return;
+
+    const open = (show) => {
+      trigger.setAttribute('aria-expanded', show ? 'true' : 'false');
+      wrapper.classList.toggle('dropdown-open', show);
+    };
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = wrapper.classList.contains('dropdown-open');
+      open(!isOpen);
+    });
+
+    trigger.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') open(false);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!wrapper.contains(e.target)) open(false);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') open(false);
+    });
+  }
+
   function renderSharedNavbar() {
     if (window.__GH_SHARED_NAVBAR__) return;
 
@@ -257,6 +330,8 @@
 
     nav.insertAdjacentHTML('beforebegin', toTrustedHTML(buildMarkup(cfg, filename)));
     nav.remove();
+
+    initDestDropdown();
 
     window.__GH_SHARED_NAVBAR__ = true;
   }
