@@ -892,6 +892,10 @@ body.secondary-page .about-premium-title {
 body.secondary-page .about-premium-title .text-gradient-gold {
     display: inline-block;
     line-height: 1.2;
+    background: linear-gradient(135deg, #ffd700 0%, #ffeebb 55%, #ffe066 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 body.secondary-page .about-premium-subtitle {
@@ -941,9 +945,160 @@ body.page-blog .blog-grid {
 }
 body.page-blog .blog-card {
     border-radius: 1.25rem;
+    position: relative;
+}
+body.page-blog .blog-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+    opacity: 0;
+    transition: opacity 0.28s ease;
+    z-index: 1;
+    border-radius: 1.25rem 1.25rem 0 0;
+}
+body.page-blog .blog-card:hover::before {
+    opacity: 1;
+}
+body.page-blog .blog-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 48px -10px rgba(0,0,0,0.14), 0 0 0 1px rgba(44,85,48,0.08);
+    border-color: rgba(44,85,48,0.15);
 }
 body.page-blog .blog-content {
     padding: 1.6rem;
+}
+body.page-blog .blog-meta {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.65rem;
+    background: rgba(176, 141, 85, 0.1);
+    border: 1px solid rgba(176, 141, 85, 0.28);
+    border-radius: 9999px;
+    font-size: 0.7rem;
+    color: var(--color-accent);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.65rem;
+}
+body.page-blog .blog-img-wrap {
+    height: 13rem;
+}
+body.page-blog .blog-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.2rem;
+    line-height: 1.4;
+}
+body.page-blog .blog-link {
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+}
+body.page-blog .blog-link i {
+    transition: transform 0.2s ease;
+}
+body.page-blog .blog-link:hover i {
+    transform: translateX(4px);
+}
+
+/* Review cards on secondary pages */
+body.secondary-page .review-card {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: var(--shadow-card);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+body.secondary-page .review-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px -8px rgba(0,0,0,0.12);
+    border-color: rgba(176,141,85,0.22);
+}
+/* Gold star color on all secondary pages */
+body.secondary-page .review-stars,
+body.secondary-page [class*="fa-star"] { color: #ffd700; }
+
+/* FAQ items on secondary pages */
+body.secondary-page .faq-item {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 0.875rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+body.secondary-page .faq-item:hover {
+    border-color: rgba(44,85,48,0.2);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+}
+body.secondary-page .faq-item[open] {
+    border-color: rgba(44,85,48,0.25);
+    box-shadow: 0 4px 16px rgba(44,85,48,0.07);
+}
+body.secondary-page .faq-item summary {
+    font-weight: 700;
+    color: var(--color-dark);
+}
+
+/* Process step cards */
+body.secondary-page .process-card {
+    background: white;
+    border: 1px solid rgba(0,0,0,0.07);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+body.secondary-page .process-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+    border-color: rgba(44,85,48,0.15);
+}
+
+/* Fleet cards on secondary pages */
+body.secondary-page .fleet-card {
+    border: 1px solid rgba(0,0,0,0.07);
+    transition: transform 0.28s cubic-bezier(0.4,0,0.2,1), box-shadow 0.28s ease, border-color 0.28s ease;
+}
+body.secondary-page .fleet-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 28px 56px -12px rgba(0,0,0,0.18);
+    border-color: rgba(176,141,85,0.3);
+}
+
+/* Form inputs on secondary pages */
+body.secondary-page input,
+body.secondary-page select,
+body.secondary-page textarea {
+    border: 1px solid var(--color-gray-200);
+    border-radius: 0.625rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+}
+body.secondary-page input:focus,
+body.secondary-page select:focus,
+body.secondary-page textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(44,85,48,0.12);
+}
+
+/* Dark / CTA band sections on secondary pages */
+body.secondary-page .bg-dark-section {
+    background: linear-gradient(135deg, #0f2318 0%, #1a3324 50%, #0f1a0f 100%);
+    position: relative;
+    overflow: hidden;
+}
+body.secondary-page .bg-dark-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 20% 50%, rgba(176,141,85,0.12), transparent 60%),
+                radial-gradient(ellipse at 80% 30%, rgba(44,85,48,0.15), transparent 55%);
+    pointer-events: none;
+}
+
+/* Section heading divider on secondary pages */
+body.secondary-page .section-heading {
+    font-family: 'Playfair Display', Georgia, serif;
+    letter-spacing: -0.01em;
 }
 
 body.page-guide #main-content {
@@ -2157,10 +2312,7 @@ body.secondary-page .footer-bottom::before {
 
 @media (max-width: 768px) {
     body.secondary-page {
-        background:
-            radial-gradient(circle at 12% -8%, rgba(44, 85, 48, 0.1), transparent 42%),
-            radial-gradient(circle at 88% 2%, rgba(176, 141, 85, 0.09), transparent 40%),
-            linear-gradient(to bottom, #ffffff 0%, var(--color-gray-50) 48%, #ffffff 100%);
+        background: #ffffff;
     }
 
     .nav-link::after {
@@ -2714,7 +2866,7 @@ body.page-about .about-premium-title {
 }
 
 body.page-about .about-premium-title .text-gradient-gold {
-    background: linear-gradient(135deg, var(--color-primary) 0%, #166534 100%); /* Green Gradient */
+    background: linear-gradient(135deg, #ffd700 0%, #ffeebb 55%, #ffe066 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -3571,11 +3723,11 @@ body.page-about .about-premium-hero {
 body.page-about .about-premium-hero-bg {
     position: absolute;
     inset: 0;
-    background-image: url('https://georgiahills.com/image-1600.webp');
+    background-image: url('image-1600.webp');
     background-size: cover;
-    background-position: center bottom;
+    background-position: center 30%;
     z-index: 0;
-    filter: brightness(0.7); /* Darker for better contrast */
+    filter: brightness(0.75);
     animation: slowZoom 20s infinite alternate ease-in-out;
 }
 @keyframes slowZoom {
@@ -3583,16 +3735,13 @@ body.page-about .about-premium-hero-bg {
     100% { transform: scale(1.1); }
 }
 
-/* Gradient Overlay - Darker for Visibility */
+/* Gradient Overlay - Cinematic dark fade */
 body.page-about .hero-overlay-gradient {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        to right, 
-        rgba(15, 23, 42, 0.9) 0%, 
-        rgba(15, 23, 42, 0.7) 40%, 
-        rgba(15, 23, 42, 0.1) 100%
-    );
+    background:
+        linear-gradient(160deg, rgba(11,31,18,0.88) 0%, rgba(26,51,36,0.70) 45%, rgba(0,0,0,0.40) 100%),
+        linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
     z-index: 1;
 }
 
@@ -3654,15 +3803,15 @@ body.page-about .text-gradient-gold {
 
 /* Subtitle */
 body.page-about .about-premium-subtitle {
-    font-size: 1.35rem;
-    color: rgba(255, 255, 255, 0.95);
-    line-height: 1.7;
-    margin-bottom: 3.5rem;
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.88);
+    line-height: 1.75;
+    margin-bottom: 3rem;
     font-weight: 400;
-    max-width: 550px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    border-left: 3px solid rgba(255, 215, 0, 0.5); /* Gold bar restored */
-    padding-left: 1.5rem;
+    max-width: 560px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    padding-left: 1.2rem;
+    border-left: 2px solid rgba(212, 170, 110, 0.7);
 }
 body.page-about .highlight-text {
     color: #F0EAD6; /* Eggshell */
@@ -3678,19 +3827,21 @@ body.page-about .hero-actions {
     width: 100%;
 }
 body.page-about .btn-hero-primary {
-    background: white;
-    color: #0f172a;
+    background: linear-gradient(135deg, #b08d55 0%, #d4aa6e 50%, #c49a52 100%);
+    color: #0b1f12;
     padding: 1.1rem 2.5rem;
     border-radius: 9999px;
     font-weight: 700;
     text-decoration: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.4);
-    font-size: 1.1rem;
+    box-shadow: 0 12px 32px -6px rgba(176, 141, 85, 0.65);
+    font-size: 1.05rem;
+    border: 1px solid rgba(255,215,0,0.3);
 }
 body.page-about .btn-hero-primary:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 35px -5px rgba(255, 255, 255, 0.5);
+    background: linear-gradient(135deg, #c49a52 0%, #e8c080 50%, #d4aa6e 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -8px rgba(176, 141, 85, 0.75);
 }
 body.page-about .btn-hero-secondary {
     display: inline-flex;
@@ -3821,8 +3972,8 @@ body.page-about .about-premium-subtitle {
 body.page-about .btn-hero-primary {
     position: relative;
     overflow: hidden;
-    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-    border: 1px solid white;
+    background: linear-gradient(135deg, #b08d55 0%, #d4aa6e 50%, #c49a52 100%);
+    border: 1px solid rgba(255, 215, 0, 0.3);
 }
 /* The shine beam */
 body.page-about .btn-hero-primary::after {
@@ -3911,7 +4062,7 @@ body.page-about .btn-hero-primary:hover i {
 }
 body.page-about .btn-hero-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px -5px rgba(255, 255, 255, 0.3);
+    box-shadow: 0 16px 36px -6px rgba(176, 141, 85, 0.7);
 }
 
 /* 7. New About Page - Middle Content Sections */
