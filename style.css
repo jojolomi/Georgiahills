@@ -478,7 +478,7 @@ html[lang="ar"] .hero::before {
 .hero-logo-container { display: flex; justify-content: center; margin-bottom: 2rem; }
 .hero-logo-circle { width: 6rem; height: 6rem; border-radius: 50%; overflow: hidden; box-shadow: var(--shadow-xl); }
 .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 1rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 9999px; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.05em; margin-bottom: 1.5rem; background: rgba(255,255,255,0.1); backdrop-filter: blur(4px); }
-.hero-title { font-size: 2.25rem; line-height: 1.2; font-weight: 800; margin-bottom: 1.5rem; margin-top: 0; text-wrap: balance; font-family: var(--font-header, 'Playfair Display', serif); letter-spacing: -0.02em; }
+.hero-title { font-size: 2.25rem; line-height: 1.2; font-weight: 800; margin-bottom: 1.5rem; margin-top: 0; text-wrap: balance; font-family: var(--font-header, serif); letter-spacing: -0.02em; }
 @media (min-width: 768px) { .hero-title { font-size: 3.75rem; } }
 @media (min-width: 1024px) { .hero-title { font-size: 6rem; } }
 .hero-subtitle { font-size: 1rem; line-height: 1.5; margin-bottom: 2.5rem; max-width: 42rem; margin-left: auto; margin-right: auto; color: #f3f4f6; font-weight: 300; text-shadow: 0 3px 16px rgba(0,0,0,0.45); }
@@ -1744,7 +1744,7 @@ body.page-about .footer {
   border-radius: 9999px;
   border: 1px solid rgba(176, 141, 85, 0.25);
 }
-.section-title { font-size: 1.875rem; font-weight: 800; color: var(--color-dark); margin-bottom: 1.5rem; line-height: 1.2; margin-top: 0; text-wrap: balance; font-family: var(--font-header, 'Playfair Display', serif); letter-spacing: -0.02em; }
+.section-title { font-size: 1.875rem; font-weight: 800; color: var(--color-dark); margin-bottom: 1.5rem; line-height: 1.2; margin-top: 0; text-wrap: balance; font-family: var(--font-header, serif); letter-spacing: -0.02em; }
 @media (min-width: 768px) { .section-title { font-size: 2.25rem; } }
 .section-desc { color: var(--color-gray-400); margin-bottom: 1.5rem; line-height: 1.625; }
 body.secondary-page .section-title {

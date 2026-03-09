@@ -174,7 +174,7 @@
     return DESTINATION_ITEMS.map(d => {
       const label = isArabic ? d.ar : d.en;
       const href = toRootPath(isArabic ? d.ar_href : d.en_href);
-      return `<a href="${href}" class="nav-dest-item"><span class="nav-dest-icon" aria-hidden="true">${d.icon}</span>${label}</a>`;
+      return `<a href="${href}" class="nav-dest-item" aria-label="${label}"><span class="nav-dest-icon" aria-hidden="true">${d.icon}</span>${label}</a>`;
     }).join('');
   }
 
@@ -255,7 +255,7 @@
               ${DESTINATION_ITEMS.map(d => {
                 const label = cfg.isArabic ? d.ar : d.en;
                 const href = toRootPath(cfg.isArabic ? d.ar_href : d.en_href);
-                return `<a href="${href}" class="mobile-dest-link">${d.icon} ${label}</a>`;
+                return `<a href="${href}" class="mobile-dest-link" aria-label="${label}">${d.icon} ${label}</a>`;
               }).join('')}
               <a href="${cfg.destinationsHub}" class="mobile-dest-link mobile-dest-all-link">${cfg.texts.destAll}</a>
             </div>

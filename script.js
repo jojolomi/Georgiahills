@@ -1846,8 +1846,9 @@ const MainApp = {
                 if (!entry.isIntersecting) return;
                 const el = entry.target;
                 const raw = el.dataset.counterTarget || el.textContent.trim();
-                const suffix = raw.replace(/[\d.]/g, '');
-                const target = parseFloat(raw.replace(/[^\d.]/g, ''));
+                const match = raw.match(/^([\d.]+)(.*)$/);
+                const target = match ? parseFloat(match[1]) : NaN;
+                const suffix = match ? match[2] : '';
                 if (!isNaN(target) && target > 0) {
                     animateCounter(el, target, suffix, 1400);
                 }
