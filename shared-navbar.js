@@ -145,7 +145,8 @@
         lang: isArabic ? 'English' : 'العربية',
         whatsapp: isArabic ? 'واتساب' : 'WhatsApp',
         close: isArabic ? 'إغلاق القائمة' : 'Close Navigation Menu',
-        toggle: isArabic ? 'فتح القائمة' : 'Toggle Navigation Menu'
+        toggle: isArabic ? 'فتح القائمة' : 'Toggle Navigation Menu',
+        brand: 'Georgia Hills'
       }
     };
   }
@@ -263,33 +264,71 @@
       </nav>
 
       <div id="mobile-menu" aria-hidden="true">
-        <button id="close-menu-btn" class="close-menu-btn" aria-label="${cfg.texts.close}"><i class="fa-solid fa-xmark"></i></button>
-        <div id="mobile-links-container">
-          <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="mobile-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
-          <a href="${cfg.about}" data-nav-link="about" data-nav-text="about" class="mobile-link${activeClass(filename, 'about')}">${cfg.texts.about}</a>
-          <a href="${cfg.destinationsHub}" data-nav-link="destinations" data-nav-text="destinations" class="mobile-link${activeDestinations}">${cfg.texts.destinations}</a>
-          <a href="${cfg.services}" data-nav-link="services" data-nav-text="services" class="mobile-link${activeClass(filename, 'services')}">${cfg.texts.services}</a>
-          <a href="${cfg.guide}" data-nav-link="guide" data-nav-text="guide" class="mobile-link${activeClass(filename, 'guide')}">${cfg.texts.guide}</a>
-          <a href="${cfg.blog}" data-nav-link="blog" data-nav-text="blog" class="mobile-link${activeClass(filename, 'blog')}">${cfg.texts.blog}</a>
-          <a href="${cfg.contact}" data-nav-link="contact" data-nav-text="contact" class="mobile-link${activeClass(filename, 'contact')}">${cfg.texts.contact}</a>
+        <div class="mm-header">
+          <a href="${cfg.home}" class="mm-brand">
+            <img src="/logo-256.avif" width="40" height="40" alt="${cfg.texts.brand}" class="mm-brand-img" onerror="this.style.display='none'">
+            <span class="mm-brand-name">${cfg.texts.brand}</span>
+          </a>
+          <button id="close-menu-btn" class="close-menu-btn" aria-label="${cfg.texts.close}"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
-        <div class="mobile-settings">
-          <div class="custom-select-wrapper" id="currency-mobile">
-            <button class="action-btn custom-select-trigger" onclick="UIManager.toggleCurrencyDropdown('mobile')" aria-haspopup="true">
-              <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-mobile">
-              <span id="curr-code-mobile">GEL</span>
-              <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
-            </button>
-            <div class="custom-options" id="curr-options-mobile"></div>
+        <nav id="mobile-links-container" aria-label="Mobile navigation">
+          <a href="${cfg.home}" data-nav-link="home" class="mobile-link${activeClass(filename, 'home')}">
+            <span class="mobile-link-icon"><i class="fa-solid fa-house"></i></span>
+            <span class="mobile-link-text">${cfg.texts.home}</span>
+            <i class="fa-solid fa-chevron-right mobile-link-arrow" aria-hidden="true"></i>
+          </a>
+          <a href="${cfg.about}" data-nav-link="about" class="mobile-link${activeClass(filename, 'about')}">
+            <span class="mobile-link-icon"><i class="fa-solid fa-circle-info"></i></span>
+            <span class="mobile-link-text">${cfg.texts.about}</span>
+            <i class="fa-solid fa-chevron-right mobile-link-arrow" aria-hidden="true"></i>
+          </a>
+          <a href="${cfg.destinationsHub}" data-nav-link="destinations" class="mobile-link${activeDestinations}">
+            <span class="mobile-link-icon"><i class="fa-solid fa-map-location-dot"></i></span>
+            <span class="mobile-link-text">${cfg.texts.destinations}</span>
+            <i class="fa-solid fa-chevron-right mobile-link-arrow" aria-hidden="true"></i>
+          </a>
+          <a href="${cfg.services}" data-nav-link="services" class="mobile-link${activeClass(filename, 'services')}">
+            <span class="mobile-link-icon"><i class="fa-solid fa-car"></i></span>
+            <span class="mobile-link-text">${cfg.texts.services}</span>
+            <i class="fa-solid fa-chevron-right mobile-link-arrow" aria-hidden="true"></i>
+          </a>
+          <a href="${cfg.guide}" data-nav-link="guide" class="mobile-link${activeClass(filename, 'guide')}">
+            <span class="mobile-link-icon"><i class="fa-solid fa-compass"></i></span>
+            <span class="mobile-link-text">${cfg.texts.guide}</span>
+            <i class="fa-solid fa-chevron-right mobile-link-arrow" aria-hidden="true"></i>
+          </a>
+          <a href="${cfg.blog}" data-nav-link="blog" class="mobile-link${activeClass(filename, 'blog')}">
+            <span class="mobile-link-icon"><i class="fa-solid fa-newspaper"></i></span>
+            <span class="mobile-link-text">${cfg.texts.blog}</span>
+            <i class="fa-solid fa-chevron-right mobile-link-arrow" aria-hidden="true"></i>
+          </a>
+          <a href="${cfg.contact}" data-nav-link="contact" class="mobile-link${activeClass(filename, 'contact')}">
+            <span class="mobile-link-icon"><i class="fa-solid fa-envelope"></i></span>
+            <span class="mobile-link-text">${cfg.texts.contact}</span>
+            <i class="fa-solid fa-chevron-right mobile-link-arrow" aria-hidden="true"></i>
+          </a>
+        </nav>
+
+        <div class="mm-footer">
+          <div class="mm-lang-row">
+            <a href="${cfg.langSwitch}" class="mm-lang-btn">
+              <i class="fa-solid fa-globe"></i> ${cfg.texts.lang}
+            </a>
+          </div>
+          <div class="mm-cta-row">
+            <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="mobile-btn-whatsapp">
+              <i class="fa-brands fa-whatsapp"></i> ${cfg.texts.whatsapp}
+            </a>
+            <a href="${cfg.booking}" data-nav-link="booking" class="mobile-btn-book${activeClass(filename, 'booking')}">${cfg.texts.book}</a>
+          </div>
+          <div class="mm-social-row">
+            <a href="https://instagram.com/georgiahills" target="_blank" rel="noopener noreferrer" class="mm-social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="mm-social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="mm-social-btn" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+            <a href="tel:+995579088537" class="mm-social-btn" aria-label="Call us"><i class="fa-solid fa-phone"></i></a>
           </div>
         </div>
-
-        <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" class="mobile-btn-whatsapp">
-          <i class="fa-brands fa-whatsapp"></i> ${cfg.texts.whatsapp}
-        </a>
-
-        <a href="${cfg.booking}" data-nav-link="booking" data-nav-text="book" class="mobile-btn-book${activeClass(filename, 'booking')}">${cfg.texts.book}</a>
       </div>
     `;
   }
