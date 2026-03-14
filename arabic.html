@@ -229,7 +229,7 @@
     <!-- Main Script Deferred -->
     <script src="shared-navbar.js" defer></script>
     <script src="shared-footer.js" defer></script>
-    <script src="script.min.js" defer></script>
+        <script src="script.js" defer></script>
     <script>
         window.addEventListener('DOMContentLoaded', function () {
             const hero = document.getElementById('home');
@@ -281,12 +281,11 @@
         </div>
     </div>
 
-    <!-- Navbar -->
-    <nav id="navbar" class="navbar"></nav>
-
-
     <!-- Accessibility Skip Link -->
     <a href="#main-content" class="skip-link">تخطي إلى المحتوى</a>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar"></nav>
 
     <!-- Hero -->
     <section id="home" class="hero" aria-label="مرحباً بكم في جورجيا هيلز">
@@ -425,45 +424,45 @@
             <div class="slider-swipe-hint"><i class="fa-solid fa-arrows-left-right"></i> <span>اسحب لاستكشاف الوجهات</span></div>
             <div id="tours-slider" class="tours-slider" tabindex="0" aria-label="Destinations Slider" dir="ltr">
                 <!-- Tbilisi -->
-                <div class="tour-card group" onclick="window.location.href='tbilisi-ar.html'">
-                    <img src="Tbilisi-480.webp" srcset="Tbilisi-320.webp 320w, Tbilisi-480.webp 480w, Tbilisi-640-lite.webp 640w, Tbilisi-768.webp 768w, Tbilisi-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="تبليسي - العاصمة">
+                <a href="tbilisi-ar.html" class="tour-card group">
+                        <img src="Tbilisi-480.webp" srcset="Tbilisi-320.webp 320w, Tbilisi-480.webp 480w, Tbilisi-640-lite.webp 640w, Tbilisi-768.webp 768w, Tbilisi-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="تبليسي - العاصمة">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">تبليسي</h3>
                         <p class="tour-desc">قلب جورجيا النابض.</p>
                         <span class="tour-btn text-accent-light">تصفح الوجهة <i class="fa-solid fa-arrow-left"></i></span>
                     </div>
-                </div>
+                    </a>
                 <!-- Kazbegi -->
-                <div class="tour-card group" onclick="window.location.href='kazbegi-ar.html'">
-                    <img src="Kazbegi-480.webp" srcset="Kazbegi-320.webp 320w, Kazbegi-480.webp 480w, Kazbegi-640.webp 640w, Kazbegi-768.webp 768w, Kazbegi-1024.webp 1024w" sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px" width="669" height="669" loading="lazy" decoding="async" class="tour-img" alt="جبل كازبيجي">
+                <a href="kazbegi-ar.html" class="tour-card group">
+                        <img src="Kazbegi-480.webp" srcset="Kazbegi-320.webp 320w, Kazbegi-480.webp 480w, Kazbegi-640.webp 640w, Kazbegi-768.webp 768w, Kazbegi-1024.webp 1024w" sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px" width="669" height="669" loading="lazy" decoding="async" class="tour-img" alt="جبل كازبيجي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">كازبيجي</h3>
                         <p class="tour-desc">قلب جبال القوقاز الخلابة.</p>
                         <span class="tour-btn text-accent-light">تصفح الوجهة <i class="fa-solid fa-arrow-left"></i></span>
                     </div>
-                </div>
+                    </a>
                 <!-- Martvili -->
-                <div class="tour-card group" onclick="window.location.href='martvili-ar.html'">
-                    <img src="Martvili-480.webp" srcset="Martvili-320.webp 320w, Martvili-480.webp 480w, Martvili-640-lite.webp 640w, Martvili-768.webp 768w, Martvili-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="وادي مارتفيلي">
+                <a href="martvili-ar.html" class="tour-card group">
+                        <img src="Martvili-480.webp" srcset="Martvili-320.webp 320w, Martvili-480.webp 480w, Martvili-640-lite.webp 640w, Martvili-768.webp 768w, Martvili-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="وادي مارتفيلي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">وادي مارتفيلي</h3>
                         <p class="tour-desc">مياه زمردية ورحلات بالقوارب.</p>
                         <span class="tour-btn text-accent-light">تصفح الوجهة <i class="fa-solid fa-arrow-left"></i></span>
                     </div>
-                </div>
+                    </a>
                 <!-- Signagi -->
-                <div class="tour-card group" onclick="window.location.href='signagi-ar.html'">
-                    <img src="Signagi-480.webp" srcset="Signagi-320.webp 320w, Signagi-480.webp 480w, Signagi-640-lite.webp 640w, Signagi-768.webp 768w, Signagi-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="سغناغي - مدينة الحب">
+                <a href="signagi-ar.html" class="tour-card group">
+                        <img src="Signagi-480.webp" srcset="Signagi-320.webp 320w, Signagi-480.webp 480w, Signagi-640-lite.webp 640w, Signagi-768.webp 768w, Signagi-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="سغناغي - مدينة الحب">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">سغناغي</h3>
                         <p class="tour-desc">مدينة الحب المطلة على الوادي.</p>
                         <span class="tour-btn text-accent-light">تصفح الوجهة <i class="fa-solid fa-arrow-left"></i></span>
                     </div>
-                </div>
+                    </a>
             </div>
 
             <!-- Mobile Controls -->

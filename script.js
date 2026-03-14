@@ -427,7 +427,7 @@ function renderSliderDestinations(dests) {
         img.height = 475;
         img.loading = 'lazy';
         img.decoding = 'async';
-        img.className = 'tour-card-img'; // Use consistent class
+        img.className = 'tour-img';
         img.alt = title;
         
         const overlay = document.createElement('div');
@@ -907,6 +907,8 @@ const UIManager = {
         const path = (window.location.pathname || '').toLowerCase();
         if (path.includes('index.html') || path.includes('arabic.html') || path.endsWith('/') || path.includes('admin.html') || path.includes('404.html')) return;
         if (document.querySelector('.pro-growth-section, .process-grid, .compare-grid, .testimonials-grid')) return;
+            if (path.includes('booking')) return;
+            if (document.querySelector('.vertical-steps')) return;
 
         const main = document.getElementById('main-content');
         if (!main) return;

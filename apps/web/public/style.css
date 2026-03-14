@@ -1610,12 +1610,7 @@ html[lang="ar"] .route-row { text-align: right; }
 /* Add some variation for 5 items */
 @media (min-width: 1024px) { 
     .packages-grid { grid-template-columns: repeat(3, 1fr); }
-    /* Center last 2 on large screens if there are 5 */
-    .packages-grid > :nth-last-child(2):nth-child(4), 
-    .packages-grid > :last-child:nth-child(5) {
-        grid-column: span 1; 
-        transform: translateX(50%);
-    }
+    /* Keep desktop cards centered without offset-induced overflow */
     .packages-grid { display: flex; flex-wrap: wrap; justify-content: center; }
     .pkg-card { width: calc(33.333% - 1.35rem); }
 }
@@ -4858,6 +4853,56 @@ html.theme-dark .newsletter-card {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+    }
+}
+
+/* =========================================
+   LAPTOP NORMALIZATION (1024px-1366px)
+   ========================================= */
+@media (min-width: 1024px) and (max-width: 1366px) {
+    body.page-about .about-premium-hero {
+        min-height: 78vh;
+        padding-top: clamp(8rem, 12vh, 10rem) !important;
+        padding-bottom: 4rem;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    body.page-about .hero-content-container {
+        max-width: var(--container-max) !important;
+        width: 100%;
+        display: block;
+    }
+
+    body.page-about .hero-text-content {
+        max-width: 44rem !important;
+        align-items: flex-start;
+    }
+
+    body.page-about .about-premium-title {
+        font-size: clamp(2.8rem, 4.2vw, 3.6rem) !important;
+        line-height: 1.15 !important;
+    }
+
+    body.page-about .about-premium-subtitle {
+        font-size: 1.1rem !important;
+        max-width: 52ch !important;
+        margin-bottom: 2.25rem !important;
+    }
+
+    body.page-services .about-premium-hero,
+    body.page-contact .about-premium-hero,
+    body.page-booking .about-premium-hero {
+        min-height: 70vh;
+        padding-top: clamp(8rem, 11vh, 9.5rem) !important;
+        padding-bottom: 3.5rem;
+    }
+
+    body.page-services .hero-actions,
+    body.page-contact .hero-actions,
+    body.page-booking .hero-actions {
+        flex-wrap: wrap;
+        gap: 0.75rem;
     }
 }
 

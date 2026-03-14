@@ -90,7 +90,7 @@
                   <label for="name" class="form-label-premium">Full Name</label>
                   <div class="input-wrapper">
                     <i class="fa-regular fa-user input-icon"></i>
-                    <input type="text" id="name" name="user_name" class="form-input-premium" placeholder="Your Name" autocomplete="name">
+                    <input type="text" id="name" name="user_name" class="form-input-premium" placeholder="Your Name" autocomplete="name" required aria-required="true">
                   </div>
                   <span class="error-text hidden" id="nameError">Name is required</span>
                 </div>
@@ -99,7 +99,7 @@
                   <label for="phone" class="form-label-premium">WhatsApp Number</label>
                   <div class="input-wrapper">
                     <i class="fa-brands fa-whatsapp input-icon"></i>
-                    <input type="tel" id="phone" name="user_phone" class="form-input-premium" placeholder="+995 5xx xx xx xx" autocomplete="tel">
+                    <input type="tel" id="phone" name="user_phone" class="form-input-premium" placeholder="+995 5xx xx xx xx" autocomplete="tel" required aria-required="true">
                   </div>
                   <span class="error-text hidden" id="phoneError">Valid number required</span>
                 </div>
@@ -119,7 +119,7 @@
                   <label for="passengers" class="form-label-premium">Passengers</label>
                   <div class="input-wrapper">
                     <i class="fa-solid fa-users input-icon"></i>
-                    <input type="number" id="passengers" min="1" class="form-input-premium" placeholder="2">
+                    <input type="number" id="passengers" min="1" class="form-input-premium" placeholder="2" required aria-required="true">
                   </div>
                   <span class="error-text hidden" id="passengersError">Min 1 passenger</span>
                 </div>
@@ -148,7 +148,7 @@
                   <label for="dateRange" class="form-label-premium">Trip Dates <span id="dates-helper" class="text-primary text-xs font-normal ml-2 hidden"></span></label>
                   <div class="input-wrapper">
                     <i class="fa-regular fa-calendar input-icon"></i>
-                    <input type="text" id="dateRange" class="form-input-premium" placeholder="Select Pick-up & Drop-off Dates">
+                    <input type="text" id="dateRange" class="form-input-premium" placeholder="Select Pick-up & Drop-off Dates" required aria-required="true">
                   </div>
                   <span class="error-text hidden" id="dateError">Select dates</span>
                 </div>
@@ -160,7 +160,7 @@
 
                 <div class="form-group full-width">
                   <label class="checkbox-label">
-                    <input type="checkbox" id="bookingConsent">
+                    <input type="checkbox" id="bookingConsent" required aria-required="true">
                     <span>I agree to receive a quote via WhatsApp.</span>
                   </label>
                   <span class="error-text hidden" id="consentError">Please confirm</span>

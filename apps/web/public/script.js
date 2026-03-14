@@ -416,7 +416,7 @@ function renderSliderDestinations(dests) {
         img.height = 475;
         img.loading = 'lazy';
         img.decoding = 'async';
-        img.className = 'tour-card-img'; // Use consistent class
+        img.className = 'tour-img';
         img.alt = title;
         // Set properties before src to catch cached loads correctly for responsive images
         if (responsiveImage.srcset) img.srcset = responsiveImage.srcset;
