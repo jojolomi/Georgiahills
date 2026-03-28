@@ -19,8 +19,8 @@
         });
     </script>
 
-        <!-- 2. OPTIMIZATION: Deferred Google Tag Manager
-            Loads only after user interaction to reduce unused JS -->
+    <!-- 2. OPTIMIZATION: Deferred Google Tag Manager
+         Loads only after user interaction to boost PageSpeed Score -->
     <script>
         function loadGTM() {
             if (window.gtmLoaded) return;
@@ -33,10 +33,11 @@
             gtag('js', new Date());
             gtag('config', 'G-6GT03GSW49');
         }
-        // Load on first meaningful interaction only
-        ['mousedown', 'keydown', 'scroll', 'touchstart', 'pointerdown'].forEach(evt => 
+        // Load on interaction or after 4 seconds
+        ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(evt => 
             window.addEventListener(evt, loadGTM, {once: true, passive: true})
         );
+        setTimeout(loadGTM, 4000);
     </script>
 
     <!-- SEO: Multilingual Support -->
@@ -172,63 +173,17 @@
     <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     
-    <!-- Preload the hero image with a mobile-safe fallback and responsive candidates -->
-    <link rel="preload" as="image" href="image-1024-lite.avif" imagesrcset="image-320.avif 320w, image-640.avif 640w, image-1024-lite.avif 1024w, image-1600.avif 1600w" imagesizes="100vw" fetchpriority="high">
+    <!-- OPTIMIZATION: Preload Hero Image BEFORE CSS to boost LCP -->
+    <!-- Updated srcset for larger screens -->
+    <link rel="preload" as="image" href="image-1600.avif" imagesrcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" imagesizes="100vw" fetchpriority="high">
 
-    <!-- Critical Above-the-Fold CSS -->
-    <style>
-        :root{--color-accent:#b08d55;--color-accent-light:#E6CCAA;--color-dark:#0F172A;--color-white-10:rgba(255,255,255,.1);--color-white-20:rgba(255,255,255,.2);--font-sans:'Outfit',sans-serif;--z-normal:10;--z-navbar:50}
-        html,body{height:100%;margin:0;font-family:var(--font-sans),system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:#fff}
-        .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
-        .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
-        .navbar{position:fixed;top:0;left:0;width:100%;z-index:var(--z-navbar);background:transparent;border-bottom:1px solid rgba(255,255,255,.1);padding:1.25rem 0}
-        .hero{position:relative;height:100vh;height:100svh;min-height:42rem;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--color-dark)}
-        .hero-bg-container{position:absolute;inset:0;z-index:0}
-        .hero-img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
-        .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.7),rgba(0,0,0,.4),transparent)}
-        .hero-content{position:relative;z-index:var(--z-normal);text-align:center;color:#fff;padding:7rem 1rem 0;max-width:64rem;margin-top:0}
-        .hero-logo-container{display:flex;justify-content:center;margin-bottom:2rem}
-        .hero-logo-circle{width:6rem;height:6rem;border-radius:50%;overflow:hidden}
-        .hero-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.25rem 1rem;border:1px solid rgba(255,255,255,.3);border-radius:9999px;font-size:.875rem;font-weight:500;letter-spacing:.05em;margin-bottom:1.5rem;background:rgba(255,255,255,.1)}
-        .hero-title{font-size:2.25rem;line-height:1.2;font-weight:800;margin:0 0 1.5rem}
-        .hero-subtitle{font-size:1rem;line-height:1.5;margin:0 auto 2.5rem;max-width:42rem;color:#f3f4f6;font-weight:300}
-        .hero-buttons{display:flex;flex-direction:column;gap:1rem;justify-content:center}
-        .btn-hero{padding:1rem 2rem;border-radius:9999px;font-weight:700;font-size:1.125rem;text-decoration:none;display:inline-flex;justify-content:center;align-items:center}
-        .btn-hero-primary{background:var(--color-accent);color:#fff}
-        .btn-hero-secondary{background:var(--color-white-10);border:1px solid var(--color-white-20);color:#fff}
-        .status-icon-svg{width:1rem;height:1rem;display:inline-block;vertical-align:-.125em}
-        .hero-badge svg{width:.75rem;height:.75rem}
-        .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
-        @media (min-width:640px){.hero-buttons{flex-direction:row}}
-        @media (min-width:768px){.hero-title{font-size:3.75rem}.hero-subtitle{font-size:1.25rem}}
-        @media (min-width:1024px){.hero-title{font-size:6rem}}
-    </style>
-
-    <!-- Non-critical CSS (deferred) -->
-    <link rel="stylesheet" href="style.min.css">
-
-    <!-- Defer icon CSS until interaction/idle -->
-    <script>
-        (function () {
-            let iconsLoaded = false;
-            function loadIconStyles() {
-                if (iconsLoaded) return;
-                iconsLoaded = true;
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-                document.head.appendChild(link);
-            }
-            ['mousedown', 'keydown', 'touchstart', 'pointerdown'].forEach((evt) => {
-                window.addEventListener(evt, loadIconStyles, { once: true, passive: true });
-            });
-            window.addEventListener('load', () => {
-                // Avoid pulling icon webfonts into the LCP critical path on mobile.
-                setTimeout(loadIconStyles, 8000);
-            }, { once: true });
-        })();
-    </script>
+    <!-- Optimized CSS Loading -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Deferred CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
     <!-- Primary Keywords in Title -->
@@ -257,17 +212,13 @@
     
     <!-- OPTIMIZATION: Defer Main Script -->
     <script src="shared-navbar.js" defer></script>
-    <script src="shared-footer.js" defer></script>
     <script src="script.js" defer></script>
-    <script>
-        window.addEventListener('DOMContentLoaded', function () {
-            if (!window.location.hash) {
-                window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-            }
-        });
-    </script>
 </head>
 <body dir="ltr">
+
+    <!-- Accessibility Skip Link -->
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
     <!-- Accessibility & Network -->
     <noscript>
         <div class="no-js-overlay">
@@ -277,44 +228,42 @@
         </div>
     </noscript>
 
-    <div id="network-toast"><svg class="status-icon-svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 18a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM2 8.82A16.92 16.92 0 0 1 12 6c3.7 0 7.12 1.2 9.9 3.24l-1.42 1.42A14.92 14.92 0 0 0 12 8c-3.31 0-6.36 1.08-8.83 2.9L2 8.82Zm4.24 4.24A10.95 10.95 0 0 1 12 11c1.9 0 3.68.48 5.24 1.34l-1.52 1.52A8.94 8.94 0 0 0 12 13c-1.58 0-3.06.41-4.35 1.12l-1.41-1.06Zm2.83 2.83A4.98 4.98 0 0 1 12 15c.64 0 1.24.12 1.79.33l-1.54 1.54a2.94 2.94 0 0 0-1.76.36l-1.42-1.34ZM23 3.27 4.27 22 3 20.73 21.73 2 23 3.27Z"/></svg> <span>You are offline</span></div>
+    <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>You are offline</span></div>
 
-    <!-- Preloader (disabled to avoid blocking hero/LCP) -->
-    <div id="preloader" style="display:none;">
+    <!-- Preloader -->
+    <div id="preloader">
         <div class="text-center">
             <div class="preloader-circle animate-bounce">
-                <img src="favicon.webp" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
-                <svg class="text-primary hidden" width="36" height="36" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="m3 20 6-8 4 5 3-4 5 7H3Zm13-9a2 2 0 1 1 0-4 2 2 0 0 1 0 4Z"/></svg>
+                <img src="favicon.ico" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
+                <i class="fa-solid fa-mountain-sun text-primary hidden" style="font-size:2.25rem;"></i>
             </div>
             <div class="preloader-text">Loading</div>
         </div>
     </div>
 
-      <!-- Accessibility Skip Link -->
-    <a href="#main-content" class="skip-link">Skip to content</a>
-
-  <!-- Navbar -->
+    <!-- Navbar -->
     <nav id="navbar" class="navbar"></nav>
+
 
     <!-- Hero -->
     <section id="home" class="hero" aria-label="Welcome to Georgia Hills">
         <div class="hero-bg-container">
              <!-- Replaced Unsplash with local placeholder -->
              <picture>
-                <source type="image/avif" srcset="image-320.avif 320w, image-640.avif 640w, image-1024-lite.avif 1024w, image-1600.avif 1600w" sizes="100vw">
-                <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="Scenic Georgia Mountains" fetchpriority="high" decoding="async" loading="eager">
+                <source type="image/avif" srcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" sizes="100vw">
+                <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="Scenic Georgia Mountains" fetchpriority="high">
              </picture>
             <div class="hero-overlay"></div>
         </div>
-            <div class="hero-content">
+        <div class="hero-content reveal">
             <div class="hero-logo-container">
                 <div class="hero-logo-circle">
-                    <img src="logo-256.avif" width="96" height="96" style="width:100%; height:100%; object-fit:cover;" alt="Georgia Hills Logo">
+                    <img src="favicon.ico" width="96" height="96" style="width:100%; height:100%; object-fit:cover;" alt="Georgia Hills Logo">
                 </div>
             </div>
             
             <div class="hero-badge">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="m12 17.27 6.18 3.73-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27Z"/></svg> #1 FOR FAMILIES
+                <i class="fa-solid fa-star" style="color:#facc15; font-size:0.75rem;"></i> #1 FOR FAMILIES
             </div>
             <h1 id="hero-title" class="hero-title">Discover Georgia <br><span class="text-accent-light italic font-serif">Without Limits</span></h1>
             <p id="hero-subtitle" class="hero-subtitle">Premium chauffeured services and self-drive rentals. From Tbilisi to Kazbegi, experience the journey in absolute comfort.</p>
@@ -360,7 +309,7 @@
                         <i class="fa-solid fa-map-location-dot step-icon"></i>
                     </div>
                     <h3 id="step1-title" class="step-title">Choose Your Trip</h3>
-                    <p id="step1-desc" class="step-text">Select a destination or customize your own daily itinerary.</p>
+                    <p id="step1-desc" class="step-text">Select a destination or customizing your own daily itinerary.</p>
                 </div>
                 <!-- Step 2 -->
                 <div class="step-card reveal" style="transition-delay: 100ms;">
@@ -390,7 +339,7 @@
             <div class="about-grid">
                 <div class="about-img-container reveal">
                     <div class="about-blob"></div>
-                    <img id="about-img" src="tbilisi-old-town-768.webp" srcset="tbilisi-old-town-480.webp 480w, tbilisi-old-town-640.webp 640w, tbilisi-old-town-768.webp 768w, tbilisi-old-town-1024.webp 1024w, tbilisi-old-town-1600.webp 1600w" sizes="(max-width: 768px) 100vw, 665px" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town - تبليسي القديمة" style="max-width: 100%; height: auto;">
+                    <img id="about-img" src="tbilisi-old-town-1024.webp" srcset="tbilisi-old-town-640.webp 640w, tbilisi-old-town-1024.webp 1024w, tbilisi-old-town-1600.webp 1600w" sizes="(max-width: 1024px) 100vw, 665px" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town - تبليسي القديمة" style="max-width: 100%; height: auto;">
                 </div>
                 <div id="about-content" class="about-content reveal">
                     <span class="section-label">Why Choose Georgia Hills?</span>
@@ -430,11 +379,10 @@
             </div>
 
             <!-- Slider Track -->
-            <div class="slider-swipe-hint"><i class="fa-solid fa-arrows-left-right"></i> <span data-i18n="swipe_explore">Swipe to explore destinations</span></div>
             <div id="tours-slider" class="tours-slider" tabindex="0" aria-label="Destinations Slider" dir="ltr">
                 <!-- Tbilisi -->
                 <a href="tbilisi.html" class="tour-card group">
-                    <img src="Tbilisi-480.webp" srcset="Tbilisi-320.webp 320w, Tbilisi-480.webp 480w, Tbilisi-640-lite.webp 640w, Tbilisi-768.webp 768w, Tbilisi-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Tbilisi - تبليسي">
+                    <img src="Tbilisi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Tbilisi - تبليسي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">Tbilisi</h3>
@@ -444,7 +392,7 @@
                 </a>
                 <!-- Kazbegi -->
                 <a href="kazbegi.html" class="tour-card group">
-                    <img src="Kazbegi-480.webp" srcset="Kazbegi-320.webp 320w, Kazbegi-480.webp 480w, Kazbegi-640.webp 640w, Kazbegi-768.webp 768w, Kazbegi-1024.webp 1024w" sizes="(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px" width="669" height="669" loading="lazy" decoding="async" class="tour-img" alt="Kazbegi - كازبيجي">
+                    <img src="Kazbegi.webp" width="669" height="669" loading="lazy" decoding="async" class="tour-img" alt="Kazbegi - كازبيجي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">Kazbegi</h3>
@@ -454,7 +402,7 @@
                 </a>
                 <!-- Martvili -->
                 <a href="martvili.html" class="tour-card group">
-                    <img src="Martvili-480.webp" srcset="Martvili-320.webp 320w, Martvili-480.webp 480w, Martvili-640-lite.webp 640w, Martvili-768.webp 768w, Martvili-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="Martvili - وادي مارتفيلي">
+                    <img src="Martvili.webp" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="Martvili - وادي مارتفيلي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">Martvili</h3>
@@ -464,7 +412,7 @@
                 </a>
                 <!-- Signagi -->
                 <a href="signagi.html" class="tour-card group">
-                    <img src="Signagi-480.webp" srcset="Signagi-320.webp 320w, Signagi-480.webp 480w, Signagi-640-lite.webp 640w, Signagi-768.webp 768w, Signagi-1024.webp 1024w" sizes="(max-width: 640px) 82vw, (max-width: 1024px) 40vw, 340px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Signagi - سغناغي">
+                    <img src="Signagi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Signagi - سغناغي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">Signagi</h3>
@@ -871,7 +819,58 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer" id="footer"></footer>
+    <footer class="footer">
+        <div class="container">
+            <div id="footer-content" class="footer-grid">
+                <!-- Brand -->
+                <div>
+                    <div class="footer-brand">
+                        <div class="footer-brand-icon"><i class="fa-solid fa-mountain"></i></div>
+                        <span class="footer-brand-text">Georgia Hills</span>
+                    </div>
+                    <p style="color:var(--color-gray-300); font-size:0.875rem; line-height:1.6; margin-bottom:1.5rem;">Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.</p>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <button onclick="App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                    <div style="margin-top:1.5rem; display:flex; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
+                        <a href="legal.html" style="color:inherit;">Privacy Policy</a>
+                        <a href="legal.html" style="color:inherit;">Terms of Service</a>
+                    </div>
+                </div>
+                <!-- Links -->
+                <div>
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#fleet">Our Fleet</a></li>
+                        <li><a href="#reviews">Reviews</a></li>
+                        <li><a href="booking.html">Book Now</a></li>
+                    </ul>
+                </div>
+                <!-- Contact -->
+                <div>
+                    <h3>Contact Us</h3>
+                    <ul style="color:var(--color-gray-400);">
+                        <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <a href="tel:+995579088537" dir="ltr">+995 579 08 85 37</a></li>
+                        <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" dir="ltr">+995 579 08 85 37</a></li>
+                        <li class="footer-contact-item"><i class="fa-solid fa-envelope text-accent"></i> <a href="mailto:info@georgiahills.com">info@georgiahills.com</a></li>
+                        <li class="footer-contact-item"><i class="fa-solid fa-location-dot text-accent"></i> <span>123 Rustaveli Ave, Tbilisi, GE</span></li>
+                    </ul>
+                </div>
+                <!-- Map -->
+                <div>
+                    <div class="footer-map-container">
+                        <span class="footer-map-overlay"><i class="fa-solid fa-map-location-dot"></i> <span>Load Map</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; <span id="year">2026</span> Georgia Hills. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
     <!-- Floating Action Buttons -->
     <div class="fab-container">

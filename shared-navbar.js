@@ -1,73 +1,4 @@
 (function () {
-  const PAGE_PAIRS = Object.freeze({
-    'index.html': 'arabic.html',
-    'arabic.html': 'index.html',
-    'about.html': 'about-ar.html',
-    'about-ar.html': 'about.html',
-    'services.html': 'services-ar.html',
-    'services-ar.html': 'services.html',
-    'guide.html': 'guide-ar.html',
-    'guide-ar.html': 'guide.html',
-    'blog.html': 'blog-ar.html',
-    'blog-ar.html': 'blog.html',
-    'booking.html': 'booking-ar.html',
-    'booking-ar.html': 'booking.html',
-    'contact.html': 'contact-ar.html',
-    'contact-ar.html': 'contact.html',
-    'batumi.html': 'batumi-ar.html',
-    'batumi-ar.html': 'batumi.html',
-    'kazbegi.html': 'kazbegi-ar.html',
-    'kazbegi-ar.html': 'kazbegi.html',
-    'martvili.html': 'martvili-ar.html',
-    'martvili-ar.html': 'martvili.html',
-    'signagi.html': 'signagi-ar.html',
-    'signagi-ar.html': 'signagi.html',
-    'tbilisi.html': 'tbilisi-ar.html',
-    'tbilisi-ar.html': 'tbilisi.html',
-    'honeymoon.html': 'honeymoon-ar.html',
-    'honeymoon-ar.html': 'honeymoon.html',
-    'article-7-days-georgia.html': 'article-7-days-georgia-ar.html',
-    'article-7-days-georgia-ar.html': 'article-7-days-georgia.html',
-    'article-georgian-food.html': 'article-georgian-food-ar.html',
-    'article-georgian-food-ar.html': 'article-georgian-food.html',
-    'article-is-georgia-safe.html': 'article-is-georgia-safe-ar.html',
-    'article-is-georgia-safe-ar.html': 'article-is-georgia-safe.html',
-    'destinations-hub.html': 'destinations-hub-ar.html',
-    'destinations-hub-ar.html': 'destinations-hub.html',
-    'family-travel-hub.html': 'family-travel-hub-ar.html',
-    'family-travel-hub-ar.html': 'family-travel-hub.html',
-    'halal-travel-hub.html': 'halal-travel-hub-ar.html',
-    'halal-travel-hub-ar.html': 'halal-travel-hub.html',
-    'itineraries-hub.html': 'itineraries-hub-ar.html',
-    'itineraries-hub-ar.html': 'itineraries-hub.html',
-    'safety-hub.html': 'safety-hub-ar.html',
-    'safety-hub-ar.html': 'safety-hub.html'
-  });
-
-  function toTrustedHTML(html) {
-    if (window.trustedTypes && typeof window.trustedTypes.createPolicy === 'function') {
-      if (!window.__GH_TRUSTED_TYPES_DEFAULT__) {
-        try {
-          window.__GH_TRUSTED_TYPES_DEFAULT__ = window.trustedTypes.createPolicy('default', {
-            createHTML: (input) => input,
-            createScript: (input) => input,
-            createScriptURL: (input) => input
-          });
-        } catch (error) {
-          if (!window.__GH_TRUSTED_TYPES_DEFAULT__) {
-            return html;
-          }
-        }
-      }
-
-      if (window.__GH_TRUSTED_TYPES_DEFAULT__ && typeof window.__GH_TRUSTED_TYPES_DEFAULT__.createHTML === 'function') {
-        return window.__GH_TRUSTED_TYPES_DEFAULT__.createHTML(html);
-      }
-    }
-
-    return html;
-  }
-
   function getFilename() {
     const path = (window.location.pathname || '').split('/').pop();
     return path || 'index.html';
@@ -82,16 +13,44 @@
     return document.documentElement.lang === 'ar';
   }
 
-  function toRootPath(path) {
-    if (!path || path.startsWith('/') || path.startsWith('#') || path.startsWith('javascript:')) {
-      return path;
-    }
+  function forceLtrLayout() {
+    document.documentElement.setAttribute('dir', 'ltr');
+    document.body && document.body.setAttribute('dir', 'ltr');
+  }
 
-    if (/^https?:\/\//i.test(path)) {
-      return path;
-    }
-
-    return `/${path}`;
+  function getPagePairs() {
+    return {
+      'index.html': 'arabic.html',
+      'arabic.html': 'index.html',
+      'about.html': 'about-ar.html',
+      'about-ar.html': 'about.html',
+      'services.html': 'services-ar.html',
+      'services-ar.html': 'services.html',
+      'guide.html': 'guide-ar.html',
+      'guide-ar.html': 'guide.html',
+      'blog.html': 'blog-ar.html',
+      'blog-ar.html': 'blog.html',
+      'booking.html': 'booking-ar.html',
+      'booking-ar.html': 'booking.html',
+      'contact.html': 'contact-ar.html',
+      'contact-ar.html': 'contact.html',
+      'batumi.html': 'batumi-ar.html',
+      'batumi-ar.html': 'batumi.html',
+      'kazbegi.html': 'kazbegi-ar.html',
+      'kazbegi-ar.html': 'kazbegi.html',
+      'martvili.html': 'martvili-ar.html',
+      'martvili-ar.html': 'martvili.html',
+      'signagi.html': 'signagi-ar.html',
+      'signagi-ar.html': 'signagi.html',
+      'tbilisi.html': 'tbilisi-ar.html',
+      'tbilisi-ar.html': 'tbilisi.html',
+      'honeymoon.html': 'honeymoon-ar.html',
+      'honeymoon-ar.html': 'honeymoon.html',
+      'article-7-days-georgia.html': 'article-7-days-georgia-ar.html',
+      'article-7-days-georgia-ar.html': 'article-7-days-georgia.html',
+      'article-georgian-food.html': 'article-georgian-food-ar.html',
+      'article-georgian-food-ar.html': 'article-georgian-food.html'
+    };
   }
 
   function buildLangSwitch(filename, isArabic) {
@@ -99,23 +58,24 @@
       const params = new URLSearchParams(window.location.search);
       params.set('lang', isArabic ? 'en' : 'ar');
       const query = params.toString();
-      return toRootPath('destination.html' + (query ? ('?' + query) : ''));
+      return 'destination.html' + (query ? ('?' + query) : '');
     }
 
-    return toRootPath(PAGE_PAIRS[filename] || (isArabic ? 'index.html' : 'arabic.html'));
+    const pairs = getPagePairs();
+    return pairs[filename] || (isArabic ? 'index.html' : 'arabic.html');
   }
 
   function getConfig(filename, isArabic) {
-    const home = toRootPath(isArabic ? 'arabic.html' : 'index.html');
+    const home = isArabic ? 'arabic.html' : 'index.html';
     return {
       isArabic,
       home,
-      about: toRootPath(isArabic ? 'about-ar.html' : 'about.html'),
-      services: toRootPath(isArabic ? 'services-ar.html' : 'services.html'),
-      guide: toRootPath(isArabic ? 'guide-ar.html' : 'guide.html'),
-      blog: toRootPath(isArabic ? 'blog-ar.html' : 'blog.html'),
-      contact: toRootPath(isArabic ? 'contact-ar.html' : 'contact.html'),
-      booking: toRootPath(isArabic ? 'booking-ar.html' : 'booking.html'),
+      about: isArabic ? 'about-ar.html' : 'about.html',
+      services: isArabic ? 'services-ar.html' : 'services.html',
+      guide: isArabic ? 'guide-ar.html' : 'guide.html',
+      blog: isArabic ? 'blog-ar.html' : 'blog.html',
+      contact: isArabic ? 'contact-ar.html' : 'contact.html',
+      booking: isArabic ? 'booking-ar.html' : 'booking.html',
       langSwitch: buildLangSwitch(filename, isArabic),
       texts: {
         home: isArabic ? 'الرئيسية' : 'Home',
@@ -161,6 +121,9 @@
   }
 
   function buildMarkup(cfg, filename) {
+    const homeDestinations = cfg.home + '#destinations';
+    const homeFleet = cfg.home + '#fleet';
+    const homeReviews = cfg.home + '#reviews';
     const desktopLinks = `
       <div id="desktop-links-container" style="display:contents">
         <a href="${cfg.home}" data-nav-link="home" data-nav-text="home" class="nav-link${activeClass(filename, 'home')}">${cfg.texts.home}</a>
@@ -177,7 +140,7 @@
         <div class="container">
           <div class="navbar-inner">
             <a href="${cfg.home}" class="nav-logo">
-              <div><img src="/logo-256.avif" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
+              <div><img src="favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
               <span data-nav-brand="text">Georgia Hills</span>
             </a>
 
@@ -194,7 +157,7 @@
                   <div class="custom-options" id="curr-options-desktop"></div>
                 </div>
 
-                <a href="${cfg.langSwitch}" class="action-btn">
+                <a href="${cfg.langSwitch}" class="action-btn" aria-label="Language switch">
                   <i class="fa-solid fa-globe"></i><span class="lang-text">${cfg.texts.lang}</span>
                 </a>
               </div>
@@ -203,7 +166,7 @@
             </div>
 
             <div class="mobile-controls">
-              <a href="${cfg.langSwitch}" class="action-btn" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
+              <a href="${cfg.langSwitch}" class="action-btn" aria-label="Language switch" style="padding: 0.375rem 0.75rem; font-size: 0.75rem;">
                 <i class="fa-solid fa-globe text-primary"></i><span class="lang-text">${cfg.texts.lang}</span>
               </a>
               <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="${cfg.texts.toggle}" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
@@ -240,13 +203,15 @@
   }
 
   function renderSharedNavbar() {
-    if (window.__GH_SHARED_NAVBAR__) return;
-
     const nav = document.getElementById('navbar');
     if (!nav) return;
 
     const filename = getFilename();
     const isArabic = detectArabic(filename);
+
+    if (isArabic) {
+      forceLtrLayout();
+    }
 
     const cfg = getConfig(filename, isArabic);
     const mobileMenu = document.getElementById('mobile-menu');
@@ -255,14 +220,14 @@
       mobileMenu.remove();
     }
 
-    nav.insertAdjacentHTML('beforebegin', toTrustedHTML(buildMarkup(cfg, filename)));
+    nav.insertAdjacentHTML('beforebegin', buildMarkup(cfg, filename));
     nav.remove();
 
     window.__GH_SHARED_NAVBAR__ = true;
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderSharedNavbar, { once: true });
+    document.addEventListener('DOMContentLoaded', renderSharedNavbar);
   } else {
     renderSharedNavbar();
   }

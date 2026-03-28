@@ -6,29 +6,12 @@
 // 1. SERVICE WORKER REGISTRATION (PWA)
 // ==========================================
 if ('serviceWorker' in navigator) {
-    const scriptBaseDir = (() => {
-        try {
-            const src = document.currentScript && document.currentScript.src;
-            if (src) {
-                const scriptUrl = new URL(src, window.location.href);
-                return scriptUrl.pathname.replace(/[^/]+$/, '');
-            }
-        } catch (e) {
-            console.debug('Failed to determine scriptBaseDir:', e);
-        }
-        return '/';
-    })();
-
   window.addEventListener('load', () => {
     try {
-                navigator.serviceWorker.register(`${scriptBaseDir}service-worker.js`)
+        navigator.serviceWorker.register('/service-worker.js')
           .then(reg => {})
-          .catch(err => {
-              console.debug('Service Worker registration failed:', err);
-          });
-    } catch(e) {
-        console.debug('Service Worker registration error:', e);
-    }
+          .catch(err => {});
+    } catch(e) {}
   });
 }
 
@@ -70,19 +53,6 @@ if (typeof firebase !== 'undefined') {
     auth = null;
 }
 
-if (window.trustedTypes && typeof window.trustedTypes.createPolicy === 'function') {
-    try {
-        if (!window.__GHTrustedTypesPolicy) {
-            window.__GHTrustedTypesPolicy = window.trustedTypes.createPolicy('default', {
-                createHTML: (input) => input,
-                createScript: (input) => input,
-                createScriptURL: (input) => input
-            });
-        }
-    } catch (e) {
-    }
-}
-
 const AppConfig = {
     vehicleRates: { 'Sedan': 150, 'Minivan': 250 },
     currencies: [
@@ -122,9 +92,7 @@ const AttributionManager = {
                 utm_content: params.get('utm_content') || existing.utm_content || ''
             };
             localStorage.setItem(this.storageKey, JSON.stringify(next));
-        } catch (e) {
-            console.warn('Attribution capture failed:', e);
-        }
+        } catch (e) {}
     },
     current() {
         try { return JSON.parse(localStorage.getItem(this.storageKey) || '{}'); }
@@ -178,9 +146,7 @@ const AnalyticsTracker = {
             if (typeof gtag === 'function') {
                 gtag('event', name, payload);
             }
-        } catch (e) {
-            console.error('Analytics tracking error:', e);
-        }
+        } catch (e) {}
     }
 };
 
@@ -332,21 +298,6 @@ function applyNavbarSettings(data = {}) {
     if (!data.items || !Array.isArray(data.items)) return;
     
     const isAr = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
-    const createNavLink = (item, className) => {
-        const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
-        const link = item.link;
-
-        const anchor = document.createElement('a');
-        anchor.href = link;
-        anchor.className = className;
-
-        if (window.location.href.includes(link) && link !== '/' && link !== '#') {
-            anchor.classList.add('active');
-        }
-
-        anchor.textContent = label;
-        return anchor;
-    };
     
     // Desktop Nav
     const desktopNav = document.getElementById('desktop-links-container');
@@ -355,7 +306,16 @@ function applyNavbarSettings(data = {}) {
         if(data.items.length > 0) desktopNav.innerHTML = '';
         
         data.items.forEach(item => {
-            desktopNav.appendChild(createNavLink(item, 'nav-link'));
+            const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
+            const link = item.link;
+            
+            const a = document.createElement('a');
+            a.href = link;
+            a.className = 'nav-link';
+            // Simple active check heuristic
+            if(window.location.href.includes(link) && link !== '/' && link !== '#') a.classList.add('active');
+            a.textContent = label;
+            desktopNav.appendChild(a);
         });
     }
 
@@ -365,7 +325,15 @@ function applyNavbarSettings(data = {}) {
         if(data.items.length > 0) mobileNav.innerHTML = '';
         
         data.items.forEach(item => {
-             mobileNav.appendChild(createNavLink(item, 'mobile-link'));
+             const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
+             const link = item.link;
+
+             const a = document.createElement('a');
+             a.href = link;
+             a.className = 'mobile-link'; 
+             if(window.location.href.includes(link) && link !== '/' && link !== '#') a.classList.add('active');
+             a.textContent = label;
+             mobileNav.appendChild(a);
         });
     }
 }
@@ -379,20 +347,6 @@ function renderSliderDestinations(dests) {
     slider.removeAttribute('data-initialized'); // Reset init state
 
     const lang = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl' ? 'ar' : 'en';
-
-    const buildResponsiveTourImage = (source) => {
-        if (!source || !/\.(webp|avif|jpe?g|png)$/i.test(source)) {
-            return { src: source || '', srcset: '', sizes: '' };
-        }
-        const extIndex = source.lastIndexOf('.');
-        const base = source.slice(0, extIndex);
-        const ext = source.slice(extIndex);
-        return {
-            src: `${base}-480${ext}`,
-            srcset: `${base}-320${ext} 320w, ${base}-480${ext} 480w, ${base}-640${ext} 640w, ${base}-768${ext} 768w, ${base}-1024${ext} 1024w`,
-            sizes: '(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px'
-        };
-    };
 
     Object.keys(dests).forEach(id => {
         const d = dests[id];
@@ -419,15 +373,12 @@ function renderSliderDestinations(dests) {
         
         // Image
         const img = document.createElement('img');
-        const responsiveImage = buildResponsiveTourImage(d.img);
-        img.src = responsiveImage.src || d.img;
-        if (responsiveImage.srcset) img.srcset = responsiveImage.srcset;
-        if (responsiveImage.sizes) img.sizes = responsiveImage.sizes;
+        img.src = d.img;
         img.width = 380; // Standardize
         img.height = 475;
         img.loading = 'lazy';
         img.decoding = 'async';
-        img.className = 'tour-img';
+        img.className = 'tour-card-img'; // Use consistent class
         img.alt = title;
         
         const overlay = document.createElement('div');
@@ -510,7 +461,56 @@ function renderSliderDestinations(dests) {
         try {
             // Home Page Logic
             if (!body.classList.contains('secondary-page')) {
-                // Keep static above-the-fold content to avoid late layout shifts.
+                const homeSnap = await db.collection('settings').doc('page_home').get();
+                if (homeSnap.exists) {
+                    const h = homeSnap.data();
+                    
+                    if (h.hero) {
+                        const heroTitle = document.getElementById('hero-title');
+                        const newTitle = isAr ? h.hero.title_ar : h.hero.title_en;
+                        setSafeHTML(heroTitle, newTitle);
+                        
+                        const heroSub = document.getElementById('hero-subtitle');
+                        const newSub = isAr ? h.hero.subtitle_ar : h.hero.subtitle_en;
+                        setSafeHTML(heroSub, newSub);
+                        
+                        const heroImg = document.getElementById('hero-img');
+                        const safeHeroImage = sanitizeImageUrl(h.hero.bg_image);
+                        if(heroImg && safeHeroImage) {
+                            heroImg.src = safeHeroImage;
+                            heroImg.srcset = `${safeHeroImage} 1x`;
+                        }
+                    }
+
+                    if (h.about) {
+                        const aboutTitle = document.getElementById('about-title');
+                        // ... existing logic for home-about-section ...
+                        const newAboutTitle = isAr ? h.about.title_ar : h.about.title_en;
+                        setSafeHTML(aboutTitle, newAboutTitle);
+
+                        const aboutDesc = document.getElementById('about-desc');
+                        const newAboutDesc = isAr ? h.about.text_ar : h.about.text_en;
+                        if(aboutDesc && newAboutDesc) aboutDesc.innerText = newAboutDesc;
+                        
+                        const aboutImg = document.getElementById('about-img');
+                        if(aboutImg && h.about.image) aboutImg.src = h.about.image;
+                    }
+                    
+                    // Features / How It Works
+                    if (h.hero) {
+                        const setTxt = (id, en, ar) => {
+                            const el = document.getElementById(id);
+                            if(el) el.innerText = isAr ? ar : en;
+                        };
+                        setTxt('steps-title', h.hero.steps_title_en, h.hero.steps_title_ar);
+                        setTxt('step1-title', h.hero.step1_title_en, h.hero.step1_title_ar);
+                        setTxt('step1-desc', h.hero.step1_desc_en, h.hero.step1_desc_ar);
+                        setTxt('step2-title', h.hero.step2_title_en, h.hero.step2_title_ar);
+                        setTxt('step2-desc', h.hero.step2_desc_en, h.hero.step2_desc_ar);
+                        setTxt('step3-title', h.hero.step3_title_en, h.hero.step3_title_ar);
+                        setTxt('step3-desc', h.hero.step3_desc_en, h.hero.step3_desc_ar);
+                    }
+                }
             }
             
             // About Page Logic (Exclusive)
@@ -663,22 +663,14 @@ const CurrencyManager = {
             if (saved && AppConfig.currencies.find(c => c.code === saved)) {
                 this.current = saved;
             }
-        } catch (e) {
-            console.debug('Storage operation failed:', e);
-        }
+        } catch (e) {}
         this.updateUI();
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(() => this.fetchRates(), { timeout: 2000 });
-        } else {
-            setTimeout(() => this.fetchRates(), 1200);
-        }
+        this.fetchRates();
     },
 
     set(code) {
         this.current = code;
-        try { localStorage.setItem('userCurrency', code); } catch (e) {
-            console.debug('Storage operation failed:', e);
-        }
+        try { localStorage.setItem('userCurrency', code); } catch (e) {}
         this.updateUI();
         this.updatePrices();
     },
@@ -714,23 +706,12 @@ const CurrencyManager = {
     },
 
     updateUI() {
-        const flagMap = {
-            ge: '🇬🇪',
-            us: '🇺🇸',
-            eu: '🇪🇺',
-            ae: '🇦🇪',
-            sa: '🇸🇦',
-            qa: '🇶🇦',
-            kw: '🇰🇼',
-            om: '🇴🇲'
-        };
-        const currentMeta = AppConfig.currencies.find(c => c.code === this.current);
-        const flagEmoji = currentMeta ? (flagMap[currentMeta.flag] || '🏳️') : '🏳️';
+        const flagUrl = `https://flagcdn.com/w40/${AppConfig.currencies.find(c => c.code === this.current).flag}.png`;
         ['desktop', 'mobile'].forEach(type => {
             const codeEl = document.getElementById(`curr-code-${type}`);
             const flagEl = document.getElementById(`curr-flag-${type}`);
             if (codeEl) codeEl.innerText = this.current;
-            if (flagEl) flagEl.textContent = flagEmoji;
+            if (flagEl) flagEl.src = flagUrl;
         });
     },
 
@@ -907,8 +888,6 @@ const UIManager = {
         const path = (window.location.pathname || '').toLowerCase();
         if (path.includes('index.html') || path.includes('arabic.html') || path.endsWith('/') || path.includes('admin.html') || path.includes('404.html')) return;
         if (document.querySelector('.pro-growth-section, .process-grid, .compare-grid, .testimonials-grid')) return;
-            if (path.includes('booking')) return;
-            if (document.querySelector('.vertical-steps')) return;
 
         const main = document.getElementById('main-content');
         if (!main) return;
@@ -961,19 +940,9 @@ const UIManager = {
             if(!container) return;
             container.innerHTML = '';
             AppConfig.currencies.forEach(curr => {
-                const flagMap = {
-                    ge: '🇬🇪',
-                    us: '🇺🇸',
-                    eu: '🇪🇺',
-                    ae: '🇦🇪',
-                    sa: '🇸🇦',
-                    qa: '🇶🇦',
-                    kw: '🇰🇼',
-                    om: '🇴🇲'
-                };
                 const opt = document.createElement('div');
                 opt.className = 'custom-option';
-                opt.innerHTML = `<span class="currency-flag-sm currency-flag-emoji" aria-hidden="true">${flagMap[curr.flag] || '🏳️'}</span> ${curr.code}`;
+                opt.innerHTML = `<img src="https://flagcdn.com/w40/${curr.flag}.png" class="currency-flag-sm" alt="${curr.code}"> ${curr.code}`;
                 opt.onclick = () => {
                     CurrencyManager.set(curr.code);
                     document.querySelectorAll('.custom-select-wrapper').forEach(el => el.classList.remove('open'));
@@ -995,19 +964,6 @@ const UIManager = {
     },
 
     setupMobileMenu() {
-        const setMenuState = (menu, toggleBtn, newState) => {
-            menu.classList.toggle('open', newState);
-            menu.setAttribute('aria-hidden', newState ? 'false' : 'true');
-            if (toggleBtn) toggleBtn.setAttribute('aria-expanded', newState ? 'true' : 'false');
-            document.body.classList.toggle('overflow-hidden', newState);
-        };
-
-        const initialMenu = document.getElementById('mobile-menu');
-        const initialToggleBtn = document.getElementById('mobile-menu-btn');
-        if (initialMenu) {
-            setMenuState(initialMenu, initialToggleBtn, false);
-        }
-
         // Use Event Delegation to handle dynamically injected elements (like shared-navbar)
         document.addEventListener('click', (e) => {
             const menuBtn = e.target.closest('#mobile-menu-btn');
@@ -1027,7 +983,11 @@ const UIManager = {
             // Toggle function
             const toggle = (forceState) => {
                 const newState = (forceState !== undefined) ? forceState : !isOpen;
-                setMenuState(menu, toggleBtn, newState);
+                menu.classList.toggle('open', newState);
+                
+                if (toggleBtn) toggleBtn.setAttribute('aria-expanded', newState);
+                menu.setAttribute('aria-hidden', newState ? 'false' : 'true');
+                document.body.classList.toggle('overflow-hidden', newState);
             };
 
             if (menuBtn) {
@@ -1043,25 +1003,22 @@ const UIManager = {
             const menu = document.getElementById('mobile-menu');
             if (event.key === 'Escape' && menu && menu.classList.contains('open')) {
                 const toggleBtn = document.getElementById('mobile-menu-btn');
-                setMenuState(menu, toggleBtn, false);
+                menu.classList.remove('open');
+                if(toggleBtn) toggleBtn.setAttribute('aria-expanded', 'false');
+                menu.setAttribute('aria-hidden', 'true');
+                document.body.classList.remove('overflow-hidden');
             }
         });
     },
 
     setupScrollListener() {
         let lastScroll = 0;
-        let lastKnownScrollY = window.scrollY || 0;
-        let isTicking = false;
-
-        const nav = document.getElementById('navbar');
-        const sticky = document.querySelector('.sticky-bar');
-        const backBtn = document.getElementById('backToTop');
-        const hero = document.getElementById('hero-img');
-        const hasDestHero = !!document.querySelector('.dest-hero');
-
-        const flushScrollUpdates = () => {
-            const currentScroll = lastKnownScrollY;
-
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+            const nav = document.getElementById('navbar');
+            const sticky = document.querySelector('.sticky-bar');
+            const backBtn = document.getElementById('backToTop');
+            
             if (nav) {
                 nav.classList.toggle('shadow-md', currentScroll > 20);
                 nav.classList.toggle('scrolled', currentScroll > 20);
@@ -1069,30 +1026,23 @@ const UIManager = {
             if (backBtn) backBtn.classList.toggle('show', currentScroll > 500);
 
             if (sticky) {
-                if (currentScroll > lastScroll && currentScroll > 100) {
-                    sticky.classList.add('hide-bar');
-                } else {
-                    sticky.classList.remove('hide-bar');
-                }
+                 if (currentScroll > lastScroll && currentScroll > 100) {
+                     sticky.classList.add('hide-bar');
+                     if(nav && window.innerWidth < 1024) nav.classList.add('nav-hidden');
+                 } else {
+                     sticky.classList.remove('hide-bar');
+                     if(nav) nav.classList.remove('nav-hidden');
+                 }
             }
-
-            if (hero && hasDestHero) {
-                hero.style.transform = `translate3d(0, ${Math.round(currentScroll * 0.4)}px, 0)`;
-            }
-
             lastScroll = currentScroll;
+            
+            const hero = document.getElementById('hero-img');
+            if(hero && document.querySelector('.dest-hero')) {
+                hero.style.transform = `translateY(${window.scrollY * 0.4}px)`;
+            }
+            
             this.updateActiveNavLink();
-            isTicking = false;
-        };
-
-        window.addEventListener('scroll', () => {
-            lastKnownScrollY = window.scrollY || 0;
-            if (isTicking) return;
-            isTicking = true;
-            window.requestAnimationFrame(flushScrollUpdates);
         }, { passive: true });
-
-        flushScrollUpdates();
     },
 
     updateActiveNavLink() {
@@ -1114,7 +1064,7 @@ const UIManager = {
     showToast(msg) {
          const toast = document.getElementById('network-toast');
         if (toast) {
-            toast.innerHTML = `<svg class="status-icon-svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> <span>${msg}</span>`;
+            toast.innerHTML = `<i class="fa-solid fa-check"></i> <span>${msg}</span>`;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
@@ -1337,9 +1287,7 @@ const BookingManager = {
             step: this.currentStep,
             maxStepReached: this.maxStepReached
         };
-        try { sessionStorage.setItem('booking_draft', JSON.stringify(data)); } catch (e) {
-            console.debug('Storage operation failed:', e);
-        }
+        try { sessionStorage.setItem('booking_draft', JSON.stringify(data)); } catch(e){}
     },
 
     loadDraft() {
@@ -1365,9 +1313,7 @@ const BookingManager = {
                 this.goToStep(this.currentStep, true);
                 this.updateIntentCta();
             }
-        } catch (e) {
-            console.debug('Storage operation failed:', e);
-        }
+        } catch(e){}
     },
 
     updateEstimate() {
@@ -1412,57 +1358,65 @@ const BookingManager = {
         }
     },
 
-    _setLoadingState(isLoading) {
+    async handleSubmit(e) {
+        e.preventDefault();
+        if (!this.validate()) return;
+
+        const honeypot = document.getElementById('companyWebsite');
+        if (honeypot && honeypot.value.trim()) {
+            return;
+        }
+
+        // Basic client-side bot friction before backend checks.
+        if (Date.now() - this.startedAt < 2500) {
+            UIManager.showToast(document.documentElement.lang === 'ar' ? 'يرجى المحاولة بعد ثانيتين' : 'Please wait a moment before submitting.');
+            return;
+        }
+        
         const btn = document.getElementById('submitBtn');
-        const spinner = document.getElementById('btnSpinner');
-        const btnText = document.getElementById('btnText');
+        btn.disabled = true;
+        document.getElementById('btnSpinner').classList.remove('hidden');
+        document.getElementById('btnText').classList.add('opacity-0');
 
-        if (btn) btn.disabled = isLoading;
-        if (spinner) spinner.classList.toggle('hidden', !isLoading);
-        if (btnText) btnText.classList.toggle('opacity-0', isLoading);
-    },
-
-    _getFormData(segmentation) {
         const dateInput = document.getElementById('dateRange');
         const dates = this.fpInstance ? this.fpInstance.selectedDates : [];
         const dString = this.fpInstance && dates.length === 2
             ? `${this.fpInstance.formatDate(dates[0], "Y-m-d")} to ${this.fpInstance.formatDate(dates[1], "Y-m-d")}`
             : (dateInput?.value?.trim() || "No dates selected");
         
-        const priceText = document.getElementById('total-price-display')?.innerText || '';
-        const durationText = document.getElementById('trip-duration')?.innerText || '';
-        const serviceEl = document.querySelector('input[name="driver"]:checked')?.nextElementSibling;
+        const priceText = document.getElementById('total-price-display').innerText;
+        const durationText = document.getElementById('trip-duration').innerText;
+        const serviceEl = document.querySelector('input[name="driver"]:checked').nextElementSibling;
         const serviceText = serviceEl ? serviceEl.innerText.trim() : "";
 
-        return {
-            name: document.getElementById('name')?.value || '',
-            phone: document.getElementById('phone')?.value || '',
-            passengers: document.getElementById('passengers')?.value || '',
-            vehicle: document.getElementById('vehicle')?.value || '',
+        const segmentation = this.getSegmentation();
+        const data = {
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            passengers: document.getElementById('passengers').value,
+            vehicle: document.getElementById('vehicle').value,
             service: serviceText,
             dates: dString,
             duration: durationText,
             price: priceText,
-            notes: document.getElementById('notes')?.value || '',
+            notes: document.getElementById('notes').value,
             intent: segmentation.intent
         };
-    },
+        const leadScoreClient = this.calculateLeadScore(data, segmentation);
 
-    _updateWhatsAppLink(data) {
         const isArabic = document.documentElement.lang === 'ar';
         const header = isArabic ? "السلام عليكم، أريد الاستفسار عن" : "New Booking Request";
 
         const text = `${header}:\n👤 ${data.name}\n📱 ${data.phone}\n🎯 Intent: ${data.intent}\n🚗 ${data.vehicle} (${data.passengers} pax)\n📅 ${data.dates} (${data.duration})\n💰 Estimate: ${data.price}\n📝 ${data.notes}`;
         const waUrl = `https://wa.me/995579088537?text=${encodeURIComponent(text)}`;
-        const waLink = document.getElementById('whatsappLink');
-        if (waLink) waLink.href = waUrl;
-    },
+        document.getElementById('whatsappLink').href = waUrl;
+        AnalyticsTracker.event('booking_submit_attempt', { page_path: window.location.pathname, vehicle: data.vehicle, intent: segmentation.intent, lead_score_client: leadScoreClient });
 
-    _buildPayload(data, segmentation, leadScoreClient, honeypot) {
-        return {
+        const endpoint = getBookingEndpoint();
+        const payload = {
             ...data,
             sourcePage: window.location.pathname,
-            sourceLang: document.documentElement.lang === 'ar' ? 'ar' : 'en',
+            sourceLang: isArabic ? 'ar' : 'en',
             companyWebsite: honeypot ? honeypot.value : '',
             consent: Boolean(document.getElementById('bookingConsent')?.checked),
             attribution: AttributionManager.current(),
@@ -1476,10 +1430,7 @@ const BookingManager = {
                 completionPercent: Math.round((this.maxStepReached / this.totalSteps) * 100)
             }
         };
-    },
 
-    async _submitToApi(payload, data, segmentation, leadScoreClient) {
-        const endpoint = getBookingEndpoint();
         try {
             if (!endpoint) throw new Error('booking_endpoint_missing');
             const response = await fetch(endpoint, {
@@ -1500,43 +1451,15 @@ const BookingManager = {
                 lead_score_client: leadScoreClient,
                 variant: (ExperimentManager.current() || {}).bookingFormVariant || 'control'
             });
+            this.finishSubmit();
         } catch (apiError) {
             // Fallback to WhatsApp intent so leads are not lost.
             AnalyticsTracker.event('booking_submit_fallback_whatsapp', {
                 page_path: window.location.pathname,
                 reason: (apiError && apiError.message) || 'unknown'
             });
-        } finally {
             this.finishSubmit();
         }
-    },
-
-    async handleSubmit(e) {
-        e.preventDefault();
-        if (!this.validate()) return;
-
-        const honeypot = document.getElementById('companyWebsite');
-        if (honeypot && honeypot.value.trim()) {
-            return;
-        }
-
-        // Basic client-side bot friction before backend checks.
-        if (Date.now() - this.startedAt < 2500) {
-            UIManager.showToast(document.documentElement.lang === 'ar' ? 'يرجى المحاولة بعد ثانيتين' : 'Please wait a moment before submitting.');
-            return;
-        }
-
-        this._setLoadingState(true);
-
-        const segmentation = this.getSegmentation();
-        const data = this._getFormData(segmentation);
-        const leadScoreClient = this.calculateLeadScore(data, segmentation);
-
-        this._updateWhatsAppLink(data);
-        AnalyticsTracker.event('booking_submit_attempt', { page_path: window.location.pathname, vehicle: data.vehicle, intent: segmentation.intent, lead_score_client: leadScoreClient });
-
-        const payload = this._buildPayload(data, segmentation, leadScoreClient, honeypot);
-        await this._submitToApi(payload, data, segmentation, leadScoreClient);
     },
 
     validate() {
@@ -1624,11 +1547,12 @@ const BookingManager = {
     },
 
     finishSubmit() {
-        this._setLoadingState(false);
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = false;
+        document.getElementById('btnSpinner').classList.add('hidden');
+        document.getElementById('btnText').classList.remove('opacity-0');
         UIManager.openModal('successModal');
-        try { sessionStorage.removeItem('booking_draft'); } catch (e) {
-            console.debug('Storage operation failed:', e);
-        }
+        try { sessionStorage.removeItem('booking_draft'); } catch(e){}
     }
 };
 
@@ -1769,12 +1693,7 @@ const MainApp = {
             observer.observe(bookingSection);
         }
         
-        const scheduleSliderInit = () => this.initSlider();
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(scheduleSliderInit, { timeout: 1500 });
-        } else {
-            setTimeout(scheduleSliderInit, 400);
-        }
+        this.initSlider();
         this.initAnimations(); 
         
         const preloader = document.getElementById('preloader');
@@ -1784,15 +1703,14 @@ const MainApp = {
             setTimeout(() => { preloader.style.display = 'none'; }, 500); // Wait for CSS transition only
         }
 
-        // Handle empty links (delegated to support dynamic elements)
-        document.body.addEventListener('click', (e) => {
-            const link = e.target.closest('a[href="#"]');
-            if (link) {
+        // PROFESSIONALISM FIX: Handle empty links
+        document.querySelectorAll('a[href="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const isAr = document.documentElement.lang === 'ar';
                 const msg = isAr ? 'هذه الميزة قادمة قريباً!' : 'This feature is coming soon!';
                 UIManager.showToast(msg);
-            }
+            });
         });
     },
     
@@ -1833,9 +1751,7 @@ const MainApp = {
     },
     
     acceptCookies() {
-        try { localStorage.setItem('cookieConsent', 'true'); } catch (e) {
-            console.debug('Storage operation failed:', e);
-        }
+        try { localStorage.setItem('cookieConsent', 'true'); } catch(e){}
         if(typeof gtag === 'function') {
             gtag('consent', 'update', { 'ad_storage': 'granted', 'ad_user_data': 'granted', 'ad_personalization': 'granted', 'analytics_storage': 'granted' });
         }
@@ -1843,9 +1759,7 @@ const MainApp = {
     },
     
     declineCookies() {
-        try { localStorage.setItem('cookieConsent', 'false'); } catch (e) {
-            console.debug('Storage operation failed:', e);
-        }
+        try { localStorage.setItem('cookieConsent', 'false'); } catch(e){}
         if(typeof gtag === 'function') {
             gtag('consent', 'update', { 'ad_storage': 'denied', 'ad_user_data': 'denied', 'ad_personalization': 'denied', 'analytics_storage': 'denied' });
         }
@@ -1910,8 +1824,6 @@ const MainApp = {
          originalCards.forEach(card => {
              const clone = card.cloneNode(true);
              clone.setAttribute('aria-hidden', 'true');
-             clone.setAttribute('tabindex', '-1');
-             clone.setAttribute('inert', '');
              const originalOnClick = card.getAttribute('onclick');
              if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
              slider.appendChild(clone);
@@ -1920,25 +1832,17 @@ const MainApp = {
          originalCards.slice().reverse().forEach(card => {
              const clone = card.cloneNode(true);
              clone.setAttribute('aria-hidden', 'true');
-             clone.setAttribute('tabindex', '-1');
-             clone.setAttribute('inert', '');
              const originalOnClick = card.getAttribute('onclick');
              if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
              slider.insertBefore(clone, slider.firstChild);
          });
 
-         let sliderMetrics = { itemWidth: 0, totalWidth: 0 };
-         const getMetrics = () => sliderMetrics;
-
-         const refreshMetrics = () => {
-             const firstCard = slider.querySelector('.tour-card:not([aria-hidden="true"])') || originalCards[0];
-             if (!firstCard) return;
-             const gap = parseFloat(window.getComputedStyle(slider).gap) || 0;
-             const itemWidth = firstCard.getBoundingClientRect().width + gap;
-             sliderMetrics = {
-                 itemWidth,
-                 totalWidth: itemWidth * originalCards.length
-             };
+         const getMetrics = () => {
+             const style = window.getComputedStyle(slider);
+             const gap = parseFloat(style.gap) || 0;
+             const itemWidth = originalCards[0].offsetWidth + gap;
+             const totalWidth = itemWidth * originalCards.length;
+             return { itemWidth, totalWidth };
          };
 
          const jumpToStart = () => {
@@ -1947,7 +1851,6 @@ const MainApp = {
          };
          
          setTimeout(() => {
-             refreshMetrics();
              slider.style.scrollBehavior = 'auto';
              jumpToStart();
              slider.style.scrollBehavior = 'smooth';
@@ -1959,49 +1862,23 @@ const MainApp = {
             slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
          };
 
-         let resetPending = false;
-         let resetRaf = null;
-
-         const queueInfiniteReset = () => {
-            if (resetPending) return;
-            resetPending = true;
-            if (resetRaf) cancelAnimationFrame(resetRaf);
-
-            resetRaf = requestAnimationFrame(() => {
-                const { totalWidth } = getMetrics();
+         const checkScroll = () => {
+            const { totalWidth } = getMetrics();
+            const tolerance = 10;
+            
+            if (slider.scrollLeft >= (totalWidth * 2) - tolerance) {
                 slider.style.scrollBehavior = 'auto';
                 slider.scrollLeft = totalWidth;
-                requestAnimationFrame(() => {
-                    slider.style.scrollBehavior = 'smooth';
-                    resetPending = false;
-                });
-            });
+                slider.style.scrollBehavior = 'smooth';
+            }
+            else if (slider.scrollLeft <= tolerance) {
+                slider.style.scrollBehavior = 'auto';
+                slider.scrollLeft = totalWidth;
+                slider.style.scrollBehavior = 'smooth';
+            }
          };
 
-         const checkScroll = () => {
-            // Simplified scroll reset logic for mobile reliability
-            const { totalWidth } = getMetrics();
-            if (!totalWidth) return;
-            const currentScroll = slider.scrollLeft;
-            const maxScroll = slider.scrollWidth - slider.clientWidth;
-            
-            // Allow native scroll-snap to finish before jumping
-            clearTimeout(slider.scrollEndTimer);
-            slider.scrollEndTimer = setTimeout(() => {
-                if (currentScroll >= maxScroll - 50) {
-                    slider.style.scrollBehavior = 'auto';
-                    slider.scrollLeft = totalWidth;
-                    slider.style.scrollBehavior = 'smooth';
-                }
-                else if (currentScroll <= 50) {
-                    slider.style.scrollBehavior = 'auto';
-                    slider.scrollLeft = totalWidth;
-                    slider.style.scrollBehavior = 'smooth';
-                }
-            }, 100);
-         };
-
-         slider.addEventListener('scroll', checkScroll, { passive: true });
+         slider.addEventListener('scroll', checkScroll);
 
          const startAuto = () => {
              clearInterval(autoScrollInterval);
@@ -2023,16 +1900,11 @@ const MainApp = {
          slider.addEventListener('mouseleave', () => isPaused = false);
          slider.addEventListener('touchend', () => isPaused = false);
          
-            let resizeRaf = null;
-            window.addEventListener('resize', () => {
-                if (resizeRaf) cancelAnimationFrame(resizeRaf);
-                resizeRaf = requestAnimationFrame(() => {
-                     refreshMetrics();
-                     slider.style.scrollBehavior = 'auto';
-                     jumpToStart();
-                     setTimeout(() => { slider.style.scrollBehavior = 'smooth'; }, 50);
-                });
-            });
+         window.addEventListener('resize', () => {
+            slider.style.scrollBehavior = 'auto';
+            jumpToStart();
+            setTimeout(() => { slider.style.scrollBehavior = 'smooth'; }, 50);
+         });
          
          startAuto();
     },
@@ -2167,6 +2039,7 @@ const DestinationApp = {
             const heroImg = document.getElementById('hero-img');
             if(heroImg) {
                 heroImg.alt = title; // Accessibility Fix
+                // FIX: Set handlers before src to catch cached loads
                 heroImg.onload = function() { this.classList.remove('skeleton'); };
                 heroImg.onerror = function() { this.src = 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80'; }; // Fallback
                 document.getElementById('hero-bg').style.backgroundImage = 'url(' + (data.img.startsWith('http') ? data.img : data.img) + ')'; heroImg.src = data.img;
@@ -2251,11 +2124,9 @@ const DestinationLoader = {
     async load() {
         const slider = document.getElementById('tours-slider');
         if (!slider) return;
-        if (!db) {
-            return;
-        }
 
         try {
+            const db = firebase.firestore();
             // Fetch all destinations (client-side filtering for legacy support)
             const snapshot = await db.collection('destinations').get();
             
@@ -2374,69 +2245,40 @@ window.DestinationLoader = DestinationLoader;
 // Expose MainApp as 'App' because the main page HTML calls 'App.prefillVehicle' etc.
 window.App = MainApp; 
 
-function hidePreloaderSafely() {
-    const preloader = document.getElementById('preloader');
-    if (!preloader) return;
-    preloader.style.opacity = '0';
-    setTimeout(() => { preloader.style.display = 'none'; }, 300);
-}
-
-window.addEventListener('error', () => {
-    hidePreloaderSafely();
-});
-
-window.addEventListener('unhandledrejection', () => {
-    hidePreloaderSafely();
-});
-
-window.addEventListener('load', () => {
-    hidePreloaderSafely();
-});
-
-setTimeout(() => {
-    hidePreloaderSafely();
-}, 4000);
-
 window.addEventListener('DOMContentLoaded', () => {
-    try {
-        // Sync language state with current page
-        LangManager.sync();
-        AttributionManager.capture();
-        ExperimentManager.assignBookingVariant();
+    // Sync language state with current page
+    LangManager.sync();
+    AttributionManager.capture();
+    ExperimentManager.assignBookingVariant();
 
-        // Ensure Cookie Banner runs on all pages (except Admin)
-        if (!window.location.pathname.includes('admin.html')) {
-            MainApp.checkCookies();
+    // Ensure Cookie Banner runs on all pages (except Admin)
+    if (!window.location.pathname.includes('admin.html')) {
+        MainApp.checkCookies();
+    }
+    
+    // Detect which page we are on and run the appropriate logic
+    
+    // Condition 1: Main Page (has 'tours-slider' or 'hero' or 'dest-hero')
+    if (document.getElementById('tours-slider') || document.querySelector('.hero') || document.querySelector('.about-premium-hero') || document.querySelector('.dest-hero')) {
+        MainApp.start();
+        // Load dynamic destinations if slider exists
+        if(document.getElementById('tours-slider')) DestinationLoader.load();
+    } 
+    // Condition 2: Dynamic Destination Page (ONLY destination.html)
+    else if (window.location.pathname.includes('destination.html')) {
+        DestinationApp.init();
+    }
+    // Condition 3: Blog Page
+    else if (window.location.pathname.includes('blog')) {
+        UIManager.init();
+        BlogManager.init();
+    }
+    // Condition 3: Static Pages (tbilisi.html, honeymoon.html, etc.)
+    else {
+        UIManager.init();
+        // Ensure animations run if present
+        if (document.querySelector('.reveal')) {
+            MainApp.initAnimations();
         }
-        
-        // Detect which page we are on and run the appropriate logic
-        
-        // Condition 1: Main Page (has 'tours-slider' or 'hero' or 'dest-hero')
-        if (document.getElementById('tours-slider') || document.querySelector('.hero') || document.querySelector('.about-premium-hero') || document.querySelector('.dest-hero')) {
-            MainApp.start();
-            // Load dynamic destinations if slider exists
-            if(document.getElementById('tours-slider')) DestinationLoader.load();
-        } 
-        // Condition 2: Dynamic Destination Page (ONLY destination.html)
-        else if (window.location.pathname.includes('destination.html')) {
-            DestinationApp.init();
-        }
-        // Condition 3: Blog Page
-        else if (window.location.pathname.includes('blog')) {
-            UIManager.init();
-            BlogManager.init();
-        }
-        // Condition 3: Static Pages (tbilisi.html, honeymoon.html, etc.)
-        else {
-            UIManager.init();
-            // Ensure animations run if present
-            if (document.querySelector('.reveal')) {
-                MainApp.initAnimations();
-            }
-        }
-    } catch (e) {
-        console.error('Startup initialization failed:', e);
-    } finally {
-        hidePreloaderSafely();
     }
 });

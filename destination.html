@@ -104,7 +104,6 @@
     </script>
     <!-- OPTIMIZATION: Defer Main Script -->
     <script src="shared-navbar.js" defer></script>
-    <script src="shared-footer.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body class="page-destination page-about secondary-page">
@@ -222,20 +221,58 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer" id="footer"></footer>
+    <footer class="footer">
+        <div class="container">
+            <div id="footer-content" class="footer-grid">
+                <!-- Brand -->
+                <div>
+                    <div class="footer-brand">
+                        <div class="footer-brand-icon"><i class="fa-solid fa-mountain"></i></div>
+                        <span class="footer-brand-text">Georgia Hills</span>
+                    </div>
+                    <p style="color:var(--color-gray-300); font-size:0.875rem; line-height:1.6; margin-bottom:1.5rem;" data-i18n="footer_desc">Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.</p>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <button onclick="App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                    <div style="margin-top:1.5rem; display:flex; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
+                        <a href="legal.html" style="color:inherit;">Privacy Policy</a>
+                    </div>
+                </div>
+                <!-- Links -->
+                <div>
+                    <h3 data-i18n="footer_links">Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+                        <li><a href="index.html#fleet" data-i18n="nav_fleet">Fleet</a></li>
+                        <li><a href="index.html#reviews" data-i18n="nav_reviews">Reviews</a></li>
+                        <li><a href="booking.html" data-i18n="nav_book">Book Now</a></li>
+                    </ul>
+                </div>
+                <!-- Contact -->
+                <div>
+                    <h3 data-i18n="footer_contact">Contact Us</h3>
+                    <ul style="color:var(--color-gray-400);">
+                        <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
+                        <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
+                        <li class="footer-contact-item"><i class="fa-solid fa-envelope text-accent"></i> info@georgiahills.com</li>
+                    </ul>
+                </div>
+                <!-- Map -->
+                <div>
+                    <div class="footer-map-container">
+                        <span class="footer-map-overlay"><i class="fa-solid fa-map-location-dot"></i> <span data-i18n="label_map">Load Map</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; <span id="year">2026</span> Georgia Hills. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
     <!-- Structured Data -->
-    <script type="application/ld+json" id="json-ld-data">
-    {
-      "@context": "https://schema.org",
-      "@graph": [
-        {
-          "@type": "WebPage",
-          "name": "Destination - Georgia Hills",
-          "url": "https://georgiahills.com/destination.html"
-        }
-      ]
-    }
-    </script>
+    <script type="application/ld+json" id="json-ld-data"></script>
 </body>
 </html>

@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
-Disallow: /admin-v3/
 
 # AI & LLM Crawlers - Explicitly Allowed
 User-agent: GPTBot
@@ -13,5 +12,4 @@ User-agent: CCBot
 Allow: /
 
 # Sitemap
-Host: https://georgiahills.com
 Sitemap: https://georgiahills.com/sitemap.xml

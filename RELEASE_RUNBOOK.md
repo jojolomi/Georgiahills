@@ -64,22 +64,13 @@ firebase deploy --project production --only hosting,functions,firestore:rules
 
 ## Smoke-check matrix and expected signals
 1. Home pages:
-   - `https://georgiahills.com/en`
-   - `https://georgiahills.com/ar`
+   - `https://georgiahills.com/`
+   - `https://georgiahills.com/arabic.html`
 2. Conversion pages:
-   - `https://georgiahills.com/booking`
-   - `https://georgiahills.com/en/tours/tbilisi-day-tour`
-   - `https://georgiahills.com/ar/tours/tbilisi-day-tour`
-   - `https://georgiahills.com/en/fleet/minivan-vip`
-   - `https://georgiahills.com/ar/fleet/minivan-vip`
+   - `https://georgiahills.com/booking.html`
+   - `https://georgiahills.com/booking-ar.html`
 3. SEO artifacts:
    - `https://georgiahills.com/sitemap.xml`
-   - `https://georgiahills.com/robots.txt`
-4. Legal pages:
-   - `https://georgiahills.com/en/privacy`
-   - `https://georgiahills.com/ar/privacy`
-   - `https://georgiahills.com/en/refund`
-   - `https://georgiahills.com/ar/refund`
 4. Expected signals:
    - HTTP 200 response
    - Canonical + hreflang present

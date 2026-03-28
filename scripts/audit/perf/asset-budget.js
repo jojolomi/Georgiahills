@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const distDir = path.resolve(process.argv[2] || 'apps/web/dist');
+const distDir = path.resolve(process.argv[2] || 'astro-site/dist');
 const maxAssetKB = Number(process.env.GH_ASSET_BUDGET_KB || 800);
 const maxPageKB = Number(process.env.GH_PAGE_BUDGET_KB || 1200);
 let failOnBreach = process.env.GH_BUDGET_FAIL === '1';

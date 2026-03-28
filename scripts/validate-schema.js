@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-const distDir = path.resolve(process.argv[2] || "apps/web/dist");
+const distDir = path.resolve(process.argv[2] || "astro-site/dist");
 
 function collectHtml(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -25,14 +25,9 @@ const files = collectHtml(distDir);
 const destinationRouteRe = /(?:^|\/)(tbilisi|batumi|kazbegi|martvili|signagi(?:-ar)?)(?:\/index\.html|\.html)$/i;
 const packageRouteRe = /(?:^|\/)(itineraries-hub|itineraries-hub-ar|honeymoon|honeymoon-ar|family-travel-hub|family-travel-hub-ar|halal-travel-hub|halal-travel-hub-ar|safety-hub|safety-hub-ar)(?:\/index\.html|\.html)$/i;
 
-// Pages that legitimately lack structured data
-const skipRe = /(?:^|[\/\\])(?:404|500|_not-found)\.html$|^index\.html$|^(?:ae|sa|qa|kw|eg)[\/\\]/;
-
 for (const file of files) {
   const html = fs.readFileSync(file, "utf8");
   const rel = path.relative(distDir, file).replace(/\\/g, "/");
-
-  if (skipRe.test(rel)) continue;
 
   const scripts = [...html.matchAll(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
   if (!scripts.length) {

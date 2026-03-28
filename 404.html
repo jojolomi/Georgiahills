@@ -17,13 +17,37 @@
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
         <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="favicon.ico">
-    <script src="shared-navbar.js" defer></script>
-    <script src="shared-footer.js" defer></script>
 </head>
 <body class="page-404 page-about secondary-page">
     <a href="#main-content" class="skip-link">Skip to main content</a>
-    <nav id="navbar" class="navbar"></nav>
+    <nav id="navbar" class="navbar">
+        <div class="container">
+            <div class="navbar-inner">
+                <a href="index.html" class="nav-logo">
+                    <img src="favicon.ico" width="56" height="56" alt="Georgia Hills logo" class="nav-logo-img">
+                    <span>Georgia Hills</span>
+                </a>
+                <div class="desktop-menu">
+                    <a href="index.html" class="nav-link">Home</a>
+                    <a href="contact.html" class="nav-link">Contact</a>
+                </div>
+                <div class="mobile-controls">
+                    <a href="index.html" class="action-btn" style="font-size:0.75rem; padding:0.375rem 0.75rem;"><i class="fa-solid fa-house"></i> <span class="lang-text">Home</span></a>
+                    <button id="mobile-menu-btn" class="btn-mobile-menu" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobile-menu"><i class="fa-solid fa-bars"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" aria-hidden="true">
+        <button id="close-menu-btn" class="close-menu-btn" aria-label="Close Navigation Menu"><i class="fa-solid fa-xmark"></i></button>
+        <a href="index.html" class="mobile-link">Home</a>
+        <a href="contact.html" class="mobile-link">Contact</a>
+        <a href="booking.html" class="mobile-btn-book">Book Now</a>
+    </div>
 
     <!-- Hero -->
     <main id="main-content">
@@ -49,9 +73,18 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer" id="footer"></footer>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; <span id="year">2026</span> Georgia Hills. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
-    <script src="script.js" defer></script>
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('year').innerText = new Date().getFullYear();
+    </script>
 </body>
 </html>
 

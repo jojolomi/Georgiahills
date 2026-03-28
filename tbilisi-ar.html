@@ -34,7 +34,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
     <script src="shared-navbar.js" defer></script>
-    <script src="shared-footer.js" defer></script>
     <script src="destination-script.js" defer></script>
     <script type="application/ld+json">
     { "@context": "https://schema.org", "@type": "TouristAttraction", "name": "السياحة في تبليسي: أهم المعالم والأماكن", "description": "اكتشف تبليسي القديمة وقلعة ناريكالا وحمامات الكبريت مع سائق خاص وخدمة مريحة من جورجيا هيلز.", "image": "https://georgiahills.com/Tbilisi.webp", "address": { "@type": "PostalAddress", "addressCountry": "GE", "addressLocality": "tbilisi" } }
@@ -204,6 +203,42 @@
         </aside>
     </main>
 
-    <footer class="footer" id="footer"></footer>
+    <footer class="footer">
+        <div class="container">
+            <div id="footer-content" class="footer-grid">
+                <div>
+                    <div class="footer-brand">
+                        <div class="footer-brand-icon"><i class="fa-solid fa-mountain"></i></div>
+                        <span class="footer-brand-text">Georgia Hills</span>
+                    </div>
+                    <p style="color:var(--color-gray-300); font-size:0.875rem; line-height:1.6; margin-bottom:1.5rem;">حلول نقل احترافية في جورجيا مع تركيز على الأمان والراحة والخبرة المحلية.</p>
+                    <div class="footer-social">
+                        <a href="https://instagram.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <button onclick="if(navigator.share){navigator.share({title:'Georgia Hills',url:window.location.href})}else{alert('Link copied to clipboard!');navigator.clipboard.writeText(window.location.href)}" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
+                    </div>
+                </div>
+                <div>
+                    <h3>روابط سريعة</h3>
+                    <ul>
+                        <li><a href="arabic.html">الرئيسية</a></li>
+                        <li><a href="services-ar.html">الخدمات</a></li>
+                        <li><a href="guide-ar.html">الدليل</a></li>
+                        <li><a href="booking-ar.html">احجز الآن</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>اتصل بنا</h3>
+                    <ul style="color:var(--color-gray-400);">
+                        <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
+                        <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                 &copy; <span id="year">2026</span> Georgia Hills. جميع الحقوق محفوظة.
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

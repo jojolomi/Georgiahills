@@ -4,7 +4,7 @@
 
 ```bash
 npm install
-npm --prefix apps/admin install
+npm --prefix admin-v3 install
 ```
 
 ## 2) Required backend env
@@ -60,7 +60,7 @@ npm run build:admin-v3:hosting
 
 - Keep `/admin-v2` live while validating v3.
 - Once parity is accepted, route `/admin` to `/admin-v3/`.
-- Production hosting serves the SPA from `apps/admin/index.prod.html`.
+- Production hosting serves the SPA from `admin-v3/index.prod.html`.
 
 ## 7) Admin v3 reliability tests
 

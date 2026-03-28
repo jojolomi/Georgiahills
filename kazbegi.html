@@ -34,7 +34,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap"></noscript>
     <script src="shared-navbar.js" defer></script>
-    <script src="shared-footer.js" defer></script>
     <script src="destination-script.js" defer></script>
     <script type="application/ld+json">
     { "@context": "https://schema.org", "@type": "TouristAttraction", "name": "Kazbegi National Park", "description": "A stunning mountain region in northern Georgia known for Mount Kazbek and Gergeti Trinity Church.", "image": "https://georgiahills.com/Kazbegi.webp", "address": { "@type": "PostalAddress", "addressCountry": "GE", "addressLocality": "Stepantsminda" } }
@@ -218,7 +217,73 @@
     </section>
 
     <!-- Footer -->
-    <footer class="footer" id="footer"></footer>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <!-- 1. Brand -->
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <div class="footer-brand-icon"><i class="fa-solid fa-mountain-sun"></i></div>
+                        <span class="footer-brand-text">Georgia Hills</span>
+                    </div>
+                    <p style="color:var(--color-gray-400); line-height:1.6; margin-bottom:1.5rem;">
+                        Your trusted partner for exploring the hidden gems and major sights of Georgia in comfort.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="social-btn" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <!-- 2. Links -->
+                <div class="footer-col">
+                    <h3>Explore</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="index.html#destinations">Destinations</a></li>
+                        <li><a href="index.html#packages">Packages</a></li>
+                        <li><a href="booking.html">Book Now</a></li>
+                    </ul>
+                </div>
+
+                <!-- 3. Legal -->
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="legal.html">Privacy Policy</a></li>
+                        <li><a href="legal.html#terms">Terms of Service</a></li>
+                        <li><a href="legal.html#refund">Refund Policy</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- 4. Contact -->
+                <div class="footer-col">
+                    <h3>Contact</h3>
+                    <div style="display:flex; flex-direction:column; gap:1rem;">
+                        <a href="tel:+995555123456" class="footer-contact-item" style="text-decoration:none; color:inherit;">
+                            <i class="fa-solid fa-phone" style="color:var(--color-accent);"></i>
+                            <span>+995 555 123 456</span>
+                        </a>
+                        <a href="mailto:info@georgiahills.com" class="footer-contact-item" style="text-decoration:none; color:inherit;">
+                            <i class="fa-solid fa-envelope" style="color:var(--color-accent);"></i>
+                            <span>info@georgiahills.com</span>
+                        </a>
+                        <div class="footer-contact-item">
+                            <i class="fa-solid fa-location-dot" style="color:var(--color-accent);"></i>
+                            <span>Tbilisi, Georgia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                &copy; <span id="year">2026</span> Georgia Hills Travel. All rights reserved.
+            </div>
+        </div>
+    </footer>
     <script>
         // Intersection Observer for highlighting timeline
         const observer = new IntersectionObserver((entries) => {

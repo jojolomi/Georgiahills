@@ -1,19 +1,8 @@
 // Lightweight runtime for static destination pages
 (function () {
   if ('serviceWorker' in navigator) {
-    const scriptBaseDir = (() => {
-      try {
-        const src = document.currentScript && document.currentScript.src;
-        if (src) {
-          const scriptUrl = new URL(src, window.location.href);
-          return scriptUrl.pathname.replace(/[^/]+$/, '');
-        }
-      } catch (e) {}
-      return '/';
-    })();
-
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register(`${scriptBaseDir}service-worker.js`).catch(() => {});
+      navigator.serviceWorker.register('/service-worker.js').catch(() => {});
     });
   }
 
