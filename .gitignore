@@ -17,3 +17,12 @@ apps/admin/index.prod.html
 **/.turbo/
 **/dist/
 **/.next/
+**/.astro/
+# Lighthouse report artifacts
+lhr*.report.html
+lhr*.report.json
+lighthouse-*.json
+# Temp / backup files
+*.tmp
+*.bak.html
+tmp_*.html

@@ -28,12 +28,17 @@ if (!fs.existsSync(distDir)) {
   process.exit(1);
 }
 
+// Skip non-SEO utility pages (admin, lighthouse reports, tmp files)
+const skipRe = /(?:^|\/)(?:admin\.html|.*\.report\.html|tmp_.*\.html)$/;
+
 let passed = true;
 const files = collectHtml(distDir);
 
 for (const file of files) {
-  const html = fs.readFileSync(file, "utf8");
   const rel = path.relative(distDir, file).replace(/\\/g, "/");
+  if (skipRe.test(rel)) continue;
+
+  const html = fs.readFileSync(file, "utf8");
 
   const canonical = html.match(/<link\s+rel=["']canonical["']\s+href=["'][^"']+["']/i);
   if (!canonical) {
