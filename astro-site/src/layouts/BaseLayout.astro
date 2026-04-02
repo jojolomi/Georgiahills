@@ -13,6 +13,20 @@ interface Props {
 
 const { lang, dir, meta, hideFooter = false } = Astro.props;
 const skipText = lang === "ar" ? "تخطي إلى المحتوى" : "Skip to content";
+const canonicalPath = (() => {
+  try {
+    return new URL(meta.canonical).pathname || "/";
+  } catch (e) {
+    console.warn(`[BaseLayout] Invalid canonical URL "${meta.canonical}":`, e);
+    return "/";
+  }
+})();
+const isHomeRoute = canonicalPath === "/" || canonicalPath === "/index.html" || canonicalPath === "/arabic.html";
+const isBookingRoute = canonicalPath === "/booking.html" || canonicalPath === "/booking-ar.html";
+const isDestinationRoute = /^\/(destination|destinations-hub|tbilisi|batumi|kazbegi|martvili|signagi)(-ar)?\.html$/i.test(canonicalPath);
+const isContentRoute = /^(\/blog(-ar)?\.html|\/guide(-ar)?\.html|\/article-.*\.html)$/i.test(canonicalPath);
+const shouldLoadLegacyScript = isHomeRoute || isBookingRoute || isDestinationRoute || isContentRoute;
+const shouldLoadMarketingScript = isHomeRoute || isBookingRoute;
 const integrations = {
   hotjarId: import.meta.env.PUBLIC_HOTJAR_ID || "",
   hotjarSv: import.meta.env.PUBLIC_HOTJAR_SV || "6",
@@ -26,6 +40,7 @@ const integrations = {
 <html lang={lang} dir={dir} class="scroll-smooth">
   <head>
     <SeoHead seo={meta} />
+    <slot name="head" />
   </head>
   <body>
     <a href="#main-content" class="skip-link">{skipText}</a>
@@ -34,16 +49,63 @@ const integrations = {
       <slot />
     </main>
     {!hideFooter && <SiteFooter lang={lang} />}
-    <script src="/astro-ui.js" defer></script>
     <script src="/shared-navbar.js" defer></script>
-    <script src="/core-ui.js" defer></script>
-    <script src="/booking.js" defer></script>
-    <script src="/seo-localization.js" defer></script>
-    <script src="/destination.js" defer></script>
+    {isBookingRoute && <script src="/astro-ui.js" defer></script>}
+    {isBookingRoute && <script src="/core-ui.js" defer></script>}
+    {isBookingRoute && <script src="/booking.js" defer></script>}
+    {isHomeRoute && <script src="/seo-localization.js" defer></script>}
+    {isDestinationRoute && <script src="/destination.js" defer></script>}
     <script is:inline define:vars={{ integrations }}>
       window.GHIntegrations = integrations;
     </script>
-    <script src="/marketing.js" defer></script>
-    <script src="/script.js" defer></script>
+    <script is:inline define:vars={{ shouldLoadLegacyScript, shouldLoadMarketingScript }}>
+      window.GHLoadFlags = {
+        legacy: shouldLoadLegacyScript,
+        marketing: shouldLoadMarketingScript
+      };
+    </script>
+    <script is:inline>
+      (() => {
+        const IDLE_TIMEOUT_MS = 2500;
+        const flags = window.GHLoadFlags || { legacy: true, marketing: true };
+        const scriptUrls = [];
+        if (flags.marketing) scriptUrls.push("/marketing.js");
+        if (flags.legacy) scriptUrls.push("/script.js");
+        if (!scriptUrls.length) return;
+        let loaded = false;
+
+        const appendScript = (src) => {
+          const script = document.createElement("script");
+          script.src = src;
+          script.defer = true;
+          document.body.appendChild(script);
+        };
+
+        const loadDeferredScripts = () => {
+          if (loaded) return;
+          loaded = true;
+          scriptUrls.forEach(appendScript);
+          cleanup();
+        };
+
+        const cleanup = () => {
+          window.removeEventListener("pointerdown", loadDeferredScripts);
+          window.removeEventListener("keydown", loadDeferredScripts);
+          window.removeEventListener("touchstart", loadDeferredScripts);
+          window.removeEventListener("scroll", loadDeferredScripts);
+        };
+
+        window.addEventListener("pointerdown", loadDeferredScripts, { once: true, passive: true });
+        window.addEventListener("keydown", loadDeferredScripts, { once: true, passive: true });
+        window.addEventListener("touchstart", loadDeferredScripts, { once: true, passive: true });
+        window.addEventListener("scroll", loadDeferredScripts, { once: true, passive: true });
+
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(loadDeferredScripts, { timeout: IDLE_TIMEOUT_MS });
+        } else {
+          window.setTimeout(loadDeferredScripts, IDLE_TIMEOUT_MS);
+        }
+      })();
+    </script>
   </body>
 </html>

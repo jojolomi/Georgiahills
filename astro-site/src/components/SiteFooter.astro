@@ -59,3 +59,8 @@ const isAr = lang === "ar";
     <div class="footer-bottom">&copy; <span id="year">2026</span> Georgia Hills. {isAr ? "جميع الحقوق محفوظة." : "All rights reserved."}</div>
   </div>
 </footer>
+
+<script>
+  const el = document.getElementById("year");
+  if (el) el.textContent = String(new Date().getFullYear());
+</script>

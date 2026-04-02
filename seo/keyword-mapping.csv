@@ -1,7 +1,36 @@
-page_path,language,primary_keyword,secondary_keywords,search_intent,priority,meta_title_example,meta_description_example
-/,ar,سياحة جورجيا,"جولات جورجيا, فيزا جورجيا",informational,1,"سياحة جورجيا - دليلك للعطلات | GeorgiaHills","خطط رحلتك إلى جورجيا مع أحدث الجولات، أسعار مناسبة وخيارات عائلية."
-/ar,ar,سائق خاص في جورجيا,"جولة خاصة, سيارة مع سائق جورجيا",commercial,1,"سائق خاص في جورجيا للعائلات الخليجية | GeorgiaHills","احجز سائقًا خاصًا في جورجيا مع برامج مرنة، أسعار واضحة، ودعم عربي سريع."
-/ar/blog/is-georgia-safe,ar,هل جورجيا آمنة,"أمان السفر في تبليسي, نصائح الأمان",informational,2,"هل جورجيا آمنة؟ دليل العائلات الخليجية | GeorgiaHills","دليل عملي لأمان السفر في جورجيا للعائلات الخليجية: سكن مناسب، نقل موثوق، وخطة يومية آمنة."
-/ar/blog/georgia-7-day-itinerary,ar,برنامج جورجيا 7 أيام,"خطة أسبوع في جورجيا, رحلة عائلية جورجيا",informational,2,"برنامج جورجيا 7 أيام للعائلات | GeorgiaHills","اكتشف برنامج 7 أيام متوازن في جورجيا يشمل تبليسي وكازبيجي وباتومي بإيقاع مريح للعائلة."
-/ar/blog/halal-travel-georgia-guide,ar,السفر الحلال في جورجيا,"مطاعم حلال في تبليسي, الصلاة في جورجيا",informational,2,"دليل السفر الحلال في جورجيا | GeorgiaHills","دليل عملي للمسافر الخليجي: خيارات الطعام الحلال، تنظيم الصلاة، وسكن مناسب للعائلة في جورجيا."
-/en,en,Private driver Georgia,"Georgia family tours, Tbilisi private tour",commercial,1,"Private Driver in Georgia | GeorgiaHills","Book private driver tours in Georgia with transparent pricing, flexible routes, and bilingual support."
+page_slug,lang,primary_keyword,secondary_keywords,intent,monthly_volume_est,competition
+/,en,Georgia private driver,private driver Georgia GCC; family trip Georgia; Georgia tours Arab travelers,commercial,2400,medium
+/arabic.html,ar,سائق خاص في جورجيا,رحلات عائلية جورجيا; برامج سياحية جورجيا; تبليسي العرب,commercial,3200,medium
+/booking.html,en,book private driver Georgia,Georgia tour booking; Georgia driver hire GCC,transactional,1100,low
+/booking-ar.html,ar,احجز سائق خاص جورجيا,حجز رحلة جورجيا; سائق خاص تبليسي,transactional,1600,low
+/services.html,en,Georgia private car service,private transfer Tbilisi; Kazbegi private driver; Batumi transfer,commercial,900,medium
+/services-ar.html,ar,خدمة سيارة خاصة جورجيا,نقل خاص تبليسي; سائق كازبيجي; نقل باتومي,commercial,1200,medium
+/guide.html,en,Georgia travel guide Arabs,Georgia trip planning GCC; best time Georgia; halal Georgia,informational,1800,medium
+/guide-ar.html,ar,دليل السفر إلى جورجيا,تخطيط رحلة جورجيا; أفضل وقت جورجيا; جورجيا حلال,informational,2100,medium
+/tbilisi.html,en,Tbilisi travel guide Arabs,things to do Tbilisi families; Tbilisi halal food; Old Town Tbilisi,informational,3400,high
+/tbilisi-ar.html,ar,دليل تبليسي للعرب,ماذا تفعل في تبليسي; طعام حلال تبليسي; المدينة القديمة,informational,4200,high
+/kazbegi.html,en,Kazbegi day trip from Tbilisi,Gergeti Church tour; Kazbegi private car; Kazbegi family trip,informational,2100,medium
+/kazbegi-ar.html,ar,كازبيجي من تبليسي,جولة كنيسة جيرجيتي; سيارة خاصة كازبيجي; كازبيجي عائلي,informational,2600,medium
+/batumi.html,en,Batumi travel guide,Batumi beach Arabs; Batumi halal; Black Sea Georgia,informational,1900,medium
+/batumi-ar.html,ar,دليل باتومي,شاطئ باتومي العرب; باتومي حلال; البحر الأسود جورجيا,informational,2400,medium
+/sa/index.html,ar,سفر من السعودية إلى جورجيا,رحلة من الرياض إلى تبليسي; باقات جورجيا للسعوديين,commercial,4800,medium
+/ae/index.html,ar,سفر من الإمارات إلى جورجيا,رحلة من دبي إلى تبليسي; باقات جورجيا للإماراتيين,commercial,5200,high
+/qa/index.html,ar,سفر من قطر إلى جورجيا,رحلة من الدوحة إلى تبليسي; باقات جورجيا للقطريين,commercial,1800,low
+/kw/index.html,ar,سفر من الكويت إلى جورجيا,رحلة من الكويت إلى تبليسي; باقات جورجيا للكويتيين,commercial,2200,low
+/eg/index.html,ar,سفر من مصر إلى جورجيا,رحلة من القاهرة إلى تبليسي; باقات جورجيا للمصريين,commercial,1400,low
+/family.html,en,family trip Georgia,Georgia family itinerary GCC; child-friendly Georgia; halal family Georgia,commercial,1700,medium
+/honeymoon.html,en,honeymoon Georgia Arabic couples,Georgia romantic trip; luxury honeymoon Tbilisi; couple trip Georgia,commercial,1200,medium
+/women-travel.html,en,women travel Georgia safe,women-only Georgia trip; safe travel Georgia women; Georgia female solo,commercial,900,medium
+/blog/en/georgia-7-day-itinerary-gcc.html,en,7 day Georgia itinerary,week in Georgia; Georgia trip plan GCC; Tbilisi Kazbegi Batumi,informational,1300,medium
+/blog/en/best-time-to-visit-georgia.html,en,best time visit Georgia,Georgia travel months; when to go Georgia; Georgia weather Arabs,informational,2800,medium
+/blog/en/georgia-halal-food-map.html,en,halal food Tbilisi,halal restaurants Georgia; Muslim food Georgia; Tbilisi halal guide,informational,1600,medium
+/blog/en/georgia-travel-cost-breakdown.html,en,Georgia travel cost,how much Georgia trip; Georgia budget travelers; Georgia prices 2026,informational,2200,medium
+/blog/en/is-georgia-safe-for-families-2026.html,en,is Georgia safe families,Georgia safety Arab tourists; Georgia crime rate; safe travel Georgia,informational,1900,medium
+/blog/en/georgia-airport-to-city-guide.html,en,Tbilisi airport to city,TBS airport transfer; Tbilisi airport taxi; airport to Old Town Tbilisi,informational,1400,medium
+/blog/en/georgia-prayer-logistics-guide.html,en,prayer Georgia Muslim,mosque Tbilisi; prayer times Georgia; Qibla direction Tbilisi,informational,800,low
+/blog/en/women-friendly-travel-in-georgia.html,en,women-friendly Georgia,safe women Georgia; female traveler Georgia; Arab women Georgia trip,informational,700,low
+/blog/en/luxury-honeymoon-georgia-routes.html,en,luxury honeymoon Georgia,romantic Georgia trip; couple hotels Tbilisi; Georgia luxury tours,informational,600,low
+/blog/en/winter-georgia-family-plans.html,en,winter Georgia family,ski Georgia families; Gudauri ski GCC; Georgia Christmas trip,informational,500,low
+/blog/ar/jadwal-georgia-7-ayyam.html,ar,جدول رحلة جورجيا أسبوع,برنامج جورجيا 7 أيام; رحلة تبليسي كازبيجي باتومي,informational,1100,medium
+/blog/ar/afdal-waqt-lisafar-georgia.html,ar,أفضل وقت السفر جورجيا,متى تزور جورجيا; مواسم جورجيا الخليج; جورجيا رمضان,informational,1800,medium
+/blog/ar/khareetat-mataem-halal-georgia.html,ar,مطاعم حلال تبليسي,طعام حلال جورجيا; دليل حلال باتومي; مطاعم عربية تبليسي,informational,2100,medium
