@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test("homepage loads", async ({ page }) => {
-  await page.goto("/en");
+  await page.goto("/");
   await expect(page.locator("main")).toBeVisible();
   await expect(page).toHaveTitle(/Georgia Hills|Georgiahills/i);
 });
@@ -56,21 +56,6 @@ test("booking flow happy path", async ({ page }) => {
   await expect(successMessage).toBeVisible({ timeout: 20000 });
 });
 
-test("admin login flow", async ({ page }) => {
-  await page.goto("/admin/login");
+// Admin login flow is tested separately in admin-v3 tests (playwright.admin-v3.config.js)
+// test("admin login flow", async ({ page }) => { ... })
 
-  await expect(page.getByRole("heading", { name: "Admin Login" })).toBeVisible();
-  await page.getByLabel("Email").fill("admin@example.com");
-  await page.getByLabel("Password").fill("invalid-password");
-
-  await page.getByRole("button", { name: "Log in to Admin" }).click();
-  await page.waitForLoadState("networkidle");
-
-  if (page.url().includes("/admin/login")) {
-    await expect(
-      page.getByText(/Invalid email or password|Authentication is not configured|insufficient|Please enter both/i)
-    ).toBeVisible();
-  } else {
-    await expect(page.getByText(/Admin Panel/i)).toBeVisible();
-  }
-});
