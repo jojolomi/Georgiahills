@@ -6,7 +6,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "node --test test/**/*.test.js",
+    "test": "node --test test/*.test.js",
     "owner:provision": "node scripts/provision-owner-admin.js"
   },
   "dependencies": {

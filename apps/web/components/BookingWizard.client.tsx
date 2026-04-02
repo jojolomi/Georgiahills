@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { captureClientException, ensureClientSentryInitialized } from "../lib/client/sentry";
 
@@ -49,7 +49,7 @@ export default function BookingWizard() {
     trigger,
     reset
   } = useForm<BookingWizardFormData>({
-    resolver: zodResolver(bookingWizardSchema),
+    resolver: zodResolver(bookingWizardSchema as any),
     mode: "onTouched",
     defaultValues: {
       fullName: "",

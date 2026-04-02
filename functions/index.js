@@ -126,7 +126,7 @@ function parseBoolEnv(value, defaultValue = false) {
 }
 
 function getAdminAllowedOrigins() {
-  const env = process.env.ADMIN_ALLOWED_ORIGINS || process.env.ALLOWED_ORIGINS || "";
+  const env = process.env.ADMIN_ALLOWED_ORIGINS || "";
   const extra = env
     .split(",")
     .map((v) => v.trim())
@@ -152,9 +152,8 @@ function validateAdminOrigin(req) {
   return { allowed: true, reason: "ok", origin, allowedOrigins };
 }
 
-function applyCors(req, res, methods = "POST, OPTIONS") {
+function applyCors(req, res, methods = "POST, OPTIONS", allowedOrigins = getAllowedOrigins()) {
   const origin = req.get("origin") || "";
-  const allowedOrigins = getAllowedOrigins();
   const originAllowed = !origin || allowedOrigins.includes(origin);
 
   if (originAllowed && origin) {
@@ -1435,5 +1434,8 @@ exports.__test = {
   roleFromToken,
   hasAnyRole,
   stableHash,
-  buildBookingPayload
+  buildBookingPayload,
+  getAllowedOrigins,
+  getAdminAllowedOrigins,
+  applyCors
 };

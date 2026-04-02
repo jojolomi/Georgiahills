@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AdminApi } from "../../shared/api/adminApiClient";
+import { AdminApi } from "../../shared/api/adminapiclient";
 import { Card, Table } from "../../shared/components/ui";
 
 export function SeoMarketsModule() {

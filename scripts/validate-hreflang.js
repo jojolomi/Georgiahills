@@ -28,8 +28,8 @@ if (!fs.existsSync(distDir)) {
   process.exit(1);
 }
 
-// Skip non-SEO utility pages (admin, lighthouse reports, tmp files)
-const skipRe = /(?:^|\/)(?:admin\.html|.*\.report\.html|tmp_.*\.html)$/;
+// Skip non-SEO utility pages (admin routes, lighthouse reports, tmp files)
+const skipRe = /(?:^|\/)(?:admin\.html|admin-v3\/.*\.html|.*\.report\.html|tmp_.*\.html)$/;
 
 let passed = true;
 const files = collectHtml(distDir);

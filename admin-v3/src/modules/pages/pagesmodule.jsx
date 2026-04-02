@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { AdminApi } from "../../shared/api/adminApiClient";
+import { AdminApi } from "../../shared/api/adminapiclient";
 import { Card, Table } from "../../shared/components/ui";
-import { reauthenticateOwner } from "../../shared/auth/reauthenticateOwner";
+import { reauthenticateOwner } from "../../shared/auth/reauthenticateowner";
 
 const pages = ["home", "home-ar", "booking", "booking-ar", "about", "about-ar", "services", "services-ar", "guide", "guide-ar", "contact", "contact-ar"];
 

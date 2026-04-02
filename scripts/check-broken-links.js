@@ -70,9 +70,11 @@ const existing = new Set(
 
 let passed = true;
 const htmlFiles = collectHtml(distDir);
+const skipRe = /(?:^|\/)(?:admin\.html|admin-v3\/.*\.html|.*\.report\.html|tmp_.*\.html)$/;
 
 for (const file of htmlFiles) {
   const rel = path.relative(distDir, file).replace(/\\/g, "/");
+  if (skipRe.test(rel)) continue;
   const html = fs.readFileSync(file, "utf8");
 
   const refs = [

@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const pagePaths = ["/en", "/booking", "/blog", "/contact"];
+const pagePaths = ["/", "/booking", "/blog", "/contact"];
 
 test.describe("critical accessibility scan", () => {
   for (const path of pagePaths) {

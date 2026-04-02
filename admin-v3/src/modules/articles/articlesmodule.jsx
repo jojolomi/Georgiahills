@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { AdminApi } from "../../shared/api/adminApiClient";
+import { AdminApi } from "../../shared/api/adminapiclient";
 import { Card, Table } from "../../shared/components/ui";
-import { reauthenticateOwner } from "../../shared/auth/reauthenticateOwner";
+import { reauthenticateOwner } from "../../shared/auth/reauthenticateowner";
 
 export function ArticlesModule() {
   const [items, setItems] = useState([]);
