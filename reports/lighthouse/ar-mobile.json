@@ -1,0 +1,19 @@
+{
+  "categories": {
+    "performance": { "score": 0.90 },
+    "accessibility": { "score": 0.96 },
+    "best-practices": { "score": 0.96 },
+    "seo": { "score": 0.98 }
+  },
+  "audits": {
+    "largest-contentful-paint": { "numericValue": 2350 },
+    "cumulative-layout-shift": { "numericValue": 0.05 },
+    "interactive": { "numericValue": 3400 }
+  },
+  "_meta": {
+    "note": "Placeholder report. Replace with real Lighthouse CI output by running: npx lighthouse https://georgiahills.com/arabic.html --preset=mobile --output=json --output-path=reports/lighthouse/ar-mobile.json",
+    "url": "https://georgiahills.com/arabic.html",
+    "formFactor": "mobile",
+    "generatedAt": "2026-04-02T00:00:00Z"
+  }
+}

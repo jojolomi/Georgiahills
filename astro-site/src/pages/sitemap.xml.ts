@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { getCollection } from "astro:content";
 import { markets } from "../config/markets";
 import { secondaryPages } from "../config/secondary-pages";
 
@@ -22,7 +23,9 @@ function escapeXml(value: string) {
     .replace(/'/g, "&apos;");
 }
 
-export const GET: APIRoute = () => {
+export const GET: APIRoute = async () => {
+  const allPosts = await getCollection("blog");
+  const postIds = new Set(allPosts.map((p) => p.id.replace(/\.md$/, "")));
   const entries: Entry[] = [
     {
       loc: absolute("/"),
@@ -38,6 +41,22 @@ export const GET: APIRoute = () => {
         { hreflang: "en", href: absolute("/booking.html") },
         { hreflang: "ar", href: absolute("/booking-ar.html") },
         { hreflang: "x-default", href: absolute("/booking.html") }
+      ]
+    },
+    {
+      loc: absolute("/blog.html"),
+      alternates: [
+        { hreflang: "en", href: absolute("/blog.html") },
+        { hreflang: "ar", href: absolute("/blog-ar.html") },
+        { hreflang: "x-default", href: absolute("/blog.html") }
+      ]
+    },
+    {
+      loc: absolute("/blog-ar.html"),
+      alternates: [
+        { hreflang: "ar", href: absolute("/blog-ar.html") },
+        { hreflang: "en", href: absolute("/blog.html") },
+        { hreflang: "x-default", href: absolute("/") }
       ]
     }
   ];
@@ -67,6 +86,27 @@ export const GET: APIRoute = () => {
       });
     }
 
+    entries.push({ loc, alternates });
+  }
+
+  for (const post of allPosts) {
+    const cleanId = post.id.replace(/\.md$/, "");
+    const loc = absolute(`/blog/${cleanId}.html`);
+    const lang = post.data.lang;
+    const isAr = lang === "ar";
+    const baseSlug = cleanId.replace(/^(ar|en)\//, "");
+    const pairedLang = isAr ? "en" : "ar";
+    const pairedCleanId = `${pairedLang}/${baseSlug}`;
+    const alternates: Array<{ hreflang: string; href: string }> = [
+      { hreflang: lang, href: loc },
+      { hreflang: "x-default", href: absolute("/") }
+    ];
+    if (postIds.has(pairedCleanId)) {
+      alternates.splice(1, 0, {
+        hreflang: pairedLang,
+        href: absolute(`/blog/${pairedCleanId}.html`)
+      });
+    }
     entries.push({ loc, alternates });
   }
 

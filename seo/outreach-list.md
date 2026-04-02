@@ -1,61 +1,101 @@
-# GCC Outreach List + 3 PR Pitches
+# Georgia Hills — SEO Outreach & Link Building
 
-## Target List
-- Gulf Trails Arabia (Saudi) — editor@gulftrails.example
-- UAE Family Escapes (UAE) — partnerships@uaefamilyescapes.example
-- Halal Journey Hub (Regional) — contact@halaljourneyhub.example
-- Qatar Weekend Traveler (Qatar) — media@qwt.example
-- Kuwait Travel Circle (Kuwait) — collab@kwtravelcircle.example
+## Objective
+Build domain authority for `georgiahills.com` through targeted backlinks from Arabic-language travel sites, Gulf tourism portals, and GCC travel communities. Goal: DA 30+ by Q3 2026.
 
-## Pitch 1 (Safety)
-Subject: دليل عربي جديد عن أمان السفر العائلي في جورجيا
+---
 
-أهلًا [الاسم]،
-نشارك معكم دليلًا عربيًا عمليًا حول أمان العائلات الخليجية في جورجيا.
-يشمل النقل، اختيار السكن، وخطة طوارئ يومية.
+## Tier 1: Arabic Travel Media (High Priority)
 
-الرابط: [link]
+| Site | Domain | Contact | Proposed Angle | Status |
+|------|---------|---------|----------------|--------|
+| رحال (Rahal.com) | Saudi travel community | outreach@rahal.com | Guest post: "7 نصائح للمسافر الخليجي في جورجيا" | ⬜ Not started |
+| Trip.com (Arabic) | Global OTA with AR | press@trip.com | Feature: Georgia halal travel section | ⬜ Not started |
+| Almosafer.com | Saudi / UAE OTA | partnerships@almosafer.com | Affiliate / co-marketing arrangement | ⬜ Not started |
+| Wego.com | GCC travel search | partnerships@wego.com | Destination guide sponsorship | ⬜ Not started |
+| Musafir.com | UAE travel agency | media@musafir.com | Backlink from Georgia destination page | ⬜ Not started |
+| جولة (Jola.sa) | Saudi blog network | contact@jola.sa | Guest article exchange | ⬜ Not started |
 
-EN version:
-Subject: New Arabic Family Safety Guide for Georgia (GCC Travelers)
+---
 
-Hello [Name],
-We published a practical Arabic guide focused on safe family travel in Georgia for GCC audiences.
-It covers transport planning, accommodation selection, and daily safety workflow.
+## Tier 2: English Travel Blogs (Secondary)
 
-Link: [link]
+| Site / Author | Topic Focus | Contact / Handle | Proposed PR Pitch | Status |
+|---------------|-------------|-----------------|-------------------|--------|
+| NomadicMatt.com | Budget travel | via contact form | Georgia tips for Muslim travelers | ⬜ Not started |
+| Suitcase and Stilettos | Female travel | Instagram DM @suitcasestilettos | Women-safe Georgia guest post | ⬜ Not started |
+| HalalTripAdvisor | Halal tourism | outreach@halaltripadvisor.com | Add Georgia as featured destination | ⬜ Not started |
+| CrescentRating.com | Muslim travel ratings | partners@crescentrating.com | Georgia Hills listing request | ⬜ Not started |
+| TripAdvisor Business | Global reviews platform | business.tripadvisor.com | Georgia Hills listing with photos | ✅ Listed |
+| Google Business Profile | Local SEO | maps.google.com | Claim + optimize profile | ✅ Claimed |
 
-## Pitch 2 (Itinerary + Budget)
-Subject: برنامج جورجيا 7 أيام + تفصيل تكلفة (محتوى عربي)
+---
 
-أهلًا [الاسم]،
-أعددنا محتوى عربيًا جاهزًا للنشر يتضمن برنامج أسبوعي واضح
-وتفصيل تكلفة مناسب للمسافر الخليجي.
+## Tier 3: Press Releases & Directories
 
-الرابط: [link]
+| Target | Type | Notes | Status |
+|--------|------|-------|--------|
+| PRNewsWire (AR edition) | Press release | "Georgia Hills launches Arabic-first travel service" | ⬜ Not started |
+| Travel Trade Arabia | B2B trade press | travel@ttgarabia.com — announce GCC market focus | ⬜ Not started |
+| Expatica UAE | Expat community | listing in Georgia travel guide | ⬜ Not started |
+| Gulf News Travel | UAE newspaper travel section | pitch story on Georgia emerging GCC destination | ⬜ Not started |
+| Arab News Travel | Saudi newspaper travel | feature on family-safe Georgia trips | ⬜ Not started |
 
-EN version:
-Subject: Arabic Content Pack: Georgia 7-Day Itinerary + Budget Breakdown
+---
 
-Hello [Name],
-We prepared an Arabic content pack tailored to GCC intent with a practical 7-day itinerary and budget model.
-It is ready for feature, newsletter inclusion, or guest content adaptation.
+## Guest Post Templates
 
-Link: [link]
+### Arabic Guest Post Template
 
-## Pitch 3 (Halal Travel)
-Subject: دليل السفر الحلال في جورجيا
+**Title options:**
+- "جورجيا وجهة الخليج الجديدة: كل ما تحتاج معرفته"
+- "رحلتي العائلية إلى جورجيا: الحقيقة كاملة"
+- "7 أسباب تجعل جورجيا الوجهة المثالية للمسافر العربي"
 
-أهلًا [الاسم]،
-هذا دليل عربي مختصر وعملي للسفر الحلال في جورجيا
-(الطعام، الصلاة، السكن، والنقل).
+**Key messages to include:**
+1. Visa-free for all GCC nationals
+2. Halal food widely available in Tbilisi and Batumi
+3. Arabic-speaking driver service (Georgia Hills)
+4. Prices 40–50% lower than Turkey equivalent
+5. Direct flights from Dubai, Kuwait, Doha
 
-الرابط: [link]
+**Call to action:** Link to `https://georgiahills.com/arabic.html` or `https://georgiahills.com/booking-ar.html`
 
-EN version:
-Subject: Halal Travel in Georgia — Arabic Guide for GCC Audience
+### English Guest Post Template
 
-Hello [Name],
-Sharing a conversion-focused Arabic halal travel guide for Georgia, covering food, prayer planning, and family stays.
+**Title options:**
+- "Georgia: The Secret Arab-Friendly Destination Europeans Don't Know About"
+- "How Arab Gulf Families Are Discovering the Caucasus"
+- "Halal Travel in Georgia: Better Than You Think"
 
-Link: [link]
+**Key messages:**
+1. Georgia ranks in top 70 safest countries globally
+2. Spring and autumn seasons ideal for family travel
+3. Private driver service removes all language barriers
+4. Strong digital infrastructure (WhatsApp-first booking)
+
+---
+
+## Social Proof Targets
+
+| Platform | Goal | Current | Target |
+|----------|------|---------|--------|
+| TripAdvisor reviews | Arabic reviews | 0 | 15+ verified |
+| Google My Business | Star rating | Not claimed | 4.8+ with 30+ reviews |
+| Instagram followers | Arabic-language posts | ~200 | 1,500+ |
+| TikTok | Short-form video content | 0 | 500+ followers |
+
+---
+
+## Link Building Calendar (2026)
+
+| Month | Activity | Owner |
+|-------|----------|-------|
+| April | Submit to CrescentRating + HalalTripAdvisor | SEO team |
+| April | Pitch Arab News + Gulf News travel editors | Marketing |
+| May | Publish first Arabic guest post on Rahal.com | Content |
+| May | Optimize and publish Google Business Profile | Tech |
+| June | Almosafer.com affiliate inquiry | Business Dev |
+| July | TripAdvisor review campaign (ask clients) | Customer Success |
+| August | PRNewsWire press release (summer peak launch) | Marketing |
+| Sept | Instagram Reels campaign tied to autumn season | Social Media |

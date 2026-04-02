@@ -1,0 +1,138 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { ensureSeoContract } from "../components/seo/contract";
+import { breadcrumbSchema, localBusinessSchema } from "../components/seo/schema-builders";
+import { SITE } from "../config/site";
+import NewsletterSignup from "../components/marketing/NewsletterSignup.astro";
+
+type PostExtra = { date?: string; meta_title?: string; metaTitle?: string; meta_description?: string; metaDescription?: string };
+
+const allPosts = await getCollection("blog");
+const enPosts = allPosts
+  .filter((p) => p.data.lang === "en")
+  .sort((a, b) => {
+    const dateA = (a.data as PostExtra).date ?? "2026-01-01";
+    const dateB = (b.data as PostExtra).date ?? "2026-01-01";
+    return dateB.localeCompare(dateA);
+  })
+  .map((post) => {
+    const extra = post.data as PostExtra;
+    return {
+      post,
+      postUrl: `/blog/${post.id.replace(/\.md$/, "")}.html`,
+      postTitle: extra.meta_title ?? extra.metaTitle ?? post.data.title,
+      postDesc: extra.meta_description ?? extra.metaDescription ?? post.data.description,
+      date: extra.date,
+      intent: post.data.intent
+    };
+  });
+
+const canonical = `${SITE.domain}/blog.html`;
+
+const meta = ensureSeoContract(
+  {
+    lang: "en",
+    dir: "ltr",
+    title: "Georgia Hills Blog | Travel Tips for GCC Visitors",
+    description: "Practical articles on visiting Georgia: itineraries, costs, safety, halal travel, and family tips.",
+    canonical,
+    hreflangs: [
+      { hreflang: "en", href: canonical },
+      { hreflang: "ar", href: `${SITE.domain}/blog-ar.html` },
+      { hreflang: "x-default", href: canonical }
+    ],
+    ogImage: `${SITE.domain}/image-1600.webp`,
+    robots: "index, follow, max-image-preview:large",
+    twitterCard: "summary_large_image",
+    schemaGraph: [
+      localBusinessSchema(canonical),
+      {
+        "@type": "WebPage",
+        name: "Georgia Hills Blog",
+        inLanguage: "en",
+        url: canonical,
+        description: "Practical travel articles for GCC visitors to Georgia"
+      },
+      breadcrumbSchema([
+        { name: "Home", item: `${SITE.domain}/` },
+        { name: "Blog", item: canonical }
+      ])
+    ]
+  },
+  "blog-en"
+);
+
+const intentLabels: Record<string, string> = {
+  planning: "Planning",
+  cost: "Budget",
+  itinerary: "Itinerary",
+  halal: "Halal",
+  safety: "Safety"
+};
+---
+<BaseLayout lang="en" dir="ltr" meta={meta}>
+  <section class="section-py" style="padding-top:7rem; padding-bottom:3rem;">
+    <div class="container">
+      <h1 class="section-title" style="margin-bottom:0.5rem;">Travel Blog</h1>
+      <p class="section-desc" style="margin-bottom:2.5rem;">
+        Practical guides and travel tips for visiting Georgia from the Gulf region.
+      </p>
+
+      {enPosts.length === 0 && (
+        <p style="color:var(--color-gray-500);">No articles available yet.</p>
+      )}
+
+      <div class="package-grid">
+        {enPosts.map(({ post, postUrl, postTitle, postDesc, date, intent }) => {
+          const intentLabel = intent ? (intentLabels[intent] ?? intent) : null;
+          return (
+            <article class="content-card blog-card" style="padding:1.5rem; display:flex; flex-direction:column; gap:0.75rem;">
+              <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+                {date && (
+                  <time datetime={date} style="font-size:0.8rem; color:var(--color-gray-500);">{date}</time>
+                )}
+                {intentLabel && (
+                  <span style="font-size:0.75rem; background:var(--color-primary); color:white; border-radius:999px; padding:0.1rem 0.6rem;">{intentLabel}</span>
+                )}
+              </div>
+              <h2 style="font-size:1.1rem; font-weight:700; line-height:1.4; margin:0;">{postTitle}</h2>
+              <p style="color:var(--color-gray-600); font-size:0.9rem; line-height:1.6; margin:0; flex:1;">{postDesc}</p>
+              <a
+                href={postUrl}
+                class="btn-hero btn-hero-primary"
+                style="align-self:flex-start; font-size:0.875rem;"
+                data-ga4-event="blog_listing_click"
+                data-ga4-label={post.id}
+              >
+                Read more
+              </a>
+            </article>
+          );
+        })}
+      </div>
+
+      <div class="hero-buttons" style="margin-top:3rem; justify-content:center;">
+        <a href="/booking.html" class="btn-hero btn-hero-primary" data-ga4-event="blog_en_cta_click">
+          Book Your Trip
+        </a>
+        <a
+          href="https://wa.me/995579088537"
+          class="btn-hero btn-hero-secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-ga4-event="whatsapp_click"
+          data-ga4-label="blog-en-page"
+        >
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+  <NewsletterSignup lang="en" />
+</BaseLayout>
+
+<script>
+  import { attachGa4Listeners } from "../lib/ga4";
+  attachGa4Listeners();
+</script>

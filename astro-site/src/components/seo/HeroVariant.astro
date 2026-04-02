@@ -34,7 +34,12 @@ const initial = variants[fallbackIntent];
   <h1 class="hero-title" data-hero-title>{initial.title}</h1>
   <p class="hero-subtitle" data-hero-subtitle>{initial.subtitle}</p>
   <div class="hero-buttons">
-    <a href={isAr ? "/booking-ar.html" : "/booking.html"} class="btn-hero btn-hero-primary">{isAr ? "احجز الآن" : "Book now"}</a>
-    <a href="https://wa.me/995579088537" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener noreferrer">{isAr ? "تواصل واتساب" : "WhatsApp"}</a>
+    <a href={isAr ? "/booking-ar.html" : "/booking.html"} class="btn-hero btn-hero-primary" data-ga4-event="hero_cta_click" data-ga4-label={`hero-${lang}`}>{isAr ? "احجز الآن" : "Book now"}</a>
+    <a href="https://wa.me/995579088537" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener noreferrer" data-ga4-event="whatsapp_click" data-ga4-label={`hero-${lang}`}>{isAr ? "تواصل واتساب" : "WhatsApp"}</a>
   </div>
 </div>
+
+<script>
+  import { attachGa4Listeners } from "../../lib/ga4";
+  attachGa4Listeners();
+</script>

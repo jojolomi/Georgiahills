@@ -1,0 +1,193 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { ensureSeoContract } from "../../components/seo/contract";
+import { breadcrumbSchema, localBusinessSchema } from "../../components/seo/schema-builders";
+import { SITE } from "../../config/site";
+import SocialProof from "../../components/trust/SocialProof.astro";
+import NewsletterSignup from "../../components/marketing/NewsletterSignup.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  const postIds = new Set(posts.map((p) => p.id.replace(/\.md$/, "")));
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.md$/, "") },
+    props: { post, allPostIds: [...postIds] }
+  }));
+}
+
+const { post, allPostIds } = Astro.props;
+const { Content } = await render(post);
+const fm = post.data as Record<string, unknown>;
+
+const lang = (post.data.lang ?? "en") as "en" | "ar";
+const isAr = lang === "ar";
+const dir = isAr ? "rtl" : "ltr";
+
+const pageTitle = String(fm.meta_title ?? fm.metaTitle ?? post.data.title);
+const pageDescription = String(fm.meta_description ?? fm.metaDescription ?? post.data.description);
+const ogImage = fm.image ? `${SITE.domain}${String(fm.image)}` : `${SITE.domain}/image-1600.webp`;
+
+const canonical = `${SITE.domain}/blog/${post.id.replace(/\.md$/, "")}.html`;
+
+const baseSlug = post.id.replace(/^(ar|en)\//, "").replace(/\.md$/, "");
+const pairedLang = isAr ? "en" : "ar";
+const pairedId = `${pairedLang}/${baseSlug}`;
+const hasPairedPost = (allPostIds as string[]).includes(pairedId);
+const pairedCanonical = `${SITE.domain}/blog/${pairedId}.html`;
+
+const faqItems = Array.isArray(fm.faq) ? (fm.faq as Array<{ question: string; answer: string }>) : [];
+
+const faqSchema = faqItems.length
+  ? {
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: { "@type": "Answer", text: item.answer }
+      }))
+    }
+  : null;
+
+const articleSchema = {
+  "@type": "Article",
+  headline: pageTitle,
+  description: pageDescription,
+  inLanguage: lang,
+  url: canonical,
+  image: ogImage,
+  author: {
+    "@type": "Person",
+    name: String(fm.author ?? "Georgia Hills")
+  },
+  publisher: {
+    "@type": "Organization",
+    name: "Georgia Hills",
+    url: SITE.domain
+  },
+  datePublished: String(fm.date ?? fm.publish_date ?? "2026-03-01"),
+  dateModified: String(fm.reviewed_date ?? fm.date ?? "2026-03-01")
+};
+
+const schemaGraph = [
+  localBusinessSchema(canonical),
+  articleSchema,
+  breadcrumbSchema([
+    {
+      name: isAr ? "الرئيسية" : "Home",
+      item: isAr ? `${SITE.domain}/arabic.html` : `${SITE.domain}/`
+    },
+    {
+      name: isAr ? "المدونة" : "Blog",
+      item: isAr ? `${SITE.domain}/blog-ar.html` : `${SITE.domain}/blog.html`
+    },
+    { name: pageTitle, item: canonical }
+  ]),
+  ...(faqSchema ? [faqSchema] : [])
+];
+
+const meta = ensureSeoContract(
+  {
+    lang,
+    dir,
+    title: pageTitle,
+    description: pageDescription,
+    canonical,
+    hreflangs: [
+      { hreflang: lang, href: canonical },
+      ...(hasPairedPost ? [{ hreflang: pairedLang, href: pairedCanonical }] : []),
+      { hreflang: "x-default", href: `${SITE.domain}/` }
+    ],
+    ogImage,
+    robots: "index, follow, max-image-preview:large",
+    twitterCard: "summary_large_image",
+    schemaGraph
+  },
+  `blog-${post.id}`
+);
+---
+<BaseLayout lang={lang} dir={dir} meta={meta}>
+  <article class="section-py" style="padding-top:7rem; padding-bottom:3rem;" itemscope itemtype="https://schema.org/Article">
+    <div class="container">
+      <div class="content-card blog-post-card" style="padding:2rem; max-width:860px; margin:0 auto;">
+
+        {fm.date && (
+          <p class="blog-post-date" style="font-size:0.85rem; color:var(--color-gray-500); margin-bottom:0.5rem;">
+            <time datetime={String(fm.date)}>{String(fm.date)}</time>
+            {fm.author && <span> &middot; {String(fm.author)}</span>}
+          </p>
+        )}
+
+        <h1 class="section-title" itemprop="headline">{pageTitle}</h1>
+        <p class="section-desc" itemprop="description">{pageDescription}</p>
+
+        {fm.image && (
+          <picture style="display:block; margin:1.5rem 0;">
+            <img
+              src={String(fm.image)}
+              alt={pageTitle}
+              loading="eager"
+              decoding="async"
+              width="1024"
+              height="576"
+              style="width:100%; border-radius:0.75rem; object-fit:cover; aspect-ratio:16/9;"
+              itemprop="image"
+            />
+          </picture>
+        )}
+
+        <div class="blog-post-body prose" itemprop="articleBody">
+          <Content />
+        </div>
+
+        {faqItems.length > 0 && (
+          <section class="faq-section" style="margin-top:2.5rem;" aria-labelledby="faq-title">
+            <h2 id="faq-title" class="section-title" style="font-size:1.4rem;">
+              {isAr ? "أسئلة شائعة" : "Frequently Asked Questions"}
+            </h2>
+            <div class="faq-list">
+              {faqItems.map((item) => (
+                <details class="faq-item content-card" style="padding:1rem; margin-bottom:0.75rem; cursor:pointer;">
+                  <summary class="faq-question" style="font-weight:600; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+                    {item.question}
+                    <span class="faq-icon" aria-hidden="true" style="font-size:1.2rem; margin-inline-start:0.5rem;">+</span>
+                  </summary>
+                  <p class="faq-answer" style="margin-top:0.75rem; color:var(--color-gray-600);">{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <div class="hero-buttons" style="margin-top:2.5rem;">
+          <a
+            href={isAr ? "/booking-ar.html" : "/booking.html"}
+            class="btn-hero btn-hero-primary"
+            data-ga4-event="blog_cta_click"
+            data-ga4-label={post.id}
+          >
+            {isAr ? "احجز رحلتك" : "Book Your Trip"}
+          </a>
+          <a
+            href="https://wa.me/995579088537"
+            class="btn-hero btn-hero-secondary"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-ga4-event="whatsapp_click"
+            data-ga4-label={`blog-${post.id}`}
+          >
+            {isAr ? "تواصل واتساب" : "WhatsApp"}
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </article>
+  <SocialProof lang={lang} />
+  <NewsletterSignup lang={lang} />
+</BaseLayout>
+
+<script>
+  import { attachGa4Listeners } from "../../lib/ga4";
+  attachGa4Listeners();
+</script>

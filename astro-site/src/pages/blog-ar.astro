@@ -1,0 +1,138 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { ensureSeoContract } from "../components/seo/contract";
+import { breadcrumbSchema, localBusinessSchema } from "../components/seo/schema-builders";
+import { SITE } from "../config/site";
+import NewsletterSignup from "../components/marketing/NewsletterSignup.astro";
+
+type PostExtra = { date?: string; meta_title?: string; metaTitle?: string; meta_description?: string; metaDescription?: string };
+
+const allPosts = await getCollection("blog");
+const arPosts = allPosts
+  .filter((p) => p.data.lang === "ar")
+  .sort((a, b) => {
+    const dateA = (a.data as PostExtra).date ?? "2026-01-01";
+    const dateB = (b.data as PostExtra).date ?? "2026-01-01";
+    return dateB.localeCompare(dateA);
+  })
+  .map((post) => {
+    const extra = post.data as PostExtra;
+    return {
+      post,
+      postUrl: `/blog/${post.id.replace(/\.md$/, "")}.html`,
+      postTitle: extra.meta_title ?? extra.metaTitle ?? post.data.title,
+      postDesc: extra.meta_description ?? extra.metaDescription ?? post.data.description,
+      date: extra.date,
+      intent: post.data.intent
+    };
+  });
+
+const canonical = `${SITE.domain}/blog-ar.html`;
+
+const meta = ensureSeoContract(
+  {
+    lang: "ar",
+    dir: "rtl",
+    title: "مدونة Georgia Hills | نصائح السفر إلى جورجيا للمسافر الخليجي",
+    description: "مقالات عملية حول السفر إلى جورجيا: برامج، تكاليف، أمان، سفر حلال ونصائح للعائلات الخليجية.",
+    canonical,
+    hreflangs: [
+      { hreflang: "ar", href: canonical },
+      { hreflang: "en", href: `${SITE.domain}/blog.html` },
+      { hreflang: "x-default", href: `${SITE.domain}/` }
+    ],
+    ogImage: `${SITE.domain}/image-1600.webp`,
+    robots: "index, follow, max-image-preview:large",
+    twitterCard: "summary_large_image",
+    schemaGraph: [
+      localBusinessSchema(canonical),
+      {
+        "@type": "WebPage",
+        name: "مدونة Georgia Hills",
+        inLanguage: "ar",
+        url: canonical,
+        description: "مقالات سفر عملية للمسافرين من الخليج إلى جورجيا"
+      },
+      breadcrumbSchema([
+        { name: "الرئيسية", item: `${SITE.domain}/arabic.html` },
+        { name: "المدونة", item: canonical }
+      ])
+    ]
+  },
+  "blog-ar"
+);
+
+const intentLabels: Record<string, string> = {
+  planning: "تخطيط",
+  cost: "ميزانية",
+  itinerary: "برنامج",
+  halal: "حلال",
+  safety: "أمان"
+};
+---
+<BaseLayout lang="ar" dir="rtl" meta={meta}>
+  <section class="section-py" style="padding-top:7rem; padding-bottom:3rem;">
+    <div class="container">
+      <h1 class="section-title" style="margin-bottom:0.5rem;">المدونة</h1>
+      <p class="section-desc" style="margin-bottom:2.5rem;">
+        نصائح عملية ومقالات سفر مخصصة للمسافر الخليجي إلى جورجيا.
+      </p>
+
+      {arPosts.length === 0 && (
+        <p style="color:var(--color-gray-500);">لا توجد مقالات متاحة حاليًا.</p>
+      )}
+
+      <div class="package-grid">
+        {arPosts.map(({ post, postUrl, postTitle, postDesc, date, intent }) => {
+          const intentLabel = intent ? (intentLabels[intent] ?? intent) : null;
+          return (
+            <article class="content-card blog-card" style="padding:1.5rem; display:flex; flex-direction:column; gap:0.75rem;">
+              <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+                {date && (
+                  <time datetime={date} style="font-size:0.8rem; color:var(--color-gray-500);">{date}</time>
+                )}
+                {intentLabel && (
+                  <span style="font-size:0.75rem; background:var(--color-primary); color:white; border-radius:999px; padding:0.1rem 0.6rem;">{intentLabel}</span>
+                )}
+              </div>
+              <h2 style="font-size:1.1rem; font-weight:700; line-height:1.4; margin:0;">{postTitle}</h2>
+              <p style="color:var(--color-gray-600); font-size:0.9rem; line-height:1.6; margin:0; flex:1;">{postDesc}</p>
+              <a
+                href={postUrl}
+                class="btn-hero btn-hero-primary"
+                style="align-self:flex-start; font-size:0.875rem;"
+                data-ga4-event="blog_listing_click"
+                data-ga4-label={post.id}
+              >
+                اقرأ المزيد
+              </a>
+            </article>
+          );
+        })}
+      </div>
+
+      <div class="hero-buttons" style="margin-top:3rem; justify-content:center;">
+        <a href="/booking-ar.html" class="btn-hero btn-hero-primary" data-ga4-event="blog_ar_cta_click">
+          احجز رحلتك
+        </a>
+        <a
+          href="https://wa.me/995579088537"
+          class="btn-hero btn-hero-secondary"
+          target="_blank"
+          rel="noopener noreferrer"
+          data-ga4-event="whatsapp_click"
+          data-ga4-label="blog-ar-page"
+        >
+          تواصل واتساب
+        </a>
+      </div>
+    </div>
+  </section>
+  <NewsletterSignup lang="ar" />
+</BaseLayout>
+
+<script>
+  import { attachGa4Listeners } from "../lib/ga4";
+  attachGa4Listeners();
+</script>

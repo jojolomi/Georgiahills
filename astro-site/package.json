@@ -12,5 +12,8 @@
   "dependencies": {
     "astro": "^5.2.0",
     "firebase-admin": "^13.0.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
   }
 }
