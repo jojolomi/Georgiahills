@@ -24,10 +24,12 @@ let passed = true;
 const files = collectHtml(distDir);
 const destinationRouteRe = /(?:^|\/)(tbilisi|batumi|kazbegi|martvili|signagi(?:-ar)?)(?:\/index\.html|\.html)$/i;
 const packageRouteRe = /(?:^|\/)(itineraries-hub|itineraries-hub-ar|honeymoon|honeymoon-ar|family-travel-hub|family-travel-hub-ar|halal-travel-hub|halal-travel-hub-ar|safety-hub|safety-hub-ar)(?:\/index\.html|\.html)$/i;
+const skipRe = /(?:^|\/)(?:admin\.html|admin-v3\/.*\.html|.*\.report\.html|tmp_.*\.html)$/;
 
 for (const file of files) {
   const html = fs.readFileSync(file, "utf8");
   const rel = path.relative(distDir, file).replace(/\\/g, "/");
+  if (skipRe.test(rel)) continue;
 
   const scripts = [...html.matchAll(/<script[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
   if (!scripts.length) {
