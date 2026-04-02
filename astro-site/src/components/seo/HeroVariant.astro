@@ -40,13 +40,6 @@ const initial = variants[fallbackIntent];
 </div>
 
 <script>
-  document.querySelectorAll("[data-ga4-event]").forEach((el) => {
-    el.addEventListener("click", () => {
-      const eventName = el.dataset.ga4Event;
-      const label = el.dataset.ga4Label ?? "";
-      if (typeof window.gtag === "function" && eventName) {
-        window.gtag("event", eventName, { event_label: label });
-      }
-    }, { once: true });
-  });
+  import { attachGa4Listeners } from "../../lib/ga4";
+  attachGa4Listeners();
 </script>

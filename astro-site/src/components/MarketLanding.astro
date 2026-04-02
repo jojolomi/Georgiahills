@@ -6,23 +6,143 @@ interface Props {
 }
 
 const { market } = Astro.props;
+const schemaGraph = [
+  {
+    "@type": "TouristTrip",
+    name: `رحلات جورجيا للمسافرين من ${market.countryAr}`,
+    description: market.ogDescription
+  },
+  market.faq.length
+    ? {
+        "@type": "FAQPage",
+        mainEntity: market.faq.map(({ q, a }) => ({
+          "@type": "Question",
+          name: q,
+          acceptedAnswer: { "@type": "Answer", text: a }
+        }))
+      }
+    : null,
+  ...market.reviews.map((r) => ({
+    "@type": "Review",
+    author: { "@type": "Person", name: r.name },
+    reviewRating: { "@type": "Rating", ratingValue: r.rating, bestRating: 5 },
+    reviewBody: r.text
+  }))
+].filter(Boolean);
 ---
-<section class="section-py" style="padding-top:8rem; padding-bottom:4rem;">
+
+<script type="application/ld+json" set:html={JSON.stringify({ "@context": "https://schema.org", "@graph": schemaGraph })}></script>
+
+<!-- Hero -->
+<section class="section-py" style="padding-top:8rem; padding-bottom:3rem;">
   <div class="container">
-    <div class="content-card" style="padding:2rem;">
+    <div class="content-card" style="padding:2.5rem 2rem;">
       <h1 class="section-title">{market.heading}</h1>
-      <p class="section-desc">{market.body}</p>
+      <p class="section-desc" style="font-size:1.15rem; margin-bottom:1.5rem;">{market.subheading}</p>
+      <p style="margin-bottom:2rem; line-height:1.8;">{market.body}</p>
+
+      <!-- USPs -->
+      <ul style="margin:0 0 2rem; padding:0; list-style:none; display:grid; gap:0.6rem;">
+        {market.usps.map((usp) => (
+          <li style="display:flex; align-items:flex-start; gap:0.6rem;">
+            <span aria-hidden="true" style="color:#1d8348; font-size:1.1rem; flex-shrink:0; margin-top:0.1rem;">✔</span>
+            <span>{usp}</span>
+          </li>
+        ))}
+      </ul>
+
+      <!-- CTA -->
+      <div class="hero-buttons" style="margin-bottom:2.5rem;">
+        <a href="/booking-ar.html" class="btn-hero btn-hero-primary" data-ga4-event="cta_click" data-ga4-label={`market_${market.code}_book`}>احجز الآن</a>
+        <a href="https://wa.me/995579088537" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener noreferrer" data-ga4-event="whatsapp_click" data-ga4-label={`market_${market.code}`}>تواصل واتساب</a>
+      </div>
+
+      <!-- Map -->
       <iframe
         title="Georgia destination map"
         src="https://www.google.com/maps?q=Georgia+country&output=embed"
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"
-        style="width:100%; min-height:280px; border:0; border-radius:0.75rem; margin-top:1rem;"
+        style="width:100%; min-height:280px; border:0; border-radius:0.75rem;"
       ></iframe>
-      <div class="hero-buttons" style="margin-top:2rem;">
-        <a href="/booking-ar.html" class="btn-hero btn-hero-primary">احجز الآن</a>
-        <a href="https://wa.me/995579088537" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener noreferrer">تواصل واتساب</a>
-      </div>
     </div>
   </div>
 </section>
+
+<!-- Pricing -->
+{market.pricing.length > 0 && (
+  <section class="section-py" style="padding-top:2rem; padding-bottom:2rem;">
+    <div class="container">
+      <div class="content-card" style="padding:2rem;">
+        <h2 class="section-title" style="font-size:1.35rem; margin-bottom:1.25rem;">الأسعار والباقات</h2>
+        <div style="display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+          {market.pricing.map((p) => (
+            <div style="border:1px solid #e2e8f0; border-radius:0.75rem; padding:1.25rem; text-align:center;">
+              <p style="font-weight:600; margin-bottom:0.4rem;">{p.label}</p>
+              <p style="color:#1d8348; font-size:1.2rem; font-weight:700;">{p.value}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<!-- Reviews -->
+{market.reviews.length > 0 && (
+  <section class="section-py" aria-labelledby={`reviews-${market.code}`} style="padding-top:2rem; padding-bottom:2rem;" itemscope itemtype="https://schema.org/ItemList">
+    <div class="container">
+      <div class="content-card" style="padding:2rem;">
+        <p style="color:#b7950b; font-weight:600; margin-bottom:0.25rem;">★★★★★ ٤.٩ / ٥</p>
+        <h2 id={`reviews-${market.code}`} class="section-title" style="font-size:1.35rem; margin-bottom:1.5rem;">{market.reviewsHeading}</h2>
+        <div style="display:grid; gap:1.25rem; grid-template-columns:repeat(auto-fit,minmax(260px,1fr));">
+          {market.reviews.map((r) => (
+            <article style="border:1px solid #e2e8f0; border-radius:0.75rem; padding:1.25rem;" itemscope itemtype="https://schema.org/Review">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+                <div>
+                  <strong itemprop="author" itemscope itemtype="https://schema.org/Person">
+                    <span itemprop="name">{r.name}</span>
+                  </strong>
+                  <div style="font-size:0.8rem; color:#718096;">{r.intent}</div>
+                </div>
+                <span style="color:#b7950b;" aria-label={`${r.rating} نجوم`} itemprop="reviewRating" itemscope itemtype="https://schema.org/Rating">
+                  <meta itemprop="ratingValue" content={String(r.rating)} />
+                  <meta itemprop="bestRating" content="5" />
+                  {"★".repeat(r.rating)}
+                </span>
+              </div>
+              <p itemprop="reviewBody" style="margin:0; line-height:1.6;">{r.text}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<!-- FAQ -->
+{market.faq.length > 0 && (
+  <section class="section-py" aria-labelledby={`faq-${market.code}`} style="padding-top:2rem; padding-bottom:2rem;">
+    <div class="container">
+      <div class="content-card" style="padding:2rem;">
+        <h2 id={`faq-${market.code}`} class="section-title" style="font-size:1.35rem; margin-bottom:1.25rem;">أسئلة شائعة</h2>
+        <div style="display:grid; gap:0.75rem;">
+          {market.faq.map(({ q, a }) => (
+            <details style="border:1px solid #e2e8f0; border-radius:0.75rem; padding:1rem; cursor:pointer;">
+              <summary style="font-weight:600; list-style:none; display:flex; justify-content:space-between; align-items:center;">
+                <span>{q}</span>
+                <span aria-hidden="true" style="margin-inline-start:0.75rem; flex-shrink:0; color:#4a5568;">+</span>
+              </summary>
+              <p style="margin:0.75rem 0 0; color:#4a5568; line-height:1.7;">{a}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
+<script>
+  import { attachGa4Listeners } from "../lib/ga4";
+  attachGa4Listeners();
+</script>

@@ -188,13 +188,6 @@ const meta = ensureSeoContract(
 </BaseLayout>
 
 <script>
-  document.querySelectorAll("[data-ga4-event]").forEach(function(el) {
-    el.addEventListener("click", function() {
-      var eventName = el.dataset.ga4Event;
-      var label = el.dataset.ga4Label || "";
-      if (typeof window.gtag === "function" && eventName) {
-        window.gtag("event", eventName, { event_label: label });
-      }
-    });
-  });
+  import { attachGa4Listeners } from "../../lib/ga4";
+  attachGa4Listeners();
 </script>
