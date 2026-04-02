@@ -1,16 +1,16 @@
 import React, { useMemo } from "react";
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
-import { useOwnerAuth } from "../shared/hooks/useOwnerAuth";
-import { DashboardModule } from "../modules/dashboard/DashboardModule";
-import { PagesModule } from "../modules/pages/PagesModule";
-import { DestinationsModule } from "../modules/destinations/DestinationsModule";
-import { ArticlesModule } from "../modules/articles/ArticlesModule";
-import { MediaModule } from "../modules/media/MediaModule";
-import { SeoMarketsModule } from "../modules/seo-markets/SeoMarketsModule";
-import { LeadsModule } from "../modules/leads/LeadsModule";
-import { PublishingModule } from "../modules/publishing/PublishingModule";
-import { IntegrationsModule } from "../modules/integrations/IntegrationsModule";
-import { AuditModule } from "../modules/audit/AuditModule";
+import { useOwnerAuth } from "../shared/hooks/useownerauth";
+import { DashboardModule } from "../modules/dashboard/dashboardmodule";
+import { PagesModule } from "../modules/pages/pagesmodule";
+import { DestinationsModule } from "../modules/destinations/destinationsmodule";
+import { ArticlesModule } from "../modules/articles/articlesmodule";
+import { MediaModule } from "../modules/media/mediamodule";
+import { SeoMarketsModule } from "../modules/seo-markets/seomarketsmodule";
+import { LeadsModule } from "../modules/leads/leadsmodule";
+import { PublishingModule } from "../modules/publishing/publishingmodule";
+import { IntegrationsModule } from "../modules/integrations/integrationsmodule";
+import { AuditModule } from "../modules/audit/auditmodule";
 
 function LoginView({ onLogin, error }) {
   return (

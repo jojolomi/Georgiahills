@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AdminApi } from "../../shared/api/adminApiClient";
+import { AdminApi } from "../../shared/api/adminapiclient";
 import { Card } from "../../shared/components/ui";
 
 export function PublishingModule() {
