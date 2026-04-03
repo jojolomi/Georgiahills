@@ -30,6 +30,11 @@ jobs:
           tar -xzf "$TMP_TAR" --strip-components=1
           rm -f "$TMP_TAR"
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.30.3
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
