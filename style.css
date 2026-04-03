@@ -441,7 +441,10 @@ html[lang="ar"] .close-menu-btn { right: auto; left: 1.5rem; }
 }
 
 /* Hero */
-.hero { position: relative; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: var(--color-dark); }
+.hero { position: relative; height: 90svh; min-height: 560px; display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: var(--color-dark); }
+@supports not (height: 1svh) {
+    .hero { height: 90vh; }
+}
 .hero-bg-container { position: absolute; inset: 0; z-index: var(--z-negative); }
 .hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.4), transparent); }

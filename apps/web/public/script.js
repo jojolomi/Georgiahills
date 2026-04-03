@@ -380,13 +380,49 @@ function renderSliderDestinations(dests) {
 
     const lang = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl' ? 'ar' : 'en';
 
-    const buildResponsiveTourImage = (source) => {
-        if (!source || !/\.(webp|avif|jpe?g|png)$/i.test(source)) {
-            return { src: source || '', srcset: '', sizes: '' };
+    const tourImageFallbacks = {
+        batumi: {
+            src: 'image-640.webp',
+            srcset: 'image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w'
         }
-        const extIndex = source.lastIndexOf('.');
-        const base = source.slice(0, extIndex);
-        const ext = source.slice(extIndex);
+    };
+
+    const buildResponsiveTourImage = (id, source) => {
+        if (typeof source !== 'string') {
+            return { src: '', srcset: '', sizes: '' };
+        }
+
+        const trimmed = source.trim();
+        if (!trimmed) {
+            return { src: '', srcset: '', sizes: '' };
+        }
+
+        if (/^(https?:)?\/\//i.test(trimmed)) {
+            return { src: trimmed, srcset: '', sizes: '' };
+        }
+
+        const fallback = tourImageFallbacks[id];
+        if (fallback) {
+            return {
+                src: fallback.src,
+                srcset: fallback.srcset,
+                sizes: '(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px'
+            };
+        }
+
+        const localFile = trimmed.match(/^([./a-zA-Z0-9_-]+)\.(webp|avif|jpe?g|png)$/i);
+        if (!localFile) {
+            return { src: trimmed, srcset: '', sizes: '' };
+        }
+
+        const base = localFile[1];
+        const ext = `.${localFile[2]}`;
+
+        // Keep already sized filenames as-is (e.g. foo-1024.webp).
+        if (/-\d{2,4}$/i.test(base)) {
+            return { src: trimmed, srcset: '', sizes: '' };
+        }
+
         return {
             src: `${base}-480${ext}`,
             srcset: `${base}-320${ext} 320w, ${base}-480${ext} 480w, ${base}-640${ext} 640w, ${base}-768${ext} 768w, ${base}-1024${ext} 1024w`,
@@ -419,7 +455,7 @@ function renderSliderDestinations(dests) {
         
         // Image
         const img = document.createElement('img');
-        const responsiveImage = buildResponsiveTourImage(d.img);
+        const responsiveImage = buildResponsiveTourImage(id, d.img);
         img.width = 380; // Standardize
         img.height = 475;
         img.loading = 'lazy';

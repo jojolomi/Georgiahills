@@ -162,7 +162,7 @@
               <div style="display:flex; gap:0.75rem;">
                 <div class="custom-select-wrapper" id="currency-desktop">
                   <button class="action-btn custom-select-trigger" data-currency-toggle="desktop" aria-haspopup="true">
-                    <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-desktop">
+                    <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-desktop" width="20" height="14" loading="lazy" decoding="async">
                     <span id="curr-code-desktop">GEL</span>
                     <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
                   </button>
@@ -207,7 +207,7 @@
         <div class="mobile-settings">
           <div class="custom-select-wrapper" id="currency-mobile">
             <button class="action-btn custom-select-trigger" data-currency-toggle="mobile" aria-haspopup="true">
-              <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-mobile">
+              <img src="https://flagcdn.com/w40/ge.png" alt="GEL" class="currency-flag-sm" id="curr-flag-mobile" width="20" height="14" loading="lazy" decoding="async">
               <span id="curr-code-mobile">GEL</span>
               <i class="fa-solid fa-chevron-down" style="font-size:0.7rem;"></i>
             </button>
