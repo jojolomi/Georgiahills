@@ -316,6 +316,21 @@ html[lang="ar"] .ml-2 { margin-left: 0; margin-right: 0.5rem; }
 .action-btn:hover { background-color: white; color: var(--color-dark); border-color: white; transform: translateY(-1px); }
 .navbar.scrolled .action-btn:hover { background-color: var(--color-gray-50); color: var(--color-primary); border-color: var(--color-gray-300); }
 
+/* Travel hub CTA contrast fix on light background */
+#travel-hubs .action-btn {
+    color: #0f172a;
+    border-color: #334155;
+    background: #ffffff;
+    font-weight: 700;
+}
+
+#travel-hubs .action-btn:hover,
+#travel-hubs .action-btn:focus-visible {
+    color: #ffffff;
+    background: #1e293b;
+    border-color: #1e293b;
+}
+
 /* Book Now Button */
 .btn-book-nav { 
     display: inline-flex; 
@@ -678,7 +693,7 @@ body.page-article .section-heading {
 }
 
 /* PERFORMANCE: Skip rendering off-screen content */
-#packages, #fleet, #guide, #reviews, #faq {
+#packages, #fleet, #guide, #reviews, #faq, #travel-hubs, #blog {
     content-visibility: auto;
     contain-intrinsic-size: 1px 800px; /* Approximate height to prevent scrollbar jumping */
 }

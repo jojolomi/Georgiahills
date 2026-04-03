@@ -174,17 +174,40 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+        <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+
+        <style id="critical-css">
+            html { scroll-behavior: smooth; }
+            body { margin: 0; font-family: 'Outfit', sans-serif; color: #0f172a; background: #f8fafc; overflow-x: hidden; }
+            .skip-link { position: absolute; top: -40px; left: 0; background: #2C5530; color: #fff; padding: 8px; z-index: 10000; }
+            .skip-link:focus { top: 0; }
+            .container { max-width: 80rem; margin: 0 auto; padding: 0 1rem; width: 100%; }
+            .navbar { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; background: transparent; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 1.25rem 0; }
+            .hero { position: relative; min-height: 42rem; height: 90vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #0F172A; }
+            .hero-bg-container, .hero-img, .hero-overlay { position: absolute; inset: 0; }
+            .hero-img { width: 100%; height: 100%; object-fit: cover; }
+            .hero-overlay { background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.4), transparent); }
+            .hero-content { position: relative; z-index: 10; color: #fff; text-align: center; max-width: 64rem; padding: 0 1rem; }
+            .hero-title { font-size: clamp(2rem, 7vw, 6rem); line-height: 1.2; margin: 0 0 1.5rem; font-weight: 800; }
+            .hero-subtitle { margin: 0 auto 2.5rem; max-width: 42rem; color: #f3f4f6; }
+            .hero-buttons { display: flex; flex-direction: column; gap: 1rem; justify-content: center; }
+            @media (min-width: 640px) { .hero-buttons { flex-direction: row; } }
+            .btn-hero { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0.8rem 1.5rem; border-radius: 9999px; font-weight: 700; }
+            .btn-hero-primary { background: #2C5530; color: #fff; }
+            .btn-hero-secondary { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.35); }
+        </style>
     
     <!-- OPTIMIZATION: Preload Hero Image BEFORE CSS to boost LCP -->
     <!-- Updated srcset for larger screens -->
     <link rel="preload" as="image" href="image-1600.avif" imagesrcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" imagesizes="100vw" fetchpriority="high">
 
     <!-- Optimized CSS Loading -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="preload" href="style.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="style.css"></noscript>
     
     <!-- Deferred CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css?display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css?display=swap"></noscript>
 
     <!-- Primary Keywords in Title -->
     <title>Private Driver in Georgia | Georgia Hills</title>
@@ -251,7 +274,7 @@
              <!-- Replaced Unsplash with local placeholder -->
              <picture>
                 <source type="image/avif" srcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" sizes="100vw">
-                <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="Scenic Georgia Mountains" fetchpriority="high">
+                     <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="Scenic Georgia Mountains" fetchpriority="high" loading="eager" decoding="async">
              </picture>
             <div class="hero-overlay"></div>
         </div>
@@ -339,7 +362,10 @@
             <div class="about-grid">
                 <div class="about-img-container reveal">
                     <div class="about-blob"></div>
-                    <img id="about-img" src="tbilisi-old-town-1024.webp" srcset="tbilisi-old-town-640.webp 640w, tbilisi-old-town-1024.webp 1024w, tbilisi-old-town-1600.webp 1600w" sizes="(max-width: 1024px) 100vw, 665px" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town - تبليسي القديمة" style="max-width: 100%; height: auto;">
+                    <picture>
+                        <source type="image/avif" srcset="tbilisi-old-town-640.avif 640w, tbilisi-old-town-1024.avif 1024w, tbilisi-old-town-1600.avif 1600w" sizes="(max-width: 767px) 92vw, (max-width: 1024px) 80vw, 665px">
+                        <img id="about-img" src="tbilisi-old-town-1024.webp" srcset="tbilisi-old-town-480.webp 480w, tbilisi-old-town-640.webp 640w, tbilisi-old-town-768.webp 768w, tbilisi-old-town-1024.webp 1024w, tbilisi-old-town-1600.webp 1600w" sizes="(max-width: 767px) 92vw, (max-width: 1024px) 80vw, 665px" width="665" height="444" loading="lazy" decoding="async" class="about-img" alt="Tbilisi Old Town - تبليسي القديمة" style="max-width: 100%; height: auto;">
+                    </picture>
                 </div>
                 <div id="about-content" class="about-content reveal">
                     <span class="section-label">Why Choose Georgia Hills?</span>
@@ -382,7 +408,7 @@
             <div id="tours-slider" class="tours-slider" tabindex="0" aria-label="Destinations Slider" dir="ltr">
                 <!-- Tbilisi -->
                 <a href="tbilisi.html" class="tour-card group">
-                    <img src="Tbilisi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Tbilisi - تبليسي">
+                    <img src="Tbilisi-640.webp" srcset="Tbilisi-320.webp 320w, Tbilisi-480.webp 480w, Tbilisi-640.webp 640w, Tbilisi-768.webp 768w, Tbilisi-1024.webp 1024w" sizes="(max-width: 767px) 92vw, (max-width: 1200px) 45vw, 380px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Tbilisi - تبليسي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">Tbilisi</h3>
@@ -392,7 +418,7 @@
                 </a>
                 <!-- Kazbegi -->
                 <a href="kazbegi.html" class="tour-card group">
-                    <img src="Kazbegi.webp" width="669" height="669" loading="lazy" decoding="async" class="tour-img" alt="Kazbegi - كازبيجي">
+                    <img src="Kazbegi-640.webp" srcset="Kazbegi-320.webp 320w, Kazbegi-480.webp 480w, Kazbegi-640.webp 640w, Kazbegi-768.webp 768w, Kazbegi-1024.webp 1024w" sizes="(max-width: 767px) 92vw, (max-width: 1200px) 45vw, 380px" width="669" height="669" loading="lazy" decoding="async" class="tour-img" alt="Kazbegi - كازبيجي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">Kazbegi</h3>
@@ -402,7 +428,7 @@
                 </a>
                 <!-- Martvili -->
                 <a href="martvili.html" class="tour-card group">
-                    <img src="Martvili.webp" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="Martvili - وادي مارتفيلي">
+                    <img src="Martvili-640.webp" srcset="Martvili-320.webp 320w, Martvili-480.webp 480w, Martvili-640.webp 640w, Martvili-768.webp 768w, Martvili-1024.webp 1024w" sizes="(max-width: 767px) 92vw, (max-width: 1200px) 45vw, 380px" width="562" height="1030" loading="lazy" decoding="async" class="tour-img" alt="Martvili - وادي مارتفيلي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">Martvili</h3>
@@ -412,7 +438,7 @@
                 </a>
                 <!-- Signagi -->
                 <a href="signagi.html" class="tour-card group">
-                    <img src="Signagi.webp" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Signagi - سغناغي">
+                    <img src="Signagi-640.webp" srcset="Signagi-320.webp 320w, Signagi-480.webp 480w, Signagi-640.webp 640w, Signagi-768.webp 768w, Signagi-1024.webp 1024w" sizes="(max-width: 767px) 92vw, (max-width: 1200px) 45vw, 380px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="Signagi - سغناغي">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">Signagi</h3>
@@ -668,7 +694,7 @@
                 <!-- Article 1 -->
                 <article class="blog-card reveal">
                     <div class="blog-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1582236357876-0f836526154b?auto=format&fit=crop&w=600&q=80" width="600" height="400" class="blog-img" alt="Georgian Food" loading="lazy">
+                        <img src="Tbilisi-640-lite.webp" srcset="Tbilisi-320.webp 320w, Tbilisi-480.webp 480w, Tbilisi-640-lite.webp 640w, Tbilisi-768.webp 768w, Tbilisi-1024.webp 1024w" sizes="(max-width: 767px) 92vw, (max-width: 1200px) 45vw, 360px" width="600" height="400" class="blog-img" alt="Georgian Food" loading="lazy" decoding="async" fetchpriority="low">
                     </div>
                     <div class="blog-content">
                         <div class="blog-meta">Food & Drink</div>
@@ -680,7 +706,7 @@
                 <!-- Article 2 -->
                 <article class="blog-card reveal">
                     <div class="blog-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=600&q=80" width="600" height="400" class="blog-img" alt="Kazbegi Mountains" loading="lazy">
+                        <img src="Kazbegi-640.webp" srcset="Kazbegi-320.webp 320w, Kazbegi-480.webp 480w, Kazbegi-640.webp 640w, Kazbegi-768.webp 768w, Kazbegi-1024.webp 1024w" sizes="(max-width: 767px) 92vw, (max-width: 1200px) 45vw, 360px" width="600" height="400" class="blog-img" alt="Kazbegi Mountains" loading="lazy" decoding="async" fetchpriority="low">
                     </div>
                     <div class="blog-content">
                         <div class="blog-meta">Travel Guide</div>
@@ -692,7 +718,7 @@
                 <!-- Article 3 -->
                 <article class="blog-card reveal">
                     <div class="blog-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1539656206689-d4198db85834?auto=format&fit=crop&w=600&q=80" width="600" height="400" class="blog-img" alt="Tbilisi Safety" loading="lazy">
+                        <img src="Martvili-640-lite.webp" srcset="Martvili-320.webp 320w, Martvili-480.webp 480w, Martvili-640-lite.webp 640w, Martvili-768.webp 768w, Martvili-1024.webp 1024w" sizes="(max-width: 767px) 92vw, (max-width: 1200px) 45vw, 360px" width="600" height="400" class="blog-img" alt="Tbilisi Safety" loading="lazy" decoding="async" fetchpriority="low">
                     </div>
                     <div class="blog-content">
                         <div class="blog-meta">Tips</div>
@@ -853,8 +879,8 @@
                 <div>
                     <h3>Contact Us</h3>
                     <ul style="color:var(--color-gray-400);">
-                        <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <a href="tel:+995579088537" dir="ltr">+995 579 08 85 37</a></li>
-                        <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" dir="ltr">+995 579 08 85 37</a></li>
+                        <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <a href="tel:+995579088537" dir="ltr" aria-label="Call Georgia Hills at +995 579 08 85 37">+995 579 08 85 37 <span class="sr-only">(phone call)</span></a></li>
+                        <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <a href="https://wa.me/995579088537" target="_blank" rel="noopener noreferrer" dir="ltr" aria-label="Chat with Georgia Hills on WhatsApp at +995 579 08 85 37">+995 579 08 85 37 <span class="sr-only">(WhatsApp chat)</span></a></li>
                         <li class="footer-contact-item"><i class="fa-solid fa-envelope text-accent"></i> <a href="mailto:info@georgiahills.com">info@georgiahills.com</a></li>
                         <li class="footer-contact-item"><i class="fa-solid fa-location-dot text-accent"></i> <span>123 Rustaveli Ave, Tbilisi, GE</span></li>
                     </ul>
