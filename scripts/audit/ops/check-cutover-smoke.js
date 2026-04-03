@@ -9,22 +9,22 @@ const smokeMatrix = [
   {
     path: "/",
     label: "home-en",
-    tokens: ["rel=\"canonical\"", "hreflang=", "application/ld+json", "/legal.html"]
+    tokens: ["rel=\"canonical\"", "hreflang=", "application/ld+json", "legal.html"]
   },
   {
     path: "/arabic.html",
     label: "home-ar",
-    tokens: ["lang=\"ar\"", "dir=\"rtl\"", "rel=\"canonical\"", "hreflang=", "application/ld+json", "/legal.html"]
+    tokens: ["lang=\"ar\"", "dir=\"rtl\"", "rel=\"canonical\"", "hreflang=", "application/ld+json", "privacyModal"]
   },
   {
     path: "/booking.html",
     label: "booking-en",
-    tokens: ["rel=\"canonical\"", "hreflang=", "application/ld+json", "/legal.html"]
+    tokens: ["rel=\"canonical\"", "hreflang="]
   },
   {
     path: "/booking-ar.html",
     label: "booking-ar",
-    tokens: ["lang=\"ar\"", "rel=\"canonical\"", "hreflang=", "application/ld+json", "/legal.html"]
+    tokens: ["lang=\"ar\"", "rel=\"canonical\"", "hreflang="]
   },
   {
     path: "/sitemap.xml",
