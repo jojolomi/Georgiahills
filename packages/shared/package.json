@@ -22,6 +22,11 @@
       "types": "./src/contracts/market.d.ts",
       "import": "./src/contracts/market.js",
       "require": "./src/contracts/market.cjs"
+    },
+    "./contracts/routing": {
+      "types": "./src/contracts/routing.d.ts",
+      "import": "./src/contracts/routing.js",
+      "require": "./src/contracts/routing.cjs"
     }
   }
 }

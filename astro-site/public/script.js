@@ -356,10 +356,60 @@ function renderSliderDestinations(dests) {
 
     const lang = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl' ? 'ar' : 'en';
 
+    const tourImageFallbacks = {
+        batumi: {
+            src: 'image-640.webp',
+            srcset: 'image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w'
+        }
+    };
+
+    const buildResponsiveTourImage = (id, source) => {
+        if (typeof source !== 'string') {
+            return { src: '', srcset: '', sizes: '' };
+        }
+
+        const trimmed = source.trim();
+        if (!trimmed) {
+            return { src: '', srcset: '', sizes: '' };
+        }
+
+        if (/^(https?:)?\/\//i.test(trimmed)) {
+            return { src: trimmed, srcset: '', sizes: '' };
+        }
+
+        const fallback = tourImageFallbacks[id];
+        if (fallback) {
+            return {
+                src: fallback.src,
+                srcset: fallback.srcset,
+                sizes: '(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px'
+            };
+        }
+
+        const localFile = trimmed.match(/^([./a-zA-Z0-9_-]+)\.(webp|avif|jpe?g|png)$/i);
+        if (!localFile) {
+            return { src: trimmed, srcset: '', sizes: '' };
+        }
+
+        const base = localFile[1];
+        const ext = `.${localFile[2]}`;
+
+        // Keep already sized filenames as-is (e.g. foo-1024.webp).
+        if (/-\d{2,4}$/i.test(base)) {
+            return { src: trimmed, srcset: '', sizes: '' };
+        }
+
+        return {
+            src: `${base}-480${ext}`,
+            srcset: `${base}-320${ext} 320w, ${base}-480${ext} 480w, ${base}-640${ext} 640w, ${base}-768${ext} 768w, ${base}-1024${ext} 1024w`,
+            sizes: '(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px'
+        };
+    };
+
     Object.keys(dests).forEach(id => {
         const d = dests[id];
-        const title = lang === 'ar' ? (d.title_ar || d.title_en) : d.title_en;
-        const desc = lang === 'ar' ? (d.desc_ar || d.desc_en) : d.desc_en;
+        const title = (lang === 'ar' ? (d.title_ar || d.title_en) : (d.title_en || d.title_ar)) || id;
+        const desc = (lang === 'ar' ? (d.desc_ar || d.desc_en) : (d.desc_en || d.desc_ar)) || '';
         const btnText = lang === 'ar' ? 'اذهب هنا' : 'Drive Here';
         // Check if a static file exists for standard ones or route to generic destination.html
         // We assume generic is safer for dynamically added ones.
@@ -381,13 +431,16 @@ function renderSliderDestinations(dests) {
         
         // Image
         const img = document.createElement('img');
-        img.src = d.img;
+        const responsiveImage = buildResponsiveTourImage(id, d.img);
         img.width = 380; // Standardize
         img.height = 475;
         img.loading = 'lazy';
         img.decoding = 'async';
-        img.className = 'tour-card-img'; // Use consistent class
+        img.className = 'tour-img';
         img.alt = title;
+        if (responsiveImage.srcset) img.srcset = responsiveImage.srcset;
+        if (responsiveImage.sizes) img.sizes = responsiveImage.sizes;
+        img.src = responsiveImage.src || d.img;
         
         const overlay = document.createElement('div');
         overlay.className = 'tour-overlay';
@@ -949,7 +1002,7 @@ const UIManager = {
             AppConfig.currencies.forEach(curr => {
                 const opt = document.createElement('div');
                 opt.className = 'custom-option';
-                opt.innerHTML = `<img src="https://flagcdn.com/w40/${curr.flag}.png" class="currency-flag-sm" alt="${curr.code}"> ${curr.code}`;
+                opt.innerHTML = `<img src="https://flagcdn.com/w40/${curr.flag}.png" class="currency-flag-sm" alt="${curr.code}" width="20" height="14" loading="lazy" decoding="async"> ${curr.code}`;
                 opt.onclick = () => {
                     CurrencyManager.set(curr.code);
                     document.querySelectorAll('.custom-select-wrapper').forEach(el => el.classList.remove('open'));

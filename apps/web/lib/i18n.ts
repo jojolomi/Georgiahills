@@ -1,10 +1,16 @@
 import en from "../messages/en.json";
 import ar from "../messages/ar.json";
+import {
+  DEFAULT_LOCALE,
+  SOURCE_LOCALES,
+  buildLocaleAlternates,
+  normalizeLocale
+} from "@georgiahills/shared";
 
-export const locales = ["en", "ar"] as const;
+export const locales = SOURCE_LOCALES;
 export type Locale = (typeof locales)[number];
 
-export const defaultLocale: Locale = "en";
+export const defaultLocale: Locale = DEFAULT_LOCALE;
 
 const messages = {
   en,
@@ -12,13 +18,12 @@ const messages = {
 } as const;
 
 export function isSupportedLocale(input: string): input is Locale {
-  return locales.includes(input as Locale);
+  return SOURCE_LOCALES.includes(String(input || "").toLowerCase() as Locale);
 }
 
 export function detectLocale(input?: string | null): Locale {
   if (!input) return defaultLocale;
-  const normalized = input.toLowerCase().split("-")[0];
-  return isSupportedLocale(normalized) ? normalized : defaultLocale;
+  return normalizeLocale(input);
 }
 
 export function resolveLocale(routeLocale?: string, acceptLanguageHeader?: string | null): Locale {
@@ -43,17 +48,10 @@ export function getDirection(locale: Locale): "ltr" | "rtl" {
 }
 
 function normalizePath(pathname = "") {
-  if (!pathname || pathname === "/") return "";
-  return pathname.startsWith("/") ? pathname : `/${pathname}`;
+  return pathname;
 }
 
 export function buildHreflangAlternates(pathname = "") {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://georgiahills.com";
-  const suffix = normalizePath(pathname);
-
-  return {
-    en: `${siteUrl}/en${suffix}`,
-    ar: `${siteUrl}/ar${suffix}`,
-    "x-default": `${siteUrl}/en${suffix}`
-  };
+  return buildLocaleAlternates({ siteUrl, pathname: normalizePath(pathname) });
 }

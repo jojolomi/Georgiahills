@@ -1,0 +1,16 @@
+{
+  "name": "@georgiahills/design-tokens",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/tokens.js",
+  "exports": {
+    ".": {
+      "import": "./src/tokens.js"
+    },
+    "./tailwind-preset": {
+      "import": "./src/tailwind.preset.js"
+    },
+    "./css": "./src/tokens.css"
+  }
+}

@@ -5,7 +5,7 @@
 - [ ] Added/updated performance optimizations (images/preload/caching)
 
 ## PR Checklist (must be checked before merge)
-- [ ] Branch `seo/gcc-ar-precision` created and rebased on `main`
+- [ ] Branch is rebased on `main`
 - [ ] Lighthouse: Performance >= 85, Accessibility >= 90 (JSON attached)
 - [ ] RTL CSS present and tested at 375px & 430px (screenshots attached)
 - [ ] Arabic pages use `lang="ar"` `dir="rtl"` and native reviews added
@@ -16,10 +16,14 @@
 - [ ] `seo/keyword-mapping.csv` included and mapped to pages
 - [ ] 6 Arabic blog posts added to `content/ar/blog/` and proofread
 - [ ] `seo/outreach-list.md` present with contacts + PR pitches
-- [ ] CI passing (Lighthouse job) on PR
+- [ ] Required checks passing on PR: `CI Checks / validate` and `Release Verify / release-readiness`
+- [ ] Release verification run completed (`npm run release:verify`) or workflow evidence attached
+- [ ] Cutover smoke matrix verified for `/`, `/arabic.html`, `/booking.html`, `/booking-ar.html`, `/sitemap.xml`, `/robots.txt`
 
 ## Validation Artifacts
 - Lighthouse JSON(s):
+- Release Verify run link or logs:
+- Cutover smoke output (strict/warn):
 - Rich Results screenshots:
 - Search Console evidence:
 - GA4 evidence:

@@ -3,7 +3,8 @@ import type { SecondaryPage } from "./secondary-pages";
 import { SITE } from "./site";
 import { ensureSeoContract, type SeoContract } from "../components/seo/contract";
 import { breadcrumbSchema, localBusinessSchema, pageSchemasForSecondary } from "../components/seo/schema-builders";
-import type { SourceLang } from "../../../../packages/shared/src/contracts/market.js";
+import type { SourceLang } from "@georgiahills/shared";
+import { buildLocaleAlternates } from "@georgiahills/shared";
 
 const defaultRobots = "index, follow, max-image-preview:large";
 const defaultOgImage = `${SITE.domain}/image-1600.webp`;
@@ -32,11 +33,8 @@ function buildHomeSeo(lang: SourceLang): SeoContract {
       title,
       description,
       canonical,
-      hreflangs: [
-        { hreflang: "en", href: `${SITE.domain}/` },
-        { hreflang: "ar", href: `${SITE.domain}/arabic.html` },
-        { hreflang: "x-default", href: `${SITE.domain}/` }
-      ],
+      hreflangs: Object.entries(buildLocaleAlternates({ siteUrl: SITE.domain, englishPath: `${SITE.domain}/`, arabicPath: `${SITE.domain}/arabic.html`, xDefaultPath: `${SITE.domain}/` }))
+        .map(([hreflang, href]) => ({ hreflang, href })),
       ogImage: defaultOgImage,
       robots: defaultRobots,
       twitterCard: "summary_large_image",
@@ -71,11 +69,8 @@ function buildBookingSeo(lang: SourceLang): SeoContract {
       title,
       description,
       canonical,
-      hreflangs: [
-        { hreflang: "en", href: `${SITE.domain}/booking.html` },
-        { hreflang: "ar", href: `${SITE.domain}/booking-ar.html` },
-        { hreflang: "x-default", href: `${SITE.domain}/booking.html` }
-      ],
+      hreflangs: Object.entries(buildLocaleAlternates({ siteUrl: SITE.domain, englishPath: `${SITE.domain}/booking.html`, arabicPath: `${SITE.domain}/booking-ar.html`, xDefaultPath: `${SITE.domain}/booking.html` }))
+        .map(([hreflang, href]) => ({ hreflang, href })),
       ogImage: defaultOgImage,
       robots: defaultRobots,
       twitterCard: "summary_large_image",
@@ -120,11 +115,8 @@ export function buildMarketMeta(market: MarketConfig): SeoContract {
       title: market.pageTitle,
       description: market.description,
       canonical,
-      hreflangs: [
-        { hreflang: "ar", href: canonical },
-        { hreflang: "en", href: `${SITE.domain}/` },
-        { hreflang: "x-default", href: `${SITE.domain}/` }
-      ],
+      hreflangs: Object.entries(buildLocaleAlternates({ siteUrl: SITE.domain, englishPath: `${SITE.domain}/`, arabicPath: canonical, xDefaultPath: `${SITE.domain}/` }))
+        .map(([hreflang, href]) => ({ hreflang, href })),
       ogImage: defaultOgImage,
       robots: defaultRobots,
       twitterCard: "summary_large_image",
@@ -147,10 +139,13 @@ export function buildMarketMeta(market: MarketConfig): SeoContract {
 }
 
 export function buildSecondaryMeta(page: SecondaryPage, pairedCanonical?: string): SeoContract {
-  const hreflangs = [{ hreflang: page.lang, href: page.canonical }, { hreflang: "x-default", href: `${SITE.domain}/` }];
-  if (pairedCanonical) {
-    hreflangs.splice(1, 0, { hreflang: page.lang === "ar" ? "en" : "ar", href: pairedCanonical });
-  }
+  const alternates = buildLocaleAlternates({
+    siteUrl: SITE.domain,
+    englishPath: page.lang === "en" ? page.canonical : pairedCanonical || `${SITE.domain}/`,
+    arabicPath: page.lang === "ar" ? page.canonical : pairedCanonical || `${SITE.domain}/`,
+    xDefaultPath: `${SITE.domain}/`
+  });
+  const hreflangs = Object.entries(alternates).map(([hreflang, href]) => ({ hreflang, href }));
 
   return ensureSeoContract(
     {

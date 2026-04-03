@@ -1,6 +1,8 @@
 import type { Config } from "tailwindcss";
+import preset from "../../packages/design-tokens/src/tailwind.preset.js";
 
 const config: Config = {
+  presets: [preset],
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,14 +12,7 @@ const config: Config = {
     "../../packages/ui/src/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    extend: {
-      colors: {
-        brand: {
-          DEFAULT: "#0f172a",
-          accent: "#2563eb"
-        }
-      }
-    }
+    extend: {}
   },
   plugins: []
 };

@@ -29,14 +29,28 @@
 1. Open a pull request.
 2. CI runs checks (`.github/workflows/ci.yml`).
 3. Staging preview deploy runs (`.github/workflows/firebase-preview.yml`).
-4. Verify the preview URL and approve PR.
-5. Merge to `main`.
-6. Production deploy runs automatically (`.github/workflows/firebase-production.yml`).
+4. Run release verification locally or in a release job:
+```bash
+npm run release:verify
+```
+5. Verify the preview URL and approve PR.
+   - Optional dry-run smoke only (non-blocking):
+```bash
+npm run ops:cutover:smoke:warn
+```
+   - Target a specific preview URL in strict mode:
+```bash
+node scripts/audit/ops/check-cutover-smoke.js https://preview.example.com strict
+```
+6. Confirm smoke matrix paths return expected SEO signals:
+   - `/`, `/arabic.html`, `/booking.html`, `/booking-ar.html`, `/sitemap.xml`, `/robots.txt`
+7. Merge to `main`.
+8. Production deploy runs automatically (`.github/workflows/firebase-production.yml`).
 
 ## Branch and environment protection
 1. Protect `main` branch:
    - Require pull request before merge.
-   - Require status checks: `CI Checks / validate`.
+   - Require status checks: `CI Checks / validate` and `Release Verify / release-readiness`.
 2. Protect `production` GitHub environment:
    - Require reviewer approval before job starts.
 

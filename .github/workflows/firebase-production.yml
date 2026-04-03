@@ -145,35 +145,15 @@ jobs:
           echo "Functions deployment is disabled in this workflow."
           echo "This is expected on Firebase Spark plan."
 
-      - name: Post-deploy smoke check
-        shell: bash
+      - name: Post-deploy cutover smoke guard (production web.app strict)
         env:
           FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}
         run: |
-          set -e
-          canonical_urls=(
-            "https://${FIREBASE_PROJECT_ID_PRODUCTION}.web.app/"
-            "https://${FIREBASE_PROJECT_ID_PRODUCTION}.web.app/sitemap.xml"
-            "https://${FIREBASE_PROJECT_ID_PRODUCTION}.web.app/admin-v3/"
-          )
+          node scripts/audit/ops/check-cutover-smoke.js "https://${FIREBASE_PROJECT_ID_PRODUCTION}.web.app" strict
 
-          for url in "${canonical_urls[@]}"; do
-            echo "Checking ${url}"
-            curl -4 -fsSL --retry 5 --retry-delay 4 --retry-all-errors --connect-timeout 15 --max-time 45 "${url}" >/dev/null
-          done
-
-          custom_domain_urls=(
-            "https://georgiahills.com/"
-            "https://georgiahills.com/sitemap.xml"
-            "https://georgiahills.com/admin-v3/"
-          )
-
-          for url in "${custom_domain_urls[@]}"; do
-            echo "Checking custom domain ${url}"
-            if ! curl -4 -fsSL --retry 5 --retry-delay 4 --retry-all-errors --connect-timeout 15 --max-time 45 "${url}" >/dev/null; then
-              echo "::warning::Custom domain check failed from GitHub runner for ${url}. Firebase hosting deploy is verified via web.app URL."
-            fi
-          done
+      - name: Post-deploy cutover smoke guard (custom domain warn)
+        run: |
+          node scripts/audit/ops/check-cutover-smoke.js "https://georgiahills.com" warn
 
       - name: Post-deploy homepage regression guard
         env:
