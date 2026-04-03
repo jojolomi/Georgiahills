@@ -34,9 +34,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Enable Corepack
         run: corepack enable
+
+      - name: Runtime versions
+        run: |
+          node --version
+          corepack pnpm --version
+
+      - name: Lockfile integrity gates
+        run: |
+          npm run lockfile:check
+          npm run lockfile:check:functions
 
       - name: Install dependencies
         run: corepack pnpm install --frozen-lockfile
@@ -47,5 +59,25 @@ jobs:
       - name: Prepare SEO dist output
         run: npm run seo:prepare
 
+      - name: Ensure Lighthouse port is free
+        shell: bash
+        run: |
+          if lsof -i :3000 >/dev/null 2>&1; then
+            echo "Port 3000 is busy. Releasing stale processes."
+            lsof -ti :3000 | xargs -r kill -9
+          else
+            echo "Port 3000 is free."
+          fi
+
       - name: Lighthouse CI (mobile >= 90)
         run: npm run lighthouse:ci
+
+      - name: Upload Lighthouse debug artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-debug-artifacts
+          if-no-files-found: ignore
+          path: |
+            .lighthouseci/**
+            reports/**

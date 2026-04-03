@@ -5,6 +5,8 @@
   "scripts": {
     "lockfile:sync": "corepack pnpm install --lockfile-only --ignore-scripts",
     "lockfile:check": "corepack pnpm install --frozen-lockfile --ignore-scripts",
+    "lockfile:check:functions": "npm --prefix functions ci --no-audit --no-fund --dry-run",
+    "preflight:pr": "npm run lockfile:check && npm run lockfile:check:functions && npm run ops:imports:case && npm run lint && npm run typecheck && npm run test:unit",
     "lint": "corepack pnpm --filter web lint",
     "typecheck": "corepack pnpm --filter web typecheck",
     "test:unit": "corepack pnpm --filter web test:unit",
