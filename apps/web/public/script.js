@@ -19,7 +19,15 @@ if ('serviceWorker' in navigator) {
 
   window.addEventListener('load', () => {
     try {
-                navigator.serviceWorker.register(`${scriptBaseDir}service-worker.js`)
+                                const isLocalhost = ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
+                                if (isLocalhost) {
+                                        navigator.serviceWorker.getRegistrations()
+                                                .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+                                                .catch(() => {});
+                                        return;
+                                }
+
+                                navigator.serviceWorker.register(`${scriptBaseDir}service-worker.js`)
           .then(reg => {})
           .catch(err => {});
     } catch(e) {}

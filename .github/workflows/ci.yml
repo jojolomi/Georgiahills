@@ -33,12 +33,27 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Enable Corepack (pnpm)
         run: corepack enable
 
+      - name: Runtime versions
+        run: |
+          node --version
+          corepack pnpm --version
+
+      - name: Lockfile integrity gates
+        run: |
+          npm run lockfile:check
+          npm run lockfile:check:functions
+
       - name: Install dependencies
         run: corepack pnpm install --frozen-lockfile
+
+      - name: Import case sensitivity gate
+        run: npm run ops:imports:case
 
       - name: Ensure workspace dependencies are installed
         run: |
@@ -68,6 +83,14 @@ jobs:
 
       - name: Build Astro site
         run: npm run build:astro
+
+      - name: Verify Astro dist exists
+        shell: bash
+        run: |
+          if [ ! -d "astro-site/dist" ]; then
+            echo "astro-site/dist missing after build"
+            exit 1
+          fi
 
       - name: Build admin-v3 hosting bundle
         run: npm run build:admin-v3:hosting

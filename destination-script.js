@@ -2,6 +2,14 @@
 (function () {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
+      const isLocalhost = ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
+      if (isLocalhost) {
+        navigator.serviceWorker.getRegistrations()
+          .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+          .catch(() => {});
+        return;
+      }
+
       navigator.serviceWorker.register('/service-worker.js').catch(() => {});
     });
   }

@@ -1,0 +1,35 @@
+{
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/.astro": true,
+    "**/dist": true,
+    "**/.turbo": true,
+    ".pnpm-store": true,
+    "playwright-report": true,
+    "test-results": true,
+    ".lighthouseci": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/.astro": true,
+    "**/dist": true,
+    "**/.turbo": true,
+    ".pnpm-store": true,
+    "playwright-report": true,
+    "test-results": true,
+    ".lighthouseci": true
+  },
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/.astro/**": true,
+    "**/dist/**": true,
+    "**/.turbo/**": true,
+    "**/.pnpm-store/**": true,
+    "**/playwright-report/**": true,
+    "**/test-results/**": true,
+    "**/.lighthouseci/**": true
+  }
+}

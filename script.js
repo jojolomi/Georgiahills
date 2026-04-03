@@ -8,9 +8,17 @@
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     try {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(reg => {})
-          .catch(err => {});
+                const isLocalhost = ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
+                if (isLocalhost) {
+                        navigator.serviceWorker.getRegistrations()
+                                .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+                                .catch(() => {});
+                        return;
+                }
+
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(reg => {})
+                    .catch(err => {});
     } catch(e) {}
   });
 }
@@ -51,6 +59,63 @@ if (typeof firebase !== 'undefined') {
     // but keep db/auth null here so we don't crash
     db = null; 
     auth = null;
+}
+
+let firebaseBootstrapPromise = null;
+
+function loadExternalScript(src) {
+    return new Promise((resolve, reject) => {
+        const existing = document.querySelector(`script[src="${src}"]`);
+        if (existing) {
+            if (existing.dataset.loaded === 'true') return resolve();
+            existing.addEventListener('load', () => resolve(), { once: true });
+            existing.addEventListener('error', () => reject(new Error(`Failed to load script: ${src}`)), { once: true });
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = src;
+        script.defer = true;
+        script.async = false;
+        script.onload = () => {
+            script.dataset.loaded = 'true';
+            resolve();
+        };
+        script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+        document.head.appendChild(script);
+    });
+}
+
+async function ensureFirebaseReady() {
+    if (db) return db;
+
+    if (typeof firebase === 'undefined') {
+        if (!firebaseBootstrapPromise) {
+            firebaseBootstrapPromise = (async () => {
+                await loadExternalScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+                await loadExternalScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
+            })();
+        }
+        await firebaseBootstrapPromise;
+    }
+
+    if (typeof firebase === 'undefined' || !firebase.firestore) {
+        return null;
+    }
+
+    try {
+        if (!firebase.apps || !firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.firestore();
+        if (firebase.auth) auth = firebase.auth();
+        return db;
+    } catch (e) {
+        console.warn('Firebase bootstrap failed, fallback to static mode.', e);
+        db = null;
+        auth = null;
+        return null;
+    }
 }
 
 const AppConfig = {
@@ -207,10 +272,10 @@ window.DestData = {
     'tbilisi': {
         img: 'Tbilisi.webp',
         gallery: [
-            'https://images.unsplash.com/photo-1539656206689-d4198db85834?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1582236357876-0f836526154b?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1569947936662-81438903c734?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80'
+            'tbilisi-old-town-1024.webp',
+            'Tbilisi-768.webp',
+            'Tbilisi-640.webp',
+            'Tbilisi-1024.webp'
         ],
         highlights_en: ["Old Town & Sulphur Baths", "Narikala Fortress", "Peace Bridge", "Rustaveli Avenue"],
         highlights_ar: ["المدينة القديمة وحمامات الكبريت", "قلعة ناريكالا", "جسر السلام", "شارع روستافيلي"],
@@ -222,8 +287,8 @@ window.DestData = {
     'kazbegi': {
         img: 'Kazbegi.webp',
         gallery: [
-            'https://images.unsplash.com/photo-1549466540-349079f2913e?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1560965377-63a236087b32?auto=format&fit=crop&w=800&q=80'
+            'kazbegi-hero-1024.webp',
+            'Kazbegi-768.webp'
         ],
         highlights_en: ["Gergeti Trinity Church", "Mount Kazbek View", "Gveleti Waterfall", "Dariali Gorge"],
         highlights_ar: ["كنيسة الثالوث جيرجيتي", "إطلالة جبل كازبيك", "شلال جفيليتي", "مضيق داريالي"],
@@ -235,8 +300,8 @@ window.DestData = {
     'martvili': {
         img: 'Martvili.webp',
         gallery: [
-            'https://images.unsplash.com/photo-1570701123490-67c858561d2d?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=800&q=80'
+            'Martvili-1024.webp',
+            'Martvili-768.webp'
         ],
         highlights_en: ["Boat Ride in Canyon", "Walking Trails", "Dadiani Palace", "Waterfalls"],
         highlights_ar: ["جولة بالقارب في الوادي", "مسارات المشي", "قصر دادياني", "الشلالات"],
@@ -248,8 +313,8 @@ window.DestData = {
     'signagi': {
         img: 'Signagi.webp',
         gallery: [
-            'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1534065662709-b6814b73b578?auto=format&fit=crop&w=800&q=80'
+            'Signagi-1024.webp',
+            'Signagi-768.webp'
         ],
         highlights_en: ["City Walls Walk", "Bodbe Monastery", "Wine Tasting", "Alazani Valley View"],
         highlights_ar: ["المشي على أسوار المدينة", "دير بودبي", "تذوق النبيذ", "إطلالة وادي ألازاني"],
@@ -261,8 +326,8 @@ window.DestData = {
     'batumi': {
         img: 'Batumi.webp',
         gallery: [
-            'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1539656206689-d4198db85834?auto=format&fit=crop&w=800&q=80'
+            'Batumi.webp',
+            'image-1024.webp'
         ],
         highlights_en: ["Ali & Nino Statue", "Batumi Boulevard", "Botanical Garden", "Alphabetic Tower"],
         highlights_ar: ["تمثال علي ونينو", "بوليفارد باتومي", "الحديقة النباتية", "برج الحروف"],
@@ -2041,7 +2106,7 @@ const DestinationApp = {
                 heroImg.alt = title; // Accessibility Fix
                 // FIX: Set handlers before src to catch cached loads
                 heroImg.onload = function() { this.classList.remove('skeleton'); };
-                heroImg.onerror = function() { this.src = 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=1200&q=80'; }; // Fallback
+                heroImg.onerror = function() { this.src = 'kazbegi-hero-1024.webp'; }; // Fallback
                 document.getElementById('hero-bg').style.backgroundImage = 'url(' + (data.img.startsWith('http') ? data.img : data.img) + ')'; heroImg.src = data.img;
             }
             
@@ -2126,9 +2191,13 @@ const DestinationLoader = {
         if (!slider) return;
 
         try {
-            const db = firebase.firestore();
+            const dbRef = db || (typeof firebase !== 'undefined' && firebase.firestore ? firebase.firestore() : await ensureFirebaseReady());
+            if (!dbRef) {
+                console.warn("Firebase not initialized, skipping dynamic destinations.");
+                return;
+            }
             // Fetch all destinations (client-side filtering for legacy support)
-            const snapshot = await db.collection('destinations').get();
+            const snapshot = await dbRef.collection('destinations').get();
             
             if (snapshot.empty) {
                 console.warn("No destinations found in Firestore.");
@@ -2242,43 +2311,82 @@ window.BlogManager = BlogManager;
 // Expose Loader
 window.DestinationLoader = DestinationLoader;
 
+function runWhenIdle(task, timeout = 1200) {
+    if (typeof window.requestIdleCallback === 'function') {
+        window.requestIdleCallback(() => task(), { timeout });
+        return;
+    }
+    setTimeout(task, 0);
+}
+
 // Expose MainApp as 'App' because the main page HTML calls 'App.prefillVehicle' etc.
 window.App = MainApp; 
 
-window.addEventListener('DOMContentLoaded', () => {
-    // Sync language state with current page
-    LangManager.sync();
-    AttributionManager.capture();
-    ExperimentManager.assignBookingVariant();
+function hidePreloaderSafely() {
+    const preloader = document.getElementById('preloader');
+    if (!preloader) return;
+    preloader.style.opacity = '0';
+    setTimeout(() => { preloader.style.display = 'none'; }, 300);
+}
 
-    // Ensure Cookie Banner runs on all pages (except Admin)
-    if (!window.location.pathname.includes('admin.html')) {
-        MainApp.checkCookies();
-    }
-    
-    // Detect which page we are on and run the appropriate logic
-    
-    // Condition 1: Main Page (has 'tours-slider' or 'hero' or 'dest-hero')
-    if (document.getElementById('tours-slider') || document.querySelector('.hero') || document.querySelector('.about-premium-hero') || document.querySelector('.dest-hero')) {
-        MainApp.start();
-        // Load dynamic destinations if slider exists
-        if(document.getElementById('tours-slider')) DestinationLoader.load();
-    } 
-    // Condition 2: Dynamic Destination Page (ONLY destination.html)
-    else if (window.location.pathname.includes('destination.html')) {
-        DestinationApp.init();
-    }
-    // Condition 3: Blog Page
-    else if (window.location.pathname.includes('blog')) {
-        UIManager.init();
-        BlogManager.init();
-    }
-    // Condition 3: Static Pages (tbilisi.html, honeymoon.html, etc.)
-    else {
-        UIManager.init();
-        // Ensure animations run if present
-        if (document.querySelector('.reveal')) {
-            MainApp.initAnimations();
+window.addEventListener('error', () => {
+    hidePreloaderSafely();
+});
+
+window.addEventListener('unhandledrejection', () => {
+    hidePreloaderSafely();
+});
+
+window.addEventListener('load', () => {
+    hidePreloaderSafely();
+});
+
+setTimeout(() => {
+    hidePreloaderSafely();
+}, 4000);
+
+window.addEventListener('DOMContentLoaded', () => {
+    try {
+        // Sync language state with current page
+        LangManager.sync();
+        AttributionManager.capture();
+        ExperimentManager.assignBookingVariant();
+
+        // Ensure Cookie Banner runs on all pages (except Admin)
+        if (!window.location.pathname.includes('admin.html')) {
+            MainApp.checkCookies();
         }
+        
+        // Detect which page we are on and run the appropriate logic
+        
+        // Condition 1: Main Page (has 'tours-slider' or 'hero' or 'dest-hero')
+        if (document.getElementById('tours-slider') || document.querySelector('.hero') || document.querySelector('.about-premium-hero') || document.querySelector('.dest-hero')) {
+            MainApp.start();
+            // Load dynamic destinations if slider exists
+            if (document.getElementById('tours-slider')) {
+                runWhenIdle(() => DestinationLoader.load());
+            }
+        } 
+        // Condition 2: Dynamic Destination Page (ONLY destination.html)
+        else if (window.location.pathname.includes('destination.html')) {
+            DestinationApp.init();
+        }
+        // Condition 3: Blog Page
+        else if (window.location.pathname.includes('blog')) {
+            UIManager.init();
+            runWhenIdle(() => BlogManager.init());
+        }
+        // Condition 3: Static Pages (tbilisi.html, honeymoon.html, etc.)
+        else {
+            UIManager.init();
+            // Ensure animations run if present
+            if (document.querySelector('.reveal')) {
+                MainApp.initAnimations();
+            }
+        }
+    } catch (e) {
+        console.error('Startup initialization failed:', e);
+    } finally {
+        hidePreloaderSafely();
     }
 });

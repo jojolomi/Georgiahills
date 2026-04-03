@@ -1,5 +1,6 @@
 tailwindcss.exe
 node_modules/
+**/node_modules/
 functions/node_modules/
 .firebase/
 firebase-config.js

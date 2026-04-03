@@ -53,29 +53,41 @@
     };
   }
 
+  function toRootPath(path) {
+    if (!path || path.startsWith('/') || path.startsWith('#') || path.startsWith('javascript:')) {
+      return path;
+    }
+
+    if (/^https?:\/\//i.test(path)) {
+      return path;
+    }
+
+    return `/${path}`;
+  }
+
   function buildLangSwitch(filename, isArabic) {
     if (filename === 'destination.html') {
       const params = new URLSearchParams(window.location.search);
       params.set('lang', isArabic ? 'en' : 'ar');
       const query = params.toString();
-      return 'destination.html' + (query ? ('?' + query) : '');
+      return toRootPath('destination.html' + (query ? ('?' + query) : ''));
     }
 
     const pairs = getPagePairs();
-    return pairs[filename] || (isArabic ? 'index.html' : 'arabic.html');
+    return toRootPath(pairs[filename] || (isArabic ? 'index.html' : 'arabic.html'));
   }
 
   function getConfig(filename, isArabic) {
-    const home = isArabic ? 'arabic.html' : 'index.html';
+    const home = toRootPath(isArabic ? 'arabic.html' : 'index.html');
     return {
       isArabic,
       home,
-      about: isArabic ? 'about-ar.html' : 'about.html',
-      services: isArabic ? 'services-ar.html' : 'services.html',
-      guide: isArabic ? 'guide-ar.html' : 'guide.html',
-      blog: isArabic ? 'blog-ar.html' : 'blog.html',
-      contact: isArabic ? 'contact-ar.html' : 'contact.html',
-      booking: isArabic ? 'booking-ar.html' : 'booking.html',
+      about: toRootPath(isArabic ? 'about-ar.html' : 'about.html'),
+      services: toRootPath(isArabic ? 'services-ar.html' : 'services.html'),
+      guide: toRootPath(isArabic ? 'guide-ar.html' : 'guide.html'),
+      blog: toRootPath(isArabic ? 'blog-ar.html' : 'blog.html'),
+      contact: toRootPath(isArabic ? 'contact-ar.html' : 'contact.html'),
+      booking: toRootPath(isArabic ? 'booking-ar.html' : 'booking.html'),
       langSwitch: buildLangSwitch(filename, isArabic),
       texts: {
         home: isArabic ? 'الرئيسية' : 'Home',
@@ -140,7 +152,7 @@
         <div class="container">
           <div class="navbar-inner">
             <a href="${cfg.home}" class="nav-logo">
-              <div><img src="favicon.ico" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
+              <div><img src="/logo-256.avif" width="56" height="56" alt="Georgia Hills Logo" class="nav-logo-img"></div>
               <span data-nav-brand="text">Georgia Hills</span>
             </a>
 

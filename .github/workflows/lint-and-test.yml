@@ -34,9 +34,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
 
       - name: Enable Corepack
         run: corepack enable
+
+      - name: Runtime versions
+        run: |
+          node --version
+          corepack pnpm --version
+
+      - name: Lockfile integrity gates
+        run: |
+          npm run lockfile:check
+          npm run lockfile:check:functions
 
       - name: Install dependencies
         run: corepack pnpm install --frozen-lockfile
@@ -55,3 +67,4 @@ jobs:
 
       - name: Core E2E tests
         run: npm run test:e2e:core
+        timeout-minutes: 8
