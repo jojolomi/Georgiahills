@@ -6,9 +6,15 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
+    env:
+      ADMIN_V3_E2E_EMAIL: ${{ secrets.ADMIN_V3_E2E_EMAIL }}
+      ADMIN_V3_E2E_PASSWORD: ${{ secrets.ADMIN_V3_E2E_PASSWORD }}
     steps:
       - name: Checkout
         id: checkout
@@ -59,6 +65,9 @@ jobs:
 
       - name: Import case sensitivity gate
         run: npm run ops:imports:case
+
+      - name: Tracked Firebase config guard
+        run: npm run ops:firebase-config-guard
 
       - name: Ensure workspace dependencies are installed
         run: |
@@ -123,9 +132,6 @@ jobs:
           else
             echo "Skipping admin-v3 authenticated smoke tests: optional secrets are not configured."
           fi
-        env:
-          ADMIN_V3_E2E_EMAIL: ${{ secrets['ADMIN_V3_E2E_EMAIL'] }}
-          ADMIN_V3_E2E_PASSWORD: ${{ secrets['ADMIN_V3_E2E_PASSWORD'] }}
 
       - name: Lighthouse budgets
         run: npm run lighthouse:ci
@@ -135,4 +141,5 @@ jobs:
           node --check script.js
           node --check admin-v2.js
           node --check scripts/prepare-admin-v3-hosting.js
+          node --check scripts/audit/ops/check-cutover-smoke.js
           node --check functions/index.js

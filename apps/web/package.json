@@ -17,6 +17,7 @@
     "@gh/lib": "workspace:*",
     "@gh/types": "workspace:*",
     "@gh/ui": "workspace:*",
+    "@georgiahills/shared": "workspace:*",
     "@hookform/resolvers": "^5.2.2",
     "@sentry/nextjs": "^9.17.0",
     "@supabase/ssr": "^0.8.0",

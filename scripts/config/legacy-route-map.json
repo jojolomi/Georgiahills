@@ -1,0 +1,37 @@
+[
+  {
+    "source": "article-7-days-georgia.html",
+    "destination": "/blog/en/georgia-7-day-itinerary.html",
+    "reason": "Legacy article route migrated to blog content"
+  },
+  {
+    "source": "article-7-days-georgia-ar.html",
+    "destination": "/blog/ar/georgia-7-day-itinerary.html",
+    "reason": "Legacy Arabic article route migrated to blog content"
+  },
+  {
+    "source": "article-georgian-food.html",
+    "destination": "/blog/en/halal-travel-in-georgia-guide.html",
+    "reason": "Legacy article route mapped to updated food/halal guidance"
+  },
+  {
+    "source": "article-georgian-food-ar.html",
+    "destination": "/blog/ar/halal-travel-in-georgia-guide.html",
+    "reason": "Legacy Arabic article route mapped to updated food/halal guidance"
+  },
+  {
+    "source": "article-is-georgia-safe.html",
+    "destination": "/blog/en/is-georgia-safe-family-travel.html",
+    "reason": "Legacy safety article route migrated to updated safety content"
+  },
+  {
+    "source": "article-is-georgia-safe-ar.html",
+    "destination": "/blog/ar/is-georgia-safe-family-travel.html",
+    "reason": "Legacy Arabic safety article route migrated to updated safety content"
+  },
+  {
+    "source": "destination.html",
+    "destination": "/destinations-hub.html",
+    "reason": "Legacy query-parameter destination route consolidated into hub"
+  }
+]

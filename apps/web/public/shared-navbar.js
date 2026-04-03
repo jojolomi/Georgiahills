@@ -94,7 +94,18 @@
     return `/${path}`;
   }
 
+  function getMarketPath(pathname) {
+    const match = String(pathname || '').match(/^\/(ae|sa|qa|kw|eg)(?:\/index\.html|\/)?$/i);
+    if (!match) return null;
+    return `/${match[1].toLowerCase()}/`;
+  }
+
   function buildLangSwitch(filename, isArabic) {
+    const marketPath = getMarketPath(window.location.pathname || '/');
+    if (marketPath) {
+      return isArabic ? toRootPath('index.html') : marketPath;
+    }
+
     if (filename === 'destination.html') {
       const params = new URLSearchParams(window.location.search);
       params.set('lang', isArabic ? 'en' : 'ar');

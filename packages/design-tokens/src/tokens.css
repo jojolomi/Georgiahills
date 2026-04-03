@@ -1,0 +1,13 @@
+:root {
+  --gh-color-primary: #2c5530;
+  --gh-color-primary-deep: #1a3c25;
+  --gh-color-secondary: #8ba888;
+  --gh-color-accent: #b08d55;
+  --gh-color-accent-light: #e6ccaa;
+  --gh-color-surface: #f9fafb;
+  --gh-color-ink: #0f172a;
+
+  --gh-font-sans: "Outfit", sans-serif;
+  --gh-font-arabic: "Cairo", sans-serif;
+  --gh-font-heading: "Playfair Display", serif;
+}

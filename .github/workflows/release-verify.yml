@@ -1,17 +1,22 @@
-name: Build and Lighthouse
+name: Release Verify
 
 on:
-  schedule:
-    - cron: "0 6 * * 6"
+  pull_request:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
   contents: read
 
-jobs:
-  build-and-lighthouse:
-    runs-on: ubuntu-latest
+concurrency:
+  group: release-verify-${{ github.ref }}
+  cancel-in-progress: true
 
+jobs:
+  release-readiness:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         id: checkout
@@ -44,7 +49,7 @@ jobs:
           cache: pnpm
           cache-dependency-path: pnpm-lock.yaml
 
-      - name: Enable Corepack
+      - name: Enable Corepack (pnpm)
         run: corepack enable
 
       - name: Runtime versions
@@ -52,39 +57,37 @@ jobs:
           node --version
           corepack pnpm --version
 
-      - name: Lockfile integrity gates
-        run: |
-          npm run lockfile:check
-          npm run lockfile:check:functions
-
       - name: Install dependencies
         run: corepack pnpm install --frozen-lockfile
 
-      - name: Build web app
-        run: corepack pnpm --filter web build
+      - name: Ensure workspace dependencies are installed
+        run: |
+          corepack pnpm --filter ./packages/ui install --frozen-lockfile
+          corepack pnpm --filter ./apps/web install --frozen-lockfile
+          corepack pnpm --filter ./apps/admin install --frozen-lockfile
 
-      - name: Prepare SEO dist output
-        run: npm run seo:prepare
+      - name: Release verification chain
+        run: |
+          npm run preflight:pr
+          npm run build:astro
+          npm run seo:validate
+          npm run perf:asset-budget
+          npm run perf:render-blocking-css
 
-      - name: Ensure Lighthouse port is free
+      - name: Start local smoke server
+        run: npx http-server . -p 4173 -c-1 >/tmp/http-server.log 2>&1 & echo $! > /tmp/http-server.pid
+
+      - name: Cutover smoke guard (strict, local)
         shell: bash
         run: |
-          if lsof -i :3000 >/dev/null 2>&1; then
-            echo "Port 3000 is busy. Releasing stale processes."
-            lsof -ti :3000 | xargs -r kill -9
-          else
-            echo "Port 3000 is free."
-          fi
+          set -euo pipefail
+          trap 'kill $(cat /tmp/http-server.pid) 2>/dev/null || true' EXIT
+          node scripts/audit/ops/check-cutover-smoke.js "http://127.0.0.1:4173" strict
 
-      - name: Lighthouse CI (mobile >= 90)
-        run: npm run lighthouse:ci
-
-      - name: Upload Lighthouse debug artifacts on failure
+      - name: Upload local server logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: lighthouse-debug-artifacts
+          name: release-verify-http-server-log
           if-no-files-found: ignore
-          path: |
-            .lighthouseci/**
-            reports/**
+          path: /tmp/http-server.log

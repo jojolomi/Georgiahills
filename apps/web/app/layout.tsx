@@ -59,6 +59,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const localeFromPath = headerPath.startsWith("/ar") ? "ar" : "en";
   const locale = requestHeaders.get("x-locale") === "ar" ? "ar" : localeFromPath;
   const direction = locale === "ar" ? "rtl" : "ltr";
+  const cspNonce = requestHeaders.get("x-csp-nonce") || undefined;
 
   return (
     <html lang={locale} dir={direction} suppressHydrationWarning>
@@ -69,7 +70,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <FloatingContactCta />
         {gtagId ? (
           <>
-            <Script id="gh-ga4-on-interaction" strategy="afterInteractive">
+            <Script id="gh-ga4-on-interaction" strategy="afterInteractive" nonce={cspNonce}>
               {`(function(){
   var loaded=false;
   function loadGA(){
