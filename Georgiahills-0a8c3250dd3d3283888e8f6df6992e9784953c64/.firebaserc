@@ -1,7 +1,0 @@
-{
-  "projects": {
-    "default": "georgiahills-15d19",
-    "staging": "your-staging-project-id",
-    "production": "georgiahills-15d19"
-  }
-}
