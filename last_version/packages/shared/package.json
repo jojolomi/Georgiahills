@@ -1,0 +1,27 @@
+{
+  "name": "@georgiahills/shared",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node --test src/contracts/*.test.js"
+  },
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.js",
+      "require": "./src/index.cjs"
+    },
+    "./contracts/lead": {
+      "import": "./src/contracts/lead.js",
+      "require": "./src/contracts/lead.cjs"
+    },
+    "./contracts/market": {
+      "types": "./src/contracts/market.d.ts",
+      "import": "./src/contracts/market.js",
+      "require": "./src/contracts/market.cjs"
+    }
+  }
+}

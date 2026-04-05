@@ -1,0 +1,24 @@
+html[dir="rtl"] body,
+html[dir="rtl"] main,
+html[dir="rtl"] section,
+html[dir="rtl"] article {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .rtl-row {
+  flex-direction: row-reverse;
+}
+
+html[dir="rtl"] .rtl-text-start {
+  text-align: right;
+}
+
+html[dir="rtl"] .rtl-text-end {
+  text-align: left;
+}
+
+html[dir="ltr"] body {
+  direction: ltr;
+  text-align: left;
+}
