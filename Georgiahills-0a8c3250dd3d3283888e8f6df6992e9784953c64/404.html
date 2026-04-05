@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, follow">
+    <meta name="description" content="The page you requested could not be found. Return to Georgia Hills home or continue with booking.">
+    <title>Page Not Found | Georgia Hills</title>
+        <style>
+            :root{--color-gray-400:#9CA3AF}
+            html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;background:#fff}
+            .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
+            .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
+            .navbar{position:relative;z-index:50;background:transparent}
+            .hero-img{width:100%;height:auto;display:block;object-fit:cover}
+            .hero{position:relative;overflow:hidden}
+            .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
+        </style>
+        <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="favicon.ico">
+    <script src="shared-navbar.js" defer></script>
+    <script src="shared-footer.js" defer></script>
+</head>
+<body class="page-404 page-about secondary-page">
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <nav id="navbar" class="navbar"></nav>
+
+    <!-- Hero -->
+    <main id="main-content">
+    <section class="about-premium-hero" style="min-height: 80vh; display:flex; align-items:center;">
+        <div class="about-premium-hero-bg" style="background-image: url('image-640.webp'); background-color: #111;"></div>
+        <div class="hero-overlay-gradient"></div>
+        <div class="container hero-content-container" style="text-align:center;">
+            <div class="hero-text-content fade-in-up" style="margin: 0 auto; max-width:800px;">
+                <span class="hero-badge" style="display:inline-block; margin-bottom:1.5rem;"><i class="fa-solid fa-triangle-exclamation"></i> 404 Error</span>
+                <h1 class="section-title about-premium-title" style="font-size: clamp(3rem, 8vw, 6rem);">
+                    Page Not <br>
+                    <span class="text-gradient-gold">Found</span>
+                </h1>
+                <p class="section-desc about-premium-subtitle">
+                    The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+                </p>
+                <div style="margin-top:2.5rem;">
+                    <a href="index.html" class="action-btn" style="padding: 1rem 2.5rem; font-size:1.1rem;">Return Home</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer"></footer>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
+
+

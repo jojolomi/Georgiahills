@@ -1,0 +1,62 @@
+name: Lighthouse Mobile Preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      preview_url:
+        description: "Production preview base URL (e.g. https://preview.example.com)"
+        required: true
+        type: string
+
+jobs:
+  lighthouse-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+        continue-on-error: true
+
+      - name: Checkout fallback (tarball)
+        if: steps.checkout.outcome != 'success'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
+          TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
+          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
+          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+          tar -xzf "$TMP_TAR" --strip-components=1
+          rm -f "$TMP_TAR"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: corepack pnpm install --frozen-lockfile
+
+      - name: Run Lighthouse (mobile) on EN/AR
+        shell: bash
+        run: |
+          URL="${{ inputs.preview_url }}"
+          mkdir -p artifacts/lighthouse
+          npx lighthouse "$URL/en" --form-factor=mobile --output=json --output-path=artifacts/lighthouse/lhr-en.json --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage"
+          npx lighthouse "$URL/ar" --form-factor=mobile --output=json --output-path=artifacts/lighthouse/lhr-ar.json --chrome-flags="--headless=new --no-sandbox --disable-dev-shm-usage"
+
+      - name: Assert mobile thresholds
+        run: node scripts/audit/perf/assert-lighthouse-mobile.mjs artifacts/lighthouse
+
+      - name: Upload Lighthouse JSON artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-mobile-json
+          path: artifacts/lighthouse/*.json
