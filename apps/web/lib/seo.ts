@@ -42,10 +42,12 @@ export function buildPageMetadata(input: BuildPageMetadataInput): Metadata {
   const images = buildOpenGraphImages(input.images);
   const title = clampText(input.title, maxTitleLength);
   const description = clampText(input.description, maxDescriptionLength);
+  const locale = canonical.includes("/ar") ? "ar" : "en";
 
   return {
     title,
     description,
+    robots: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
     alternates: {
       canonical,
       languages: input.alternates
@@ -56,6 +58,7 @@ export function buildPageMetadata(input: BuildPageMetadataInput): Metadata {
       url: canonical,
       siteName,
       type: "website",
+      locale,
       images
     },
     twitter: {

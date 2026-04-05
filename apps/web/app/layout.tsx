@@ -23,8 +23,26 @@ const notoSansArabic = Noto_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://georgiahills.com"),
   title: "Georgia Hills",
   description: "Premium private driver and tour services across Georgia. From Tbilisi to Kazbegi, Batumi, and beyond.",
+  alternates: {
+    canonical: "/"
+  },
+  openGraph: {
+    title: "Georgia Hills",
+    description: "Premium private driver and tour services across Georgia. From Tbilisi to Kazbegi, Batumi, and beyond.",
+    type: "website",
+    url: "/",
+    siteName: "Georgia Hills",
+    images: ["/hero-home-1600.avif"]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Georgia Hills",
+    description: "Premium private driver and tour services across Georgia. From Tbilisi to Kazbegi, Batumi, and beyond.",
+    images: ["/hero-home-1600.avif"]
+  },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
     other: {
@@ -64,6 +82,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang={locale} dir={direction} suppressHydrationWarning>
       <head>
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://wa.me" />
       </head>
       <body className={`${inter.variable} ${notoSansArabic.variable}`}>
         {children}

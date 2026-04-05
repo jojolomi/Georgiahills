@@ -51,7 +51,42 @@ function normalizePath(pathname = "") {
   return pathname;
 }
 
-export function buildHreflangAlternates(pathname = "") {
+type HreflangOptions = {
+  englishPath?: string;
+  arabicPath?: string;
+  xDefaultPath?: string;
+  includeEnglish?: boolean;
+  includeArabic?: boolean;
+};
+
+function toAbsoluteUrl(siteUrl: string, value?: string) {
+  if (!value) return undefined;
+  if (/^https?:\/\//i.test(value)) return value;
+  const normalized = value.startsWith("/") ? value : `/${value}`;
+  return `${siteUrl}${normalized}`;
+}
+
+export function buildHreflangAlternates(pathname = "", options: HreflangOptions = {}) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://georgiahills.com";
-  return buildLocaleAlternates({ siteUrl, pathname: normalizePath(pathname) });
+  const baseAlternates = buildLocaleAlternates({
+    siteUrl,
+    pathname: normalizePath(pathname),
+    englishPath: toAbsoluteUrl(siteUrl, options.englishPath),
+    arabicPath: toAbsoluteUrl(siteUrl, options.arabicPath),
+    xDefaultPath: toAbsoluteUrl(siteUrl, options.xDefaultPath)
+  });
+
+  const alternates: Record<string, string> = {
+    "x-default": baseAlternates["x-default"]
+  };
+
+  if (options.includeEnglish !== false) {
+    alternates.en = baseAlternates.en;
+  }
+
+  if (options.includeArabic !== false) {
+    alternates.ar = baseAlternates.ar;
+  }
+
+  return alternates;
 }
