@@ -1,0 +1,72 @@
+:root {
+  --color-primary: #2C5530;
+  --color-surface: #F9FAFB;
+  --color-gray-800: #0f172a;
+  --font-sans: 'Outfit', sans-serif;
+  --font-arabic: 'Cairo', sans-serif;
+  --header-height: 5rem;
+  --z-navbar: 50;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  background-color: var(--color-surface);
+  background: radial-gradient(circle at 50% 0%, #ffffff 0%, #F3F4F6 100%);
+  color: var(--color-gray-800);
+  font-family: var(--font-sans);
+}
+
+html[lang="ar"] body {
+  font-family: var(--font-arabic);
+  direction: rtl;
+  text-align: right;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 8px;
+  z-index: 10000;
+  transition: top 0.3s;
+}
+
+.skip-link:focus { top: 0; }
+
+main {
+  width: 100%;
+  flex: 1 1 auto;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: var(--z-navbar);
+  min-height: var(--header-height);
+  background-color: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

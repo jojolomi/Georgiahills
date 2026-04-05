@@ -1,0 +1,73 @@
+name: SEO Checks
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      preview_url:
+        description: "Preview URL for Lighthouse checks (optional)"
+        required: false
+        type: string
+
+jobs:
+  seo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+        continue-on-error: true
+
+      - name: Checkout fallback (tarball)
+        if: steps.checkout.outcome != 'success'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
+          TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
+          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
+          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+          tar -xzf "$TMP_TAR" --strip-components=1
+          rm -f "$TMP_TAR"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate sitemap
+        run: node scripts/generate-sitemap.js
+
+      - name: Build site
+        run: npm run build:astro
+
+      - name: Run SEO validation
+        run: npm run seo:validate
+
+      - name: Run Lighthouse on preview URL (optional)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.preview_url != '' }}
+        run: npx lighthouse "${{ inputs.preview_url }}" --preset=mobile --output=json --output-path=./lighthouse.json
+
+      - name: Check Lighthouse thresholds (optional)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.preview_url != '' }}
+        run: node scripts/check-lighthouse-threshold.js ./lighthouse.json
+
+      - name: Run Lighthouse assertions (if reports exist)
+        run: |
+          if [ -f reports/lighthouse/en-mobile.json ] && [ -f reports/lighthouse/ar-mobile.json ]; then
+            npm run lighthouse:assert:mobile
+          else
+            echo "Skipping lighthouse assertions; report files not found."
+          fi

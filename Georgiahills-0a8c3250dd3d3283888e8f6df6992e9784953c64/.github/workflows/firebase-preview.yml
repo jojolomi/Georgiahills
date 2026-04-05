@@ -1,0 +1,110 @@
+name: Staging Preview Deploy
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    environment: staging
+    concurrency:
+      group: firebase-preview-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+        continue-on-error: true
+
+      - name: Checkout fallback (tarball)
+        if: steps.checkout.outcome != 'success'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
+          TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
+          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
+          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+          tar -xzf "$TMP_TAR" --strip-components=1
+          rm -f "$TMP_TAR"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
+
+      - name: Install dependencies
+        run: corepack pnpm install --frozen-lockfile
+
+      - name: Ensure workspace dependencies are installed
+        run: |
+          corepack pnpm --filter ./packages/ui install --frozen-lockfile
+          corepack pnpm --filter ./apps/web install --frozen-lockfile
+          corepack pnpm --filter ./apps/admin install --frozen-lockfile
+
+      - name: Runtime parity assertion
+        if: ${{ vars.FIREBASE_PROJECT_ID_STAGING != '' }}
+        run: npm run ops:runtime-parity
+        env:
+          GH_ENVIRONMENT: staging
+          EXPECTED_NODE_MAJOR: "20"
+          REQUIRED_ENV_KEYS: FIREBASE_PROJECT_ID
+          FIREBASE_PROJECT_ID: ${{ vars['FIREBASE_PROJECT_ID_STAGING'] }}
+
+      - name: Runtime parity skipped
+        if: ${{ vars.FIREBASE_PROJECT_ID_STAGING == '' }}
+        run: |
+          echo "Skipping runtime parity in staging preview: vars.FIREBASE_PROJECT_ID_STAGING is not configured."
+
+      - name: Build Astro site
+        run: npm run build:astro
+
+      - name: Build admin-v3 hosting bundle
+        run: npm run build:admin-v3:hosting
+
+      - name: Check staging deploy prerequisites
+        id: staging_precheck
+        shell: bash
+        env:
+          FIREBASE_PROJECT_ID_STAGING: ${{ vars['FIREBASE_PROJECT_ID_STAGING'] }}
+          FIREBASE_SERVICE_ACCOUNT_STAGING: ${{ secrets['FIREBASE_SERVICE_ACCOUNT_STAGING'] }}
+        run: |
+          if [ -n "$FIREBASE_PROJECT_ID_STAGING" ] && [ -n "$FIREBASE_SERVICE_ACCOUNT_STAGING" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Deploy to staging preview channel
+        if: ${{ steps.staging_precheck.outputs.ready == 'true' }}
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets['FIREBASE_SERVICE_ACCOUNT_STAGING'] }}"
+          projectId: "${{ vars['FIREBASE_PROJECT_ID_STAGING'] }}"
+          expires: 7d
+
+      - name: Post-deploy homepage regression guard (staging)
+        if: ${{ steps.staging_precheck.outputs.ready == 'true' }}
+        env:
+          FIREBASE_PROJECT_ID_STAGING: ${{ vars['FIREBASE_PROJECT_ID_STAGING'] }}
+        run: |
+          node scripts/audit/ops/check-homepage-regression.js "https://${FIREBASE_PROJECT_ID_STAGING}.web.app/" strict
+
+      - name: Deploy skipped
+        if: ${{ steps.staging_precheck.outputs.ready != 'true' }}
+        run: |
+          echo "Skipping staging preview deploy: missing FIREBASE_PROJECT_ID_STAGING var or FIREBASE_SERVICE_ACCOUNT_STAGING secret."
