@@ -6,6 +6,10 @@ on:
       - opened
       - synchronize
       - reopened
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - "artifacts/**"
 
 permissions:
   contents: read
@@ -14,6 +18,7 @@ permissions:
 jobs:
   preview:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     environment: staging
     env:
       FIREBASE_PROJECT_ID_STAGING: ${{ vars.FIREBASE_PROJECT_ID_STAGING }}
@@ -22,35 +27,11 @@ jobs:
       group: firebase-preview-${{ github.event.pull_request.number }}
       cancel-in-progress: true
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-        continue-on-error: true
+      - name: Checkout with fallback
+        uses: ./.github/actions/checkout-with-fallback
 
-      - name: Checkout fallback (tarball)
-        if: steps.checkout.outcome != 'success'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
-          TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
-          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
-          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-          tar -xzf "$TMP_TAR" --strip-components=1
-          rm -f "$TMP_TAR"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
-
-      - name: Install dependencies
-        run: corepack pnpm install --frozen-lockfile
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Ensure workspace dependencies are installed
         run: |
@@ -99,15 +80,56 @@ jobs:
 
       - name: Post-deploy homepage regression guard (staging)
         if: ${{ steps.staging_precheck.outputs.ready == 'true' }}
+        shell: bash
         run: |
-          node scripts/audit/ops/check-homepage-regression.js "https://${FIREBASE_PROJECT_ID_STAGING}.web.app/" strict
+          set -euo pipefail
+          node scripts/audit/ops/check-homepage-regression.js "https://${FIREBASE_PROJECT_ID_STAGING}.web.app/" strict | tee /tmp/staging-homepage-regression.log
 
       - name: Post-deploy cutover smoke guard (staging)
         if: ${{ steps.staging_precheck.outputs.ready == 'true' }}
+        shell: bash
         run: |
-          node scripts/audit/ops/check-cutover-smoke.js "https://${FIREBASE_PROJECT_ID_STAGING}.web.app" strict
+          set -euo pipefail
+          node scripts/audit/ops/check-cutover-smoke.js "https://${FIREBASE_PROJECT_ID_STAGING}.web.app" strict | tee /tmp/staging-cutover-smoke.log
+
+      - name: Post-deploy delivery SLO guard (staging)
+        if: ${{ steps.staging_precheck.outputs.ready == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/audit/ops/check-delivery-slo.js "https://${FIREBASE_PROJECT_ID_STAGING}.web.app" strict | tee /tmp/staging-delivery-slo.log
 
       - name: Deploy skipped
         if: ${{ steps.staging_precheck.outputs.ready != 'true' }}
         run: |
           echo "Skipping staging preview deploy: missing FIREBASE_PROJECT_ID_STAGING var or FIREBASE_SERVICE_ACCOUNT_STAGING secret."
+
+      - name: Upload staging diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-preview-diagnostics
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            /tmp/staging-homepage-regression.log
+            /tmp/staging-cutover-smoke.log
+            /tmp/staging-delivery-slo.log
+
+      - name: Staging deploy summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Staging Preview Summary"
+            echo ""
+            echo "- Precheck ready: ${{ steps.staging_precheck.outputs.ready }}"
+            if [ "${{ steps.staging_precheck.outputs.ready }}" = "true" ]; then
+              echo "- Preview URL: https://${FIREBASE_PROJECT_ID_STAGING}.web.app"
+              echo "- Homepage guard: executed"
+              echo "- Cutover smoke guard: executed"
+              echo "- Delivery SLO guard: executed (strict)"
+            else
+              echo "- Deploy skipped due to missing staging project/credentials"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -13,37 +13,16 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     environment: production
+    env:
+      ENABLE_FUNCTIONS_DEPLOY: ${{ vars.ENABLE_FUNCTIONS_DEPLOY }}
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-        continue-on-error: true
+      - name: Checkout with fallback
+        uses: ./.github/actions/checkout-with-fallback
 
-      - name: Checkout fallback (tarball)
-        if: steps.checkout.outcome != 'success'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
-          TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
-          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
-          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-          tar -xzf "$TMP_TAR" --strip-components=1
-          rm -f "$TMP_TAR"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
-
-      - name: Install dependencies
-        run: corepack pnpm install --frozen-lockfile
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Ensure workspace dependencies are installed
         run: |
@@ -128,36 +107,93 @@ jobs:
 
       - name: Deploy functions to production
         id: deploy_functions
-        if: ${{ false }}
+        if: ${{ env.ENABLE_FUNCTIONS_DEPLOY == 'true' }}
         continue-on-error: true
         run: firebase deploy --project "${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}" --only "functions" --non-interactive
 
       - name: Functions deploy status
-        if: ${{ false }}
+        if: ${{ env.ENABLE_FUNCTIONS_DEPLOY == 'true' && steps.deploy_functions.outcome != 'success' }}
         run: |
           echo "Functions deployment did not complete."
           echo "Most likely billing is not enabled for Cloud Build/Artifact Registry."
           echo "Hosting and Firestore rules were still deployed successfully."
 
       - name: Functions deploy skipped
-        if: ${{ always() }}
+        if: ${{ env.ENABLE_FUNCTIONS_DEPLOY != 'true' }}
         run: |
-          echo "Functions deployment is disabled in this workflow."
-          echo "This is expected on Firebase Spark plan."
+          echo "Functions deployment is disabled (vars.ENABLE_FUNCTIONS_DEPLOY != 'true')."
+          echo "Set repository/environment variable ENABLE_FUNCTIONS_DEPLOY=true to enable it."
 
       - name: Post-deploy cutover smoke guard (production web.app strict)
         env:
           FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}
+        shell: bash
         run: |
-          node scripts/audit/ops/check-cutover-smoke.js "https://${FIREBASE_PROJECT_ID_PRODUCTION}.web.app" strict
+          set -euo pipefail
+          node scripts/audit/ops/check-cutover-smoke.js "https://${FIREBASE_PROJECT_ID_PRODUCTION}.web.app" strict | tee /tmp/prod-cutover-webapp.log
 
       - name: Post-deploy cutover smoke guard (custom domain warn)
+        shell: bash
         run: |
-          node scripts/audit/ops/check-cutover-smoke.js "https://georgiahills.com" warn
+          set -euo pipefail
+          node scripts/audit/ops/check-cutover-smoke.js "https://georgiahills.com" warn | tee /tmp/prod-cutover-domain.log
 
       - name: Post-deploy homepage regression guard
         env:
           FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}
+        shell: bash
         run: |
-          node scripts/audit/ops/check-homepage-regression.js "https://${FIREBASE_PROJECT_ID_PRODUCTION}.web.app/" strict
-          node scripts/audit/ops/check-homepage-regression.js "https://georgiahills.com/" warn
+          set -euo pipefail
+          node scripts/audit/ops/check-homepage-regression.js "https://${FIREBASE_PROJECT_ID_PRODUCTION}.web.app/" strict | tee /tmp/prod-homepage-webapp.log
+          node scripts/audit/ops/check-homepage-regression.js "https://georgiahills.com/" warn | tee /tmp/prod-homepage-domain.log
+
+      - name: Post-deploy delivery SLO guard (production web.app strict)
+        env:
+          FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/audit/ops/check-delivery-slo.js "https://${FIREBASE_PROJECT_ID_PRODUCTION}.web.app" strict | tee /tmp/prod-delivery-slo-webapp.log
+
+      - name: Post-deploy delivery SLO guard (custom domain warn)
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/audit/ops/check-delivery-slo.js "https://georgiahills.com" warn | tee /tmp/prod-delivery-slo-domain.log
+
+      - name: Upload production diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-deploy-diagnostics
+          retention-days: 7
+          if-no-files-found: ignore
+          path: |
+            /tmp/prod-cutover-webapp.log
+            /tmp/prod-cutover-domain.log
+            /tmp/prod-homepage-webapp.log
+            /tmp/prod-homepage-domain.log
+            /tmp/prod-delivery-slo-webapp.log
+            /tmp/prod-delivery-slo-domain.log
+
+      - name: Production deploy summary
+        if: always()
+        shell: bash
+        env:
+          FIREBASE_PROJECT_ID_PRODUCTION: ${{ vars['FIREBASE_PROJECT_ID_PRODUCTION'] }}
+        run: |
+          {
+            echo "## Production Deploy Summary"
+            echo ""
+            echo "- Project: ${FIREBASE_PROJECT_ID_PRODUCTION}"
+            echo "- Hosting deploy: attempted"
+            echo "- Firestore rules deploy outcome: ${{ steps.deploy_firestore_rules.outcome }}"
+            echo "- Functions deploy enabled: ${{ env.ENABLE_FUNCTIONS_DEPLOY == 'true' }}"
+            if [ "${{ env.ENABLE_FUNCTIONS_DEPLOY }}" = "true" ]; then
+              echo "- Functions deploy outcome: ${{ steps.deploy_functions.outcome }}"
+            else
+              echo "- Functions deploy outcome: skipped (opt-in disabled)"
+            fi
+            echo "- Smoke checks: web.app strict + custom domain warn"
+            echo "- Delivery SLO: web.app strict + custom domain warn"
+          } >> "$GITHUB_STEP_SUMMARY"

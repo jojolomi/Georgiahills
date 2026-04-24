@@ -29,14 +29,18 @@ const smokeMatrix = [
   {
     path: "/sitemap.xml",
     label: "sitemap",
-    tokens: ["<urlset", "https://georgiahills.com"]
+    tokens: ["<urlset", "https://georgiahills.com"],
+    contentTypeIncludes: "xml"
   },
   {
     path: "/robots.txt",
     label: "robots",
-    tokens: ["Sitemap:"]
+    tokens: ["Sitemap:"],
+    contentTypeIncludes: "text/plain"
   }
 ];
+
+const validModes = new Set(["strict", "warn"]);
 
 function normalizeBaseUrl(value) {
   const trimmed = String(value || "").trim();
@@ -82,7 +86,11 @@ async function fetchText(url, retries = 4) {
       }
 
       const body = await response.text();
-      return body;
+      const contentType = response.headers.get("content-type") || "";
+      return {
+        body,
+        contentType
+      };
     } catch (error) {
       clearTimeout(timeout);
       lastError = error;
@@ -96,17 +104,31 @@ async function fetchText(url, retries = 4) {
 }
 
 async function main() {
+  if (!validModes.has(mode)) {
+    throw new Error(`Invalid mode '${mode}'. Use 'strict' or 'warn'.`);
+  }
+
   const baseUrl = normalizeBaseUrl(baseUrlRaw);
   process.stdout.write(`Running cutover smoke checks against ${baseUrl.origin} (${mode})\n`);
 
   for (const item of smokeMatrix) {
     const target = new URL(item.path, baseUrl.origin);
     let body = "";
+    let contentType = "";
 
     try {
-      body = await fetchText(target.href);
+      const responsePayload = await fetchText(target.href);
+      body = responsePayload.body;
+      contentType = responsePayload.contentType;
     } catch (error) {
       warnOrFail(`${item.label} (${target.href}) fetch failed: ${error.message}`);
+      continue;
+    }
+
+    if (item.contentTypeIncludes && !contentType.toLowerCase().includes(item.contentTypeIncludes)) {
+      warnOrFail(
+        `${item.label} (${target.href}) unexpected content-type '${contentType}', expected to include '${item.contentTypeIncludes}'`
+      );
       continue;
     }
 

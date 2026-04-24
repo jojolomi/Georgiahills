@@ -14,35 +14,11 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-        continue-on-error: true
+      - name: Checkout with fallback
+        uses: ./.github/actions/checkout-with-fallback
 
-      - name: Checkout fallback (tarball)
-        if: steps.checkout.outcome != 'success'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
-          TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
-          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
-          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-          tar -xzf "$TMP_TAR" --strip-components=1
-          rm -f "$TMP_TAR"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install dependencies
-        run: corepack pnpm install --frozen-lockfile
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Run Lighthouse (mobile) on EN/AR
         shell: bash
@@ -59,4 +35,17 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-mobile-json
+          retention-days: 7
           path: artifacts/lighthouse/*.json
+
+      - name: Lighthouse mobile summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Lighthouse Mobile Preview Summary"
+            echo ""
+            echo "- Base URL: ${{ inputs.preview_url }}"
+            echo "- Routes tested: /en, /ar"
+            echo "- Artifact: lighthouse-mobile-json"
+          } >> "$GITHUB_STEP_SUMMARY"

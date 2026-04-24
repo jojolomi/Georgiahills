@@ -8,17 +8,9 @@
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     try {
-                const isLocalhost = ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname);
-                if (isLocalhost) {
-                        navigator.serviceWorker.getRegistrations()
-                                .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
-                                .catch(() => {});
-                        return;
-                }
-
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(reg => {})
-                    .catch(err => {});
+        navigator.serviceWorker.getRegistrations()
+            .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+            .catch(() => {});
     } catch(e) {}
   });
 }
@@ -345,17 +337,35 @@ let DestKeys = Object.keys(window.DestData);
 
 function normalizeDestinationShape(id, raw = {}) {
     const existing = window.DestData[id] || {};
+    const toText = (value) => (typeof value === 'string' ? value : '');
+    const toArray = (value) => {
+        if (Array.isArray(value)) return value.filter((item) => typeof item === 'string' && item.trim());
+        if (typeof value === 'string' && value.trim()) return [value.trim()];
+        return [];
+    };
+
+    const rawImage = toText(raw.img) || toText(raw.thumbnail);
+    const existingImage = toText(existing.img);
+    const normalizedImage = sanitizeImageUrl(rawImage) || sanitizeImageUrl(existingImage) || 'image-1024.webp';
+
+    const rawGallery = Array.isArray(raw.gallery) ? raw.gallery : [];
+    const existingGallery = Array.isArray(existing.gallery) ? existing.gallery : [];
+
+    const normalizedTitleEn = toText(raw.title_en) || toText(raw.title?.en) || toText(existing.title_en);
+    const normalizedTitleAr = toText(raw.title_ar) || toText(raw.title?.ar) || toText(existing.title_ar);
+
     return {
         ...existing,
-        title_en: raw.title_en || raw.title?.en || existing.title_en || '',
-        title_ar: raw.title_ar || raw.title?.ar || existing.title_ar || '',
-        desc_en: raw.desc_en || raw.desc?.en || existing.desc_en || '',
-        desc_ar: raw.desc_ar || raw.desc?.ar || existing.desc_ar || '',
-        img: raw.img || raw.thumbnail || existing.img || '',
-        gallery: raw.gallery || existing.gallery || [],
-        highlights_en: raw.highlights_en || raw.highlights?.en || existing.highlights_en || [],
-        highlights_ar: raw.highlights_ar || raw.highlights?.ar || existing.highlights_ar || [],
-        map_url: raw.map_url || raw.mapUrl || existing.map_url || ''
+        title_en: normalizedTitleEn || id,
+        title_ar: normalizedTitleAr || normalizedTitleEn || id,
+        desc_en: toText(raw.desc_en) || toText(raw.desc?.en) || toText(existing.desc_en),
+        desc_ar: toText(raw.desc_ar) || toText(raw.desc?.ar) || toText(existing.desc_ar),
+        img: normalizedImage,
+        thumbnail: sanitizeImageUrl(toText(raw.thumbnail)) || sanitizeImageUrl(toText(existing.thumbnail)) || normalizedImage,
+        gallery: toArray(rawGallery.length ? rawGallery : existingGallery),
+        highlights_en: toArray(raw.highlights_en || raw.highlights?.en || existing.highlights_en),
+        highlights_ar: toArray(raw.highlights_ar || raw.highlights?.ar || existing.highlights_ar),
+        map_url: toText(raw.map_url) || toText(raw.mapUrl) || toText(existing.map_url)
     };
 }
 
@@ -371,7 +381,9 @@ function applyNavbarSettings(data = {}) {
         if(data.items.length > 0) desktopNav.innerHTML = '';
         
         data.items.forEach(item => {
-            const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
+            const label = isAr
+                ? (item.label_ar || item.label_en || item.text_ar || item.text_en || item.link || 'Link')
+                : (item.label_en || item.label_ar || item.text_en || item.text_ar || item.link || 'Link');
             const link = item.link;
             
             const a = document.createElement('a');
@@ -390,7 +402,9 @@ function applyNavbarSettings(data = {}) {
         if(data.items.length > 0) mobileNav.innerHTML = '';
         
         data.items.forEach(item => {
-             const label = isAr ? (item.label_ar || item.label_en) : item.label_en;
+             const label = isAr
+            ? (item.label_ar || item.label_en || item.text_ar || item.text_en || item.link || 'Link')
+            : (item.label_en || item.label_ar || item.text_en || item.text_ar || item.link || 'Link');
              const link = item.link;
 
              const a = document.createElement('a');
@@ -443,30 +457,14 @@ function renderSliderDestinations(dests) {
             };
         }
 
-        const localFile = trimmed.match(/^([./a-zA-Z0-9_-]+)\.(webp|avif|jpe?g|png)$/i);
-        if (!localFile) {
-            return { src: trimmed, srcset: '', sizes: '' };
-        }
-
-        const base = localFile[1];
-        const ext = `.${localFile[2]}`;
-
-        // Keep already sized filenames as-is (e.g. foo-1024.webp).
-        if (/-\d{2,4}$/i.test(base)) {
-            return { src: trimmed, srcset: '', sizes: '' };
-        }
-
-        return {
-            src: `${base}-480${ext}`,
-            srcset: `${base}-320${ext} 320w, ${base}-480${ext} 480w, ${base}-640${ext} 640w, ${base}-768${ext} 768w, ${base}-1024${ext} 1024w`,
-            sizes: '(max-width: 640px) 88vw, (max-width: 1024px) 44vw, 380px'
-        };
+        return { src: trimmed, srcset: '', sizes: '' };
     };
 
     Object.keys(dests).forEach(id => {
-        const d = dests[id];
-        const title = (lang === 'ar' ? (d.title_ar || d.title_en) : (d.title_en || d.title_ar)) || id;
-        const desc = (lang === 'ar' ? (d.desc_ar || d.desc_en) : (d.desc_en || d.desc_ar)) || '';
+        const safeId = normalizeDestinationId(id);
+        const d = normalizeDestinationShape(safeId, dests[id] || {});
+        const title = String((lang === 'ar' ? (d.title_ar || d.title_en) : (d.title_en || d.title_ar)) || safeId);
+        const desc = String((lang === 'ar' ? (d.desc_ar || d.desc_en) : (d.desc_en || d.desc_ar)) || '');
         const btnText = lang === 'ar' ? 'اذهب هنا' : 'Drive Here';
         // Check if a static file exists for standard ones or route to generic destination.html
         // We assume generic is safer for dynamically added ones.
@@ -480,7 +478,7 @@ function renderSliderDestinations(dests) {
         // Actually, DestinationApp redirects index.html links but maybe not these.
         // Let's just use destination.html?id=${id} for simplicity and consistency with the new system.
         
-        const link = `destination.html?id=${id}`; 
+        const link = `destination.html?id=${encodeURIComponent(safeId)}`;
 
         const card = document.createElement('a');
         card.href = link;
@@ -488,7 +486,7 @@ function renderSliderDestinations(dests) {
         
         // Image
         const img = document.createElement('img');
-        const responsiveImage = buildResponsiveTourImage(id, d.img);
+        const responsiveImage = buildResponsiveTourImage(safeId, d.img);
         img.width = 380; // Standardize
         img.height = 475;
         img.loading = 'lazy';
@@ -579,56 +577,7 @@ function renderSliderDestinations(dests) {
         try {
             // Home Page Logic
             if (!body.classList.contains('secondary-page')) {
-                const homeSnap = await db.collection('settings').doc('page_home').get();
-                if (homeSnap.exists) {
-                    const h = homeSnap.data();
-                    
-                    if (h.hero) {
-                        const heroTitle = document.getElementById('hero-title');
-                        const newTitle = isAr ? h.hero.title_ar : h.hero.title_en;
-                        setSafeHTML(heroTitle, newTitle);
-                        
-                        const heroSub = document.getElementById('hero-subtitle');
-                        const newSub = isAr ? h.hero.subtitle_ar : h.hero.subtitle_en;
-                        setSafeHTML(heroSub, newSub);
-                        
-                        const heroImg = document.getElementById('hero-img');
-                        const safeHeroImage = sanitizeImageUrl(h.hero.bg_image);
-                        if(heroImg && safeHeroImage) {
-                            heroImg.src = safeHeroImage;
-                            heroImg.srcset = `${safeHeroImage} 1x`;
-                        }
-                    }
-
-                    if (h.about) {
-                        const aboutTitle = document.getElementById('about-title');
-                        // ... existing logic for home-about-section ...
-                        const newAboutTitle = isAr ? h.about.title_ar : h.about.title_en;
-                        setSafeHTML(aboutTitle, newAboutTitle);
-
-                        const aboutDesc = document.getElementById('about-desc');
-                        const newAboutDesc = isAr ? h.about.text_ar : h.about.text_en;
-                        if(aboutDesc && newAboutDesc) aboutDesc.innerText = newAboutDesc;
-                        
-                        const aboutImg = document.getElementById('about-img');
-                        if(aboutImg && h.about.image) aboutImg.src = h.about.image;
-                    }
-                    
-                    // Features / How It Works
-                    if (h.hero) {
-                        const setTxt = (id, en, ar) => {
-                            const el = document.getElementById(id);
-                            if(el) el.innerText = isAr ? ar : en;
-                        };
-                        setTxt('steps-title', h.hero.steps_title_en, h.hero.steps_title_ar);
-                        setTxt('step1-title', h.hero.step1_title_en, h.hero.step1_title_ar);
-                        setTxt('step1-desc', h.hero.step1_desc_en, h.hero.step1_desc_ar);
-                        setTxt('step2-title', h.hero.step2_title_en, h.hero.step2_title_ar);
-                        setTxt('step2-desc', h.hero.step2_desc_en, h.hero.step2_desc_ar);
-                        setTxt('step3-title', h.hero.step3_title_en, h.hero.step3_title_ar);
-                        setTxt('step3-desc', h.hero.step3_desc_en, h.hero.step3_desc_ar);
-                    }
-                }
+                // Keep static above-the-fold content to avoid late layout shifts and unintended copy overrides.
             }
             
             // About Page Logic (Exclusive)
@@ -1691,6 +1640,25 @@ const LibraryLoader = {
     }
 };
 
+function normalizeLangCode(rawLang) {
+    const value = (rawLang || '').toString().trim().toLowerCase();
+    return value.startsWith('ar') ? 'ar' : 'en';
+}
+
+function normalizeDestinationId(rawId) {
+    const value = (rawId || '').toString().trim().toLowerCase();
+    if (!value || value === 'undefined' || value === 'null' || value === '[object object]') {
+        return 'tbilisi';
+    }
+
+    if (window.DestData && window.DestData[value]) {
+        return value;
+    }
+
+    const knownIds = Object.keys(window.DestData || {});
+    return knownIds.length ? knownIds[0] : 'tbilisi';
+}
+
 // --- Language Manager (For Destination Page) ---
 const LangManager = {
     // UPDATED: Check URL param first, default to localStorage
@@ -1704,7 +1672,7 @@ const LangManager = {
         
         // 2. Dynamic Pages (destination.html): Check URL param, then storage
         const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get('lang') || localStorage.getItem('userLang') || 'en';
+        return normalizeLangCode(urlParams.get('lang') || localStorage.getItem('userLang') || document.documentElement.lang || 'en');
     },
     
     sync() {
@@ -1745,7 +1713,7 @@ const LangManager = {
     },
     
     apply() {
-        const lang = this.current;
+        const lang = normalizeLangCode(this.current);
         const isAr = lang === 'ar';
         document.documentElement.lang = lang;
         document.documentElement.dir = isAr ? 'rtl' : 'ltr';
@@ -2085,7 +2053,7 @@ const DestinationApp = {
         UIManager.init();
 
         const params = new URLSearchParams(window.location.search);
-        const id = params.get('id') || 'tbilisi';
+        const id = normalizeDestinationId(params.get('id'));
         
         let data = normalizeDestinationShape(id, window.DestData[id] || {}); // Fallback to local data
 
@@ -2099,7 +2067,7 @@ const DestinationApp = {
             } catch(e) { console.log("Using offline data"); }
         }
 
-        const lang = LangManager.current;
+        const lang = normalizeLangCode(LangManager.current);
 
         // 0. Fix Navigation Links for Arabic
         if (lang === 'ar') {
@@ -2109,13 +2077,15 @@ const DestinationApp = {
         }
 
         if(data) {
-            const title = data[`title_${lang}`];
+            const title = data[`title_${lang}`] || data.title_en || data.title_ar || id;
+            const imageUrl = sanitizeImageUrl(data.img) || 'image-1024.webp';
+            const absoluteImageUrl = /^(https?:)?\/\//i.test(imageUrl) ? imageUrl : `https://georgiahills.com/${imageUrl}`;
             document.title = title + " - Georgia Hills";
             
             // 1. Dynamic Meta Description & Open Graph
-            const desc = data[`desc_${lang}`];
+            const desc = data[`desc_${lang}`] || data.desc_en || data.desc_ar || '';
             const metaDesc = document.querySelector('meta[name="description"]');
-            if(metaDesc) metaDesc.content = desc.substring(0, 160) + "...";
+            if(metaDesc) metaDesc.content = desc ? (desc.substring(0, 160) + "...") : "Explore destinations in Georgia with trusted private driver services.";
 
             const setMeta = (prop, val) => {
                 let el = document.querySelector(`meta[property="${prop}"]`);
@@ -2123,8 +2093,8 @@ const DestinationApp = {
                 el.content = val;
             };
             setMeta('og:title', title);
-            setMeta('og:description', desc.substring(0, 200));
-            setMeta('og:image', data.img.startsWith('http') ? data.img : `https://georgiahills.com/${data.img}`);
+            setMeta('og:description', desc ? desc.substring(0, 200) : 'Explore destinations in Georgia with trusted private driver services.');
+            setMeta('og:image', absoluteImageUrl);
 
             // 2. Clean Canonical URL (Remove tracking params)
             const canonicalLink = document.querySelector('link[rel="canonical"]');
@@ -2142,8 +2112,8 @@ const DestinationApp = {
                     "@context": "https://schema.org",
                     "@type": "TouristAttraction",
                     "name": title,
-                    "description": data[`desc_${lang}`],
-                    "image": data.img.startsWith('http') ? data.img : `https://georgiahills.com/${data.img}`,
+                    "description": desc,
+                    "image": absoluteImageUrl,
                     "url": window.location.href,
                     "address": {
                         "@type": "PostalAddress",
@@ -2160,7 +2130,8 @@ const DestinationApp = {
                 // FIX: Set handlers before src to catch cached loads
                 heroImg.onload = function() { this.classList.remove('skeleton'); };
                 heroImg.onerror = function() { this.src = 'kazbegi-hero-1024.webp'; }; // Fallback
-                document.getElementById('hero-bg').style.backgroundImage = 'url(' + (data.img.startsWith('http') ? data.img : data.img) + ')'; heroImg.src = data.img;
+                document.getElementById('hero-bg').style.backgroundImage = `url(${imageUrl})`;
+                heroImg.src = imageUrl;
             }
             
             const crumbTitle = document.getElementById('crumb-title'); const crumbCurrent = document.getElementById('crumb-current'); if(crumbCurrent) crumbCurrent.innerText = title;
@@ -2177,13 +2148,13 @@ const DestinationApp = {
             
             const pageDesc = document.getElementById('page-desc');
             if(pageDesc) {
-                pageDesc.innerText = data[`desc_${lang}`];
+                pageDesc.innerText = desc;
                 pageDesc.classList.remove('skeleton');
             }
             
             const highlightsEl = document.getElementById('highlights');
             if(highlightsEl) {
-                const highlightsList = data[`highlights_${lang}`] || [];
+                const highlightsList = data[`highlights_${lang}`] || data.highlights_en || data.highlights_ar || [];
                 highlightsEl.innerHTML = '';
                 highlightsList.forEach((h) => {
                     const li = document.createElement('li');
@@ -2232,7 +2203,7 @@ const DestinationApp = {
             }
             
             const nextTitle = document.getElementById('next-title');
-            if(nextTitle) nextTitle.innerText = nextData[`title_${lang}`];
+            if(nextTitle) nextTitle.innerText = nextData[`title_${lang}`] || nextData.title_en || nextData.title_ar || nextId;
         }
     }
 };
@@ -2264,19 +2235,21 @@ const DestinationLoader = {
                 if (data.active === false) return;
 
                 const id = doc.id;
+                const safeId = normalizeDestinationId(id);
                 const lang = document.documentElement.lang || 'en';
                 const isAr = lang === 'ar';
-                
-                const title = isAr ? (data.title_ar || data.title_en) : data.title_en;
-                const desc = isAr ? (data.desc_ar || data.desc_en) : data.desc_en;
+                const shaped = normalizeDestinationShape(safeId, data || {});
+
+                const title = String((isAr ? (shaped.title_ar || shaped.title_en) : (shaped.title_en || shaped.title_ar)) || safeId);
+                const desc = String((isAr ? (shaped.desc_ar || shaped.desc_en) : (shaped.desc_en || shaped.desc_ar)) || '');
                 // Prefer explicit slug or route handling if available, else link to dynamic page
                 // Note: The static site has tbilisi.html etc. We might want to link there if ID matches?
                 // But for new destinations, we rely on destination.html?id=...
-                const link = `destination.html?id=${id}`; 
+                const link = `destination.html?id=${encodeURIComponent(safeId)}`;
 
                 html += `
                 <a href="${link}" class="tour-card group">
-                    <img src="${data.thumbnail || 'https://placehold.co/600x800'}" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="${title}">
+                    <img src="${shaped.thumbnail || 'https://placehold.co/600x800'}" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="${title}">
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">${title}</h3>
@@ -2372,6 +2345,19 @@ function runWhenIdle(task, timeout = 1200) {
     setTimeout(task, 0);
 }
 
+function shouldEagerlyTrackSession(pathname = window.location.pathname) {
+    if (!pathname) return false;
+    const normalized = pathname.toLowerCase();
+    return (
+        normalized === '/' ||
+        normalized.endsWith('/index.html') ||
+        normalized.endsWith('/arabic.html') ||
+        normalized.includes('booking') ||
+        normalized.includes('contact') ||
+        normalized.includes('services')
+    );
+}
+
 // Expose MainApp as 'App' because the main page HTML calls 'App.prefillVehicle' etc.
 window.App = MainApp; 
 
@@ -2402,8 +2388,17 @@ window.addEventListener('DOMContentLoaded', () => {
     try {
         // Sync language state with current page
         LangManager.sync();
-        AttributionManager.capture();
-        ExperimentManager.assignBookingVariant();
+
+        const captureSession = () => {
+            AttributionManager.capture();
+            ExperimentManager.assignBookingVariant();
+        };
+
+        if (shouldEagerlyTrackSession()) {
+            captureSession();
+        } else {
+            runWhenIdle(captureSession, 1800);
+        }
 
         // Ensure Cookie Banner runs on all pages (except Admin)
         if (!window.location.pathname.includes('admin.html')) {
@@ -2412,22 +2407,22 @@ window.addEventListener('DOMContentLoaded', () => {
         
         // Detect which page we are on and run the appropriate logic
         
-        // Condition 1: Main Page (has 'tours-slider' or 'hero' or 'dest-hero')
-        if (document.getElementById('tours-slider') || document.querySelector('.hero') || document.querySelector('.about-premium-hero') || document.querySelector('.dest-hero')) {
+        // Condition 1: Dynamic Destination Page (destination.html)
+        if (window.location.pathname.includes('destination.html') || document.body.classList.contains('page-destination')) {
+            DestinationApp.init();
+        }
+        // Condition 2: Main Page (has slider or generic home hero)
+        else if (document.getElementById('tours-slider') || document.querySelector('.hero') || document.querySelector('.dest-hero')) {
             MainApp.start();
             // Load dynamic destinations if slider exists
             if (document.getElementById('tours-slider')) {
-                runWhenIdle(() => DestinationLoader.load());
+                runWhenIdle(() => DestinationLoader.load(), 1500);
             }
-        } 
-        // Condition 2: Dynamic Destination Page (ONLY destination.html)
-        else if (window.location.pathname.includes('destination.html')) {
-            DestinationApp.init();
         }
         // Condition 3: Blog Page
         else if (window.location.pathname.includes('blog')) {
             UIManager.init();
-            runWhenIdle(() => BlogManager.init());
+            runWhenIdle(() => BlogManager.init(), 1500);
         }
         // Condition 3: Static Pages (tbilisi.html, honeymoon.html, etc.)
         else {

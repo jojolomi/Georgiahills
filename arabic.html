@@ -150,7 +150,7 @@
     
     <!-- OPTIMIZATION: Preload Hero Image BEFORE CSS -->
         <link rel="preload" as="image" 
-            href="image-1600.avif" 
+            href="image-640.avif" 
             imagesrcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" 
           imagesizes="100vw"
           fetchpriority="high">
@@ -169,7 +169,8 @@
             .hero-content{position:relative;z-index:10;text-align:center;color:#fff;padding:0 1rem;max-width:64rem;margin-top:2.5rem}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="stylesheet" href="style.css">
+        <link rel="preload" href="style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="style.min.css"></noscript>
 
     <!-- Inline Critical CSS for Icons (prevents flash) -->
     <style>
@@ -208,7 +209,7 @@
 
     <!-- Main Script Deferred -->
     <script src="shared-navbar.js" defer></script>
-    <script src="script.js" defer></script>
+    <script src="script.min.js" defer></script>
     <script>
         window.addEventListener('DOMContentLoaded', function () {
             const hero = document.getElementById('home');
@@ -226,7 +227,7 @@
                 heroImg.style.visibility = 'visible';
                 heroImg.style.opacity = '1';
                 if (!heroImg.getAttribute('src')) {
-                    heroImg.setAttribute('src', 'image-1024.webp');
+                    heroImg.setAttribute('src', 'image-640.webp');
                 }
             }
 
@@ -272,7 +273,7 @@
         <div class="hero-bg-container">
              <picture>
                 <source type="image/avif" srcset="image-320.avif 320w, image-640.avif 640w, image-1024.avif 1024w, image-1600.avif 1600w" sizes="100vw">
-                <img id="hero-img" src="image-1024.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="جبال جورجيا الخلابة" fetchpriority="high" decoding="async" loading="eager">
+                <img id="hero-img" src="image-640.webp" srcset="image-320.webp 320w, image-640.webp 640w, image-1024.webp 1024w, image-1600.webp 1600w" sizes="100vw" width="1200" height="700" class="hero-img" alt="جبال جورجيا الخلابة" fetchpriority="high" decoding="async" loading="eager">
              </picture>
             <div class="hero-overlay"></div>
         </div>
@@ -938,3 +939,6 @@
 
 </body>
 </html>
+
+
+

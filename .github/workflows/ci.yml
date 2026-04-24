@@ -2,58 +2,40 @@ name: CI Checks
 
 on:
   pull_request:
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - "artifacts/**"
   push:
     branches:
       - main
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - "artifacts/**"
 
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     env:
       ADMIN_V3_E2E_EMAIL: ${{ secrets.ADMIN_V3_E2E_EMAIL }}
       ADMIN_V3_E2E_PASSWORD: ${{ secrets.ADMIN_V3_E2E_PASSWORD }}
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-        continue-on-error: true
+      - name: Checkout with fallback
+        uses: ./.github/actions/checkout-with-fallback
 
-      - name: Checkout fallback (tarball)
-        if: steps.checkout.outcome != 'success'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
-          TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
-          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
-          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-          tar -xzf "$TMP_TAR" --strip-components=1
-          rm -f "$TMP_TAR"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
         with:
-          version: 10.30.3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
-
-      - name: Runtime versions
-        run: |
-          node --version
-          corepack pnpm --version
+          run-install: "false"
 
       - name: Lockfile integrity gates
         run: |
@@ -113,7 +95,17 @@ jobs:
         run: npm run seo:validate
 
       - name: Asset budget report
+        env:
+          GH_BUDGET_FAIL: "1"
+          GH_ASSET_BUDGET_KB: "250"
+          GH_PAGE_BUDGET_KB: "80"
         run: npm run perf:asset-budget
+
+      - name: Lighthouse config guardrails
+        run: npm run perf:lighthouse:config
+
+      - name: Legacy minified asset guardrails
+        run: npm run perf:legacy-assets
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps

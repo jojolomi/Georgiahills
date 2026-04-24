@@ -60,6 +60,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
 
+    <link rel="preload" as="image" href="kazbegi-hero-1024.webp" fetchpriority="high">
+
     <!-- PWA & Icons -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0F172A">
@@ -84,12 +86,13 @@
             .hero{position:relative;overflow:hidden}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="stylesheet" href="style.css">
+        <link rel="preload" href="style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <noscript><link rel="stylesheet" href="style.min.css"></noscript>
 
     <!-- Firebase SDKs (Compat) -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js" defer></script>
+    <script src="firebase-config.js" defer></script>
 
     <!-- FIX: Immediate Language Direction Application -->
     <script>
@@ -104,7 +107,7 @@
     </script>
     <!-- OPTIMIZATION: Defer Main Script -->
     <script src="shared-navbar.js" defer></script>
-    <script src="script.js" defer></script>
+    <script src="script.min.js" defer></script>
 </head>
 <body class="page-destination page-about secondary-page">
 
@@ -276,3 +279,6 @@
     <script type="application/ld+json" id="json-ld-data"></script>
 </body>
 </html>
+
+
+

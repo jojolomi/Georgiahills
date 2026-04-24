@@ -13,9 +13,9 @@ export default defineConfig({
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
-    command: "cd apps/web && npx next dev -H 127.0.0.1 -p 4174",
+    command: "cd apps/web && npm run build && npx next start -H 127.0.0.1 -p 4174",
     url: "http://127.0.0.1:4174",
     reuseExistingServer: true,
-    timeout: 120000
+    timeout: 240000
   }
 });

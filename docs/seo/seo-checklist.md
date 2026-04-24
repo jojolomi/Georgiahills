@@ -13,6 +13,16 @@
 - [x] Locale-aware blog routing in `app/[locale]/blog/[slug]/page.tsx`
 - [x] `lang` + `dir` synchronization for locale pages
 - [x] RTL stylesheet added (`app/rtl.css`)
+- [x] Locale content parity gate: `npm run seo:validate:parity`
+
+### Locale parity follow-ups (warning-level)
+- `destinations-hub.html` / `destinations-hub-ar.html`
+- `family-travel-hub.html` / `family-travel-hub-ar.html`
+- `halal-travel-hub.html` / `halal-travel-hub-ar.html`
+- `itineraries-hub.html` / `itineraries-hub-ar.html`
+- `safety-hub.html` / `safety-hub-ar.html`
+
+These pairs currently emit warning-level parity results because the static HTML content is too short for strict ratio enforcement.
 
 ## 3) Structured Data
 - [x] `BreadcrumbList` added to localized marketing page

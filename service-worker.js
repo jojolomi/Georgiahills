@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gh-cache-v24';
+const CACHE_NAME = 'gh-cache-v25';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -32,7 +32,9 @@ const ASSETS_TO_CACHE = [
   '/signagi.html',
   '/signagi-ar.html',
   '/style.css',
+  '/style.min.css',
   '/script.js',
+  '/script.min.js',
   '/404.html',
   '/legal.html',
   '/favicon.ico',
@@ -95,6 +97,22 @@ self.addEventListener('fetch', (event) => {
   // OPTIMIZATION: For destination.html, ignore query params when matching cache
   // This ensures we serve the cached app shell regardless of the ?id=... param
   const isDestination = event.request.url.includes('/destination.html');
+
+  // Prefer fresh JS/CSS to avoid stale runtime bugs after deploys.
+  if (/\.(?:js|css)(?:\?|$)/i.test(event.request.url)) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200 && (networkResponse.type === 'basic' || networkResponse.type === 'cors')) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request, { ignoreSearch: isDestination }).then((cachedResponse) => {
