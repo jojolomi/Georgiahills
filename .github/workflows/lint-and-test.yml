@@ -12,8 +12,8 @@ jobs:
     timeout-minutes: 45
 
     steps:
-      - name: Checkout with fallback
-        uses: ./.github/actions/checkout-with-fallback
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm

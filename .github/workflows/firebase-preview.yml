@@ -27,8 +27,8 @@ jobs:
       group: firebase-preview-${{ github.event.pull_request.number }}
       cancel-in-progress: true
     steps:
-      - name: Checkout with fallback
-        uses: ./.github/actions/checkout-with-fallback
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm

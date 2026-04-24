@@ -17,8 +17,8 @@ jobs:
       FIREBASE_MONTHLY_BUDGET_USD: ${{ vars.FIREBASE_MONTHLY_BUDGET_USD }}
       FIREBASE_CURRENT_MONTH_COST_USD: ${{ vars.FIREBASE_CURRENT_MONTH_COST_USD }}
     steps:
-      - name: Checkout with fallback
-        uses: ./.github/actions/checkout-with-fallback
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

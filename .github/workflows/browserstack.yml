@@ -16,8 +16,8 @@ jobs:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
     steps:
-      - name: Checkout with fallback
-        uses: ./.github/actions/checkout-with-fallback
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Setup Node and pnpm
         uses: ./.github/actions/setup-node-pnpm
