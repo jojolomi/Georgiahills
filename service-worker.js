@@ -1,4 +1,4 @@
-const CACHE_NAME = 'gh-cache-v25';
+const CACHE_NAME = 'gh-cache-v26';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -35,6 +35,9 @@ const ASSETS_TO_CACHE = [
   '/style.min.css',
   '/script.js',
   '/script.min.js',
+  '/shared-navbar.js',
+  '/destination-script.js',
+  '/firebase-config.js',
   '/404.html',
   '/legal.html',
   '/favicon.ico',
@@ -110,6 +113,13 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         })
         .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  if (event.request.url.includes('/firebase-config.js') || event.request.url.includes('/service-worker.js')) {
+    event.respondWith(
+      fetch(event.request).catch(() => caches.match(event.request))
     );
     return;
   }

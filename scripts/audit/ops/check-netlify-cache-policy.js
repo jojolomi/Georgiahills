@@ -8,7 +8,10 @@ const configPath = path.resolve("netlify.toml");
 const requiredRules = [
   { target: '/script.min.js', token: 'immutable' },
   { target: '/style.min.css', token: 'immutable' },
-  { target: '/destination-script.js', token: 'immutable' },
+  { target: '/destination-script.js', token: 'must-revalidate' },
+  { target: '/script.js', token: 'must-revalidate' },
+  { target: '/shared-navbar.js', token: 'must-revalidate' },
+  { target: '/service-worker.js', token: 'must-revalidate' },
   { target: '/*.html', token: 'must-revalidate' }
 ];
 

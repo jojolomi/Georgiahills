@@ -464,7 +464,6 @@ function renderSliderDestinations(dests) {
         const safeId = normalizeDestinationId(id);
         const d = normalizeDestinationShape(safeId, dests[id] || {});
         const title = String((lang === 'ar' ? (d.title_ar || d.title_en) : (d.title_en || d.title_ar)) || safeId);
-        const desc = String((lang === 'ar' ? (d.desc_ar || d.desc_en) : (d.desc_en || d.desc_ar)) || '');
         const btnText = lang === 'ar' ? 'اذهب هنا' : 'Drive Here';
         // Check if a static file exists for standard ones or route to generic destination.html
         // We assume generic is safer for dynamically added ones.
@@ -507,16 +506,11 @@ function renderSliderDestinations(dests) {
         h3.className = 'tour-title';
         h3.textContent = title;
         
-        const p = document.createElement('p');
-        p.className = 'tour-desc';
-        p.textContent = desc.substring(0, 60) + (desc.length > 60 ? '...' : '');
-        
         const span = document.createElement('span');
         span.className = 'tour-btn text-accent-light';
         span.innerHTML = `${btnText} <i class="fa-solid fa-arrow-right rtl:rotate-180"></i>`;
         
         content.appendChild(h3);
-        content.appendChild(p);
         content.appendChild(span);
         
         card.appendChild(img);
@@ -1864,135 +1858,140 @@ const MainApp = {
 
     initSlider() {
          const slider = document.getElementById('tours-slider');
-         if(!slider) return;
+         if (!slider) return;
 
-         // Prevent multiple initializations or clean up if re-initializing
-         if (slider.dataset.initialized === 'true') {
-            // Remove existing clones to reset state
-            const clones = slider.querySelectorAll('[aria-hidden="true"]');
-            clones.forEach(clone => clone.remove());
-            // Clear old listeners if possible (hard without reference), 
-            // but since we are just re-cloning, maybe it's fine?
-            // Actually, we should be careful about button listeners piling up.
-            // Let's assume for now we just reset the clones.
+         if (typeof slider.__cleanupSlider === 'function') {
+            slider.__cleanupSlider();
          }
+
+         slider.querySelectorAll('[aria-hidden="true"]').forEach((clone) => clone.remove());
+
+         const originalCards = Array.from(slider.children).filter((card) => !card.hasAttribute('aria-hidden'));
+         if (originalCards.length === 0) return;
+
          slider.dataset.initialized = 'true';
 
-         const prevBtns = [document.getElementById('prevBtnDesk'), document.getElementById('prevBtnMob')];
-         const nextBtns = [document.getElementById('nextBtnDesk'), document.getElementById('nextBtnMob')];
-
-         // Clear existing listeners to prevent duplicates (requires storing abort controllers or named functions)
-         // For simplicity, we'll use cloning to wipe listeners on buttons
-         prevBtns.forEach((btn, i) => {
-             if(btn) {
-                const newBtn = btn.cloneNode(true);
-                btn.parentNode.replaceChild(newBtn, btn);
-                prevBtns[i] = newBtn; // Update reference
-             }
-         });
-         nextBtns.forEach((btn, i) => {
-             if(btn) {
-                const newBtn = btn.cloneNode(true);
-                btn.parentNode.replaceChild(newBtn, btn);
-                nextBtns[i] = newBtn; // Update reference
-             }
-         });
-
-         let autoScrollInterval;
-         const intervalTime = 3500;
+         const prevBtns = [document.getElementById('prevBtnDesk'), document.getElementById('prevBtnMob')].filter(Boolean);
+         const nextBtns = [document.getElementById('nextBtnDesk'), document.getElementById('nextBtnMob')].filter(Boolean);
+         const controller = new AbortController();
+         const { signal } = controller;
+         let autoScrollInterval = null;
          let isPaused = false;
-         
-         // Get updated original cards (excluding any clones if we missed them)
-         const originalCards = Array.from(slider.children).filter(c => !c.hasAttribute('aria-hidden'));
-         if(originalCards.length === 0) return;
+         const intervalTime = 3500;
 
-         // Append clones for infinite scroll
-         originalCards.forEach(card => {
-             const clone = card.cloneNode(true);
-             clone.setAttribute('aria-hidden', 'true');
-             const originalOnClick = card.getAttribute('onclick');
-             if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
-             slider.appendChild(clone);
-         });
-         
-         originalCards.slice().reverse().forEach(card => {
-             const clone = card.cloneNode(true);
-             clone.setAttribute('aria-hidden', 'true');
-             const originalOnClick = card.getAttribute('onclick');
-             if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
-             slider.insertBefore(clone, slider.firstChild);
-         });
+         const cloneCard = (card) => {
+            const clone = card.cloneNode(true);
+            clone.setAttribute('aria-hidden', 'true');
+            return clone;
+         };
+
+         originalCards.forEach((card) => slider.appendChild(cloneCard(card)));
+         originalCards.slice().reverse().forEach((card) => slider.insertBefore(cloneCard(card), slider.firstChild));
 
          const getMetrics = () => {
-             const style = window.getComputedStyle(slider);
-             const gap = parseFloat(style.gap) || 0;
-             const itemWidth = originalCards[0].offsetWidth + gap;
-             const totalWidth = itemWidth * originalCards.length;
-             return { itemWidth, totalWidth };
+            const style = window.getComputedStyle(slider);
+            const gap = parseFloat(style.gap) || 0;
+            const itemWidth = originalCards[0].getBoundingClientRect().width + gap;
+            const totalWidth = itemWidth * originalCards.length;
+            return { itemWidth, totalWidth };
+         };
+
+         const withImmediateScroll = (callback) => {
+            const previous = slider.style.scrollBehavior;
+            slider.style.scrollBehavior = 'auto';
+            callback();
+            requestAnimationFrame(() => {
+                slider.style.scrollBehavior = previous || 'smooth';
+            });
          };
 
          const jumpToStart = () => {
-             const { totalWidth } = getMetrics();
-             slider.scrollLeft = totalWidth; 
+            const { totalWidth } = getMetrics();
+            withImmediateScroll(() => {
+                slider.scrollLeft = totalWidth;
+            });
          };
-         
-         setTimeout(() => {
-             slider.style.scrollBehavior = 'auto';
-             jumpToStart();
-             slider.style.scrollBehavior = 'smooth';
-         }, 100);
 
          const moveSlider = (direction) => {
             const { itemWidth } = getMetrics();
-            let scrollAmount = direction * itemWidth;
-            slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            if (!itemWidth) return;
+            slider.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
          };
 
          const checkScroll = () => {
             const { totalWidth } = getMetrics();
+            if (!totalWidth) return;
             const tolerance = 10;
-            
+
             if (slider.scrollLeft >= (totalWidth * 2) - tolerance) {
-                slider.style.scrollBehavior = 'auto';
-                slider.scrollLeft = totalWidth;
-                slider.style.scrollBehavior = 'smooth';
-            }
-            else if (slider.scrollLeft <= tolerance) {
-                slider.style.scrollBehavior = 'auto';
-                slider.scrollLeft = totalWidth;
-                slider.style.scrollBehavior = 'smooth';
+                withImmediateScroll(() => {
+                    slider.scrollLeft = totalWidth;
+                });
+            } else if (slider.scrollLeft <= tolerance) {
+                withImmediateScroll(() => {
+                    slider.scrollLeft = totalWidth;
+                });
             }
          };
 
-         slider.addEventListener('scroll', checkScroll);
+         const stopAuto = () => {
+            if (autoScrollInterval) {
+                clearInterval(autoScrollInterval);
+                autoScrollInterval = null;
+            }
+         };
 
          const startAuto = () => {
-             clearInterval(autoScrollInterval);
-             autoScrollInterval = setInterval(() => {
-                 if(!isPaused) moveSlider(1);
-             }, intervalTime);
+            stopAuto();
+            autoScrollInterval = setInterval(() => {
+                if (!isPaused) moveSlider(1);
+            }, intervalTime);
          };
-         
+
          const resetAuto = () => {
-             clearInterval(autoScrollInterval);
-             startAuto();
+            startAuto();
          };
-         
-         nextBtns.forEach(btn => btn?.addEventListener('click', () => { moveSlider(1); resetAuto(); }));
-         prevBtns.forEach(btn => btn?.addEventListener('click', () => { moveSlider(-1); resetAuto(); }));
-         
-         slider.addEventListener('mouseenter', () => isPaused = true);
-         slider.addEventListener('touchstart', () => isPaused = true);
-         slider.addEventListener('mouseleave', () => isPaused = false);
-         slider.addEventListener('touchend', () => isPaused = false);
-         
-         window.addEventListener('resize', () => {
-            slider.style.scrollBehavior = 'auto';
-            jumpToStart();
-            setTimeout(() => { slider.style.scrollBehavior = 'smooth'; }, 50);
+
+         prevBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                isPaused = false;
+                moveSlider(-1);
+                resetAuto();
+            }, { signal });
          });
-         
-         startAuto();
+
+         nextBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                isPaused = false;
+                moveSlider(1);
+                resetAuto();
+            }, { signal });
+         });
+
+         slider.addEventListener('scroll', checkScroll, { signal, passive: true });
+         slider.addEventListener('mouseenter', () => { isPaused = true; }, { signal, passive: true });
+         slider.addEventListener('mouseleave', () => { isPaused = false; }, { signal, passive: true });
+         slider.addEventListener('focusin', () => { isPaused = true; }, { signal });
+         slider.addEventListener('focusout', () => { isPaused = false; }, { signal });
+         slider.addEventListener('touchstart', () => { isPaused = true; }, { signal, passive: true });
+         slider.addEventListener('touchend', () => { isPaused = false; resetAuto(); }, { signal, passive: true });
+         slider.addEventListener('touchcancel', () => { isPaused = false; }, { signal, passive: true });
+
+         window.addEventListener('resize', () => {
+            jumpToStart();
+         }, { signal, passive: true });
+
+         slider.__cleanupSlider = () => {
+            stopAuto();
+            controller.abort();
+            slider.querySelectorAll('[aria-hidden="true"]').forEach((clone) => clone.remove());
+            delete slider.__cleanupSlider;
+         };
+
+         requestAnimationFrame(() => {
+            jumpToStart();
+            startAuto();
+         });
     },
     
     prefillVehicle(type) {
@@ -2048,6 +2047,381 @@ const MainApp = {
 
 // --- Destination Page Controller (destination.html) ---
 const DestinationApp = {
+    getDisplayTitle(title) {
+        if (typeof title !== 'string' || !title.trim()) return 'Destination';
+        const shortTitle = title.split(':')[0].trim();
+        return shortTitle || title.trim();
+    },
+
+    getBadge(id, lang) {
+        const badges = {
+            en: {
+                tbilisi: 'Capital City',
+                kazbegi: 'Mountain Escape',
+                martvili: 'Canyon Adventure',
+                signagi: 'Wine Country',
+                batumi: 'Sea Escape',
+                fallback: 'Signature Destination'
+            },
+            ar: {
+                tbilisi: 'العاصمة',
+                kazbegi: 'ملاذ جبلي',
+                martvili: 'مغامرة الوادي',
+                signagi: 'منطقة النبيذ',
+                batumi: 'وجهة ساحلية',
+                fallback: 'وجهة مميزة'
+            }
+        };
+
+        return badges[lang]?.[id] || badges[lang]?.fallback || badges.en.fallback;
+    },
+
+    getStats(id, lang) {
+        const stats = {
+            en: {
+                tbilisi: [
+                    ['1-3 Days', 'Recommended'],
+                    ['City + Hills', 'Route Feel'],
+                    ['All Year', 'Best Season']
+                ],
+                kazbegi: [
+                    ['Full Day', 'Recommended'],
+                    ['Mountain Road', 'Route Feel'],
+                    ['May-Oct', 'Best Season']
+                ],
+                martvili: [
+                    ['Full Day', 'Recommended'],
+                    ['Nature Route', 'Route Feel'],
+                    ['Apr-Oct', 'Best Season']
+                ],
+                signagi: [
+                    ['Full Day', 'Recommended'],
+                    ['Wine Region', 'Route Feel'],
+                    ['Spring-Fall', 'Best Season']
+                ],
+                batumi: [
+                    ['2-3 Days', 'Recommended'],
+                    ['Coastal City', 'Route Feel'],
+                    ['May-Sep', 'Best Season']
+                ],
+                fallback: [
+                    ['1 Day', 'Recommended'],
+                    ['Private Tour', 'Route Feel'],
+                    ['All Year', 'Best Season']
+                ]
+            },
+            ar: {
+                tbilisi: [
+                    ['1-3 أيام', 'المدة المناسبة'],
+                    ['مدينة + مرتفعات', 'طابع الرحلة'],
+                    ['طوال العام', 'أفضل موسم']
+                ],
+                kazbegi: [
+                    ['رحلة يوم كامل', 'المدة المناسبة'],
+                    ['طريق جبلي', 'طابع الرحلة'],
+                    ['مايو-أكتوبر', 'أفضل موسم']
+                ],
+                martvili: [
+                    ['رحلة يوم كامل', 'المدة المناسبة'],
+                    ['طبيعة وخضرة', 'طابع الرحلة'],
+                    ['أبريل-أكتوبر', 'أفضل موسم']
+                ],
+                signagi: [
+                    ['رحلة يوم كامل', 'المدة المناسبة'],
+                    ['منطقة النبيذ', 'طابع الرحلة'],
+                    ['الربيع-الخريف', 'أفضل موسم']
+                ],
+                batumi: [
+                    ['2-3 أيام', 'المدة المناسبة'],
+                    ['مدينة ساحلية', 'طابع الرحلة'],
+                    ['مايو-سبتمبر', 'أفضل موسم']
+                ],
+                fallback: [
+                    ['يوم واحد', 'المدة المناسبة'],
+                    ['جولة خاصة', 'طابع الرحلة'],
+                    ['طوال العام', 'أفضل موسم']
+                ]
+            }
+        };
+
+        return stats[lang]?.[id] || stats[lang]?.fallback || stats.en.fallback;
+    },
+
+    getItinerary(id, lang, title) {
+        const plans = {
+            en: {
+                tbilisi: [
+                    ['Arrival & Old Town', 'Start in the historic core, walk the old streets, and settle into the city rhythm before sunset.'],
+                    ['Views & Landmarks', 'Pair fortress viewpoints, iconic bridges, and the main cultural boulevard in one smooth driver-led route.'],
+                    ['Flexible Add-ons', 'Keep space for baths, cafes, shopping, or a half-day scenic detour depending on your pace.']
+                ],
+                kazbegi: [
+                    ['Early Departure', 'Leave early for a comfortable mountain drive with scenic stops along the way.'],
+                    ['Highland Highlights', 'Focus on the main church viewpoint, dramatic valleys, and clean mountain-air stops.'],
+                    ['Return at Golden Hour', 'Head back after the key viewpoints while the road is still relaxed and the light is best.']
+                ],
+                martvili: [
+                    ['Morning Transfer', 'Reach the canyon area early for the calmest pace and best photo conditions.'],
+                    ['Canyon Experience', 'Combine the boat ride, short walking paths, and nearby natural stops in one easy route.'],
+                    ['Slow Return', 'Add a relaxed lunch and scenic roadside breaks on the way back.']
+                ],
+                signagi: [
+                    ['Scenic Drive Out', 'Use the outbound route for countryside viewpoints and an easy arrival into Kakheti.'],
+                    ['Town & Monastery', 'Blend the old town walls, monastery stop, and valley views without rushing.'],
+                    ['Wine & Sunset', 'Finish with a tasting stop or terrace break before returning to the city.']
+                ],
+                batumi: [
+                    ['Arrival & Boulevard', 'Open with the promenade, old streets, and easy waterfront stops.'],
+                    ['Gardens & Icons', 'Pair the major city landmarks with a flexible visit to the botanical side of town.'],
+                    ['Evening by the Sea', 'Keep the last stretch open for dinner, lights, and a smooth hotel return.']
+                ],
+                fallback: [
+                    ['Comfortable Start', 'Begin with pickup and a direct route to the main highlights without overloading the day.'],
+                    ['Core Sights', `Cover the most worthwhile stops in ${title} with enough time to enjoy each one properly.`],
+                    ['Flexible Finish', 'Leave room for photo stops, food, and a relaxed return transfer.']
+                ]
+            },
+            ar: {
+                tbilisi: [
+                    ['الوصول والمدينة القديمة', 'ابدأ من قلب تبليسي التاريخي واستمتع بالأزقة القديمة قبل وقت الغروب.'],
+                    ['الإطلالات والمعالم', 'اجمع بين القلعة والجسور والمعالم الرئيسية في مسار مريح مع السائق.'],
+                    ['خيارات مرنة', 'اترك مساحة للحمامات والكافيهات والتسوق أو إضافة توقفات حسب وقتك.']
+                ],
+                kazbegi: [
+                    ['انطلاق مبكر', 'ابدأ الرحلة مبكراً للاستمتاع بالطريق الجبلي مع توقفات مريحة ومناظر رائعة.'],
+                    ['أهم المعالم', 'ركز على الكنيسة الشهيرة والإطلالات الجبلية والوديان في مسار واضح.'],
+                    ['عودة مريحة', 'الرجوع بعد أبرز التوقفات يمنحك طريقاً أهدأ وإضاءة أجمل للصور.']
+                ],
+                martvili: [
+                    ['الوصول صباحاً', 'الوصول المبكر يمنحك أجواء أهدأ وفرصة أفضل للتصوير.'],
+                    ['تجربة الوادي', 'اجمع بين القارب والمشي الخفيف وأهم النقاط الطبيعية في زيارة واحدة.'],
+                    ['عودة هادئة', 'أضف استراحة غداء وتوقفات طبيعية بسيطة في طريق العودة.']
+                ],
+                signagi: [
+                    ['طريق ريفي جميل', 'استمتع بالمشاهد الريفية في الطريق إلى كاخيتي قبل الوصول إلى سغناغي.'],
+                    ['المدينة والدير', 'قسّم الوقت بين البلدة القديمة والدير والإطلالات على الوادي.'],
+                    ['نهاية هادئة', 'اختم بتجربة تذوق أو جلسة مطلة قبل العودة إلى المدينة.']
+                ],
+                batumi: [
+                    ['الوصول والكورنيش', 'ابدأ بالكورنيش والأماكن السهلة داخل المدينة الساحلية.'],
+                    ['الحدائق والمعالم', 'اجمع أهم رموز المدينة مع زيارة مرنة للحدائق أو المناطق الهادئة.'],
+                    ['المساء على البحر', 'اترك آخر الوقت للمشي أو العشاء مع عودة مريحة إلى الفندق.']
+                ],
+                fallback: [
+                    ['بداية مريحة', 'ابدأ بالاستقبال والانطلاق مباشرة إلى أهم المحطات بدون ضغط.'],
+                    ['أبرز الأماكن', `غطِّ أهم ما يستحق الزيارة في ${title} مع وقت كافٍ لكل محطة.`],
+                    ['نهاية مرنة', 'اترك مساحة للصور والطعام والتوقفات الإضافية قبل العودة.']
+                ]
+            }
+        };
+
+        return plans[lang]?.[id] || plans[lang]?.fallback || plans.en.fallback;
+    },
+
+    getSeasonCards(id, lang) {
+        const cards = {
+            en: {
+                tbilisi: [
+                    ['Spring & Autumn', 'Best for walking, mixed city days, and balanced weather.'],
+                    ['Winter Option', 'Great for festive city atmosphere, baths, and lower crowd levels.']
+                ],
+                kazbegi: [
+                    ['Late Spring to Autumn', 'Best road comfort, green scenery, and clear mountain viewpoints.'],
+                    ['Winter Conditions', 'Beautiful but more weather-dependent, so timing matters more.']
+                ],
+                martvili: [
+                    ['Warm Season', 'Ideal for canyon access, boat rides, and lush greenery.'],
+                    ['Shoulder Months', 'Quieter visits with cooler weather and gentler pacing.']
+                ],
+                signagi: [
+                    ['Spring', 'Excellent for soft weather, countryside views, and relaxed town walks.'],
+                    ['Harvest Season', 'Autumn is strongest for Kakheti scenery and wine-country atmosphere.']
+                ],
+                batumi: [
+                    ['Summer', 'Best for seaside energy, long evenings, and full coastal activity.'],
+                    ['Shoulder Season', 'More relaxed city pace with pleasant weather and easier movement.']
+                ],
+                fallback: [
+                    ['Primary Window', 'Spring and autumn usually offer the most comfortable travel balance.'],
+                    ['Alternative Season', 'Winter or summer can still work well depending on your route priorities.']
+                ]
+            },
+            ar: {
+                tbilisi: [
+                    ['الربيع والخريف', 'الأفضل للمشي داخل المدينة والاستمتاع بالأجواء المعتدلة.'],
+                    ['الخيار الشتوي', 'مناسب للأجواء الهادئة والحمامات والكثافة الأقل.']
+                ],
+                kazbegi: [
+                    ['من أواخر الربيع إلى الخريف', 'أفضل وقت للطريق المريح والمناظر الجبلية الواضحة.'],
+                    ['الشتاء', 'جميل جداً لكنه يعتمد أكثر على حالة الطقس والطريق.']
+                ],
+                martvili: [
+                    ['الموسم الدافئ', 'الأفضل للقوارب والوادي والطبيعة الخضراء.'],
+                    ['الأشهر الانتقالية', 'زيارة أهدأ مع طقس ألطف وحركة أقل.']
+                ],
+                signagi: [
+                    ['الربيع', 'ممتاز للأجواء اللطيفة والمشي والإطلالات الريفية.'],
+                    ['موسم الحصاد', 'الخريف هو الأفضل لأجواء كاخيتي وتجارب النبيذ.']
+                ],
+                batumi: [
+                    ['الصيف', 'الأفضل للأجواء البحرية والنشاطات الساحلية والمساء الطويل.'],
+                    ['الفترات الانتقالية', 'أهدأ وأكثر راحة للتنقل داخل المدينة.']
+                ],
+                fallback: [
+                    ['الفترة الأساسية', 'الربيع والخريف يمنحان أفضل توازن لمعظم الرحلات.'],
+                    ['فترة بديلة', 'الصيف أو الشتاء قد يكونان مناسبين حسب طبيعة الوجهة.']
+                ]
+            }
+        };
+
+        return cards[lang]?.[id] || cards[lang]?.fallback || cards.en.fallback;
+    },
+
+    getFaq(id, lang, title) {
+        const questions = {
+            en: [
+                ['Is this route good as a day trip?', 'Yes. Most guests book it as a private day route, though some places benefit from a slower overnight pace.'],
+                ['Should I book a driver or self-drive?', `For ${title}, a private driver is usually the easier choice if you want flexible stops, less stress, and a smoother day.`]
+            ],
+            ar: [
+                ['هل تصلح هذه الوجهة لرحلة يوم واحد؟', 'نعم، أغلب الضيوف يحجزونها كرحلة خاصة ليوم واحد، وبعض الوجهات تستفيد أكثر من مبيت مريح.'],
+                ['هل الأفضل سائق خاص أم قيادة ذاتية؟', `بالنسبة إلى ${title} غالباً يكون السائق الخاص هو الخيار الأسهل إذا كنت تريد توقفات مرنة وتجربة أكثر راحة.`]
+            ]
+        };
+
+        return questions[lang] || questions.en;
+    },
+
+    renderOverview(desc) {
+        const overview = document.getElementById('overview-copy');
+        if (!overview) return;
+
+        const paragraphs = String(desc || '')
+            .split(/\n\s*\n/)
+            .map((item) => item.trim())
+            .filter(Boolean);
+
+        if (!paragraphs.length) {
+            overview.innerHTML = '<p>Explore this destination with a private driver, flexible stops, and a smoother route plan from Georgia Hills.</p>';
+            return;
+        }
+
+        overview.innerHTML = paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join('');
+    },
+
+    renderStats(id, lang) {
+        const stats = this.getStats(id, lang);
+        stats.forEach((item, index) => {
+            const valueEl = document.getElementById(`stat${index + 1}-value`);
+            const labelEl = document.getElementById(`stat${index + 1}-label`);
+            if (valueEl) valueEl.textContent = item[0];
+            if (labelEl) labelEl.textContent = item[1];
+        });
+    },
+
+    renderItinerary(id, lang, title) {
+        const itineraryList = document.getElementById('itinerary-list');
+        if (!itineraryList) return;
+
+        const items = this.getItinerary(id, lang, title);
+        itineraryList.innerHTML = '';
+        items.forEach((item, index) => {
+            const row = document.createElement('div');
+            row.className = 'timeline-item';
+            row.innerHTML = `
+                <div class="timeline-dot"></div>
+                ${index < items.length - 1 ? '<div class="timeline-line"></div>' : ''}
+                <div class="timeline-content">
+                    <strong>${item[0]}</strong>
+                    <p>${item[1]}</p>
+                </div>`;
+            itineraryList.appendChild(row);
+        });
+    },
+
+    renderSeasonCards(id, lang) {
+        const seasonCopy = document.getElementById('season-copy');
+        if (!seasonCopy) return;
+
+        const cards = this.getSeasonCards(id, lang);
+        seasonCopy.innerHTML = cards.map((card, index) => `
+            <div style="background:var(--color-gray-50); padding:1.25rem; border-radius:0.75rem;">
+                <strong><i class="fa-solid ${index === 0 ? 'fa-sun' : 'fa-calendar-days'} text-accent"></i> ${card[0]}</strong>
+                <p style="font-size:0.9rem; margin-top:0.5rem; color:var(--color-gray-600);">${card[1]}</p>
+            </div>`).join('');
+    },
+
+    renderFaq(id, lang, title) {
+        const faqList = document.getElementById('faq-list');
+        if (!faqList) return;
+
+        const items = this.getFaq(id, lang, title);
+        faqList.innerHTML = items.map((item) => `
+            <details class="faq-item">
+                <summary style="font-weight:700; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;">${item[0]} <i class="fa-solid fa-chevron-down text-primary"></i></summary>
+                <p style="margin-top:0.75rem; color:var(--color-gray-600);">${item[1]}</p>
+            </details>`).join('');
+    },
+
+    renderGallery(data, lang) {
+        const galleryEl = document.getElementById('gallery');
+        if (!galleryEl) return;
+
+        const highlights = data[`highlights_${lang}`] || data.highlights_en || data.highlights_ar || [];
+        const fallbackDesc = lang === 'ar' ? 'محطة بارزة ضمن مسار هذه الوجهة.' : 'One of the standout stops on this destination route.';
+
+        galleryEl.innerHTML = '';
+        (data.gallery || []).forEach((url, index) => {
+            const safeUrl = sanitizeImageUrl(url);
+            if (!safeUrl) return;
+
+            const title = highlights[index] || this.getDisplayTitle(data[`title_${lang}`] || data.title_en || data.title_ar || 'Destination');
+            const card = document.createElement('article');
+            card.className = 'highlight-card';
+            card.innerHTML = `
+                <img src="${safeUrl}" class="highlight-img" loading="lazy" decoding="async" alt="${title}">
+                <div class="highlight-overlay">
+                    <h4 class="highlight-title">${title}</h4>
+                    <p class="highlight-desc">${fallbackDesc}</p>
+                </div>`;
+            galleryEl.appendChild(card);
+        });
+
+        if (!galleryEl.children.length) {
+            galleryEl.innerHTML = `<div style="background:var(--color-gray-50); padding:1.5rem; border-radius:1rem;">${lang === 'ar' ? 'سيتم تحديث الصور قريباً.' : 'Gallery images will be updated soon.'}</div>`;
+        }
+    },
+
+    renderMoreDestinations(currentId, lang) {
+        const grid = document.getElementById('more-destinations-grid');
+        if (!grid) return;
+
+        const ids = Object.keys(window.DestData || {}).filter((id) => id !== currentId).slice(0, 3);
+        grid.innerHTML = '';
+
+        ids.forEach((id) => {
+            const item = normalizeDestinationShape(id, window.DestData[id] || {});
+            const title = item[`title_${lang}`] || item.title_en || item.title_ar || id;
+            const cardTitle = this.getDisplayTitle(title);
+            const desc = item[`desc_${lang}`] || item.desc_en || item.desc_ar || '';
+            const image = sanitizeImageUrl(item.thumbnail || item.img) || 'image-1024.webp';
+            const href = `destination.html?id=${encodeURIComponent(id)}${lang === 'ar' ? '&lang=ar' : ''}`;
+
+            const card = document.createElement('a');
+            card.href = href;
+            card.className = 'more-dest-card';
+            card.setAttribute('aria-label', `${lang === 'ar' ? 'استكشف' : 'Explore'} ${cardTitle}`);
+            card.innerHTML = `
+                <img src="${image}" alt="${cardTitle}" class="more-dest-img" loading="lazy" decoding="async">
+                <div class="more-dest-overlay">
+                    <h4 class="more-dest-title">${cardTitle}</h4>
+                    <p class="more-dest-desc">${desc.split('\n')[0].trim().slice(0, 90)}</p>
+                </div>
+                <div class="more-dest-arrow"><i class="fa-solid fa-arrow-right"></i></div>`;
+            grid.appendChild(card);
+        });
+    },
+
     async init() {
         LangManager.apply();
         UIManager.init();
@@ -2078,6 +2452,7 @@ const DestinationApp = {
 
         if(data) {
             const title = data[`title_${lang}`] || data.title_en || data.title_ar || id;
+            const displayTitle = this.getDisplayTitle(title);
             const imageUrl = sanitizeImageUrl(data.img) || 'image-1024.webp';
             const absoluteImageUrl = /^(https?:)?\/\//i.test(imageUrl) ? imageUrl : `https://georgiahills.com/${imageUrl}`;
             document.title = title + " - Georgia Hills";
@@ -2134,23 +2509,20 @@ const DestinationApp = {
                 heroImg.src = imageUrl;
             }
             
-            const crumbTitle = document.getElementById('crumb-title'); const crumbCurrent = document.getElementById('crumb-current'); if(crumbCurrent) crumbCurrent.innerText = title;
-            if(crumbTitle) {
-                crumbTitle.innerText = title;
-                crumbTitle.classList.remove('skeleton');
-            }
+            const crumbCurrent = document.getElementById('crumb-current');
+            if(crumbCurrent) crumbCurrent.innerText = displayTitle;
             
             const pageTitle = document.getElementById('page-title');
             if(pageTitle) {
-                pageTitle.innerText = title;
+                pageTitle.innerText = displayTitle;
                 pageTitle.classList.remove('skeleton');
             }
-            
-            const pageDesc = document.getElementById('page-desc');
-            if(pageDesc) {
-                pageDesc.innerText = desc;
-                pageDesc.classList.remove('skeleton');
-            }
+
+            const heroBadge = document.getElementById('hero-badge');
+            if (heroBadge) heroBadge.innerText = this.getBadge(id, lang);
+
+            const overviewHeading = document.getElementById('overview-heading');
+            if (overviewHeading) overviewHeading.innerText = lang === 'ar' ? 'نظرة عامة' : 'Overview';
             
             const highlightsEl = document.getElementById('highlights');
             if(highlightsEl) {
@@ -2166,44 +2538,74 @@ const DestinationApp = {
                 });
             }
 
+            this.renderOverview(desc);
+            this.renderStats(id, lang);
+            this.renderItinerary(id, lang, displayTitle);
+            this.renderSeasonCards(id, lang);
+            this.renderFaq(id, lang, displayTitle);
+
             const mapLink = document.getElementById('map-link');
             if(mapLink) {
                 mapLink.href = data.map_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.title_en)}`;
                 mapLink.rel = "noopener noreferrer";
             }
 
-            const galleryEl = document.getElementById('gallery');
-            if(galleryEl) {
-                galleryEl.innerHTML = '';
-                (data.gallery || []).forEach((url) => {
-                    const safeUrl = sanitizeImageUrl(url);
-                    if (!safeUrl) return;
-                    const img = document.createElement('img');
-                    img.src = safeUrl;
-                    img.className = 'gallery-img skeleton';
-                    img.loading = 'lazy';
-                    img.addEventListener('load', () => img.classList.remove('skeleton'));
-                    img.addEventListener('error', () => { img.style.display = 'none'; });
-                    galleryEl.appendChild(img);
-                });
+            this.renderGallery(data, lang);
+            this.renderMoreDestinations(id, lang);
+
+            const copy = {
+                en: {
+                    itineraryHeading: 'Suggested Plan',
+                    seasonHeading: 'Best Time to Visit',
+                    faqHeading: 'Common Questions',
+                    exploreHeading: 'Explore More',
+                    primaryCta: 'Book a Driver',
+                    secondaryCta: 'See Price List',
+                    priceNote: 'Private driver day rate'
+                },
+                ar: {
+                    itineraryHeading: 'الخطة المقترحة',
+                    seasonHeading: 'أفضل وقت للزيارة',
+                    faqHeading: 'أسئلة شائعة',
+                    exploreHeading: 'اكتشف المزيد',
+                    primaryCta: 'احجز سائقاً خاصاً',
+                    secondaryCta: 'الخدمات والأسعار',
+                    priceNote: 'السعر اليومي مع سائق خاص'
+                }
+            };
+            const uiCopy = copy[lang] || copy.en;
+
+            const itineraryHeading = document.getElementById('itinerary-heading');
+            if (itineraryHeading) itineraryHeading.textContent = uiCopy.itineraryHeading;
+            const seasonHeading = document.getElementById('season-heading');
+            if (seasonHeading) seasonHeading.textContent = uiCopy.seasonHeading;
+            const faqHeading = document.getElementById('faq-heading');
+            if (faqHeading) faqHeading.textContent = uiCopy.faqHeading;
+            const exploreHeading = document.getElementById('explore-heading');
+            if (exploreHeading) exploreHeading.textContent = uiCopy.exploreHeading;
+
+            const bookingHref = lang === 'ar' ? 'booking-ar.html' : 'booking.html';
+            const servicesHref = lang === 'ar' ? 'services-ar.html' : 'services.html';
+            const primaryCta = document.getElementById('primary-cta');
+            if (primaryCta) {
+                primaryCta.href = bookingHref;
+                primaryCta.textContent = uiCopy.primaryCta;
+            }
+            const secondaryCta = document.getElementById('secondary-cta');
+            if (secondaryCta) {
+                secondaryCta.href = servicesHref;
+                secondaryCta.textContent = uiCopy.secondaryCta;
             }
 
-            const idx = DestKeys.indexOf(id);
-            const nextId = DestKeys[(idx + 1) % DestKeys.length];
-            const nextData = normalizeDestinationShape(nextId, window.DestData[nextId] || {});
-            
-            const nextLink = document.getElementById('next-link');
-            // Update next link to preserve language choice in URL
-            if(nextLink) nextLink.href = `destination.html?id=${nextId}${lang === 'ar' ? '&lang=ar' : ''}`;
-            
-            const nextImg = document.getElementById('next-img');
-            if(nextImg) {
-                nextImg.onload = function() { this.classList.remove('skeleton'); };
-                nextImg.src = nextData.img;
+            const sidebarBookLink = document.getElementById('sidebar-book-link');
+            if (sidebarBookLink) {
+                sidebarBookLink.href = bookingHref;
+                sidebarBookLink.textContent = uiCopy.primaryCta;
             }
-            
-            const nextTitle = document.getElementById('next-title');
-            if(nextTitle) nextTitle.innerText = nextData[`title_${lang}`] || nextData.title_en || nextData.title_ar || nextId;
+            const sidebarPrice = document.getElementById('sidebar-price');
+            if (sidebarPrice) sidebarPrice.textContent = `${AppConfig.vehicleRates.Sedan || 150} GEL`;
+            const sidebarPriceNote = document.getElementById('sidebar-price-note');
+            if (sidebarPriceNote) sidebarPriceNote.textContent = uiCopy.priceNote;
         }
     }
 };
@@ -2241,7 +2643,6 @@ const DestinationLoader = {
                 const shaped = normalizeDestinationShape(safeId, data || {});
 
                 const title = String((isAr ? (shaped.title_ar || shaped.title_en) : (shaped.title_en || shaped.title_ar)) || safeId);
-                const desc = String((isAr ? (shaped.desc_ar || shaped.desc_en) : (shaped.desc_en || shaped.desc_ar)) || '');
                 // Prefer explicit slug or route handling if available, else link to dynamic page
                 // Note: The static site has tbilisi.html etc. We might want to link there if ID matches?
                 // But for new destinations, we rely on destination.html?id=...
@@ -2253,7 +2654,6 @@ const DestinationLoader = {
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">${title}</h3>
-                        <p class="tour-desc">${desc || ''}</p>
                         <span class="tour-btn text-accent-light">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
                     </div>
                 </a>`;

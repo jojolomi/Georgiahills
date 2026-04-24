@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" class="scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="robots" content="noindex, follow">
-    
-    <!-- 1. Google Consent Mode -->
+
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -17,7 +16,6 @@
         });
     </script>
 
-    <!-- 2. OPTIMIZATION: Deferred GTM -->
     <script>
         function loadGTM() {
             if (window.gtmLoaded) return;
@@ -26,22 +24,20 @@
             script.src = "https://www.googletagmanager.com/gtag/js?id=G-6GT03GSW49";
             script.async = true;
             document.head.appendChild(script);
-            
+
             gtag('js', new Date());
             gtag('config', 'G-6GT03GSW49');
         }
-        ['mousedown', 'mousemove', 'scroll', 'touchstart'].forEach(evt => 
-            window.addEventListener(evt, loadGTM, {once: true, passive: true})
-        );
+        ['mousedown', 'mousemove', 'scroll', 'touchstart'].forEach(function(evt) {
+            window.addEventListener(evt, loadGTM, { once: true, passive: true });
+        });
         setTimeout(loadGTM, 4000);
     </script>
 
-    <!-- Dynamic SEO Placeholders -->
     <title>Destination - Georgia Hills</title>
     <meta name="description" content="Explore the beauty of Georgia with our premium car rental and driver services.">
     <meta property="og:title" content="Georgia Hills Destinations">
     <meta property="og:description" content="Discover amazing places in Georgia.">
-    <!-- OPTIMIZATION: Added fallback image for social sharing -->
     <meta property="og:image" content="https://georgiahills.com/image-1600.webp">
     <meta property="og:locale" content="en_US">
     <meta property="og:locale:alternate" content="ar_SA">
@@ -55,46 +51,36 @@
     <link rel="alternate" hreflang="ar" href="https://georgiahills.com/destination.html?lang=ar">
     <link rel="alternate" hreflang="x-default" href="https://georgiahills.com/destination.html">
 
-    <!-- Performance Hints -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-
     <link rel="preload" as="image" href="kazbegi-hero-1024.webp" fetchpriority="high">
 
-    <!-- PWA & Icons -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0F172A">
     <link rel="icon" type="image/png" href="favicon.ico">
     <link rel="apple-touch-icon" href="favicon.ico">
 
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-    
-    <!-- OPTIMIZATION: Defer FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"></noscript>
-    
-    <!-- Main Stylesheet -->
-        <style>
-            :root{--color-gray-400:#9CA3AF}
-            html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;background:#fff}
-            .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
-            .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
-            .navbar{position:relative;z-index:50;background:transparent}
-            .hero-img{width:100%;height:auto;display:block;object-fit:cover}
-            .hero{position:relative;overflow:hidden}
-            .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
-        </style>
-        <link rel="preload" href="style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-        <noscript><link rel="stylesheet" href="style.min.css"></noscript>
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
-    <!-- Firebase SDKs (Compat) -->
+    <style>
+        :root{--color-gray-400:#9CA3AF}
+        html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:#fff}
+        .skip-link{position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden}
+        .skip-link:focus{left:0;top:0;width:auto;height:auto;padding:.5rem;background:#111;color:#fff;z-index:9999}
+        .navbar{position:relative;z-index:50;background:transparent}
+        .hero-img{width:100%;height:auto;display:block;object-fit:cover}
+        .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
+    </style>
+    <link rel="preload" href="style.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="style.min.css"></noscript>
+
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js" defer></script>
     <script src="firebase-config.js" defer></script>
 
-    <!-- FIX: Immediate Language Direction Application -->
     <script>
         (function() {
             try {
@@ -102,107 +88,141 @@
                 var savedLang = urlParams.get('lang') || localStorage.getItem('userLang') || 'en';
                 document.documentElement.lang = savedLang;
                 document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr';
-            } catch(e) {}
+            } catch (e) {}
         })();
     </script>
-    <!-- OPTIMIZATION: Defer Main Script -->
-    <script src="shared-navbar.js" defer></script>
-    <script src="script.min.js" defer></script>
-</head>
-<body class="page-destination page-about secondary-page">
 
-    <!-- Accessibility Skip Link -->
+    <script src="shared-navbar.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body class="page-destination secondary-page">
+
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
-    <!-- Navbar -->
     <nav id="navbar" class="navbar"></nav>
 
-    <!-- Hero -->
-    <section class="about-premium-hero" aria-labelledby="page-title">
-        <div class="about-premium-hero-bg" id="hero-bg" style="background-color: #111;"></div>
-        <div class="hero-overlay-gradient"></div>
-        <div class="container hero-content-container">
-            <div class="hero-text-content fade-in-up">
-                <span class="hero-badge"><i class="fa-solid fa-location-dot"></i> <span id="crumb-title" class="skeleton">Destination</span></span>
-                <h1 class="section-title about-premium-title" id="page-title">
-                    Loading...
-                </h1>
-                <p class="section-desc about-premium-subtitle" id="page-desc">
-                    Loading destination details...
-                </p>
+    <main id="main-content">
+        <section class="dest-hero" aria-labelledby="page-title">
+            <div class="dest-hero-bg" id="hero-bg" style="background-image:url('kazbegi-hero-1024.webp');"></div>
+            <div class="dest-overlay"></div>
+            <div class="dest-hero-content">
+                <span class="dest-badge" id="hero-badge">Destination</span>
+                <h1 class="dest-title" id="page-title">Loading...</h1>
+            </div>
+        </section>
+
+        <div class="dest-stats-bar" aria-label="Destination quick facts">
+            <div class="dest-stat-item">
+                <i class="fa-solid fa-clock dest-stat-icon"></i>
+                <span class="dest-stat-value" id="stat1-value">1 Day</span>
+                <span class="dest-stat-label" id="stat1-label">Recommended</span>
+            </div>
+            <div class="dest-stat-item">
+                <i class="fa-solid fa-route dest-stat-icon"></i>
+                <span class="dest-stat-value" id="stat2-value">150 km</span>
+                <span class="dest-stat-label" id="stat2-label">Route Feel</span>
+            </div>
+            <div class="dest-stat-item">
+                <i class="fa-solid fa-temperature-half dest-stat-icon"></i>
+                <span class="dest-stat-value" id="stat3-value">All Year</span>
+                <span class="dest-stat-label" id="stat3-label">Best Season</span>
             </div>
         </div>
-    </section>
-    
-    <!-- Hidden img for script compatibility -->
-    <img id="hero-img" class="hidden" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Hidden Hero">
 
-    <section class="section-py about-premium-content">
-        <main class="container" id="main-content">
-            <div class="page-grid">
-                <!-- Left: Main Content -->
-                <div class="content-card-wrapper">
-                    <div class="content-card about-card-large" style="padding:2rem;">
-                        <noscript>
-                            <div style="padding: 2rem; text-align: center; background: #FEF2F2; color: #991B1B; border-radius: 0.5rem; margin-bottom: 2rem;">
-                                <i class="fa-solid fa-triangle-exclamation"></i> 
-                                Please enable JavaScript to view destination details, photos, and travel guides.
+        <div class="container dest-layout">
+            <div class="dest-content">
+                <div class="content-card">
+                    <div class="breadcrumbs" style="margin-bottom:2rem;">
+                        <a href="index.html" data-i18n="nav_home">Home</a>
+                        <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+                        <a href="index.html#destinations" data-i18n="nav_tours">Destinations</a>
+                        <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+                        <span id="crumb-current" class="text-accent" style="font-weight:600;">...</span>
+                    </div>
+
+                    <h3 class="section-heading overview-heading" id="overview-heading">Overview</h3>
+                    <div id="overview-copy" class="rich-text">
+                        <p class="skeleton" style="height:1.25rem; width:92%;"></p>
+                        <p class="skeleton" style="height:1.25rem; width:88%;"></p>
+                        <p class="skeleton" style="height:1.25rem; width:74%;"></p>
+                    </div>
+
+                    <h3 class="section-heading" data-i18n="label_highlights" style="margin-top:2.5rem;">Top Highlights</h3>
+                    <ul id="highlights" class="highlights-list">
+                        <li class="skeleton" style="width:60%;"></li>
+                        <li class="skeleton" style="width:80%;"></li>
+                        <li class="skeleton" style="width:50%;"></li>
+                    </ul>
+
+                    <div class="itinerary-block" style="margin-top:2.5rem;">
+                        <h3 class="section-heading" id="itinerary-heading">Suggested Plan</h3>
+                        <div id="itinerary-list">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-line"></div>
+                                <div class="timeline-content skeleton" style="min-height:5rem;"></div>
                             </div>
-                        </noscript>
-
-                        <div class="breadcrumbs">
-                            <a href="index.html" data-i18n="nav_home">Home</a> 
-                            <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i> 
-                            <a href="index.html#destinations" data-i18n="nav_tours">Destinations</a> 
-                            <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
-                            <span id="crumb-current" class="text-accent" style="font-weight:600;">...</span>
-                        </div>
-                        
-                        <!-- Top Sights -->
-                        <h3 class="section-heading" data-i18n="label_highlights" style="margin-top:2rem;">Top Sights</h3>
-                        <ul id="highlights" class="highlights-list">
-                            <li class="skeleton" style="width:60%;"></li>
-                            <li class="skeleton" style="width:80%;"></li>
-                            <li class="skeleton" style="width:50%;"></li>
-                        </ul>
-
-                        <h3 class="section-heading" data-i18n="label_gallery" style="margin-top:2rem;">Photo Gallery</h3>
-                        <div id="gallery" class="gallery-grid">
-                            <div class="skeleton" style="height:16rem;"></div>
-                            <div class="skeleton" style="height:16rem;"></div>
-                        </div>
-
-                    <!-- Next Destination -->
-                    <div style="margin-top:4rem;">
-                        <span style="font-size:0.8rem; font-weight:700; color:var(--color-gray-500); text-transform:uppercase; display:block; margin-bottom:0.5rem;" data-i18n="label_next">Explore Next</span>
-                        <a id="next-link" href="#" class="next-card">
-                            <img id="next-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" class="skeleton" style="width:5rem; height:5rem; border-radius:0.75rem; object-fit:cover;" alt="Next destination preview | معاينة الوجهة التالية">
-                            <div>
-                                <h4 id="next-title" style="margin:0; font-size:1.25rem; font-weight:700;">Next Place</h4>
-                                <span style="font-size:0.85rem; color:var(--color-primary); font-weight:600;">
-                                    <span data-i18n="btn_view">View Details</span> <i class="fa-solid fa-arrow-right"></i>
-                                </span>
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content skeleton" style="min-height:5rem;"></div>
                             </div>
-                        </a>
+                        </div>
+                    </div>
+
+                    <div class="best-time-block" style="margin-top:2.5rem;">
+                        <h3 class="section-heading" id="season-heading">Best Time to Visit</h3>
+                        <div id="season-copy" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1rem;">
+                            <div class="skeleton" style="height:8rem; border-radius:0.75rem;"></div>
+                            <div class="skeleton" style="height:8rem; border-radius:0.75rem;"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:2.5rem;">
+                        <h3 class="section-heading" data-i18n="label_gallery">Photo Gallery</h3>
+                        <div id="gallery" class="highlight-grid">
+                            <div class="skeleton" style="height:18rem; border-radius:1rem;"></div>
+                            <div class="skeleton" style="height:18rem; border-radius:1rem;"></div>
+                        </div>
+                    </div>
+
+                    <div class="mini-faq-block" style="margin-top:2.5rem; display:flex; flex-direction:column; gap:1rem;">
+                        <h3 class="section-heading" id="faq-heading">Common Questions</h3>
+                        <div id="faq-list">
+                            <div class="skeleton" style="height:3.5rem; border-radius:0.75rem;"></div>
+                            <div class="skeleton" style="height:3.5rem; border-radius:0.75rem; margin-top:0.75rem;"></div>
+                        </div>
+                    </div>
+
+                    <div class="destination-cta-block" style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--color-gray-200); display:flex; gap:1rem; flex-wrap:wrap;">
+                        <a href="booking.html" id="primary-cta" class="btn-book-nav" style="text-decoration:none; padding:0.75rem 2rem;">Book a Driver</a>
+                        <a href="services.html" id="secondary-cta" class="action-btn" style="color:var(--color-dark); border-color:var(--color-gray-300);">See Price List</a>
                     </div>
                 </div>
+
+                <section id="explore-more-destinations" class="more-destinations" aria-label="Suggested destinations">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; flex-wrap:wrap; margin-bottom:2rem;">
+                        <div>
+                            <span class="dest-badge" style="background:var(--color-primary); color:white; font-size:0.75rem; margin-bottom:0.75rem;">Discover Georgia</span>
+                            <h3 class="section-heading" id="explore-heading" style="margin:0;">Explore More</h3>
+                        </div>
+                    </div>
+                    <div id="more-destinations-grid" class="more-destinations-grid">
+                        <div class="skeleton" style="height:16rem; border-radius:1rem;"></div>
+                        <div class="skeleton" style="height:16rem; border-radius:1rem;"></div>
+                        <div class="skeleton" style="height:16rem; border-radius:1rem;"></div>
+                    </div>
+                </section>
             </div>
 
-            <!-- Right: Sticky Sidebar -->
             <div class="sidebar-col">
-                <div class="booking-box">
-                    <h3 class="booking-title" data-i18n="cta_title">Plan Your Trip</h3>
-                    <p class="booking-subtitle" data-i18n="cta_subtitle">Personal Driver & Car</p>
-                    <a href="booking.html" class="btn-book-nav" style="width:100%; display:flex; justify-content:center; color:white; text-decoration:none;">
-                        <span data-i18n="nav_book">Book Now</span>
-                    </a>
-                    
-                    <!-- Map Link -->
-                    <a id="map-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-map">
+                <div class="sticky-book-card">
+                    <div class="price-tag-large" id="sidebar-price">150 GEL</div>
+                    <p id="sidebar-price-note" style="color:var(--color-gray-500); margin-bottom:1.5rem;">Private driver day rate</p>
+                    <a href="booking.html" id="sidebar-book-link" class="btn-book-nav" style="width:100%; text-align:center; justify-content:center; text-decoration:none;">Book This Route</a>
+                    <a id="map-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-map" style="margin-top:1rem;">
                         <i class="fa-solid fa-map-location-dot"></i> <span data-i18n="label_map">View on Google Maps</span>
                     </a>
-                    
-                    <div class="trust-list">
+                    <div class="trust-list" style="margin-top:1.5rem;">
                         <div class="trust-item"><i class="fa-solid fa-check icon-check"></i> <span data-i18n="trust_1">Free Cancellation</span></div>
                         <div class="trust-item"><i class="fa-solid fa-check icon-check"></i> <span data-i18n="trust_2">Pay on Arrival</span></div>
                         <div class="trust-item"><i class="fa-solid fa-check icon-check"></i> <span data-i18n="trust_3">English/Arabic Driver</span></div>
@@ -210,24 +230,13 @@
                 </div>
             </div>
         </div>
-
-    <!-- Mobile Sticky CTA (Hidden on Desktop) -->
-    <div class="mobile-cta-bar">
-        <div style="font-weight:700; font-size:0.9rem;">
-            <span id="mob-cta-label" data-i18n="cta_title">Plan Your Trip</span>
-        </div>
-        <a href="booking.html" class="btn-book-nav" style="padding:0.75rem 1.5rem; color:white; text-decoration:none;">
-            <span id="mob-btn-text" data-i18n="nav_book">Book Now</span>
-        </a>
-    </div>
     </main>
-    </section>
 
-    <!-- Footer -->
+    <img id="hero-img" class="hidden" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Hidden Hero">
+
     <footer class="footer">
         <div class="container">
             <div id="footer-content" class="footer-grid">
-                <!-- Brand -->
                 <div>
                     <div class="footer-brand">
                         <div class="footer-brand-icon"><i class="fa-solid fa-mountain"></i></div>
@@ -239,21 +248,16 @@
                         <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
                         <button onclick="App.share()" class="social-btn" aria-label="Share Website"><i class="fa-solid fa-share-nodes"></i></button>
                     </div>
-                    <div style="margin-top:1.5rem; display:flex; gap:1rem; font-size:0.75rem; color:var(--color-gray-400);">
-                        <a href="legal.html" style="color:inherit;">Privacy Policy</a>
-                    </div>
                 </div>
-                <!-- Links -->
                 <div>
                     <h3 data-i18n="footer_links">Quick Links</h3>
                     <ul>
                         <li><a href="index.html" data-i18n="nav_home">Home</a></li>
-                        <li><a href="index.html#fleet" data-i18n="nav_fleet">Fleet</a></li>
-                        <li><a href="index.html#reviews" data-i18n="nav_reviews">Reviews</a></li>
+                        <li><a href="services.html">Services</a></li>
+                        <li><a href="guide.html">Guide</a></li>
                         <li><a href="booking.html" data-i18n="nav_book">Book Now</a></li>
                     </ul>
                 </div>
-                <!-- Contact -->
                 <div>
                     <h3 data-i18n="footer_contact">Contact Us</h3>
                     <ul style="color:var(--color-gray-400);">
@@ -262,23 +266,16 @@
                         <li class="footer-contact-item"><i class="fa-solid fa-envelope text-accent"></i> info@georgiahills.com</li>
                     </ul>
                 </div>
-                <!-- Map -->
                 <div>
                     <div class="footer-map-container">
                         <span class="footer-map-overlay"><i class="fa-solid fa-map-location-dot"></i> <span data-i18n="label_map">Load Map</span></span>
                     </div>
                 </div>
             </div>
-            <div class="footer-bottom">
-                &copy; <span id="year">2026</span> Georgia Hills. All rights reserved.
-            </div>
+            <div class="footer-bottom">&copy; <span id="year">2026</span> Georgia Hills. All rights reserved.</div>
         </div>
     </footer>
 
-    <!-- Structured Data -->
     <script type="application/ld+json" id="json-ld-data"></script>
 </body>
 </html>
-
-
-
