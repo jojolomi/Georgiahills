@@ -63,7 +63,6 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 
     <style>
         :root{--color-gray-400:#9CA3AF}
@@ -132,12 +131,12 @@
         <div class="container dest-layout">
             <div class="dest-content">
                 <div class="content-card">
-                    <div class="breadcrumbs" style="margin-bottom:2rem;">
+                    <div class="breadcrumbs dest-breadcrumbs">
                         <a href="index.html" data-i18n="nav_home">Home</a>
-                        <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
+                        <i class="fa-solid fa-chevron-right breadcrumb-chevron"></i>
                         <a href="index.html#destinations" data-i18n="nav_tours">Destinations</a>
-                        <i class="fa-solid fa-chevron-right" style="font-size:0.7rem;"></i>
-                        <span id="crumb-current" class="text-accent" style="font-weight:600;">...</span>
+                        <i class="fa-solid fa-chevron-right breadcrumb-chevron"></i>
+                        <span id="crumb-current" class="text-accent crumb-current">...</span>
                     </div>
 
                     <h3 class="section-heading overview-heading" id="overview-heading">Overview</h3>
@@ -147,69 +146,69 @@
                         <p class="skeleton" style="height:1.25rem; width:74%;"></p>
                     </div>
 
-                    <h3 class="section-heading" data-i18n="label_highlights" style="margin-top:2.5rem;">Top Highlights</h3>
+                    <h3 class="section-heading section-spacer" data-i18n="label_highlights">Top Highlights</h3>
                     <ul id="highlights" class="highlights-list">
                         <li class="skeleton" style="width:60%;"></li>
                         <li class="skeleton" style="width:80%;"></li>
                         <li class="skeleton" style="width:50%;"></li>
                     </ul>
 
-                    <div class="itinerary-block" style="margin-top:2.5rem;">
+                    <div class="itinerary-block section-spacer">
                         <h3 class="section-heading" id="itinerary-heading">Suggested Plan</h3>
                         <div id="itinerary-list">
                             <div class="timeline-item">
                                 <div class="timeline-dot"></div>
                                 <div class="timeline-line"></div>
-                                <div class="timeline-content skeleton" style="min-height:5rem;"></div>
+                                <div class="timeline-content skeleton timeline-skeleton"></div>
                             </div>
                             <div class="timeline-item">
                                 <div class="timeline-dot"></div>
-                                <div class="timeline-content skeleton" style="min-height:5rem;"></div>
+                                <div class="timeline-content skeleton timeline-skeleton"></div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="best-time-block" style="margin-top:2.5rem;">
+                    <div class="best-time-block section-spacer">
                         <h3 class="section-heading" id="season-heading">Best Time to Visit</h3>
-                        <div id="season-copy" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:1rem;">
-                            <div class="skeleton" style="height:8rem; border-radius:0.75rem;"></div>
-                            <div class="skeleton" style="height:8rem; border-radius:0.75rem;"></div>
+                        <div id="season-copy" class="season-copy-grid">
+                            <div class="skeleton season-skeleton"></div>
+                            <div class="skeleton season-skeleton"></div>
                         </div>
                     </div>
 
-                    <div style="margin-top:2.5rem;">
+                    <div class="section-spacer">
                         <h3 class="section-heading" data-i18n="label_gallery">Photo Gallery</h3>
                         <div id="gallery" class="highlight-grid">
-                            <div class="skeleton" style="height:18rem; border-radius:1rem;"></div>
-                            <div class="skeleton" style="height:18rem; border-radius:1rem;"></div>
+                            <div class="skeleton gallery-skeleton"></div>
+                            <div class="skeleton gallery-skeleton"></div>
                         </div>
                     </div>
 
-                    <div class="mini-faq-block" style="margin-top:2.5rem; display:flex; flex-direction:column; gap:1rem;">
+                    <div class="mini-faq-block section-spacer faq-block">
                         <h3 class="section-heading" id="faq-heading">Common Questions</h3>
                         <div id="faq-list">
-                            <div class="skeleton" style="height:3.5rem; border-radius:0.75rem;"></div>
-                            <div class="skeleton" style="height:3.5rem; border-radius:0.75rem; margin-top:0.75rem;"></div>
+                            <div class="skeleton faq-skeleton"></div>
+                            <div class="skeleton faq-skeleton faq-skeleton-spaced"></div>
                         </div>
                     </div>
 
-                    <div class="destination-cta-block" style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--color-gray-200); display:flex; gap:1rem; flex-wrap:wrap;">
-                        <a href="booking.html" id="primary-cta" class="btn-book-nav" style="text-decoration:none; padding:0.75rem 2rem;">Book a Driver</a>
-                        <a href="services.html" id="secondary-cta" class="action-btn" style="color:var(--color-dark); border-color:var(--color-gray-300);">See Price List</a>
+                    <div class="destination-cta-block">
+                        <a href="booking.html" id="primary-cta" class="btn-book-nav destination-cta-primary">Book a Driver</a>
+                        <a href="services.html" id="secondary-cta" class="action-btn destination-cta-secondary">See Price List</a>
                     </div>
                 </div>
 
                 <section id="explore-more-destinations" class="more-destinations" aria-label="Suggested destinations">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:1rem; flex-wrap:wrap; margin-bottom:2rem;">
+                    <div class="explore-more-header">
                         <div>
-                            <span class="dest-badge" style="background:var(--color-primary); color:white; font-size:0.75rem; margin-bottom:0.75rem;">Discover Georgia</span>
-                            <h3 class="section-heading" id="explore-heading" style="margin:0;">Explore More</h3>
+                            <span class="dest-badge explore-more-badge">Discover Georgia</span>
+                            <h3 class="section-heading explore-more-heading" id="explore-heading">Explore More</h3>
                         </div>
                     </div>
                     <div id="more-destinations-grid" class="more-destinations-grid">
-                        <div class="skeleton" style="height:16rem; border-radius:1rem;"></div>
-                        <div class="skeleton" style="height:16rem; border-radius:1rem;"></div>
-                        <div class="skeleton" style="height:16rem; border-radius:1rem;"></div>
+                        <div class="skeleton more-destination-skeleton"></div>
+                        <div class="skeleton more-destination-skeleton"></div>
+                        <div class="skeleton more-destination-skeleton"></div>
                     </div>
                 </section>
             </div>
@@ -217,12 +216,12 @@
             <div class="sidebar-col">
                 <div class="sticky-book-card">
                     <div class="price-tag-large" id="sidebar-price">150 GEL</div>
-                    <p id="sidebar-price-note" style="color:var(--color-gray-500); margin-bottom:1.5rem;">Private driver day rate</p>
-                    <a href="booking.html" id="sidebar-book-link" class="btn-book-nav" style="width:100%; text-align:center; justify-content:center; text-decoration:none;">Book This Route</a>
-                    <a id="map-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-map" style="margin-top:1rem;">
+                    <p id="sidebar-price-note" class="sidebar-price-note">Private driver day rate</p>
+                    <a href="booking.html" id="sidebar-book-link" class="btn-book-nav sidebar-book-link">Book This Route</a>
+                    <a id="map-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-map sidebar-map-link">
                         <i class="fa-solid fa-map-location-dot"></i> <span data-i18n="label_map">View on Google Maps</span>
                     </a>
-                    <div class="trust-list" style="margin-top:1.5rem;">
+                    <div class="trust-list sidebar-trust-list">
                         <div class="trust-item"><i class="fa-solid fa-check icon-check"></i> <span data-i18n="trust_1">Free Cancellation</span></div>
                         <div class="trust-item"><i class="fa-solid fa-check icon-check"></i> <span data-i18n="trust_2">Pay on Arrival</span></div>
                         <div class="trust-item"><i class="fa-solid fa-check icon-check"></i> <span data-i18n="trust_3">English/Arabic Driver</span></div>
@@ -242,7 +241,7 @@
                         <div class="footer-brand-icon"><i class="fa-solid fa-mountain"></i></div>
                         <span class="footer-brand-text">Georgia Hills</span>
                     </div>
-                    <p style="color:var(--color-gray-300); font-size:0.875rem; line-height:1.6; margin-bottom:1.5rem;" data-i18n="footer_desc">Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.</p>
+                    <p class="destination-footer-desc" data-i18n="footer_desc">Premium transport solutions in Georgia. Safety, comfort, and local expertise in every mile.</p>
                     <div class="footer-social">
                         <a href="https://instagram.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
                         <a href="https://facebook.com/georgiahills" target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
@@ -260,7 +259,7 @@
                 </div>
                 <div>
                     <h3 data-i18n="footer_contact">Contact Us</h3>
-                    <ul style="color:var(--color-gray-400);">
+                    <ul class="destination-footer-contact-list">
                         <li class="footer-contact-item"><i class="fa-solid fa-phone text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
                         <li class="footer-contact-item"><i class="fa-brands fa-whatsapp text-accent"></i> <span dir="ltr">+995 579 08 85 37</span></li>
                         <li class="footer-contact-item"><i class="fa-solid fa-envelope text-accent"></i> info@georgiahills.com</li>

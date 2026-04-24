@@ -4355,6 +4355,86 @@ body.page-destination .sticky-book-card {
     transition: transform 0.3s;
 }
 body.page-destination .sticky-book-card:hover { transform: translateY(-5px); }
+body.page-destination .dest-breadcrumbs { margin-bottom: 2rem; }
+body.page-destination .breadcrumb-chevron { font-size: 0.7rem; }
+body.page-destination .crumb-current { font-weight: 600; }
+body.page-destination .section-spacer { margin-top: 2.5rem; }
+body.page-destination .timeline-skeleton { min-height: 5rem; }
+body.page-destination .season-copy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+body.page-destination .season-skeleton {
+    height: 8rem;
+    border-radius: 0.75rem;
+}
+body.page-destination .gallery-skeleton,
+body.page-destination .more-destination-skeleton {
+    height: 16rem;
+    border-radius: 1rem;
+}
+body.page-destination .gallery-skeleton { height: 18rem; }
+body.page-destination .faq-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+body.page-destination .faq-skeleton {
+    height: 3.5rem;
+    border-radius: 0.75rem;
+}
+body.page-destination .faq-skeleton-spaced { margin-top: 0.75rem; }
+body.page-destination .destination-cta-block {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-gray-200);
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+body.page-destination .destination-cta-primary {
+    text-decoration: none;
+    padding: 0.75rem 2rem;
+}
+body.page-destination .destination-cta-secondary {
+    color: var(--color-dark);
+    border-color: var(--color-gray-300);
+}
+body.page-destination .explore-more-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+body.page-destination .explore-more-badge {
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+body.page-destination .explore-more-heading { margin: 0; }
+body.page-destination .sidebar-price-note {
+    color: var(--color-gray-500);
+    margin-bottom: 1.5rem;
+}
+body.page-destination .sidebar-book-link {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    text-decoration: none;
+}
+body.page-destination .sidebar-map-link { margin-top: 1rem; }
+body.page-destination .sidebar-trust-list { margin-top: 1.5rem; }
+body.page-destination .destination-footer-desc {
+    color: var(--color-gray-300);
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+body.page-destination .destination-footer-contact-list { color: var(--color-gray-400); }
 
 body.page-destination .price-tag-large {
     font-size: 3rem;
