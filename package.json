@@ -69,7 +69,7 @@
     ,"ops:netlify-cache-policy": "node scripts/audit/ops/check-netlify-cache-policy.js"
   },
   "dependencies": {
-    "firebase": "^12.9.0"
+    "firebase": "^12.12.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
