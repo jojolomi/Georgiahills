@@ -11,6 +11,7 @@ playwright-report/
 scripts/audit/perf/*.json
 !scripts/audit/perf/mobile-template-targets.json
 !scripts/audit/perf/dom-simplification-budgets.json
+!scripts/audit/perf/third-party-governance-policy.json
 scripts/seo-report.json
 apps/admin/dist/
 apps/admin/assets/
