@@ -82,8 +82,8 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
   const conversionRates = { SAR: 1.38, AED: 1.35 };
   const tours = toursData as TourRecord[];
   const fleet = fleetData as FleetRecord[];
-  const featuredTours = tours.slice(0, 3);
-  const featuredFleet = fleet.slice(0, 3);
+  const featuredTours = tours.slice(0, 2);
+  const featuredFleet = fleet.slice(0, 2);
   const approxPriceNote = formatApproxPrice(locale, baseTourPriceGel, conversionRates, conversionAsOf);
 
   const routeHighlights = [
@@ -100,13 +100,6 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
       description: isArabic
         ? "صفحات الخصوصية والشروط والاسترداد تبقى ظاهرة ومترابطة."
         : "Privacy, terms, and refund pages stay visible and connected."
-    },
-    {
-      icon: Clock3,
-      title: isArabic ? "مسار حجز سريع" : "Shorter booking path",
-      description: isArabic
-        ? "من الصفحة الرئيسية إلى واتساب أو نموذج الحجز بدون خطوات زائدة."
-        : "From the homepage to WhatsApp or booking with no extra friction."
     }
   ];
 
@@ -380,51 +373,6 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
           </div>
         </section>
 
-        <section className="mt-16 rounded-[2rem] border border-slate-200 bg-white p-6 text-slate-900 shadow-xl shadow-slate-900/5 sm:p-8">
-          <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-700">
-                {isArabic ? "لماذا هذه النسخة أفضل" : "Why this version is stronger"}
-              </p>
-              <h2 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">
-                {isArabic ? "ترتيب أوضح، حجز أسرع، وإشارات ثقة أقوى" : "Clearer structure, faster booking, stronger trust signals"}
-              </h2>
-              <p className="mt-4 max-w-xl text-base leading-8 text-slate-600">
-                {isArabic
-                  ? "نأخذ أفضل ما في الأرشيف: وضوح العروض، مسار تحويل مباشر، وصفحات سياسة ظاهرة، ثم نعيد تقديمه داخل البنية الحالية الأكثر قابلية للصيانة والقياس."
-                  : "We keep the best archive traits: clearer offers, a direct conversion path, visible policy pages, and rebuild them inside the current maintainable, measurable stack."}
-              </p>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-3">
-              {[
-                {
-                  title: isArabic ? "التحويل" : "Conversion",
-                  description: isArabic
-                    ? "أزرار حجز وواتساب وأسطول في أعلى الصفحة."
-                    : "Booking, WhatsApp, and fleet CTAs stay above the fold."
-                },
-                {
-                  title: isArabic ? "الأداء" : "Performance",
-                  description: isArabic
-                    ? "صفحة خفيفة، صور مضبوطة، ومحتوى ثابت على الخادم."
-                    : "Light page shell, tuned images, and mostly server-rendered content."
-                },
-                {
-                  title: isArabic ? "الـSEO" : "SEO",
-                  description: isArabic
-                    ? "مخطط بيانات، hreflang، وروابط صفحات واضحة."
-                    : "Structured data, hreflang, and explicit route links."
-                }
-              ].map((item) => (
-                <article key={item.title} className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm font-semibold text-emerald-700">{item.title}</p>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">{item.description}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
         <section className="mt-16">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -447,7 +395,7 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
             </Link>
           </div>
 
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
+          <div className="mt-8 grid gap-5 lg:grid-cols-2">
             {featuredTours.map((tour, index) => {
               const copy = isArabic ? tour.ar : tour.en;
               return (
@@ -511,7 +459,7 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
             </p>
           </div>
 
-          <div className="mt-8 grid gap-5 lg:grid-cols-3">
+          <div className="mt-8 grid gap-5 lg:grid-cols-2">
             {featuredFleet.map((vehicle) => {
               const copy = isArabic ? vehicle.ar : vehicle.en;
               return (
