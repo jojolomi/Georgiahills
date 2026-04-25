@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "templates": {
+    "home-en": {
+      "maxNodes": 650,
+      "maxInlineStyles": 55,
+      "maxInlineHandlers": 18
+    },
+    "home-ar": {
+      "maxNodes": 650,
+      "maxInlineStyles": 55,
+      "maxInlineHandlers": 23
+    },
+    "booking-en": {
+      "maxNodes": 220,
+      "maxInlineStyles": 8,
+      "maxInlineHandlers": 8
+    },
+    "destination-en": {
+      "maxNodes": 190,
+      "maxInlineStyles": 30,
+      "maxInlineHandlers": 8
+    }
+  }
+}

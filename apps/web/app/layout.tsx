@@ -22,7 +22,7 @@ const notoSansArabic = Noto_Sans_Arabic({
   subsets: ["arabic"],
   weight: ["400", "500", "700"],
   display: "optional",
-  preload: true,
+  preload: false,
   variable: "--font-arabic"
 });
 
