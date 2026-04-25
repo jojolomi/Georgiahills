@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "profiles": {
+    "mobile": {
+      "notes": "Soft budgets for baseline phase. Tighten after stabilization.",
+      "budgets": {
+        "lcpMs": 3200,
+        "cls": 0.1,
+        "inpMs": 300,
+        "tbtMs": 300,
+        "jsKb": 220,
+        "cssKb": 80,
+        "totalKb": 900
+      }
+    }
+  },
+  "templates": [
+    {
+      "id": "home-en",
+      "priority": 1,
+      "family": "home",
+      "locale": "en",
+      "entry": "index.html",
+      "lighthouseUrl": "http://127.0.0.1:3000/en"
+    },
+    {
+      "id": "home-ar",
+      "priority": 1,
+      "family": "home",
+      "locale": "ar",
+      "entry": "arabic.html",
+      "lighthouseUrl": "http://127.0.0.1:3000/ar"
+    },
+    {
+      "id": "booking-en",
+      "priority": 1,
+      "family": "booking",
+      "locale": "en",
+      "entry": "booking.html",
+      "lighthouseUrl": "http://127.0.0.1:3000/booking"
+    },
+    {
+      "id": "destination-en",
+      "priority": 1,
+      "family": "destination",
+      "locale": "en",
+      "entry": "destination.html",
+      "lighthouseUrl": "http://127.0.0.1:3000/en/destinations/tbilisi"
+    },
+    {
+      "id": "blog-en",
+      "priority": 2,
+      "family": "blog",
+      "locale": "en",
+      "entry": "blog.html",
+      "lighthouseUrl": "pending"
+    },
+    {
+      "id": "article-en",
+      "priority": 2,
+      "family": "article",
+      "locale": "en",
+      "entry": "article-7-days-georgia.html",
+      "lighthouseUrl": "pending"
+    }
+  ]
+}

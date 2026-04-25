@@ -9,6 +9,7 @@ test-results/
 playwright-report/
 .lighthouseci/
 scripts/audit/perf/*.json
+!scripts/audit/perf/mobile-template-targets.json
 scripts/seo-report.json
 apps/admin/dist/
 apps/admin/assets/
