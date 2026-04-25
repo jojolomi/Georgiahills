@@ -1,16 +1,37 @@
-import React, { useMemo } from "react";
+import React, { Suspense, lazy, useMemo } from "react";
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 import { useOwnerAuth } from "../shared/hooks/useownerauth";
-import { DashboardModule } from "../modules/dashboard/dashboardmodule";
-import { PagesModule } from "../modules/pages/pagesmodule";
-import { DestinationsModule } from "../modules/destinations/destinationsmodule";
-import { ArticlesModule } from "../modules/articles/articlesmodule";
-import { MediaModule } from "../modules/media/mediamodule";
-import { SeoMarketsModule } from "../modules/seo-markets/seomarketsmodule";
-import { LeadsModule } from "../modules/leads/leadsmodule";
-import { PublishingModule } from "../modules/publishing/publishingmodule";
-import { IntegrationsModule } from "../modules/integrations/integrationsmodule";
-import { AuditModule } from "../modules/audit/auditmodule";
+
+const DashboardModule = lazy(() =>
+  import("../modules/dashboard/dashboardmodule").then((module) => ({ default: module.DashboardModule }))
+);
+const PagesModule = lazy(() =>
+  import("../modules/pages/pagesmodule").then((module) => ({ default: module.PagesModule }))
+);
+const DestinationsModule = lazy(() =>
+  import("../modules/destinations/destinationsmodule").then((module) => ({ default: module.DestinationsModule }))
+);
+const ArticlesModule = lazy(() =>
+  import("../modules/articles/articlesmodule").then((module) => ({ default: module.ArticlesModule }))
+);
+const MediaModule = lazy(() =>
+  import("../modules/media/mediamodule").then((module) => ({ default: module.MediaModule }))
+);
+const SeoMarketsModule = lazy(() =>
+  import("../modules/seo-markets/seomarketsmodule").then((module) => ({ default: module.SeoMarketsModule }))
+);
+const LeadsModule = lazy(() =>
+  import("../modules/leads/leadsmodule").then((module) => ({ default: module.LeadsModule }))
+);
+const PublishingModule = lazy(() =>
+  import("../modules/publishing/publishingmodule").then((module) => ({ default: module.PublishingModule }))
+);
+const IntegrationsModule = lazy(() =>
+  import("../modules/integrations/integrationsmodule").then((module) => ({ default: module.IntegrationsModule }))
+);
+const AuditModule = lazy(() =>
+  import("../modules/audit/auditmodule").then((module) => ({ default: module.AuditModule }))
+);
 
 function LoginView({ onLogin, error }) {
   return (
@@ -56,19 +77,21 @@ function AppShell({ onLogout, email }) {
           </div>
           <button className="btn" onClick={onLogout}>Logout</button>
         </div>
-        <Routes>
-          <Route path="/dashboard" element={<DashboardModule />} />
-          <Route path="/content/pages" element={<PagesModule />} />
-          <Route path="/content/destinations" element={<DestinationsModule />} />
-          <Route path="/content/articles" element={<ArticlesModule />} />
-          <Route path="/media" element={<MediaModule />} />
-          <Route path="/seo/markets" element={<SeoMarketsModule />} />
-          <Route path="/leads" element={<LeadsModule />} />
-          <Route path="/publishing" element={<PublishingModule />} />
-          <Route path="/integrations" element={<IntegrationsModule />} />
-          <Route path="/audit" element={<AuditModule />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
-        </Routes>
+        <Suspense fallback={<div style={{ padding: "2rem" }}>Loading module...</div>}>
+          <Routes>
+            <Route path="/dashboard" element={<DashboardModule />} />
+            <Route path="/content/pages" element={<PagesModule />} />
+            <Route path="/content/destinations" element={<DestinationsModule />} />
+            <Route path="/content/articles" element={<ArticlesModule />} />
+            <Route path="/media" element={<MediaModule />} />
+            <Route path="/seo/markets" element={<SeoMarketsModule />} />
+            <Route path="/leads" element={<LeadsModule />} />
+            <Route path="/publishing" element={<PublishingModule />} />
+            <Route path="/integrations" element={<IntegrationsModule />} />
+            <Route path="/audit" element={<AuditModule />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </Suspense>
       </main>
     </div>
   );

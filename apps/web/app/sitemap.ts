@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { getContentSlugs } from "../lib/content";
 import { getFleetSlugs } from "../lib/fleet";
 import { getTourSlugs } from "../lib/tours";
+import destinationsData from "../content/destinations.json";
 
 type ExtendedSitemapEntry = MetadataRoute.Sitemap[number] & {
   images?: string[];
@@ -15,6 +16,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const arBlogSlugs = await getContentSlugs("blog", "ar");
   const tourSlugs = getTourSlugs();
   const fleetSlugs = getFleetSlugs();
+  const destinationSlugs = (destinationsData as Array<{ slug: string }>).map((destination) => destination.slug);
 
   const staticEntries: ExtendedSitemapEntry[] = [
     {
@@ -90,5 +92,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   ];
 
-  return [...staticEntries, ...tourEntries, ...fleetEntries, ...blogEntries] as MetadataRoute.Sitemap;
+  const destinationEntries: ExtendedSitemapEntry[] = destinationSlugs.map((slug) => ({
+    url: `${siteUrl}/en/destinations/${slug}`,
+    lastModified: now,
+    images: [`${siteUrl}/image-1024.avif`]
+  }));
+
+  return [...staticEntries, ...tourEntries, ...fleetEntries, ...blogEntries, ...destinationEntries] as MetadataRoute.Sitemap;
 }

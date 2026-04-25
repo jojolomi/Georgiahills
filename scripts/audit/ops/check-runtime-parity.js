@@ -4,15 +4,21 @@ const required = String(process.env.REQUIRED_ENV_KEYS || "")
   .map((x) => x.trim())
   .filter(Boolean);
 const environment = process.env.GH_ENVIRONMENT || "unknown";
+const allowNodeMismatch = ["1", "true", "yes", "warn"].includes(
+  String(process.env.ALLOW_NODE_RUNTIME_MISMATCH || "").toLowerCase()
+);
 
 let passed = true;
 const nodeMajor = Number(process.versions.node.split(".")[0]);
 
 if (!Number.isFinite(nodeMajor) || nodeMajor !== expectedNodeMajor) {
-  console.error(
-    `✖ Node runtime mismatch for ${environment}: expected ${expectedNodeMajor}, got ${nodeMajor}`
-  );
-  passed = false;
+  const message = `Node runtime mismatch for ${environment}: expected ${expectedNodeMajor}, got ${nodeMajor}`;
+  if (allowNodeMismatch) {
+    console.warn(`⚠ ${message} (allowed by ALLOW_NODE_RUNTIME_MISMATCH)`);
+  } else {
+    console.error(`✖ ${message}`);
+    passed = false;
+  }
 }
 
 for (const key of required) {

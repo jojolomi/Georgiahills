@@ -16,9 +16,9 @@
             .hero{position:relative;overflow:hidden}
             .container{max-width:1200px;margin-left:auto;margin-right:auto;padding:0 1rem}
         </style>
-        <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     <link rel="icon" type="image/png" href="favicon.ico">
 </head>
 <body class="page-404 page-about secondary-page">
@@ -81,11 +81,14 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.min.js"></script>
     <script>
         document.getElementById('year').innerText = new Date().getFullYear();
     </script>
 </body>
 </html>
+
+
+
 
 

@@ -5,31 +5,20 @@ on:
   schedule:
     - cron: "0 9 * * *"
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   budget-check:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       FIREBASE_MONTHLY_BUDGET_USD: ${{ vars.FIREBASE_MONTHLY_BUDGET_USD }}
       FIREBASE_CURRENT_MONTH_COST_USD: ${{ vars.FIREBASE_CURRENT_MONTH_COST_USD }}
     steps:
-      - name: Checkout
-        id: checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-        continue-on-error: true
-
-      - name: Checkout fallback (tarball)
-        if: steps.checkout.outcome != 'success'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
-          TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
-          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
-          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-          tar -xzf "$TMP_TAR" --strip-components=1
-          rm -f "$TMP_TAR"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -37,8 +26,62 @@ jobs:
           node-version: 20
 
       - name: Run budget threshold check
+        id: budget_check
+        continue-on-error: true
         run: npm run ops:firebase-cost
         env:
           GH_ENVIRONMENT: production
           FIREBASE_MONTHLY_BUDGET_USD: ${{ env.FIREBASE_MONTHLY_BUDGET_USD }}
           FIREBASE_CURRENT_MONTH_COST_USD: ${{ env.FIREBASE_CURRENT_MONTH_COST_USD }}
+
+      - name: Create or update budget alert issue
+        if: ${{ steps.budget_check.outcome != 'success' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const title = 'Firebase budget alert';
+            const body = [
+              'The scheduled Firebase budget monitor detected that current month spend exceeded the configured threshold.',
+              '',
+              `- Budget (USD): ${process.env.FIREBASE_MONTHLY_BUDGET_USD || 'unknown'}`,
+              `- Current cost (USD): ${process.env.FIREBASE_CURRENT_MONTH_COST_USD || 'unknown'}`,
+              `- Workflow run: ${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`,
+              '',
+              'Please review Firebase usage and update budget/cost variables after verification.'
+            ].join('\n');
+
+            const existing = await github.rest.issues.listForRepo({
+              owner,
+              repo,
+              state: 'open',
+              per_page: 100
+            });
+
+            const match = existing.data.find((issue) => issue.title === title);
+
+            if (match) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: match.number,
+                body
+              });
+            } else {
+              await github.rest.issues.create({
+                owner,
+                repo,
+                title,
+                body
+              });
+            }
+        env:
+          FIREBASE_MONTHLY_BUDGET_USD: ${{ env.FIREBASE_MONTHLY_BUDGET_USD }}
+          FIREBASE_CURRENT_MONTH_COST_USD: ${{ env.FIREBASE_CURRENT_MONTH_COST_USD }}
+
+      - name: Enforce budget threshold
+        if: ${{ steps.budget_check.outcome != 'success' }}
+        run: |
+          echo "Firebase budget threshold check failed. See issue notifications for details."
+          exit 1

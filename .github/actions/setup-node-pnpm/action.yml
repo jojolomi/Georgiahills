@@ -1,0 +1,57 @@
+name: Setup Node and pnpm
+description: Standardize Node.js and pnpm setup with optional install
+inputs:
+  node-version:
+    description: Node.js version to use
+    required: false
+    default: "20"
+  pnpm-version:
+    description: pnpm version to install
+    required: false
+    default: "10.30.3"
+  cache-dependency-path:
+    description: Dependency lockfile path for pnpm cache
+    required: false
+    default: "pnpm-lock.yaml"
+  run-install:
+    description: Whether to run dependency install
+    required: false
+    default: "true"
+  install-command:
+    description: Command used to install dependencies
+    required: false
+    default: "corepack pnpm install --frozen-lockfile"
+  print-versions:
+    description: Whether to print Node and pnpm versions
+    required: false
+    default: "true"
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: ${{ inputs.pnpm-version }}
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: pnpm
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}
+
+    - name: Enable Corepack (pnpm)
+      shell: bash
+      run: corepack enable
+
+    - name: Runtime versions
+      if: ${{ inputs.print-versions == 'true' }}
+      shell: bash
+      run: |
+        node --version
+        corepack pnpm --version
+
+    - name: Install dependencies
+      if: ${{ inputs.run-install == 'true' }}
+      shell: bash
+      run: ${{ inputs.install-command }}

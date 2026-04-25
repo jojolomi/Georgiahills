@@ -43,7 +43,11 @@ export async function generateMetadata({ params }: DestinationPageProps): Promis
     slug: params.slug,
     title: destination.title,
     description: destination.description,
-    alternates: buildHreflangAlternates(`/destinations/${params.slug}`)
+    alternates: buildHreflangAlternates(`/destinations/${params.slug}`, {
+      englishPath: `/en/destinations/${params.slug}`,
+      xDefaultPath: `/en/destinations/${params.slug}`,
+      includeArabic: false
+    })
   });
 }
 

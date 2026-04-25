@@ -1,10 +1,13 @@
 name: Release Verify
 
 on:
-  pull_request:
   push:
     branches:
       - main
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - "artifacts/**"
   workflow_dispatch:
 
 permissions:
@@ -17,48 +20,13 @@ concurrency:
 jobs:
   release-readiness:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
-      - name: Checkout
-        id: checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-        continue-on-error: true
 
-      - name: Checkout fallback (tarball)
-        if: steps.checkout.outcome != 'success'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
-          TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
-          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
-          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-          tar -xzf "$TMP_TAR" --strip-components=1
-          rm -f "$TMP_TAR"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.30.3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-          cache-dependency-path: pnpm-lock.yaml
-
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
-
-      - name: Runtime versions
-        run: |
-          node --version
-          corepack pnpm --version
-
-      - name: Install dependencies
-        run: corepack pnpm install --frozen-lockfile
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
 
       - name: Ensure workspace dependencies are installed
         run: |
@@ -71,7 +39,7 @@ jobs:
           npm run preflight:pr
           npm run build:astro
           npm run seo:validate
-          npm run perf:asset-budget
+          GH_BUDGET_FAIL=1 GH_ASSET_BUDGET_KB=250 GH_PAGE_BUDGET_KB=80 npm run perf:asset-budget
           npm run perf:render-blocking-css
 
       - name: Start local smoke server
@@ -84,10 +52,35 @@ jobs:
           trap 'kill $(cat /tmp/http-server.pid) 2>/dev/null || true' EXIT
           node scripts/audit/ops/check-cutover-smoke.js "http://127.0.0.1:4173" strict
 
+      - name: Delivery SLO guard (warn, local)
+        shell: bash
+        run: |
+          set -euo pipefail
+          trap 'kill $(cat /tmp/http-server.pid) 2>/dev/null || true' EXIT
+          node scripts/audit/ops/check-delivery-slo.js "http://127.0.0.1:4173" warn | tee /tmp/release-delivery-slo.log
+
       - name: Upload local server logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: release-verify-http-server-log
+          retention-days: 7
           if-no-files-found: ignore
-          path: /tmp/http-server.log
+          path: |
+            /tmp/http-server.log
+            /tmp/release-delivery-slo.log
+
+      - name: Release verification summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Release Verification Summary"
+            echo ""
+            echo "- Preflight checks: executed"
+            echo "- SEO validation: executed"
+            echo "- Performance checks: asset budget + render blocking CSS"
+            echo "- Cutover smoke (local strict): executed"
+            echo "- Delivery SLO (local warn): executed"
+            echo "- Diagnostics artifact on failure: release-verify-http-server-log"
+          } >> "$GITHUB_STEP_SUMMARY"

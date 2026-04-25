@@ -1,9 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { MessageCircle, Phone, Zap } from "lucide-react";
-import { QuickBookingModal } from "./QuickBookingModal.client";
+
+const QuickBookingModal = dynamic(
+  () => import("./QuickBookingModal.client").then((module) => module.QuickBookingModal),
+  { ssr: false }
+);
 
 const phoneNumber = "+995579088537";
 const whatsappNumber = "995579088537";

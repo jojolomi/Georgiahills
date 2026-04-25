@@ -31,8 +31,13 @@ function parseExternalStyles(html) {
     .map((linkTag) => {
       const href = (linkTag.match(/href=["']([^"']+)["']/i) || ["", ""])[1];
       const media = (linkTag.match(/media=["']([^"']+)["']/i) || ["", ""])[1].toLowerCase();
-      const onload = (linkTag.match(/onload=["']([^"']+)["']/i) || ["", ""])[1].toLowerCase();
-      return { href, media, onload };
+      const lower = linkTag.toLowerCase();
+      const hasMediaSwapOnload =
+        lower.includes("this.media='all'") ||
+        lower.includes('this.media="all"') ||
+        lower.includes("this.media = 'all'") ||
+        lower.includes('this.media = "all"');
+      return { href, media, hasMediaSwapOnload };
     })
     .filter((item) => /^https?:\/\//i.test(item.href));
 }
@@ -46,7 +51,7 @@ for (const file of files) {
   const styles = parseExternalStyles(html);
 
   for (const style of styles) {
-    const isNonBlocking = style.media === "print" && style.onload.includes("this.media='all'");
+    const isNonBlocking = style.media === "print" && style.hasMediaSwapOnload;
     if (isNonBlocking) continue;
 
     issues.push({

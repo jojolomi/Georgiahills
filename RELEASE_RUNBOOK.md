@@ -8,6 +8,7 @@
 - Repository variables:
   - `FIREBASE_PROJECT_ID_STAGING`
   - `FIREBASE_PROJECT_ID_PRODUCTION`
+   - `ENABLE_FUNCTIONS_DEPLOY` (`true` to deploy functions in production workflow)
 - Repository secrets:
   - `FIREBASE_SERVICE_ACCOUNT_STAGING`
   - `FIREBASE_TOKEN_PRODUCTION`
@@ -45,7 +46,14 @@ node scripts/audit/ops/check-cutover-smoke.js https://preview.example.com strict
 6. Confirm smoke matrix paths return expected SEO signals:
    - `/`, `/arabic.html`, `/booking.html`, `/booking-ar.html`, `/sitemap.xml`, `/robots.txt`
 7. Merge to `main`.
-8. Production deploy runs automatically (`.github/workflows/firebase-production.yml`).
+8. Trigger production deploy manually (`.github/workflows/firebase-production.yml` via workflow dispatch).
+9. If function rollout is required, set `ENABLE_FUNCTIONS_DEPLOY=true` in the production environment before dispatching.
+
+## Workflow diagnostics and summaries
+1. Staging preview workflow now uploads `staging-preview-diagnostics` on failure and writes a run summary with preview URL/precheck state.
+2. Production deploy workflow now uploads `production-deploy-diagnostics` on failure and writes a run summary with deploy outcomes.
+3. Release verification workflow writes a run summary and uploads `release-verify-http-server-log` on failure.
+4. Lighthouse workflows write run summaries and retain JSON/debug artifacts for 7 days.
 
 ## Branch and environment protection
 1. Protect `main` branch:

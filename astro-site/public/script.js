@@ -521,56 +521,7 @@ function renderSliderDestinations(dests) {
         try {
             // Home Page Logic
             if (!body.classList.contains('secondary-page')) {
-                const homeSnap = await db.collection('settings').doc('page_home').get();
-                if (homeSnap.exists) {
-                    const h = homeSnap.data();
-                    
-                    if (h.hero) {
-                        const heroTitle = document.getElementById('hero-title');
-                        const newTitle = isAr ? h.hero.title_ar : h.hero.title_en;
-                        setSafeHTML(heroTitle, newTitle);
-                        
-                        const heroSub = document.getElementById('hero-subtitle');
-                        const newSub = isAr ? h.hero.subtitle_ar : h.hero.subtitle_en;
-                        setSafeHTML(heroSub, newSub);
-                        
-                        const heroImg = document.getElementById('hero-img');
-                        const safeHeroImage = sanitizeImageUrl(h.hero.bg_image);
-                        if(heroImg && safeHeroImage) {
-                            heroImg.src = safeHeroImage;
-                            heroImg.srcset = `${safeHeroImage} 1x`;
-                        }
-                    }
-
-                    if (h.about) {
-                        const aboutTitle = document.getElementById('about-title');
-                        // ... existing logic for home-about-section ...
-                        const newAboutTitle = isAr ? h.about.title_ar : h.about.title_en;
-                        setSafeHTML(aboutTitle, newAboutTitle);
-
-                        const aboutDesc = document.getElementById('about-desc');
-                        const newAboutDesc = isAr ? h.about.text_ar : h.about.text_en;
-                        if(aboutDesc && newAboutDesc) aboutDesc.innerText = newAboutDesc;
-                        
-                        const aboutImg = document.getElementById('about-img');
-                        if(aboutImg && h.about.image) aboutImg.src = h.about.image;
-                    }
-                    
-                    // Features / How It Works
-                    if (h.hero) {
-                        const setTxt = (id, en, ar) => {
-                            const el = document.getElementById(id);
-                            if(el) el.innerText = isAr ? ar : en;
-                        };
-                        setTxt('steps-title', h.hero.steps_title_en, h.hero.steps_title_ar);
-                        setTxt('step1-title', h.hero.step1_title_en, h.hero.step1_title_ar);
-                        setTxt('step1-desc', h.hero.step1_desc_en, h.hero.step1_desc_ar);
-                        setTxt('step2-title', h.hero.step2_title_en, h.hero.step2_title_ar);
-                        setTxt('step2-desc', h.hero.step2_desc_en, h.hero.step2_desc_ar);
-                        setTxt('step3-title', h.hero.step3_title_en, h.hero.step3_title_ar);
-                        setTxt('step3-desc', h.hero.step3_desc_en, h.hero.step3_desc_ar);
-                    }
-                }
+                // Keep static above-the-fold content to avoid late layout shifts and unintended copy overrides.
             }
             
             // About Page Logic (Exclusive)
@@ -2375,15 +2326,15 @@ window.addEventListener('DOMContentLoaded', () => {
         
         // Detect which page we are on and run the appropriate logic
         
-        // Condition 1: Main Page (has 'tours-slider' or 'hero' or 'dest-hero')
-        if (document.getElementById('tours-slider') || document.querySelector('.hero') || document.querySelector('.about-premium-hero') || document.querySelector('.dest-hero')) {
+        // Condition 1: Dynamic Destination Page (destination.html)
+        if (window.location.pathname.includes('destination.html') || document.body.classList.contains('page-destination')) {
+            DestinationApp.init();
+        }
+        // Condition 2: Main Page (has slider or generic home hero)
+        else if (document.getElementById('tours-slider') || document.querySelector('.hero') || document.querySelector('.dest-hero')) {
             MainApp.start();
             // Load dynamic destinations if slider exists
             if (document.getElementById('tours-slider')) DestinationLoader.load();
-        } 
-        // Condition 2: Dynamic Destination Page (ONLY destination.html)
-        else if (window.location.pathname.includes('destination.html')) {
-            DestinationApp.init();
         }
         // Condition 3: Blog Page
         else if (window.location.pathname.includes('blog')) {

@@ -11,39 +11,18 @@ permissions:
 jobs:
   browserstack:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
     steps:
-      - name: Checkout
-        id: checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
-        continue-on-error: true
 
-      - name: Checkout fallback (tarball)
-        if: steps.checkout.outcome != 'success'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |      
-          set -euo pipefail
-          TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
-          TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
-          curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
-          find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-          tar -xzf "$TMP_TAR" --strip-components=1
-          rm -f "$TMP_TAR"
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Node and pnpm
+        uses: ./.github/actions/setup-node-pnpm
         with:
-          node-version: 20
-
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
-
-      - name: Install dependencies
-        run: corepack pnpm -w install --frozen-lockfile
+          install-command: corepack pnpm -w install --frozen-lockfile
 
       - name: Build Astro site
         run: npm run build:astro
@@ -53,6 +32,12 @@ jobs:
         run: |
           npx http-server astro-site/dist -p 4173 >/tmp/http-server.log 2>&1 &
           sleep 2
+
+      - name: Validate BrowserStack credentials (scheduled runs)
+        if: ${{ github.event_name == 'schedule' && (env.BROWSERSTACK_USERNAME == '' || env.BROWSERSTACK_ACCESS_KEY == '') }}
+        run: |
+          echo "Scheduled BrowserStack run requires BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY secrets."
+          exit 1
 
       - name: Run BrowserStack smoke tests (optional)
         shell: bash

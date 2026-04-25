@@ -1,0 +1,23 @@
+name: Checkout with fallback
+description: Checkout repository with tarball fallback when standard checkout fails
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      id: checkout
+      uses: actions/checkout@v4
+      continue-on-error: true
+
+    - name: Checkout fallback (tarball)
+      if: steps.checkout.outcome != 'success'
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        set -euo pipefail
+        TAR_URL="https://codeload.github.com/${GITHUB_REPOSITORY}/tar.gz/${GITHUB_SHA}"
+        TMP_TAR="$RUNNER_TEMP/repo.tar.gz"
+        curl -fsSL -H "Authorization: Bearer ${GH_TOKEN}" "$TAR_URL" -o "$TMP_TAR" || curl -fsSL "$TAR_URL" -o "$TMP_TAR"
+        find . -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+        tar -xzf "$TMP_TAR" --strip-components=1
+        rm -f "$TMP_TAR"
