@@ -82,6 +82,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const locale = requestHeaders.get("x-locale") === "ar" ? "ar" : localeFromPath;
   const direction = locale === "ar" ? "rtl" : "ltr";
   const cspNonce = requestHeaders.get("x-csp-nonce") || undefined;
+  const isLandingPerformanceRoute = headerPath === "/en" || headerPath === "/ar";
   const footerLinks = [
     { href: locale === "ar" ? "/ar/privacy" : "/en/privacy", label: locale === "ar" ? "سياسة الخصوصية" : "Privacy Policy" },
     {
@@ -104,7 +105,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className={`${inter.variable} ${notoSansArabic.variable}`}>
         {children}
-        <FloatingContactCta />
+        {!isLandingPerformanceRoute ? <FloatingContactCta /> : null}
         {gtagId ? (
           <>
             <Script id="gh-ga4-on-interaction" strategy="afterInteractive" nonce={cspNonce}>

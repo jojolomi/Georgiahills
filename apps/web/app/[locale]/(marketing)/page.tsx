@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import fleetData from "../../../content/fleet.json";
 import toursData from "../../../content/tours.json";
-import { GccApproxPrice } from "../../../components/GccApproxPrice.client";
 import { OptimizedImage } from "../../../components/OptimizedImage";
 import { StructuredDataGraph } from "../../../components/StructuredData";
 import type { FleetRecord } from "../../../lib/fleet";
@@ -42,6 +41,15 @@ function buildRouteHref(locale: Locale, slug: string) {
 
 function buildFleetHref(locale: Locale, slug: string) {
   return `/${locale}/fleet/${slug}`;
+}
+
+function formatApproxPrice(locale: Locale, baseGel: number, rates: { SAR: number; AED: number }, asOf: string) {
+  const currency = locale === "ar" ? "SAR" : "AED";
+  const approx = Math.round(baseGel * rates[currency]);
+  if (locale === "ar") {
+    return `السعر الأساسي ${baseGel} GEL (حوالي ${approx} ${currency}) - سعر تقريبي بناءً على تحويل ${asOf}.`;
+  }
+  return `Base price ${baseGel} GEL (about ${approx} ${currency}) - approximate conversion as of ${asOf}.`;
 }
 
 export function generateStaticParams() {
@@ -71,10 +79,12 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
   const isArabic = locale === "ar";
   const baseTourPriceGel = 120;
   const conversionAsOf = "2026-03-03";
+  const conversionRates = { SAR: 1.38, AED: 1.35 };
   const tours = toursData as TourRecord[];
   const fleet = fleetData as FleetRecord[];
   const featuredTours = tours.slice(0, 3);
   const featuredFleet = fleet.slice(0, 3);
+  const approxPriceNote = formatApproxPrice(locale, baseTourPriceGel, conversionRates, conversionAsOf);
 
   const routeHighlights = [
     {
@@ -541,7 +551,7 @@ export default function LocalizedMarketingPage({ params }: LocalizedPageProps) {
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-700">
               {isArabic ? "تسعير تقريبي للمقارنة" : "Approximate price comparison"}
             </p>
-            <GccApproxPrice locale={locale} baseGel={baseTourPriceGel} rates={{ SAR: 1.38, AED: 1.35 }} asOf={conversionAsOf} />
+            <p className="mt-2 text-sm text-slate-500">{approxPriceNote}</p>
           </div>
         </section>
 
