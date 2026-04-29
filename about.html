@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="style.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"></noscript>
     <script src="shared-navbar.js" defer></script>
@@ -40,8 +40,8 @@
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <div id="network-toast"><i class="fa-solid fa-wifi-slash"></i> <span>You are offline</span></div>
 
-    <!-- Preloader -->
-    <div id="preloader">
+    <!-- Preloader (disabled to avoid blocking hero/LCP) -->
+    <div id="preloader" style="display:none;">
         <div class="text-center">
             <div class="preloader-circle animate-bounce">
                 <img src="favicon.ico" width="80" height="80" style="object-fit:contain;" alt="Georgia Hills Logo" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.classList.remove('hidden')">
@@ -384,6 +384,7 @@
     </div>
 </body>
 </html>
+
 
 
 
