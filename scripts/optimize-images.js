@@ -6,8 +6,12 @@ const defaultBreakpoints = [480, 768, 1024, 1440, 1920];
 const jobs = [
   { input: 'image.webp', base: 'image', widths: defaultBreakpoints },
   { input: 'Tbilisi_old_Town.webp', base: 'tbilisi-old-town', widths: defaultBreakpoints },
-  { input: 'Kazbegi.jpeg', base: 'kazbegi-hero', widths: defaultBreakpoints },
-  { input: 'logo.jpeg', base: 'logo', widths: [256, 512] }
+  { input: 'Kazbegi.webp', base: 'Kazbegi', widths: defaultBreakpoints },
+  { input: 'logo.jpeg', base: 'logo', widths: [256, 512] },
+  { input: 'Batumi.webp', base: 'Batumi', widths: defaultBreakpoints },
+  { input: 'Signagi.webp', base: 'Signagi', widths: defaultBreakpoints },
+  { input: 'Martvili.webp', base: 'Martvili', widths: defaultBreakpoints },
+  { input: 'Tbilisi.webp', base: 'Tbilisi', widths: defaultBreakpoints }
 ];
 
 const report = [];
