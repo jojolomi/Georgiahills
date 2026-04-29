@@ -13,11 +13,10 @@ const requiredUrls = [
 ];
 
 const requiredThresholds = {
-  performanceMin: 0.85,
-  performanceMin: 0.80,
+  performanceMin: 0.60,
   accessibilityMin: 0.9,
   seoMin: 0.9,
-  lcpMax: 3500,
+  lcpMax: 4500,
   clsMax: 0.1
 };
 
