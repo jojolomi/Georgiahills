@@ -33,5 +33,10 @@
     "source": "destination.html",
     "destination": "/destinations-hub.html",
     "reason": "Legacy query-parameter destination route consolidated into hub"
+  },
+  {
+    "source": "destination-ar.html",
+    "destination": "/destinations-hub-ar.html",
+    "reason": "Legacy query-parameter Arabic destination route consolidated into hub"
   }
 ]

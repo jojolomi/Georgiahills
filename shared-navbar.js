@@ -77,11 +77,13 @@
       return isArabic ? toRootPath('index.html') : marketPath;
     }
 
-    if (filename === 'destination.html') {
+    if (filename === 'destination.html' || filename === 'destination-ar.html') {
       const params = new URLSearchParams(window.location.search);
-      params.set('lang', isArabic ? 'en' : 'ar');
+      const targetFile = isArabic ? 'destination.html' : 'destination-ar.html';
+      if (isArabic) params.delete('lang');
+      else params.set('lang', 'ar');
       const query = params.toString();
-      return toRootPath('destination.html' + (query ? ('?' + query) : ''));
+      return toRootPath(targetFile + (query ? ('?' + query) : ''));
     }
 
     const pairs = getPagePairs();
