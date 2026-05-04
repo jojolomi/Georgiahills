@@ -1888,13 +1888,16 @@ const MainApp = {
          originalCards.forEach((card) => slider.appendChild(cloneCard(card)));
          originalCards.slice().reverse().forEach((card) => slider.insertBefore(cloneCard(card), slider.firstChild));
 
-         const getMetrics = () => {
-            const style = window.getComputedStyle(slider);
-            const gap = parseFloat(style.gap) || 0;
-            const itemWidth = originalCards[0].getBoundingClientRect().width + gap;
-            const totalWidth = itemWidth * originalCards.length;
-            return { itemWidth, totalWidth };
+         let cachedMetrics = { itemWidth: 0, totalWidth: 0 };
+         const updateMetrics = () => {
+            const card = slider.querySelector('.tour-card:not([aria-hidden="true"])') || originalCards[0];
+            if (!card) return;
+            const gap = parseFloat(window.getComputedStyle(slider).gap) || 0;
+            const itemWidth = card.getBoundingClientRect().width + gap;
+            cachedMetrics = { itemWidth, totalWidth: itemWidth * originalCards.length };
          };
+
+         const getMetrics = () => cachedMetrics;
 
          const withImmediateScroll = (callback) => {
             const previous = slider.style.scrollBehavior;
@@ -1978,9 +1981,11 @@ const MainApp = {
          slider.addEventListener('touchcancel', () => { isPaused = false; }, { signal, passive: true });
 
          window.addEventListener('resize', () => {
+            updateMetrics();
             jumpToStart();
          }, { signal, passive: true });
 
+         updateMetrics();
          slider.__cleanupSlider = () => {
             stopAuto();
             controller.abort();
@@ -2393,7 +2398,14 @@ const DestinationApp = {
     },
 
     renderMoreDestinations(currentId, lang) {
-        const grid = document.getElementById('more-destinations-grid');
+        let grid = document.getElementById('more-destinations-grid');
+        const container = document.getElementById('explore-more-destinations');
+        
+        if (!grid && container) {
+            container.innerHTML = `<h3 class="section-title" id="explore-heading" style="margin-bottom:1.5rem;">Explore More</h3><div id="more-destinations-grid" class="more-destinations-grid"></div>`;
+            grid = document.getElementById('more-destinations-grid');
+        }
+        
         if (!grid) return;
 
         const ids = Object.keys(window.DestData || {}).filter((id) => id !== currentId).slice(0, 3);
@@ -2500,17 +2512,29 @@ const DestinationApp = {
 
             // Image Error Handling
             const heroImg = document.getElementById('hero-img');
+            const heroBg = document.getElementById('hero-bg');
             if(heroImg) {
                 heroImg.alt = title; // Accessibility Fix
                 // FIX: Set handlers before src to catch cached loads
                 heroImg.onload = function() { this.classList.remove('skeleton'); };
                 heroImg.onerror = function() { this.src = 'kazbegi-hero-1024.webp'; }; // Fallback
-                document.getElementById('hero-bg').style.backgroundImage = `url(${imageUrl})`;
                 heroImg.src = imageUrl;
             }
+            if(heroBg) {
+                heroBg.style.backgroundImage = `url(${imageUrl})`;
+                heroBg.classList.remove('skeleton');
+            }
             
+            const crumbTitle = document.getElementById('crumb-title');
+            if(crumbTitle) {
+                crumbTitle.innerText = displayTitle;
+                crumbTitle.classList.remove('skeleton');
+            }
             const crumbCurrent = document.getElementById('crumb-current');
-            if(crumbCurrent) crumbCurrent.innerText = displayTitle;
+            if(crumbCurrent) {
+                crumbCurrent.innerText = displayTitle;
+                crumbCurrent.style.display = 'inline';
+            }
             
             const pageTitle = document.getElementById('page-title');
             if(pageTitle) {
@@ -2518,8 +2542,11 @@ const DestinationApp = {
                 pageTitle.classList.remove('skeleton');
             }
 
-            const heroBadge = document.getElementById('hero-badge');
-            if (heroBadge) heroBadge.innerText = this.getBadge(id, lang);
+            const heroBadge = document.getElementById('hero-badge') || document.getElementById('dest-badge');
+            if (heroBadge) {
+                heroBadge.innerText = this.getBadge(id, lang);
+                heroBadge.classList.remove('skeleton');
+            }
 
             const overviewHeading = document.getElementById('overview-heading');
             if (overviewHeading) overviewHeading.innerText = lang === 'ar' ? 'نظرة عامة' : 'Overview';

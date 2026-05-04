@@ -6,22 +6,11 @@
 // 1. SERVICE WORKER REGISTRATION (PWA)
 // ==========================================
 if ('serviceWorker' in navigator) {
-    const scriptBaseDir = (() => {
-        try {
-            const src = document.currentScript && document.currentScript.src;
-            if (src) {
-                const scriptUrl = new URL(src, window.location.href);
-                return scriptUrl.pathname.replace(/[^/]+$/, '');
-            }
-        } catch (e) {}
-        return '/';
-    })();
-
   window.addEventListener('load', () => {
     try {
-                navigator.serviceWorker.getRegistrations()
-                    .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
-                    .catch(() => {});
+        navigator.serviceWorker.getRegistrations()
+            .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+            .catch(() => {});
     } catch(e) {}
   });
 }
@@ -64,16 +53,60 @@ if (typeof firebase !== 'undefined') {
     auth = null;
 }
 
-if (window.trustedTypes && typeof window.trustedTypes.createPolicy === 'function') {
-    try {
-        if (!window.__GHTrustedTypesPolicy) {
-            window.__GHTrustedTypesPolicy = window.trustedTypes.createPolicy('default', {
-                createHTML: (input) => input,
-                createScript: (input) => input,
-                createScriptURL: (input) => input
-            });
+let firebaseBootstrapPromise = null;
+
+function loadExternalScript(src) {
+    return new Promise((resolve, reject) => {
+        const existing = document.querySelector(`script[src="${src}"]`);
+        if (existing) {
+            if (existing.dataset.loaded === 'true') return resolve();
+            existing.addEventListener('load', () => resolve(), { once: true });
+            existing.addEventListener('error', () => reject(new Error(`Failed to load script: ${src}`)), { once: true });
+            return;
         }
+
+        const script = document.createElement('script');
+        script.src = src;
+        script.defer = true;
+        script.async = false;
+        script.onload = () => {
+            script.dataset.loaded = 'true';
+            resolve();
+        };
+        script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+        document.head.appendChild(script);
+    });
+}
+
+async function ensureFirebaseReady() {
+    if (db) return db;
+
+    if (typeof firebase === 'undefined') {
+        if (!firebaseBootstrapPromise) {
+            firebaseBootstrapPromise = (async () => {
+                await loadExternalScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js');
+                await loadExternalScript('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js');
+            })();
+        }
+        await firebaseBootstrapPromise;
+    }
+
+    if (typeof firebase === 'undefined' || !firebase.firestore) {
+        return null;
+    }
+
+    try {
+        if (!firebase.apps || !firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.firestore();
+        if (firebase.auth) auth = firebase.auth();
+        return db;
     } catch (e) {
+        console.warn('Firebase bootstrap failed, fallback to static mode.', e);
+        db = null;
+        auth = null;
+        return null;
     }
 }
 
@@ -170,9 +203,7 @@ const AnalyticsTracker = {
             if (typeof gtag === 'function') {
                 gtag('event', name, payload);
             }
-        } catch (e) {
-            console.error('Analytics tracking error:', e);
-        }
+        } catch (e) {}
     }
 };
 
@@ -233,10 +264,10 @@ window.DestData = {
     'tbilisi': {
         img: 'Tbilisi.webp',
         gallery: [
-            'https://images.unsplash.com/photo-1539656206689-d4198db85834?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1582236357876-0f836526154b?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1569947936662-81438903c734?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80'
+            'tbilisi-old-town-1024.webp',
+            'Tbilisi-768.webp',
+            'Tbilisi-640.webp',
+            'Tbilisi-1024.webp'
         ],
         highlights_en: ["Old Town & Sulphur Baths", "Narikala Fortress", "Peace Bridge", "Rustaveli Avenue"],
         highlights_ar: ["المدينة القديمة وحمامات الكبريت", "قلعة ناريكالا", "جسر السلام", "شارع روستافيلي"],
@@ -248,8 +279,8 @@ window.DestData = {
     'kazbegi': {
         img: 'Kazbegi.webp',
         gallery: [
-            'https://images.unsplash.com/photo-1549466540-349079f2913e?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1560965377-63a236087b32?auto=format&fit=crop&w=800&q=80'
+            'kazbegi-hero-1024.webp',
+            'Kazbegi-768.webp'
         ],
         highlights_en: ["Gergeti Trinity Church", "Mount Kazbek View", "Gveleti Waterfall", "Dariali Gorge"],
         highlights_ar: ["كنيسة الثالوث جيرجيتي", "إطلالة جبل كازبيك", "شلال جفيليتي", "مضيق داريالي"],
@@ -261,8 +292,8 @@ window.DestData = {
     'martvili': {
         img: 'Martvili.webp',
         gallery: [
-            'https://images.unsplash.com/photo-1570701123490-67c858561d2d?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=800&q=80'
+            'Martvili-1024.webp',
+            'Martvili-768.webp'
         ],
         highlights_en: ["Boat Ride in Canyon", "Walking Trails", "Dadiani Palace", "Waterfalls"],
         highlights_ar: ["جولة بالقارب في الوادي", "مسارات المشي", "قصر دادياني", "الشلالات"],
@@ -274,8 +305,8 @@ window.DestData = {
     'signagi': {
         img: 'Signagi.webp',
         gallery: [
-            'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1534065662709-b6814b73b578?auto=format&fit=crop&w=800&q=80'
+            'Signagi-1024.webp',
+            'Signagi-768.webp'
         ],
         highlights_en: ["City Walls Walk", "Bodbe Monastery", "Wine Tasting", "Alazani Valley View"],
         highlights_ar: ["المشي على أسوار المدينة", "دير بودبي", "تذوق النبيذ", "إطلالة وادي ألازاني"],
@@ -287,8 +318,8 @@ window.DestData = {
     'batumi': {
         img: 'Batumi.webp',
         gallery: [
-            'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?auto=format&fit=crop&w=800&q=80',
-            'https://images.unsplash.com/photo-1539656206689-d4198db85834?auto=format&fit=crop&w=800&q=80'
+            'Batumi.webp',
+            'image-1024.webp'
         ],
         highlights_en: ["Ali & Nino Statue", "Batumi Boulevard", "Botanical Garden", "Alphabetic Tower"],
         highlights_ar: ["تمثال علي ونينو", "بوليفارد باتومي", "الحديقة النباتية", "برج الحروف"],
@@ -342,23 +373,6 @@ function applyNavbarSettings(data = {}) {
     if (!data.items || !Array.isArray(data.items)) return;
     
     const isAr = document.documentElement.lang === 'ar' || document.documentElement.dir === 'rtl';
-    const createNavLink = (item, className) => {
-        const label = isAr
-            ? (item.label_ar || item.label_en || item.text_ar || item.text_en || item.link || 'Link')
-            : (item.label_en || item.label_ar || item.text_en || item.text_ar || item.link || 'Link');
-        const link = item.link;
-
-        const anchor = document.createElement('a');
-        anchor.href = link;
-        anchor.className = className;
-
-        if (window.location.href.includes(link) && link !== '/' && link !== '#') {
-            anchor.classList.add('active');
-        }
-
-        anchor.textContent = label;
-        return anchor;
-    };
     
     // Desktop Nav
     const desktopNav = document.getElementById('desktop-links-container');
@@ -367,7 +381,18 @@ function applyNavbarSettings(data = {}) {
         if(data.items.length > 0) desktopNav.innerHTML = '';
         
         data.items.forEach(item => {
-            desktopNav.appendChild(createNavLink(item, 'nav-link'));
+            const label = isAr
+                ? (item.label_ar || item.label_en || item.text_ar || item.text_en || item.link || 'Link')
+                : (item.label_en || item.label_ar || item.text_en || item.text_ar || item.link || 'Link');
+            const link = item.link;
+            
+            const a = document.createElement('a');
+            a.href = link;
+            a.className = 'nav-link';
+            // Simple active check heuristic
+            if(window.location.href.includes(link) && link !== '/' && link !== '#') a.classList.add('active');
+            a.textContent = label;
+            desktopNav.appendChild(a);
         });
     }
 
@@ -377,7 +402,17 @@ function applyNavbarSettings(data = {}) {
         if(data.items.length > 0) mobileNav.innerHTML = '';
         
         data.items.forEach(item => {
-             mobileNav.appendChild(createNavLink(item, 'mobile-link'));
+             const label = isAr
+            ? (item.label_ar || item.label_en || item.text_ar || item.text_en || item.link || 'Link')
+            : (item.label_en || item.label_ar || item.text_en || item.text_ar || item.link || 'Link');
+             const link = item.link;
+
+             const a = document.createElement('a');
+             a.href = link;
+             a.className = 'mobile-link'; 
+             if(window.location.href.includes(link) && link !== '/' && link !== '#') a.classList.add('active');
+             a.textContent = label;
+             mobileNav.appendChild(a);
         });
     }
 }
@@ -429,7 +464,6 @@ function renderSliderDestinations(dests) {
         const safeId = normalizeDestinationId(id);
         const d = normalizeDestinationShape(safeId, dests[id] || {});
         const title = String((lang === 'ar' ? (d.title_ar || d.title_en) : (d.title_en || d.title_ar)) || safeId);
-        const desc = String((lang === 'ar' ? (d.desc_ar || d.desc_en) : (d.desc_en || d.desc_ar)) || '');
         const btnText = lang === 'ar' ? 'اذهب هنا' : 'Drive Here';
         // Check if a static file exists for standard ones or route to generic destination.html
         // We assume generic is safer for dynamically added ones.
@@ -458,7 +492,6 @@ function renderSliderDestinations(dests) {
         img.decoding = 'async';
         img.className = 'tour-img';
         img.alt = title;
-        // Set properties before src to catch cached loads correctly for responsive images
         if (responsiveImage.srcset) img.srcset = responsiveImage.srcset;
         if (responsiveImage.sizes) img.sizes = responsiveImage.sizes;
         img.src = responsiveImage.src || d.img;
@@ -473,16 +506,11 @@ function renderSliderDestinations(dests) {
         h3.className = 'tour-title';
         h3.textContent = title;
         
-        const p = document.createElement('p');
-        p.className = 'tour-desc';
-        p.textContent = desc.substring(0, 60) + (desc.length > 60 ? '...' : '');
-        
         const span = document.createElement('span');
         span.className = 'tour-btn text-accent-light';
         span.innerHTML = `${btnText} <i class="fa-solid fa-arrow-right rtl:rotate-180"></i>`;
         
         content.appendChild(h3);
-        content.appendChild(p);
         content.appendChild(span);
         
         card.appendChild(img);
@@ -513,16 +541,17 @@ function renderSliderDestinations(dests) {
                 
                 // Update global data
                 window.DestData = { ...window.DestData, ...newDests };
+                window.DestKeys = Object.keys(window.DestData);
                 
                 // Re-render slider
                 renderSliderDestinations(window.DestData);
                 
-                // Re-initialize slider logic if module API is ready
-                if (window.GHCoreUI && window.GHCoreUI.initSlider) {
+                // Re-initialize slider logic if App is ready
+                if (window.App && window.App.initSlider) {
                      const slider = document.getElementById('tours-slider');
                      if (slider && slider.dataset.initialized) {
                          slider.removeAttribute('data-initialized');
-                         window.GHCoreUI.initSlider();
+                         window.App.initSlider();
                      }
                 }
             }
@@ -542,7 +571,7 @@ function renderSliderDestinations(dests) {
         try {
             // Home Page Logic
             if (!body.classList.contains('secondary-page')) {
-                // Keep static above-the-fold content to avoid late layout shifts.
+                // Keep static above-the-fold content to avoid late layout shifts and unintended copy overrides.
             }
             
             // About Page Logic (Exclusive)
@@ -697,11 +726,7 @@ const CurrencyManager = {
             }
         } catch (e) {}
         this.updateUI();
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(() => this.fetchRates(), { timeout: 2000 });
-        } else {
-            setTimeout(() => this.fetchRates(), 1200);
-        }
+        this.fetchRates();
     },
 
     set(code) {
@@ -742,23 +767,12 @@ const CurrencyManager = {
     },
 
     updateUI() {
-        const flagMap = {
-            ge: '🇬🇪',
-            us: '🇺🇸',
-            eu: '🇪🇺',
-            ae: '🇦🇪',
-            sa: '🇸🇦',
-            qa: '🇶🇦',
-            kw: '🇰🇼',
-            om: '🇴🇲'
-        };
-        const currentMeta = AppConfig.currencies.find(c => c.code === this.current);
-        const flagEmoji = currentMeta ? (flagMap[currentMeta.flag] || '🏳️') : '🏳️';
+        const flagUrl = `https://flagcdn.com/w40/${AppConfig.currencies.find(c => c.code === this.current).flag}.png`;
         ['desktop', 'mobile'].forEach(type => {
             const codeEl = document.getElementById(`curr-code-${type}`);
             const flagEl = document.getElementById(`curr-flag-${type}`);
             if (codeEl) codeEl.innerText = this.current;
-            if (flagEl) flagEl.textContent = flagEmoji;
+            if (flagEl) flagEl.src = flagUrl;
         });
     },
 
@@ -769,7 +783,7 @@ const CurrencyManager = {
                 el.innerText = `${this.convert(base)} ${this.current}`;
             }
         });
-        if (BookingManager.updateEstimate) {
+        if(typeof BookingManager !== 'undefined' && BookingManager.updateEstimate) {
             BookingManager.updateEstimate();
         }
     }
@@ -987,19 +1001,9 @@ const UIManager = {
             if(!container) return;
             container.innerHTML = '';
             AppConfig.currencies.forEach(curr => {
-                const flagMap = {
-                    ge: '🇬🇪',
-                    us: '🇺🇸',
-                    eu: '🇪🇺',
-                    ae: '🇦🇪',
-                    sa: '🇸🇦',
-                    qa: '🇶🇦',
-                    kw: '🇰🇼',
-                    om: '🇴🇲'
-                };
                 const opt = document.createElement('div');
                 opt.className = 'custom-option';
-                opt.innerHTML = `<span class="currency-flag-sm currency-flag-emoji" aria-hidden="true">${flagMap[curr.flag] || '🏳️'}</span> ${curr.code}`;
+                opt.innerHTML = `<img src="https://flagcdn.com/w40/${curr.flag}.png" class="currency-flag-sm" alt="${curr.code}" width="20" height="14" loading="lazy" decoding="async"> ${curr.code}`;
                 opt.onclick = () => {
                     CurrencyManager.set(curr.code);
                     document.querySelectorAll('.custom-select-wrapper').forEach(el => el.classList.remove('open'));
@@ -1070,18 +1074,12 @@ const UIManager = {
 
     setupScrollListener() {
         let lastScroll = 0;
-        let lastKnownScrollY = window.scrollY || 0;
-        let isTicking = false;
-
-        const nav = document.getElementById('navbar');
-        const sticky = document.querySelector('.sticky-bar');
-        const backBtn = document.getElementById('backToTop');
-        const hero = document.getElementById('hero-img');
-        const hasDestHero = !!document.querySelector('.dest-hero');
-
-        const flushScrollUpdates = () => {
-            const currentScroll = lastKnownScrollY;
-
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.scrollY;
+            const nav = document.getElementById('navbar');
+            const sticky = document.querySelector('.sticky-bar');
+            const backBtn = document.getElementById('backToTop');
+            
             if (nav) {
                 nav.classList.toggle('shadow-md', currentScroll > 20);
                 nav.classList.toggle('scrolled', currentScroll > 20);
@@ -1089,30 +1087,23 @@ const UIManager = {
             if (backBtn) backBtn.classList.toggle('show', currentScroll > 500);
 
             if (sticky) {
-                if (currentScroll > lastScroll && currentScroll > 100) {
-                    sticky.classList.add('hide-bar');
-                } else {
-                    sticky.classList.remove('hide-bar');
-                }
+                 if (currentScroll > lastScroll && currentScroll > 100) {
+                     sticky.classList.add('hide-bar');
+                     if(nav && window.innerWidth < 1024) nav.classList.add('nav-hidden');
+                 } else {
+                     sticky.classList.remove('hide-bar');
+                     if(nav) nav.classList.remove('nav-hidden');
+                 }
             }
-
-            if (hero && hasDestHero) {
-                hero.style.transform = `translate3d(0, ${Math.round(currentScroll * 0.4)}px, 0)`;
-            }
-
             lastScroll = currentScroll;
+            
+            const hero = document.getElementById('hero-img');
+            if(hero && document.querySelector('.dest-hero')) {
+                hero.style.transform = `translateY(${window.scrollY * 0.4}px)`;
+            }
+            
             this.updateActiveNavLink();
-            isTicking = false;
-        };
-
-        window.addEventListener('scroll', () => {
-            lastKnownScrollY = window.scrollY || 0;
-            if (isTicking) return;
-            isTicking = true;
-            window.requestAnimationFrame(flushScrollUpdates);
         }, { passive: true });
-
-        flushScrollUpdates();
     },
 
     updateActiveNavLink() {
@@ -1134,7 +1125,7 @@ const UIManager = {
     showToast(msg) {
          const toast = document.getElementById('network-toast');
         if (toast) {
-            toast.innerHTML = `<svg class="status-icon-svg" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path fill="currentColor" d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> <span>${msg}</span>`;
+            toast.innerHTML = `<i class="fa-solid fa-check"></i> <span>${msg}</span>`;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
@@ -1491,14 +1482,6 @@ const BookingManager = {
             consent: Boolean(document.getElementById('bookingConsent')?.checked),
             attribution: AttributionManager.current(),
             experiment: ExperimentManager.current(),
-            clientMeta: {
-                language: (navigator.language || '').slice(0, 20),
-                platform: (navigator.platform || '').slice(0, 40),
-                timezoneOffsetMinutes: new Date().getTimezoneOffset(),
-                viewportWidth: Math.max(0, Math.min(10000, window.innerWidth || 0)),
-                viewportHeight: Math.max(0, Math.min(10000, window.innerHeight || 0)),
-                maxTouchPoints: Math.max(0, Math.min(20, Number(navigator.maxTouchPoints || 0)))
-            },
             segmentation,
             leadScoreClient,
             funnel: {
@@ -1641,13 +1624,11 @@ const LibraryLoader = {
         if (this.loaded[url]) return Promise.resolve();
         return new Promise((resolve, reject) => {
             const el = type === 'css' ? document.createElement('link') : document.createElement('script');
+            if (type === 'css') { el.rel = 'stylesheet'; el.href = url; }
+            else { el.src = url; el.defer = true; }
             
             el.onload = () => { this.loaded[url] = true; resolve(); };
             el.onerror = reject;
-
-            if (type === 'css') { el.rel = 'stylesheet'; el.href = url; }
-            else { el.src = url; el.defer = true; }
-
             document.head.appendChild(el);
         });
     }
@@ -1792,12 +1773,7 @@ const MainApp = {
             observer.observe(bookingSection);
         }
         
-        const scheduleSliderInit = () => this.initSlider();
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(scheduleSliderInit, { timeout: 1500 });
-        } else {
-            setTimeout(scheduleSliderInit, 400);
-        }
+        this.initSlider();
         this.initAnimations(); 
         
         const preloader = document.getElementById('preloader');
@@ -1807,15 +1783,14 @@ const MainApp = {
             setTimeout(() => { preloader.style.display = 'none'; }, 500); // Wait for CSS transition only
         }
 
-        // Handle empty links (delegated to support dynamic elements)
-        document.body.addEventListener('click', (e) => {
-            const link = e.target.closest('a[href="#"]');
-            if (link) {
+        // PROFESSIONALISM FIX: Handle empty links
+        document.querySelectorAll('a[href="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const isAr = document.documentElement.lang === 'ar';
                 const msg = isAr ? 'هذه الميزة قادمة قريباً!' : 'This feature is coming soon!';
                 UIManager.showToast(msg);
-            }
+            });
         });
     },
     
@@ -1883,170 +1858,145 @@ const MainApp = {
 
     initSlider() {
          const slider = document.getElementById('tours-slider');
-         if(!slider) return;
+         if (!slider) return;
 
-         // Prevent multiple initializations or clean up if re-initializing
-         if (slider.dataset.initialized === 'true') {
-            // Remove existing clones to reset state
-            const clones = slider.querySelectorAll('[aria-hidden="true"]');
-            clones.forEach(clone => clone.remove());
-            // Clear old listeners if possible (hard without reference), 
-            // but since we are just re-cloning, maybe it's fine?
-            // Actually, we should be careful about button listeners piling up.
-            // Let's assume for now we just reset the clones.
+         if (typeof slider.__cleanupSlider === 'function') {
+            slider.__cleanupSlider();
          }
+
+         slider.querySelectorAll('[aria-hidden="true"]').forEach((clone) => clone.remove());
+
+         const originalCards = Array.from(slider.children).filter((card) => !card.hasAttribute('aria-hidden'));
+         if (originalCards.length === 0) return;
+
          slider.dataset.initialized = 'true';
 
-         const prevBtns = [document.getElementById('prevBtnDesk'), document.getElementById('prevBtnMob')];
-         const nextBtns = [document.getElementById('nextBtnDesk'), document.getElementById('nextBtnMob')];
-
-         // Clear existing listeners to prevent duplicates (requires storing abort controllers or named functions)
-         // For simplicity, we'll use cloning to wipe listeners on buttons
-         prevBtns.forEach((btn, i) => {
-             if(btn) {
-                const newBtn = btn.cloneNode(true);
-                btn.parentNode.replaceChild(newBtn, btn);
-                prevBtns[i] = newBtn; // Update reference
-             }
-         });
-         nextBtns.forEach((btn, i) => {
-             if(btn) {
-                const newBtn = btn.cloneNode(true);
-                btn.parentNode.replaceChild(newBtn, btn);
-                nextBtns[i] = newBtn; // Update reference
-             }
-         });
-
-         let autoScrollInterval;
-         const intervalTime = 3500;
+         const prevBtns = [document.getElementById('prevBtnDesk'), document.getElementById('prevBtnMob')].filter(Boolean);
+         const nextBtns = [document.getElementById('nextBtnDesk'), document.getElementById('nextBtnMob')].filter(Boolean);
+         const controller = new AbortController();
+         const { signal } = controller;
+         let autoScrollInterval = null;
          let isPaused = false;
-         
-         // Get updated original cards (excluding any clones if we missed them)
-         const originalCards = Array.from(slider.children).filter(c => !c.hasAttribute('aria-hidden'));
-         if(originalCards.length === 0) return;
+         const intervalTime = 3500;
 
-         // Append clones for infinite scroll
-         originalCards.forEach(card => {
-             const clone = card.cloneNode(true);
-             clone.setAttribute('aria-hidden', 'true');
-             const originalOnClick = card.getAttribute('onclick');
-             if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
-             slider.appendChild(clone);
-         });
-         
-         originalCards.slice().reverse().forEach(card => {
-             const clone = card.cloneNode(true);
-             clone.setAttribute('aria-hidden', 'true');
-             const originalOnClick = card.getAttribute('onclick');
-             if (originalOnClick) clone.setAttribute('onclick', originalOnClick);
-             slider.insertBefore(clone, slider.firstChild);
-         });
-
-         let sliderMetrics = { itemWidth: 0, totalWidth: 0 };
-         const getMetrics = () => sliderMetrics;
-
-         const refreshMetrics = () => {
-             const firstCard = slider.querySelector('.tour-card:not([aria-hidden="true"])') || originalCards[0];
-             if (!firstCard) return;
-             const gap = parseFloat(window.getComputedStyle(slider).gap) || 0;
-             const itemWidth = firstCard.getBoundingClientRect().width + gap;
-             sliderMetrics = {
-                 itemWidth,
-                 totalWidth: itemWidth * originalCards.length
-             };
+         const cloneCard = (card) => {
+            const clone = card.cloneNode(true);
+            clone.setAttribute('aria-hidden', 'true');
+            return clone;
          };
 
-         const jumpToStart = () => {
-             const { totalWidth } = getMetrics();
-             slider.scrollLeft = totalWidth; 
-         };
-         
-         setTimeout(() => {
-             refreshMetrics();
-             slider.style.scrollBehavior = 'auto';
-             jumpToStart();
-             slider.style.scrollBehavior = 'smooth';
-         }, 100);
+         originalCards.forEach((card) => slider.appendChild(cloneCard(card)));
+         originalCards.slice().reverse().forEach((card) => slider.insertBefore(cloneCard(card), slider.firstChild));
 
-         const moveSlider = (direction) => {
-            const { itemWidth } = getMetrics();
-            let scrollAmount = direction * itemWidth;
-            slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+         let cachedMetrics = { itemWidth: 0, totalWidth: 0 };
+         const updateMetrics = () => {
+            const card = slider.querySelector('.tour-card:not([aria-hidden="true"])') || originalCards[0];
+            if (!card) return;
+            const gap = parseFloat(window.getComputedStyle(slider).gap) || 0;
+            const itemWidth = card.getBoundingClientRect().width + gap;
+            cachedMetrics = { itemWidth, totalWidth: itemWidth * originalCards.length };
          };
 
-         let resetPending = false;
-         let resetRaf = null;
+         const getMetrics = () => cachedMetrics;
 
-         const queueInfiniteReset = () => {
-            if (resetPending) return;
-            resetPending = true;
-            if (resetRaf) cancelAnimationFrame(resetRaf);
-
-            resetRaf = requestAnimationFrame(() => {
-                const { totalWidth } = getMetrics();
-                slider.style.scrollBehavior = 'auto';
-                slider.scrollLeft = totalWidth;
-                requestAnimationFrame(() => {
-                    slider.style.scrollBehavior = 'smooth';
-                    resetPending = false;
-                });
+         const withImmediateScroll = (callback) => {
+            const previous = slider.style.scrollBehavior;
+            slider.style.scrollBehavior = 'auto';
+            callback();
+            requestAnimationFrame(() => {
+                slider.style.scrollBehavior = previous || 'smooth';
             });
          };
 
+         const jumpToStart = () => {
+            const { totalWidth } = getMetrics();
+            withImmediateScroll(() => {
+                slider.scrollLeft = totalWidth;
+            });
+         };
+
+         const moveSlider = (direction) => {
+            const { itemWidth } = getMetrics();
+            if (!itemWidth) return;
+            slider.scrollBy({ left: direction * itemWidth, behavior: 'smooth' });
+         };
+
          const checkScroll = () => {
-            // Simplified scroll reset logic for mobile reliability
             const { totalWidth } = getMetrics();
             if (!totalWidth) return;
-            const currentScroll = slider.scrollLeft;
-            const maxScroll = slider.scrollWidth - slider.clientWidth;
-            
-            // Allow native scroll-snap to finish before jumping
-            clearTimeout(slider.scrollEndTimer);
-            slider.scrollEndTimer = setTimeout(() => {
-                if (currentScroll >= maxScroll - 50) {
-                    slider.style.scrollBehavior = 'auto';
+            const tolerance = 10;
+
+            if (slider.scrollLeft >= (totalWidth * 2) - tolerance) {
+                withImmediateScroll(() => {
                     slider.scrollLeft = totalWidth;
-                    slider.style.scrollBehavior = 'smooth';
-                }
-                else if (currentScroll <= 50) {
-                    slider.style.scrollBehavior = 'auto';
+                });
+            } else if (slider.scrollLeft <= tolerance) {
+                withImmediateScroll(() => {
                     slider.scrollLeft = totalWidth;
-                    slider.style.scrollBehavior = 'smooth';
-                }
-            }, 100);
+                });
+            }
          };
 
-         slider.addEventListener('scroll', checkScroll, { passive: true });
+         const stopAuto = () => {
+            if (autoScrollInterval) {
+                clearInterval(autoScrollInterval);
+                autoScrollInterval = null;
+            }
+         };
 
          const startAuto = () => {
-             clearInterval(autoScrollInterval);
-             autoScrollInterval = setInterval(() => {
-                 if(!isPaused) moveSlider(1);
-             }, intervalTime);
+            stopAuto();
+            autoScrollInterval = setInterval(() => {
+                if (!isPaused) moveSlider(1);
+            }, intervalTime);
          };
-         
+
          const resetAuto = () => {
-             clearInterval(autoScrollInterval);
-             startAuto();
+            startAuto();
          };
-         
-         nextBtns.forEach(btn => btn?.addEventListener('click', () => { moveSlider(1); resetAuto(); }));
-         prevBtns.forEach(btn => btn?.addEventListener('click', () => { moveSlider(-1); resetAuto(); }));
-         
-         slider.addEventListener('mouseenter', () => isPaused = true);
-         slider.addEventListener('touchstart', () => isPaused = true);
-         slider.addEventListener('mouseleave', () => isPaused = false);
-         slider.addEventListener('touchend', () => isPaused = false);
-         
-         window.addEventListener('resize', () => {
-                refreshMetrics();
-            slider.style.scrollBehavior = 'auto';
-            jumpToStart();
-            setTimeout(() => { slider.style.scrollBehavior = 'smooth'; }, 50);
+
+         prevBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                isPaused = false;
+                moveSlider(-1);
+                resetAuto();
+            }, { signal });
          });
-            refreshMetrics();
-         
-         startAuto();
+
+         nextBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                isPaused = false;
+                moveSlider(1);
+                resetAuto();
+            }, { signal });
+         });
+
+         slider.addEventListener('scroll', checkScroll, { signal, passive: true });
+         slider.addEventListener('mouseenter', () => { isPaused = true; }, { signal, passive: true });
+         slider.addEventListener('mouseleave', () => { isPaused = false; }, { signal, passive: true });
+         slider.addEventListener('focusin', () => { isPaused = true; }, { signal });
+         slider.addEventListener('focusout', () => { isPaused = false; }, { signal });
+         slider.addEventListener('touchstart', () => { isPaused = true; }, { signal, passive: true });
+         slider.addEventListener('touchend', () => { isPaused = false; resetAuto(); }, { signal, passive: true });
+         slider.addEventListener('touchcancel', () => { isPaused = false; }, { signal, passive: true });
+
+         window.addEventListener('resize', () => {
+            updateMetrics();
+            jumpToStart();
+         }, { signal, passive: true });
+
+         updateMetrics();
+         slider.__cleanupSlider = () => {
+            stopAuto();
+            controller.abort();
+            slider.querySelectorAll('[aria-hidden="true"]').forEach((clone) => clone.remove());
+            delete slider.__cleanupSlider;
+         };
+
+         requestAnimationFrame(() => {
+            jumpToStart();
+            startAuto();
+         });
     },
     
     prefillVehicle(type) {
@@ -2102,6 +2052,388 @@ const MainApp = {
 
 // --- Destination Page Controller (destination.html) ---
 const DestinationApp = {
+    getDisplayTitle(title) {
+        if (typeof title !== 'string' || !title.trim()) return 'Destination';
+        const shortTitle = title.split(':')[0].trim();
+        return shortTitle || title.trim();
+    },
+
+    getBadge(id, lang) {
+        const badges = {
+            en: {
+                tbilisi: 'Capital City',
+                kazbegi: 'Mountain Escape',
+                martvili: 'Canyon Adventure',
+                signagi: 'Wine Country',
+                batumi: 'Sea Escape',
+                fallback: 'Signature Destination'
+            },
+            ar: {
+                tbilisi: 'العاصمة',
+                kazbegi: 'ملاذ جبلي',
+                martvili: 'مغامرة الوادي',
+                signagi: 'منطقة النبيذ',
+                batumi: 'وجهة ساحلية',
+                fallback: 'وجهة مميزة'
+            }
+        };
+
+        return badges[lang]?.[id] || badges[lang]?.fallback || badges.en.fallback;
+    },
+
+    getStats(id, lang) {
+        const stats = {
+            en: {
+                tbilisi: [
+                    ['1-3 Days', 'Recommended'],
+                    ['City + Hills', 'Route Feel'],
+                    ['All Year', 'Best Season']
+                ],
+                kazbegi: [
+                    ['Full Day', 'Recommended'],
+                    ['Mountain Road', 'Route Feel'],
+                    ['May-Oct', 'Best Season']
+                ],
+                martvili: [
+                    ['Full Day', 'Recommended'],
+                    ['Nature Route', 'Route Feel'],
+                    ['Apr-Oct', 'Best Season']
+                ],
+                signagi: [
+                    ['Full Day', 'Recommended'],
+                    ['Wine Region', 'Route Feel'],
+                    ['Spring-Fall', 'Best Season']
+                ],
+                batumi: [
+                    ['2-3 Days', 'Recommended'],
+                    ['Coastal City', 'Route Feel'],
+                    ['May-Sep', 'Best Season']
+                ],
+                fallback: [
+                    ['1 Day', 'Recommended'],
+                    ['Private Tour', 'Route Feel'],
+                    ['All Year', 'Best Season']
+                ]
+            },
+            ar: {
+                tbilisi: [
+                    ['1-3 أيام', 'المدة المناسبة'],
+                    ['مدينة + مرتفعات', 'طابع الرحلة'],
+                    ['طوال العام', 'أفضل موسم']
+                ],
+                kazbegi: [
+                    ['رحلة يوم كامل', 'المدة المناسبة'],
+                    ['طريق جبلي', 'طابع الرحلة'],
+                    ['مايو-أكتوبر', 'أفضل موسم']
+                ],
+                martvili: [
+                    ['رحلة يوم كامل', 'المدة المناسبة'],
+                    ['طبيعة وخضرة', 'طابع الرحلة'],
+                    ['أبريل-أكتوبر', 'أفضل موسم']
+                ],
+                signagi: [
+                    ['رحلة يوم كامل', 'المدة المناسبة'],
+                    ['منطقة النبيذ', 'طابع الرحلة'],
+                    ['الربيع-الخريف', 'أفضل موسم']
+                ],
+                batumi: [
+                    ['2-3 أيام', 'المدة المناسبة'],
+                    ['مدينة ساحلية', 'طابع الرحلة'],
+                    ['مايو-سبتمبر', 'أفضل موسم']
+                ],
+                fallback: [
+                    ['يوم واحد', 'المدة المناسبة'],
+                    ['جولة خاصة', 'طابع الرحلة'],
+                    ['طوال العام', 'أفضل موسم']
+                ]
+            }
+        };
+
+        return stats[lang]?.[id] || stats[lang]?.fallback || stats.en.fallback;
+    },
+
+    getItinerary(id, lang, title) {
+        const plans = {
+            en: {
+                tbilisi: [
+                    ['Arrival & Old Town', 'Start in the historic core, walk the old streets, and settle into the city rhythm before sunset.'],
+                    ['Views & Landmarks', 'Pair fortress viewpoints, iconic bridges, and the main cultural boulevard in one smooth driver-led route.'],
+                    ['Flexible Add-ons', 'Keep space for baths, cafes, shopping, or a half-day scenic detour depending on your pace.']
+                ],
+                kazbegi: [
+                    ['Early Departure', 'Leave early for a comfortable mountain drive with scenic stops along the way.'],
+                    ['Highland Highlights', 'Focus on the main church viewpoint, dramatic valleys, and clean mountain-air stops.'],
+                    ['Return at Golden Hour', 'Head back after the key viewpoints while the road is still relaxed and the light is best.']
+                ],
+                martvili: [
+                    ['Morning Transfer', 'Reach the canyon area early for the calmest pace and best photo conditions.'],
+                    ['Canyon Experience', 'Combine the boat ride, short walking paths, and nearby natural stops in one easy route.'],
+                    ['Slow Return', 'Add a relaxed lunch and scenic roadside breaks on the way back.']
+                ],
+                signagi: [
+                    ['Scenic Drive Out', 'Use the outbound route for countryside viewpoints and an easy arrival into Kakheti.'],
+                    ['Town & Monastery', 'Blend the old town walls, monastery stop, and valley views without rushing.'],
+                    ['Wine & Sunset', 'Finish with a tasting stop or terrace break before returning to the city.']
+                ],
+                batumi: [
+                    ['Arrival & Boulevard', 'Open with the promenade, old streets, and easy waterfront stops.'],
+                    ['Gardens & Icons', 'Pair the major city landmarks with a flexible visit to the botanical side of town.'],
+                    ['Evening by the Sea', 'Keep the last stretch open for dinner, lights, and a smooth hotel return.']
+                ],
+                fallback: [
+                    ['Comfortable Start', 'Begin with pickup and a direct route to the main highlights without overloading the day.'],
+                    ['Core Sights', `Cover the most worthwhile stops in ${title} with enough time to enjoy each one properly.`],
+                    ['Flexible Finish', 'Leave room for photo stops, food, and a relaxed return transfer.']
+                ]
+            },
+            ar: {
+                tbilisi: [
+                    ['الوصول والمدينة القديمة', 'ابدأ من قلب تبليسي التاريخي واستمتع بالأزقة القديمة قبل وقت الغروب.'],
+                    ['الإطلالات والمعالم', 'اجمع بين القلعة والجسور والمعالم الرئيسية في مسار مريح مع السائق.'],
+                    ['خيارات مرنة', 'اترك مساحة للحمامات والكافيهات والتسوق أو إضافة توقفات حسب وقتك.']
+                ],
+                kazbegi: [
+                    ['انطلاق مبكر', 'ابدأ الرحلة مبكراً للاستمتاع بالطريق الجبلي مع توقفات مريحة ومناظر رائعة.'],
+                    ['أهم المعالم', 'ركز على الكنيسة الشهيرة والإطلالات الجبلية والوديان في مسار واضح.'],
+                    ['عودة مريحة', 'الرجوع بعد أبرز التوقفات يمنحك طريقاً أهدأ وإضاءة أجمل للصور.']
+                ],
+                martvili: [
+                    ['الوصول صباحاً', 'الوصول المبكر يمنحك أجواء أهدأ وفرصة أفضل للتصوير.'],
+                    ['تجربة الوادي', 'اجمع بين القارب والمشي الخفيف وأهم النقاط الطبيعية في زيارة واحدة.'],
+                    ['عودة هادئة', 'أضف استراحة غداء وتوقفات طبيعية بسيطة في طريق العودة.']
+                ],
+                signagi: [
+                    ['طريق ريفي جميل', 'استمتع بالمشاهد الريفية في الطريق إلى كاخيتي قبل الوصول إلى سغناغي.'],
+                    ['المدينة والدير', 'قسّم الوقت بين البلدة القديمة والدير والإطلالات على الوادي.'],
+                    ['نهاية هادئة', 'اختم بتجربة تذوق أو جلسة مطلة قبل العودة إلى المدينة.']
+                ],
+                batumi: [
+                    ['الوصول والكورنيش', 'ابدأ بالكورنيش والأماكن السهلة داخل المدينة الساحلية.'],
+                    ['الحدائق والمعالم', 'اجمع أهم رموز المدينة مع زيارة مرنة للحدائق أو المناطق الهادئة.'],
+                    ['المساء على البحر', 'اترك آخر الوقت للمشي أو العشاء مع عودة مريحة إلى الفندق.']
+                ],
+                fallback: [
+                    ['بداية مريحة', 'ابدأ بالاستقبال والانطلاق مباشرة إلى أهم المحطات بدون ضغط.'],
+                    ['أبرز الأماكن', `غطِّ أهم ما يستحق الزيارة في ${title} مع وقت كافٍ لكل محطة.`],
+                    ['نهاية مرنة', 'اترك مساحة للصور والطعام والتوقفات الإضافية قبل العودة.']
+                ]
+            }
+        };
+
+        return plans[lang]?.[id] || plans[lang]?.fallback || plans.en.fallback;
+    },
+
+    getSeasonCards(id, lang) {
+        const cards = {
+            en: {
+                tbilisi: [
+                    ['Spring & Autumn', 'Best for walking, mixed city days, and balanced weather.'],
+                    ['Winter Option', 'Great for festive city atmosphere, baths, and lower crowd levels.']
+                ],
+                kazbegi: [
+                    ['Late Spring to Autumn', 'Best road comfort, green scenery, and clear mountain viewpoints.'],
+                    ['Winter Conditions', 'Beautiful but more weather-dependent, so timing matters more.']
+                ],
+                martvili: [
+                    ['Warm Season', 'Ideal for canyon access, boat rides, and lush greenery.'],
+                    ['Shoulder Months', 'Quieter visits with cooler weather and gentler pacing.']
+                ],
+                signagi: [
+                    ['Spring', 'Excellent for soft weather, countryside views, and relaxed town walks.'],
+                    ['Harvest Season', 'Autumn is strongest for Kakheti scenery and wine-country atmosphere.']
+                ],
+                batumi: [
+                    ['Summer', 'Best for seaside energy, long evenings, and full coastal activity.'],
+                    ['Shoulder Season', 'More relaxed city pace with pleasant weather and easier movement.']
+                ],
+                fallback: [
+                    ['Primary Window', 'Spring and autumn usually offer the most comfortable travel balance.'],
+                    ['Alternative Season', 'Winter or summer can still work well depending on your route priorities.']
+                ]
+            },
+            ar: {
+                tbilisi: [
+                    ['الربيع والخريف', 'الأفضل للمشي داخل المدينة والاستمتاع بالأجواء المعتدلة.'],
+                    ['الخيار الشتوي', 'مناسب للأجواء الهادئة والحمامات والكثافة الأقل.']
+                ],
+                kazbegi: [
+                    ['من أواخر الربيع إلى الخريف', 'أفضل وقت للطريق المريح والمناظر الجبلية الواضحة.'],
+                    ['الشتاء', 'جميل جداً لكنه يعتمد أكثر على حالة الطقس والطريق.']
+                ],
+                martvili: [
+                    ['الموسم الدافئ', 'الأفضل للقوارب والوادي والطبيعة الخضراء.'],
+                    ['الأشهر الانتقالية', 'زيارة أهدأ مع طقس ألطف وحركة أقل.']
+                ],
+                signagi: [
+                    ['الربيع', 'ممتاز للأجواء اللطيفة والمشي والإطلالات الريفية.'],
+                    ['موسم الحصاد', 'الخريف هو الأفضل لأجواء كاخيتي وتجارب النبيذ.']
+                ],
+                batumi: [
+                    ['الصيف', 'الأفضل للأجواء البحرية والنشاطات الساحلية والمساء الطويل.'],
+                    ['الفترات الانتقالية', 'أهدأ وأكثر راحة للتنقل داخل المدينة.']
+                ],
+                fallback: [
+                    ['الفترة الأساسية', 'الربيع والخريف يمنحان أفضل توازن لمعظم الرحلات.'],
+                    ['فترة بديلة', 'الصيف أو الشتاء قد يكونان مناسبين حسب طبيعة الوجهة.']
+                ]
+            }
+        };
+
+        return cards[lang]?.[id] || cards[lang]?.fallback || cards.en.fallback;
+    },
+
+    getFaq(id, lang, title) {
+        const questions = {
+            en: [
+                ['Is this route good as a day trip?', 'Yes. Most guests book it as a private day route, though some places benefit from a slower overnight pace.'],
+                ['Should I book a driver or self-drive?', `For ${title}, a private driver is usually the easier choice if you want flexible stops, less stress, and a smoother day.`]
+            ],
+            ar: [
+                ['هل تصلح هذه الوجهة لرحلة يوم واحد؟', 'نعم، أغلب الضيوف يحجزونها كرحلة خاصة ليوم واحد، وبعض الوجهات تستفيد أكثر من مبيت مريح.'],
+                ['هل الأفضل سائق خاص أم قيادة ذاتية؟', `بالنسبة إلى ${title} غالباً يكون السائق الخاص هو الخيار الأسهل إذا كنت تريد توقفات مرنة وتجربة أكثر راحة.`]
+            ]
+        };
+
+        return questions[lang] || questions.en;
+    },
+
+    renderOverview(desc) {
+        const overview = document.getElementById('overview-copy');
+        if (!overview) return;
+
+        const paragraphs = String(desc || '')
+            .split(/\n\s*\n/)
+            .map((item) => item.trim())
+            .filter(Boolean);
+
+        if (!paragraphs.length) {
+            overview.innerHTML = '<p>Explore this destination with a private driver, flexible stops, and a smoother route plan from Georgia Hills.</p>';
+            return;
+        }
+
+        overview.innerHTML = paragraphs.map((paragraph) => `<p>${paragraph}</p>`).join('');
+    },
+
+    renderStats(id, lang) {
+        const stats = this.getStats(id, lang);
+        stats.forEach((item, index) => {
+            const valueEl = document.getElementById(`stat${index + 1}-value`);
+            const labelEl = document.getElementById(`stat${index + 1}-label`);
+            if (valueEl) valueEl.textContent = item[0];
+            if (labelEl) labelEl.textContent = item[1];
+        });
+    },
+
+    renderItinerary(id, lang, title) {
+        const itineraryList = document.getElementById('itinerary-list');
+        if (!itineraryList) return;
+
+        const items = this.getItinerary(id, lang, title);
+        itineraryList.innerHTML = '';
+        items.forEach((item, index) => {
+            const row = document.createElement('div');
+            row.className = 'timeline-item';
+            row.innerHTML = `
+                <div class="timeline-dot"></div>
+                ${index < items.length - 1 ? '<div class="timeline-line"></div>' : ''}
+                <div class="timeline-content">
+                    <strong>${item[0]}</strong>
+                    <p>${item[1]}</p>
+                </div>`;
+            itineraryList.appendChild(row);
+        });
+    },
+
+    renderSeasonCards(id, lang) {
+        const seasonCopy = document.getElementById('season-copy');
+        if (!seasonCopy) return;
+
+        const cards = this.getSeasonCards(id, lang);
+        seasonCopy.innerHTML = cards.map((card, index) => `
+            <div style="background:var(--color-gray-50); padding:1.25rem; border-radius:0.75rem;">
+                <strong><i class="fa-solid ${index === 0 ? 'fa-sun' : 'fa-calendar-days'} text-accent"></i> ${card[0]}</strong>
+                <p style="font-size:0.9rem; margin-top:0.5rem; color:var(--color-gray-600);">${card[1]}</p>
+            </div>`).join('');
+    },
+
+    renderFaq(id, lang, title) {
+        const faqList = document.getElementById('faq-list');
+        if (!faqList) return;
+
+        const items = this.getFaq(id, lang, title);
+        faqList.innerHTML = items.map((item) => `
+            <details class="faq-item">
+                <summary style="font-weight:700; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center;">${item[0]} <i class="fa-solid fa-chevron-down text-primary"></i></summary>
+                <p style="margin-top:0.75rem; color:var(--color-gray-600);">${item[1]}</p>
+            </details>`).join('');
+    },
+
+    renderGallery(data, lang) {
+        const galleryEl = document.getElementById('gallery');
+        if (!galleryEl) return;
+
+        const highlights = data[`highlights_${lang}`] || data.highlights_en || data.highlights_ar || [];
+        const fallbackDesc = lang === 'ar' ? 'محطة بارزة ضمن مسار هذه الوجهة.' : 'One of the standout stops on this destination route.';
+
+        galleryEl.innerHTML = '';
+        (data.gallery || []).forEach((url, index) => {
+            const safeUrl = sanitizeImageUrl(url);
+            if (!safeUrl) return;
+
+            const title = highlights[index] || this.getDisplayTitle(data[`title_${lang}`] || data.title_en || data.title_ar || 'Destination');
+            const card = document.createElement('article');
+            card.className = 'highlight-card';
+            card.innerHTML = `
+                <img src="${safeUrl}" class="highlight-img" loading="lazy" decoding="async" alt="${title}">
+                <div class="highlight-overlay">
+                    <h4 class="highlight-title">${title}</h4>
+                    <p class="highlight-desc">${fallbackDesc}</p>
+                </div>`;
+            galleryEl.appendChild(card);
+        });
+
+        if (!galleryEl.children.length) {
+            galleryEl.innerHTML = `<div style="background:var(--color-gray-50); padding:1.5rem; border-radius:1rem;">${lang === 'ar' ? 'سيتم تحديث الصور قريباً.' : 'Gallery images will be updated soon.'}</div>`;
+        }
+    },
+
+    renderMoreDestinations(currentId, lang) {
+        let grid = document.getElementById('more-destinations-grid');
+        const container = document.getElementById('explore-more-destinations');
+        
+        if (!grid && container) {
+            container.innerHTML = `<h3 class="section-title" id="explore-heading" style="margin-bottom:1.5rem;">Explore More</h3><div id="more-destinations-grid" class="more-destinations-grid"></div>`;
+            grid = document.getElementById('more-destinations-grid');
+        }
+        
+        if (!grid) return;
+
+        const ids = Object.keys(window.DestData || {}).filter((id) => id !== currentId).slice(0, 3);
+        grid.innerHTML = '';
+
+        ids.forEach((id) => {
+            const item = normalizeDestinationShape(id, window.DestData[id] || {});
+            const title = item[`title_${lang}`] || item.title_en || item.title_ar || id;
+            const cardTitle = this.getDisplayTitle(title);
+            const desc = item[`desc_${lang}`] || item.desc_en || item.desc_ar || '';
+            const image = sanitizeImageUrl(item.thumbnail || item.img) || 'image-1024.webp';
+            const href = `destination.html?id=${encodeURIComponent(id)}${lang === 'ar' ? '&lang=ar' : ''}`;
+
+            const card = document.createElement('a');
+            card.href = href;
+            card.className = 'more-dest-card';
+            card.setAttribute('aria-label', `${lang === 'ar' ? 'استكشف' : 'Explore'} ${cardTitle}`);
+            card.innerHTML = `
+                <img src="${image}" alt="${cardTitle}" class="more-dest-img" loading="lazy" decoding="async">
+                <div class="more-dest-overlay">
+                    <h4 class="more-dest-title">${cardTitle}</h4>
+                    <p class="more-dest-desc">${desc.split('\n')[0].trim().slice(0, 90)}</p>
+                </div>
+                <div class="more-dest-arrow"><i class="fa-solid fa-arrow-right"></i></div>`;
+            grid.appendChild(card);
+        });
+    },
+
     async init() {
         LangManager.apply();
         UIManager.init();
@@ -2132,6 +2464,7 @@ const DestinationApp = {
 
         if(data) {
             const title = data[`title_${lang}`] || data.title_en || data.title_ar || id;
+            const displayTitle = this.getDisplayTitle(title);
             const imageUrl = sanitizeImageUrl(data.img) || 'image-1024.webp';
             const absoluteImageUrl = /^(https?:)?\/\//i.test(imageUrl) ? imageUrl : `https://georgiahills.com/${imageUrl}`;
             document.title = title + " - Georgia Hills";
@@ -2153,10 +2486,14 @@ const DestinationApp = {
             // 2. Clean Canonical URL (Remove tracking params)
             const canonicalLink = document.querySelector('link[rel="canonical"]');
             if(canonicalLink) {
-                const url = new URL(window.location.origin + window.location.pathname);
-                url.searchParams.set('id', id);
-                if(lang !== 'en') url.searchParams.set('lang', lang);
-                canonicalLink.href = url.toString();
+                try {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('id', id);
+                    if(lang !== 'en') url.searchParams.set('lang', lang);
+                    canonicalLink.href = url.toString();
+                } catch(e) {
+                    console.log('Failed to update canonical URL', e);
+                }
             }
 
             // 2. Dynamic Schema.org Injection (NEW OPTIMIZATION)
@@ -2179,31 +2516,50 @@ const DestinationApp = {
 
             // Image Error Handling
             const heroImg = document.getElementById('hero-img');
+            const heroBg = document.getElementById('hero-bg');
             if(heroImg) {
                 heroImg.alt = title; // Accessibility Fix
+                // FIX: Set handlers before src to catch cached loads
                 heroImg.onload = function() { this.classList.remove('skeleton'); };
                 heroImg.onerror = function() { this.src = 'kazbegi-hero-1024.webp'; }; // Fallback
-                document.getElementById('hero-bg').style.backgroundImage = `url(${imageUrl})`;
                 heroImg.src = imageUrl;
             }
+            if(heroBg) {
+                heroBg.style.backgroundImage = `url(${imageUrl})`;
+                heroBg.classList.remove('skeleton');
+            }
             
-            const crumbTitle = document.getElementById('crumb-title'); const crumbCurrent = document.getElementById('crumb-current'); if(crumbCurrent) crumbCurrent.innerText = title;
+            const crumbTitle = document.getElementById('crumb-title');
             if(crumbTitle) {
-                crumbTitle.innerText = title;
+                crumbTitle.innerText = displayTitle;
                 crumbTitle.classList.remove('skeleton');
+            }
+            const crumbCurrent = document.getElementById('crumb-current');
+            if(crumbCurrent) {
+                crumbCurrent.innerText = displayTitle;
+                crumbCurrent.style.display = 'inline';
             }
             
             const pageTitle = document.getElementById('page-title');
             if(pageTitle) {
-                pageTitle.innerText = title;
+                pageTitle.innerText = displayTitle;
                 pageTitle.classList.remove('skeleton');
             }
-            
+
             const pageDesc = document.getElementById('page-desc');
             if(pageDesc) {
-                pageDesc.innerText = desc;
+                pageDesc.innerText = desc ? desc.split('\n')[0].trim() : '';
                 pageDesc.classList.remove('skeleton');
             }
+
+            const heroBadge = document.getElementById('hero-badge') || document.getElementById('dest-badge');
+            if (heroBadge) {
+                heroBadge.innerText = this.getBadge(id, lang);
+                heroBadge.classList.remove('skeleton');
+            }
+
+            const overviewHeading = document.getElementById('overview-heading');
+            if (overviewHeading) overviewHeading.innerText = lang === 'ar' ? 'نظرة عامة' : 'Overview';
             
             const highlightsEl = document.getElementById('highlights');
             if(highlightsEl) {
@@ -2219,44 +2575,74 @@ const DestinationApp = {
                 });
             }
 
+            this.renderOverview(desc);
+            this.renderStats(id, lang);
+            this.renderItinerary(id, lang, displayTitle);
+            this.renderSeasonCards(id, lang);
+            this.renderFaq(id, lang, displayTitle);
+
             const mapLink = document.getElementById('map-link');
             if(mapLink) {
                 mapLink.href = data.map_url || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data.title_en)}`;
                 mapLink.rel = "noopener noreferrer";
             }
 
-            const galleryEl = document.getElementById('gallery');
-            if(galleryEl) {
-                galleryEl.innerHTML = '';
-                (data.gallery || []).forEach((url) => {
-                    const safeUrl = sanitizeImageUrl(url);
-                    if (!safeUrl) return;
-                    const img = document.createElement('img');
-                    img.className = 'gallery-img skeleton';
-                    img.loading = 'lazy';
-                    img.addEventListener('load', () => img.classList.remove('skeleton'));
-                    img.addEventListener('error', () => { img.style.display = 'none'; });
-                    img.src = safeUrl;
-                    galleryEl.appendChild(img);
-                });
+            this.renderGallery(data, lang);
+            this.renderMoreDestinations(id, lang);
+
+            const copy = {
+                en: {
+                    itineraryHeading: 'Suggested Plan',
+                    seasonHeading: 'Best Time to Visit',
+                    faqHeading: 'Common Questions',
+                    exploreHeading: 'Explore More',
+                    primaryCta: 'Book a Driver',
+                    secondaryCta: 'See Price List',
+                    priceNote: 'Private driver day rate'
+                },
+                ar: {
+                    itineraryHeading: 'الخطة المقترحة',
+                    seasonHeading: 'أفضل وقت للزيارة',
+                    faqHeading: 'أسئلة شائعة',
+                    exploreHeading: 'اكتشف المزيد',
+                    primaryCta: 'احجز سائقاً خاصاً',
+                    secondaryCta: 'الخدمات والأسعار',
+                    priceNote: 'السعر اليومي مع سائق خاص'
+                }
+            };
+            const uiCopy = copy[lang] || copy.en;
+
+            const itineraryHeading = document.getElementById('itinerary-heading');
+            if (itineraryHeading) itineraryHeading.textContent = uiCopy.itineraryHeading;
+            const seasonHeading = document.getElementById('season-heading');
+            if (seasonHeading) seasonHeading.textContent = uiCopy.seasonHeading;
+            const faqHeading = document.getElementById('faq-heading');
+            if (faqHeading) faqHeading.textContent = uiCopy.faqHeading;
+            const exploreHeading = document.getElementById('explore-heading');
+            if (exploreHeading) exploreHeading.textContent = uiCopy.exploreHeading;
+
+            const bookingHref = lang === 'ar' ? 'booking-ar.html' : 'booking.html';
+            const servicesHref = lang === 'ar' ? 'services-ar.html' : 'services.html';
+            const primaryCta = document.getElementById('primary-cta');
+            if (primaryCta) {
+                primaryCta.href = bookingHref;
+                primaryCta.textContent = uiCopy.primaryCta;
+            }
+            const secondaryCta = document.getElementById('secondary-cta');
+            if (secondaryCta) {
+                secondaryCta.href = servicesHref;
+                secondaryCta.textContent = uiCopy.secondaryCta;
             }
 
-            const idx = DestKeys.indexOf(id);
-            const nextId = DestKeys[(idx + 1) % DestKeys.length];
-            const nextData = normalizeDestinationShape(nextId, window.DestData[nextId] || {});
-            
-            const nextLink = document.getElementById('next-link');
-            // Update next link to preserve language choice in URL
-            if(nextLink) nextLink.href = `destination.html?id=${nextId}${lang === 'ar' ? '&lang=ar' : ''}`;
-            
-            const nextImg = document.getElementById('next-img');
-            if(nextImg) {
-                nextImg.onload = function() { this.classList.remove('skeleton'); };
-                nextImg.src = nextData.img;
+            const sidebarBookLink = document.getElementById('sidebar-book-link');
+            if (sidebarBookLink) {
+                sidebarBookLink.href = bookingHref;
+                sidebarBookLink.textContent = uiCopy.primaryCta;
             }
-            
-            const nextTitle = document.getElementById('next-title');
-            if(nextTitle) nextTitle.innerText = nextData[`title_${lang}`] || nextData.title_en || nextData.title_ar || nextId;
+            const sidebarPrice = document.getElementById('sidebar-price');
+            if (sidebarPrice) sidebarPrice.textContent = `${AppConfig.vehicleRates.Sedan || 150} GEL`;
+            const sidebarPriceNote = document.getElementById('sidebar-price-note');
+            if (sidebarPriceNote) sidebarPriceNote.textContent = uiCopy.priceNote;
         }
     }
 };
@@ -2266,13 +2652,15 @@ const DestinationLoader = {
     async load() {
         const slider = document.getElementById('tours-slider');
         if (!slider) return;
-        if (!db) {
-            return;
-        }
 
         try {
+            const dbRef = db || (typeof firebase !== 'undefined' && firebase.firestore ? firebase.firestore() : await ensureFirebaseReady());
+            if (!dbRef) {
+                console.warn("Firebase not initialized, skipping dynamic destinations.");
+                return;
+            }
             // Fetch all destinations (client-side filtering for legacy support)
-            const snapshot = await db.collection('destinations').get();
+            const snapshot = await dbRef.collection('destinations').get();
             
             if (snapshot.empty) {
                 console.warn("No destinations found in Firestore.");
@@ -2292,7 +2680,6 @@ const DestinationLoader = {
                 const shaped = normalizeDestinationShape(safeId, data || {});
 
                 const title = String((isAr ? (shaped.title_ar || shaped.title_en) : (shaped.title_en || shaped.title_ar)) || safeId);
-                const desc = String((isAr ? (shaped.desc_ar || shaped.desc_en) : (shaped.desc_en || shaped.desc_ar)) || '');
                 // Prefer explicit slug or route handling if available, else link to dynamic page
                 // Note: The static site has tbilisi.html etc. We might want to link there if ID matches?
                 // But for new destinations, we rely on destination.html?id=...
@@ -2304,7 +2691,6 @@ const DestinationLoader = {
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">${title}</h3>
-                        <p class="tour-desc">${desc || ''}</p>
                         <span class="tour-btn text-accent-light">Drive Here <i class="fa-solid fa-arrow-right rtl:rotate-180"></i></span>
                     </div>
                 </a>`;
@@ -2313,10 +2699,10 @@ const DestinationLoader = {
             slider.innerHTML = html;
             
             // Re-init slider logic because we replaced DOM elements
-            if(window.GHCoreUI && window.GHCoreUI.initSlider) {
+            if(window.App && App.initSlider) {
                 // Reset initialized flag to force re-bind
                 slider.dataset.initialized = 'false';
-                window.GHCoreUI.initSlider();
+                App.initSlider();
             }
         } catch (e) {
             console.error("Failed to load destinations", e);
@@ -2379,10 +2765,14 @@ const BlogManager = {
 // 5. GLOBAL EXPORTS
 // ==========================================
 
-const previousGHCoreUI = window.GHCoreUI || {};
-const previousGHBooking = window.GHBooking || {};
-const previousGHLocalization = window.GHLocalization || {};
-const previousGHDestination = window.GHDestination || {};
+// Expose objects to window for inline HTML event handlers (onclick="...")
+window.UIManager = UIManager;
+window.CurrencyManager = CurrencyManager;
+window.BookingManager = BookingManager;
+window.LangManager = LangManager;
+window.BlogManager = BlogManager;
+// Expose Loader
+window.DestinationLoader = DestinationLoader;
 
 function runWhenIdle(task, timeout = 1200) {
     if (typeof window.requestIdleCallback === 'function') {
@@ -2405,45 +2795,8 @@ function shouldEagerlyTrackSession(pathname = window.location.pathname) {
     );
 }
 
-window.GHCoreUI = {
-    ...previousGHCoreUI,
-    init: () => {
-        if (typeof previousGHCoreUI.init === "function") previousGHCoreUI.init();
-        UIManager.init();
-    },
-    closeModal: (modalId) => UIManager.closeModal(modalId),
-    toggleCurrencyDropdown: (type) => UIManager.toggleCurrencyDropdown(type),
-    initSlider: () => MainApp.initSlider(),
-    prefillVehicle: (type) => MainApp.prefillVehicle(type)
-};
-
-window.GHBooking = {
-    ...previousGHBooking,
-    init: () => {
-        if (typeof previousGHBooking.init === "function") previousGHBooking.init();
-        BookingManager.init();
-    },
-    updateEstimate: () => BookingManager.updateEstimate(),
-    handleSubmit: (event) => BookingManager.handleSubmit(event)
-};
-
-window.GHLocalization = {
-    ...previousGHLocalization,
-    init: () => {
-        if (typeof previousGHLocalization.init === "function") previousGHLocalization.init();
-        LangManager.apply();
-    },
-    sync: () => LangManager.sync()
-};
-
-window.GHDestination = {
-    ...previousGHDestination,
-    init: () => {
-        if (typeof previousGHDestination.init === "function") previousGHDestination.init();
-        DestinationApp.init();
-    },
-    refreshSlider: () => DestinationLoader.load()
-};
+// Expose MainApp as 'App' because the main page HTML calls 'App.prefillVehicle' etc.
+window.App = MainApp; 
 
 function hidePreloaderSafely() {
     const preloader = document.getElementById('preloader');
