@@ -1,17 +1,4 @@
 (function () {
-  const DEFAULT_FIREBASE_CONFIG = {
-    apiKey: "AIzaSyApLm0zacQiM1VbSQ5INRlQ28ev3QoTw2o",
-    authDomain: "georgiahills-15d19.firebaseapp.com",
-    projectId: "georgiahills-15d19",
-    storageBucket: "georgiahills-15d19.firebasestorage.app",
-    messagingSenderId: "447700508040",
-    appId: "1:447700508040:web:379c32079d09523a14ae3d",
-    measurementId: "G-PTEM4FPQR1",
-    functionsRegion: "europe-west1"
-  };
-
-  const firebaseConfig = window.__GH_FIREBASE_CONFIG || DEFAULT_FIREBASE_CONFIG;
-
   const AppConfig = {
     vehicleRates: { Sedan: 150 },
     currencies: [
@@ -132,9 +119,6 @@
     }
   };
 
-  let db = null;
-  let firebaseBootstrapPromise = null;
-
   function runWhenIdle(task, timeout) {
     if (typeof window.requestIdleCallback === "function") {
       window.requestIdleCallback(task, { timeout: timeout || 1500 });
@@ -222,36 +206,6 @@
       script.onerror = function () { reject(new Error("Failed to load script: " + src)); };
       document.head.appendChild(script);
     });
-  }
-
-  function shouldDeferFirebase() {
-    const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-    if (!connection) return false;
-    if (connection.saveData) return true;
-    return connection.effectiveType === "slow-2g" || connection.effectiveType === "2g";
-  }
-
-  async function ensureFirebaseReady() {
-    if (db) return db;
-    if (shouldDeferFirebase()) return null;
-
-    if (!firebaseBootstrapPromise) {
-      firebaseBootstrapPromise = (async function () {
-        await loadExternalScript("https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js");
-        await loadExternalScript("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js");
-        if (typeof firebase === "undefined" || !firebase.firestore) return null;
-        if (!firebase.apps || !firebase.apps.length) {
-          firebase.initializeApp(firebaseConfig);
-        }
-        db = firebase.firestore();
-        return db;
-      })().catch(function () {
-        db = null;
-        return null;
-      });
-    }
-
-    return firebaseBootstrapPromise;
   }
 
   const CurrencyManager = {
@@ -899,19 +853,6 @@
       const lang = LangManager.current;
       const localData = normalizeDestinationShape(id, DESTINATION_DATA[id]);
       this.render(id, localData, lang);
-
-      if (window.matchMedia("(max-width: 900px)").matches) return;
-
-      runWhenIdle(async function () {
-        const liveDb = await ensureFirebaseReady();
-        if (!liveDb) return;
-        try {
-          const docSnap = await liveDb.collection("destinations").doc(id).get();
-          if (!docSnap.exists) return;
-          const remoteData = normalizeDestinationShape(id, docSnap.data());
-          DestinationApp.render(id, remoteData, lang);
-        } catch (error) {}
-      }, 2000);
     }
   };
 
