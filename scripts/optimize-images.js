@@ -22,8 +22,8 @@ const report = [];
     for (const w of job.widths) {
       const webpOut = `${job.base}-${w}.webp`;
       const avifOut = `${job.base}-${w}.avif`;
-      await sharp(job.input).resize({ width: w, withoutEnlargement: true }).webp({ quality: 78 }).toFile(webpOut);
-      await sharp(job.input).resize({ width: w, withoutEnlargement: true }).avif({ quality: 55 }).toFile(avifOut);
+      await sharp(job.input).resize({ width: w, withoutEnlargement: true }).webp({ quality: 65, smartSubsample: true }).toFile(webpOut);
+      await sharp(job.input).resize({ width: w, withoutEnlargement: true }).avif({ quality: 40, effort: 6 }).toFile(avifOut);
       console.log(`generated ${webpOut} + ${avifOut}`);
       report.push({
         input: job.input,

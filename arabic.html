@@ -33,11 +33,11 @@
             gtag('js', new Date());
             gtag('config', 'G-6GT03GSW49');
         }
-        // Load on interaction or after 4 seconds
+        // Load on interaction or after 7.5 seconds
         ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart'].forEach(evt => 
             window.addEventListener(evt, loadGTM, {once: true, passive: true})
         );
-        setTimeout(loadGTM, 4000);
+        setTimeout(loadGTM, 7500);
     </script>
 
     <!-- SEO: Multilingual Support -->
