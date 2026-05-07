@@ -57,7 +57,7 @@
     "ops:firebase-cost": "node scripts/audit/ops/check-firebase-cost-threshold.js"
   },
   "dependencies": {
-    "firebase": "^12.9.0"
+    "firebase": "^12.12.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
