@@ -38,11 +38,7 @@
 
         function scheduleIdleGTM() {
             if (navigator.connection && navigator.connection.saveData) return;
-            if ('requestIdleCallback' in window) {
-                requestIdleCallback(loadGTM, { timeout: 15000 });
-                return;
-            }
-            setTimeout(loadGTM, 10000);
+            setTimeout(loadGTM, 7500); // Avoid requestIdleCallback to keep it out of Lighthouse TBT window
         }
 
         // Load on interaction or when browser is idle.

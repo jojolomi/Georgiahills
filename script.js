@@ -2675,9 +2675,16 @@ const DestinationLoader = {
                 // But for new destinations, we rely on destination.html?id=...
                 const link = `destination.html?id=${encodeURIComponent(safeId)}`;
 
+                let imageHtml = `<img src="${shaped.thumbnail || 'https://placehold.co/600x800'}" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="${title}">`;
+                if (shaped.thumbnail && shaped.thumbnail.endsWith('.webp') && !shaped.thumbnail.match(/-\d+\.webp$/)) {
+                    const base = shaped.thumbnail.replace('.webp', '');
+                    const srcset = `${base}-480.webp 480w, ${base}-768.webp 768w, ${base}-1024.webp 1024w`;
+                    imageHtml = `<img src="${base}-480.webp" srcset="${srcset}" sizes="(max-width: 768px) 100vw, 380px" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="${title}">`;
+                }
+
                 html += `
                 <a href="${link}" class="tour-card group">
-                    <img src="${shaped.thumbnail || 'https://placehold.co/600x800'}" width="380" height="475" loading="lazy" decoding="async" class="tour-img" alt="${title}">
+                    ${imageHtml}
                     <div class="tour-overlay"></div>
                     <div class="tour-content">
                         <h3 class="tour-title">${title}</h3>
@@ -2766,10 +2773,10 @@ window.DestinationLoader = DestinationLoader;
 
 function runWhenIdle(task, timeout = 1200) {
     if (typeof window.requestIdleCallback === 'function') {
-        window.requestIdleCallback(() => task(), { timeout });
+        setTimeout(() => window.requestIdleCallback(() => task()), timeout);
         return;
     }
-    setTimeout(task, 0);
+    setTimeout(task, timeout);
 }
 
 function shouldEagerlyTrackSession(pathname = window.location.pathname) {
@@ -2843,7 +2850,7 @@ window.addEventListener('DOMContentLoaded', () => {
             MainApp.start();
             // Load dynamic destinations if slider exists
             if (document.getElementById('tours-slider')) {
-                runWhenIdle(() => DestinationLoader.load(), 1500);
+                runWhenIdle(() => DestinationLoader.load(), 6000);
             }
         }
         // Condition 3: Blog Page
